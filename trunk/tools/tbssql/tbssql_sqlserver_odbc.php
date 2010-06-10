@@ -1,7 +1,7 @@
 <?php
 
 // TbsSql Engine
-// Version 2.6, 2009-11-26, Skrol29
+// Version 2.7beta, 2010-06-10, Skrol29
 
 define('TBSSQL_SILENT', 0);
 define('TBSSQL_NORMAL', 1);
@@ -13,7 +13,7 @@ class clsTbsSql {
 	function clsTbsSql($srv='',$uid='',$pwd='',$db='',$drv='',$Mode=TBSSQL_NORMAL) {
 		// Default values (defined here to be compatible with both PHP 4 & 5)
 		$this->Id = false;
-		$this->SqlNull = 'NULL'; // can be modifier by user
+		$this->SqlNull = 'NULL'; // can be modified by user
 		if ($srv==='') {
 			$this->Mode = $Mode;
 		} else {
@@ -52,7 +52,7 @@ class clsTbsSql {
 	function Execute($Sql) {
 		$ArgLst = func_get_args();
 		$Sql = $this->_SqlProtect($ArgLst);
-		$RsId = $this->_Dbs_RsOpen(null,$Sql);
+		$RsId = $this->_Dbs_RsOpen($Sql);
 		if ($RsId===false) return $this->_SqlError($this->Id);
 		$this->_Dbs_RsClose($RsId);
 		return true;
@@ -61,7 +61,7 @@ class clsTbsSql {
 	function GetVal($Sql) {
 		$ArgLst = func_get_args();
 		$Sql = $this->_SqlProtect($ArgLst);
-		$RsId = $this->_Dbs_RsOpen(null,$Sql);
+		$RsId = $this->_Dbs_RsOpen($Sql);
 		if ($RsId===false) return $this->_SqlError($this->Id);
 		$x = false;
 		$Row = $this->_Dbs_RsFetch($RsId);
@@ -73,7 +73,7 @@ class clsTbsSql {
 	function GetRow($Sql) {
 		$ArgLst = func_get_args();
 		$Sql = $this->_SqlProtect($ArgLst);
-		$RsId = $this->_Dbs_RsOpen(null,$Sql);
+		$RsId = $this->_Dbs_RsOpen($Sql);
 		if ($RsId===false) return $this->_SqlError($this->Id);
 		$x = $this->_Dbs_RsFetch($RsId);
 		$this->_Dbs_RsClose($RsId);
@@ -83,7 +83,7 @@ class clsTbsSql {
 	function GetRows($Sql) {
 		$ArgLst = func_get_args();
 		$Sql = $this->_SqlProtect($ArgLst);
-		$RsId = $this->_Dbs_RsOpen(null,$Sql);
+		$RsId = $this->_Dbs_RsOpen($Sql);
 		if ($RsId===false) return $this->_SqlError($this->Id);
 		$x = array();
 		while ($r = $this->_Dbs_RsFetch($RsId)) {
@@ -96,7 +96,7 @@ class clsTbsSql {
 	function GetList($Sql) {
 		$ArgLst = func_get_args();
 		$Sql = $this->_SqlProtect($ArgLst);
-		$RsId = $this->_Dbs_RsOpen(null,$Sql);
+		$RsId = $this->_Dbs_RsOpen($Sql);
 		if ($RsId===false) return $this->_SqlError($this->Id);
 		$x = array();
 		$first = true;
@@ -144,10 +144,18 @@ class clsTbsSql {
 			}
 		}
 		$this->TbsKey = $Key;
-		$_TBS_UserFctLst['k:'.$Key] = array('type'=>4,'open'=>array(&$this,'_Dbs_RsOpen'),'fetch'=>array(&$this,'_Dbs_RsFetch'),'close'=>array(&$this,'_Dbs_RsClose'));
+		$_TBS_UserFctLst['k:'.$Key] = array('type'=>4,'open'=>array(&$this,'_TbsRsOpen'),'fetch'=>array(&$this,'_Dbs_RsFetch'),'close'=>array(&$this,'_Dbs_RsClose'));
 	}
 
 // Private methods
+
+	function _TbsRsOpen($Src,$Sql) {
+	// Special for TinyButStrong
+		$Sql = $this->_SqlProtect(array($Sql)); // just in order to manage the Mode output
+		$RecSet = $this->_Dbs_RsOpen($Sql);
+		if ($RecSet===false) $this->_SqlError(false);
+		return $RecSet;
+	}
 
 	function _SqlError($ObjId) {
 		if ($this->Mode==TBSSQL_SILENT) return;
@@ -262,7 +270,7 @@ class clsTbsSql {
 // -------------------------------
 
 // Database Engine: SQL-Server via ODBC
-// Version 1.02, 2006-10-12, Skrol29
+// Version 1.03, 2010-06-10, Skrol29
 	
 	function _Dbs_Prepare() {
 	}
@@ -327,8 +335,7 @@ class clsTbsSql {
 		}
 	}
 	
-	function _Dbs_RsOpen($Src,$Sql) {
-	// $Src is only for compatibility with TinyButStrong
+	function _Dbs_RsOpen($Sql) {
 		$RsId = @odbc_exec($this->Id,$Sql);
 		if ($RsId!==false) {
 			$this->ColumnLst = array();
@@ -338,7 +345,6 @@ class clsTbsSql {
 			}
 		}
 		return $RsId;
-
 	}
 
 	function _Dbs_RsFetch(&$RsId) {
