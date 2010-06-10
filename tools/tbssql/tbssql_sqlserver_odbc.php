@@ -2,18 +2,30 @@
 
 // TbsSql Engine
 // Version 2.7beta, 2010-06-10, Skrol29
+// [ok] bug: Trace doesn't work when using TinyButStrong
+// [  ] enh: Compatibility PHP 4
+// [  ] fct: Trace info for connexion with user or not
+// [  ] fct: Cache
+// [  ] fct: Version
 
 define('TBSSQL_SILENT', 0);
 define('TBSSQL_NORMAL', 1);
 define('TBSSQL_DEBUG', 2);
 define('TBSSQL_TRACE', 3);
+define('TBSSQL_DEFAULT', -1);
 
 class clsTbsSql {
 
-	function clsTbsSql($srv='',$uid='',$pwd='',$db='',$drv='',$Mode=TBSSQL_NORMAL) {
+	function __construct($srv='',$uid='',$pwd='',$db='',$drv='',$Mode=TBSSQL_NORMAL) {
 		// Default values (defined here to be compatible with both PHP 4 & 5)
+		$this->Version = '2.7beta';
 		$this->Id = false;
 		$this->SqlNull = 'NULL'; // can be modified by user
+		$this->CacheEnabled = false;
+		$this->CacheDir = '.';
+		$this->CacheTimeout = 24*60; // in minutes
+		$this->CacheSpecialTimeout = false;
+		$this->CacheAutoClear = 100;
 		if ($srv==='') {
 			$this->Mode = $Mode;
 		} else {
@@ -21,6 +33,11 @@ class clsTbsSql {
 		}
 		$this->_Dbs_Prepare();
 		$this->SetTbsKey();
+	}
+
+	// Compatibility for PHP 4
+	function clsTbsSql($srv='',$uid='',$pwd='',$db='',$drv='',$Mode=TBSSQL_NORMAL) {
+		$this->__construct($srv,$uid,$pwd,$db,$drv,$Mode);
 	}
 
 // Public methods
@@ -244,6 +261,53 @@ class clsTbsSql {
 		return $Sql;
 	}
 
+	function _CacheTryRetrieve($Sql, &$Data) {
+		
+		// update $this->_CacheTimeout and continue if has to retrieve data
+		if ($this->CacheSpecialTimeout===false) {
+			if ($this->CacheEnabled) {
+				$timeout = $this->CacheTimeout;
+			} else {
+				$this->_CacheTimeout = false;
+ 				return false;
+ 			}
+		} else {
+			$timeout = $this->CacheSpecialTimeout;
+			if ($timeout===TBSSQL_DEFAULT) $timeout = $this->CacheTimeout;
+		}
+
+		// 
+		$file_z = $this->CacheDir.'/cache_tbssql_'.md5($Sql);
+		$this->_CacheFileI = $file_z.'_info.php'; // we save it as a PHP file in order to hide the contents from web users
+		$this->_CacheFileD = $file_z.'_data.php';
+		$this->_CacheToBeUpdated = true;
+		if ( file_exists($this->_CacheFileI) && file_exists($this->_CacheFileD) && (filectime($this->_CacheFileI)<time()) ) {
+			// retrieve the data
+			include($this->_CacheFileI);
+			if ($Sql!=$CacheSql) return false; // It can happens very rarely that two different SQL queries have the same md5, with this chech we are sure to have to good result
+			include($this->_CacheFileD); // does $Data = ...
+		} else {
+			// (à coder)
+		}
+		$this->_CacheFileI = $file_z.'_info.php'; // we save it as a PHP file in order to hide the contents from web users
+		$this->_CacheFileD = $file_z.'_data.php'; // we save it as a PHP file in order to hide the contents from web users
+		
+		
+	}
+
+	function _CacheClearDir() {
+		$del = array();
+		$dir = opendir($this->CacheDir);
+		$now = time();
+		while ($file = readdir($dir)) {
+			if ( (strlen($file)==52) && (substr($file,0,13)==='cache_tbssql_') ) {
+				$fullpath = $this->CacheDir.'/'.$file;
+				if (filectime($fullpath)>=$now) unlink($fullpath);
+			}
+		}
+		closedir($dir);		
+	}
+
 // Deprecated
 
 	function Value($DefVal,$Sql) {
@@ -299,7 +363,7 @@ class clsTbsSql {
 			}
 		}
 		unset($z);
-			
+
 		// Complete the connextion string.
 		if (!isset($prm_lst['DRIVER'])) {
 			// Parameter DRIVER must exist if parameter DSN is not defined
@@ -314,13 +378,13 @@ class clsTbsSql {
 		} 
 		if ( (!isset($prm_lst['DATABASE'])) and ($db!=='') ) $str .= ';DATABASE='.$db; // Parameter DATABASE is a priority over the DSN parameters.
 		if ((count($prm_lst)==1) and (substr($str,-1,1)!=';') ) $str .= ';'; // If it is a connextion string then at least on semilicon must be present (tested with for 'Easysoft ODBC-SQL Server' driver)
-		
-		// Information, must be the same for any database type	
+
+		// Information, must be the same for any database type
 		if ($this->Mode==TBSSQL_DEBUG) $this->LastSql = 'Connection String='.$str;
 		if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace Connection String: '.$str,'#663399');
 		
 		$this->Id = odbc_connect($str,$uid,$pwd); // do not use @ before the function because the non installation of the extension on Linux makes a fatal error.
-		
+
 	}
 
 	function _Dbs_Close() {
@@ -334,7 +398,7 @@ class clsTbsSql {
 			return @odbc_errormsg($ObjId);
 		}
 	}
-	
+
 	function _Dbs_RsOpen($Sql) {
 		$RsId = @odbc_exec($this->Id,$Sql);
 		if ($RsId!==false) {
