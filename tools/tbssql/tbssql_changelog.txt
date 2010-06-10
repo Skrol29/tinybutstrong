@@ -1,0 +1,32 @@
+****************
+TbsSQL changelog
+****************
+Skrol29
+http://www.tinybutstrong.com/onlyyou.html
+
+Version 2.6, 2009-11-26
+
+- Argument $Mode has been added to the class instantiation and to method Connect().
+  This allows to display error message and trace when the connection is made.
+- Display the connection string in trace mode (Mode=TBSSQL_TRACE)
+- New database support : ODBC (generic), for both Windows and Unix)  
+- Support UnixODBC for ODBC Generic and ODBC for SQL Server.
+- Use canonical formats for date and time with ODBC Generic and ODBC for SQL Server.
+- Support ODBC connection string with ODBC and ODBC Generic for SQL Server.
+- Do not use @ with odbc_connect() because some error of connection can make a PHP critical error.
+  In this case @ avoid any error and warning messages which is uncomfortable.
+
+Version 2.5, 2009-09-16
+
+- New set of jokers that supports NULL values for SQL.
+- constants that can be used for property $Db->Mode :
+  TBSSQL_SILENT
+  TBSSQL_NORMAL
+  TBSSQL_DEBUG
+  TBSSQL_TRACE
+- Bug for TbsSQL with MySQL : each TbsSQL instance was always linked to the 
+  last MySQL connection. That was because property $Db->Id was always set to True
+  instead of the MySQL connection resource. 
+- New property $Db->TbsKey : enables you to use several instances of TbsSQL with TinyButStrong.
+- New method $Db->SetTbsKey() : enables you to customize instances of TbsSQL with TinyButStrong.
+
