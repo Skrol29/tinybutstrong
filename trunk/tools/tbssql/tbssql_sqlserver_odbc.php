@@ -269,7 +269,7 @@ class clsTbsSql {
 				$timeout = $this->CacheTimeout;
 			} else {
 				$this->_CacheTimeout = false;
- 				return false;
+ 				return;
  			}
 		} else {
 			$timeout = $this->CacheSpecialTimeout;
@@ -277,22 +277,21 @@ class clsTbsSql {
 		}
 
 		// 
-		$file_z = $this->CacheDir.'/cache_tbssql_'.md5($Sql);
-		$this->_CacheFileI = $file_z.'_info.php'; // we save it as a PHP file in order to hide the contents from web users
-		$this->_CacheFileD = $file_z.'_data.php';
+		$this->_CacheFile = $this->CacheDir.'/cache_tbssql_'.md5($Sql).'.php'; // we save it as a PHP file in order to hide the contents from web users
 		$this->_CacheToBeUpdated = true;
-		if ( file_exists($this->_CacheFileI) && file_exists($this->_CacheFileD) && (filectime($this->_CacheFileI)<time()) ) {
+		if ( file_exists($this->_CacheFile) && (filectime($this->_CacheFileI)<time()) ) {
 			// retrieve the data
-			include($this->_CacheFileI);
-			if ($Sql!=$CacheSql) return false; // It can happens very rarely that two different SQL queries have the same md5, with this chech we are sure to have to good result
-			include($this->_CacheFileD); // does $Data = ...
+			include($this->_CacheFile); // set $CacheSql and $Data
+			if ($Sql!==$CacheSql) return; // It can happens very rarely that two different SQL queries have the same md5, with this chech we are sure to have to good result
+			$this->_CacheToBeUpdated = false;
 		} else {
 			// (à coder)
 		}
-		$this->_CacheFileI = $file_z.'_info.php'; // we save it as a PHP file in order to hide the contents from web users
-		$this->_CacheFileD = $file_z.'_data.php'; // we save it as a PHP file in order to hide the contents from web users
 		
-		
+	}
+
+	function _CacheTryUpdate($Sql, $Data) {
+		if (!$this->_CacheToBeUpdated) return;
 	}
 
 	function _CacheClearDir() {
@@ -300,7 +299,7 @@ class clsTbsSql {
 		$dir = opendir($this->CacheDir);
 		$now = time();
 		while ($file = readdir($dir)) {
-			if ( (strlen($file)==52) && (substr($file,0,13)==='cache_tbssql_') ) {
+			if ( (strlen($file)==47) && (substr($file,0,13)==='cache_tbssql_') ) {
 				$fullpath = $this->CacheDir.'/'.$file;
 				if (filectime($fullpath)>=$now) unlink($fullpath);
 			}
