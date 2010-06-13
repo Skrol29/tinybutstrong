@@ -100,14 +100,16 @@ class clsTbsSql {
 	function GetRows($Sql) {
 		$ArgLst = func_get_args();
 		$Sql = $this->_SqlProtect($ArgLst);
+		$Data = array();
+		if ($this->_CacheTryRetrieve($Sql,$Data)) return $Data;
 		$RsId = $this->_Dbs_RsOpen($Sql);
 		if ($RsId===false) return $this->_SqlError($this->Id);
-		$x = array();
 		while ($r = $this->_Dbs_RsFetch($RsId)) {
-			$x[] = $r;
+			$Data[] = $r;
 		}
 		$this->_Dbs_RsClose($RsId);
-		return $x;
+		if ($this->_CacheToBeUpdated) $this->_CacheUpdate($Sql, $Data);
+		return $Data;
 	}
 
 	function GetList($Sql) {
@@ -268,8 +270,8 @@ class clsTbsSql {
 			if ($this->CacheEnabled) {
 				$timeout = $this->CacheTimeout;
 			} else {
-				$this->_CacheTimeout = false;
- 				return;
+				$this->_CacheToBeUpdated = false;
+ 				return false;
  			}
 		} else {
 			$timeout = $this->CacheSpecialTimeout;
@@ -278,20 +280,41 @@ class clsTbsSql {
 
 		// 
 		$this->_CacheFile = $this->CacheDir.'/cache_tbssql_'.md5($Sql).'.php'; // we save it as a PHP file in order to hide the contents from web users
-		$this->_CacheToBeUpdated = true;
-		if ( file_exists($this->_CacheFile) && (filectime($this->_CacheFileI)<time()) ) {
+		if ( file_exists($this->_CacheFile) && (filemtime($this->_CacheFileI)<time()) ) {
 			// retrieve the data
-			include($this->_CacheFile); // set $CacheSql and $Data
-			if ($Sql!==$CacheSql) return; // It can happens very rarely that two different SQL queries have the same md5, with this chech we are sure to have to good result
 			$this->_CacheToBeUpdated = false;
-		} else {
-			// (à coder)
+			include($this->_CacheFile); // set $CacheSql and $Data
+			if ($Sql===$CacheSql) {
+				return true;
+			} else {
+				return false; // It can happens very rarely that two different SQL queries have the same md5, with this chech we are sure to have to good result
+			}
 		}
+		
+		$this->_CacheToBeUpdated = true;
+		return false;
 		
 	}
 
-	function _CacheTryUpdate($Sql, $Data) {
-		if (!$this->_CacheToBeUpdated) return;
+	function _CacheUpdate($Sql, $Data) {
+		$fid = @fopen($this->_CacheFile, 'w');
+		if ($fid===false) {
+			$this->_Message('The cache file '.$this->_CacheFile.' cannot be saved.');
+			return false;
+		} else {
+			flock($fid,2); // acquire an exlusive lock
+			fwrite($fid,'<php? $CacheSql='.var_export($Sql,true).'; ');
+			fwrite($fid,'$Data='.var_export($Data,true).';');
+			flock($fid,3); // release the lock
+			fclose($fid);
+			$cache_end = time() + $this->CacheTimeout;
+			$ok = touch($this->_CacheFile, $cache_end);
+			if ($ok) {
+				$d = filemtime($this->_CacheFile) - $cache_end;
+				if ($d!=0) touch($this->_CacheFile, $cache_end + $d);
+			}
+			return true;
+		}
 	}
 
 	function _CacheClearDir() {
