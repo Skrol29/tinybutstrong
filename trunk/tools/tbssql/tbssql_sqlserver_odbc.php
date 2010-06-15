@@ -26,6 +26,7 @@ class clsTbsSql {
 		$this->CacheTimeout = 24*60; // in minutes
 		$this->CacheSpecialTimeout = false;
 		$this->CacheAutoClear = 100;
+		$this->_CacheNewTimeout = false; // is different from false if data as to be saved
 		if ($srv==='') {
 			$this->Mode = $Mode;
 		} else {
@@ -174,6 +175,7 @@ class clsTbsSql {
 		$Sql = $this->_SqlProtect(array($Sql)); // just in order to manage the Mode when it is TRACE or DEBUG
 		$Data = false;
 		if ($this->_CacheTbsOk=$this->_CacheTryRetrieve($Sql,$Data)) {
+			// Data is retrieved from the cache
 			$this->_CacheTbsEnd = count($Data);
 			$this->_CacheTbsCurr = -1;
 			$this->_CacheTbsData = $Data;
@@ -182,6 +184,7 @@ class clsTbsSql {
 			// No cache
 			$RecSet = $this->_Dbs_RsOpen($Sql);
 			if ($RecSet===false) $this->_SqlError(false);
+			if ($this->_CacheNewTimeout!==false) $this->_CacheTbsData = array();
 			return $RecSet;
 		}
 	}
@@ -196,7 +199,9 @@ class clsTbsSql {
 				return $this->_CacheTbsData[$this->_CacheTbsCurr];
 			}
 		} else {
-			return $this->_Dbs_RsFetch($RsId);
+			$Rec = $this->_Dbs_RsFetch($RsId);
+			if (($this->_CacheNewTimeout!==false) && ($Rec!==false)) $this->_CacheTbsData[] = $Rec;
+			return $Rec;
 		}
 	}
 
@@ -300,12 +305,14 @@ class clsTbsSql {
 	function _CacheTryRetrieve($Sql, &$Data) {
 	// Try to retrieve data from the cache file. Return true if $Data contains the data from the cache.
 	
+		// at this point $this->_CacheNewTimeout is always false
+		$this->_CacheNewTimeout = false; // for security
+	
 		// update $this->_CacheTimeout and continue if has to retrieve data
 		if ($this->CacheSpecialTimeout===false) {
 			if ($this->CacheEnabled) {
 				$timeout = $this->CacheTimeout;
 			} else {
-				$this->_CacheNewTimeout = false;
  				return false;
  			}
 		} else {
@@ -320,7 +327,6 @@ class clsTbsSql {
 		if ( file_exists($this->_CacheFile) && ($now<=filemtime($this->_CacheFile)) ) {
 			// retrieve the data
 			// echo 'debug CacheTryRetrieve : cache still current'."<br>\r\n";
-			$this->_CacheNewTimeout = false;
 			include($this->_CacheFile); // set $CacheSql and $Data
 			if ($Sql===$CacheSql) {
 				if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: Data retreived from cache file '.$this->_CacheFile,'#663399');
@@ -341,6 +347,8 @@ class clsTbsSql {
 	function _CacheTryUpdate($Sql, $Data) {
 	// Try to update the cache if necessary
 		if ($this->_CacheNewTimeout===false) return false;
+		$cache_end = time() + 60*$this->_CacheNewTimeout;
+		$this->_CacheNewTimeout = false;
 		$fid = @fopen($this->_CacheFile, 'w');
 		if ($fid===false) {
 			$this->_Message('The cache file '.$this->_CacheFile.' cannot be saved.');
@@ -351,7 +359,6 @@ class clsTbsSql {
 			fwrite($fid,'$Data='.var_export($Data,true).';');
 			flock($fid,3); // release the lock
 			fclose($fid);
-			$cache_end = time() + 60*$this->_CacheNewTimeout;
 			$ok = touch($this->_CacheFile, $cache_end);
 		  //echo 'debug CacheTryUpdate : cache file='.date('Y-m-d h:i:s',filemtime($this->_CacheFile)).' end='.date('Y-m-d h:i:s',$cache_end).' , now='.date('Y-m-d h:i:s',time()).' , ok='.var_export($ok,true)."<br>\r\n";
 			if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: Data saved in cache file '.$this->_CacheFile,'#663399');
