@@ -7,12 +7,15 @@
 // [  ] fct: Trace info for connexion with user or not
 // [  ] fct: Cache
 // [  ] fct: Version
+// [  ] suffix in cache fil names in order to separate databases if needed
 
 define('TBSSQL_SILENT', 0);
 define('TBSSQL_NORMAL', 1);
 define('TBSSQL_DEBUG', 2);
 define('TBSSQL_TRACE', 3);
-define('TBSSQL_DEFAULT', -1);
+define('TBSSQL_1HOUR', 60);
+define('TBSSQL_1DAY', 24*60);
+define('TBSSQL_1WEEK', 7*24*60);
 
 class clsTbsSql {
 
@@ -21,12 +24,12 @@ class clsTbsSql {
 		$this->Version = '2.7beta';
 		$this->Id = false;
 		$this->SqlNull = 'NULL'; // can be modified by user
-		$this->CacheEnabled = false;
 		$this->CacheDir = '.';
-		$this->CacheTimeout = 24*60; // in minutes
+		$this->CacheTimeout = false; // in minutes
 		$this->CacheSpecialTimeout = false;
-		$this->CacheAutoClear = 100;
-		$this->_CacheNewTimeout = false; // is different from false if data as to be saved
+		$this->CacheAutoClear = 7*24*60; // 1 week in minutes
+		$this->CacheSuffix = '';
+		$this->_CacheSql = false; // is different from false if data as to be saved
 		if ($srv==='') {
 			$this->Mode = $Mode;
 		} else {
@@ -68,6 +71,7 @@ class clsTbsSql {
 	}
 
 	function Execute($Sql) {
+		// we do not use cache here
 		$ArgLst = func_get_args();
 		$Sql = $this->_SqlProtect($ArgLst);
 		$RsId = $this->_Dbs_RsOpen($Sql);
@@ -77,65 +81,97 @@ class clsTbsSql {
 	}
 
 	function GetVal($Sql) {
+
 		$ArgLst = func_get_args();
 		$Sql = $this->_SqlProtect($ArgLst);
-		$RsId = $this->_Dbs_RsOpen($Sql);
-		if ($RsId===false) return $this->_SqlError($this->Id);
-		$x = false;
-		$Row = $this->_Dbs_RsFetch($RsId);
-		if ($Row!==false) $x = reset($Row);
-		$this->_Dbs_RsClose($RsId);
-		return $x;
+		
+		$Data = array();
+		if ($this->_CacheTryRetrieve($Sql,$Data)) return $this->_GetFirstRow($Data, true);
+			
+		if ($this->_CacheSql===false) {
+			// no cache
+			if (!$this->_GetData($Sql, $Data, true)) return false;
+		} else {
+			// cache has to be updated first
+			if (!$this->_GetData($Sql, $Data)) return false;
+			$this->_CacheUpdate($Data);
+		}
+
+		return $this->_GetFirstRow($Data, true);
+
 	}
 
 	function GetRow($Sql) {
+		
 		$ArgLst = func_get_args();
 		$Sql = $this->_SqlProtect($ArgLst);
-		$RsId = $this->_Dbs_RsOpen($Sql);
-		if ($RsId===false) return $this->_SqlError($this->Id);
-		$x = $this->_Dbs_RsFetch($RsId);
-		$this->_Dbs_RsClose($RsId);
-		return $x;
+		
+		$Data = array();
+		if ($this->_CacheTryRetrieve($Sql,$Data)) return $this->_GetFirstRow($Data, false);
+			
+		if ($this->_CacheSql===false) {
+			// no cache
+			if (!$this->_GetData($Sql, $Data, true)) return false;
+		} else {
+			// cache has to be updated first
+			if (!$this->_GetData($Sql, $Data)) return false;
+			$this->_CacheUpdate($Data);
+		}
+
+		return $this->_GetFirstRow($Data, false);
+		
 	}
 
 	function GetRows($Sql) {
+		
 		$ArgLst = func_get_args();
 		$Sql = $this->_SqlProtect($ArgLst);
-		$Data = false;
+		
+		$Data = array();
 		if ($this->_CacheTryRetrieve($Sql,$Data)) return $Data;
-		$RsId = $this->_Dbs_RsOpen($Sql);
-		if ($RsId===false) return $this->_SqlError($this->Id);
-		while ($r = $this->_Dbs_RsFetch($RsId)) {
-			$Data[] = $r;
-		}
-		$this->_Dbs_RsClose($RsId);
-		$this->_CacheTryUpdate($Sql, $Data);
+		
+		if (!$this->_GetData($Sql, $Data)) return false;
+		
+		if ($this->_CacheSql!==false) $this->_CacheUpdate($Data);
+		
 		return $Data;
+		
 	}
 
 	function GetList($Sql) {
+		
 		$ArgLst = func_get_args();
 		$Sql = $this->_SqlProtect($ArgLst);
-		$RsId = $this->_Dbs_RsOpen($Sql);
-		if ($RsId===false) return $this->_SqlError($this->Id);
-		$x = array();
-		$first = true;
-		while ($r = $this->_Dbs_RsFetch($RsId)) {
-			if ($first) {
-				$cols = array_keys($r);
-				$col1 = $cols[0];
-				$col2 = isset($cols[1]) ? $cols[1] : false; 
-				unset($cols);
-				$first = false;
-			}
-			if ($col2===false) {
-				$x[] = $r[$col1];
+		
+		$Data = array();
+		$col1 = false;
+		$col2 = false;
+
+		if (!$this->_CacheTryRetrieve($Sql,$Data)) {
+			if ($this->_CacheSql===false) {
+				// no cache
+				$RsId = $this->_Dbs_RsOpen($Sql);
+				if ($RsId===false) return $this->_SqlError($this->Id);
+				$r = $this->_Dbs_RsFetch($RsId); // First row
+				if ($r===false) return $Data;
+				$this->_ItemFoundCol($r, $col1, $col2);
+				$this->_ItemAdd($Data, $r, $col1, $col2);
+				while ($r = $this->_Dbs_RsFetch($RsId)) $this->_ItemAdd($Data, $r, $col1, $col2); // other rows
+				$this->_Dbs_RsClose($RsId);
+				return $Data;
 			} else {
-				$x[$r[$col1]] = $r[$col2];
+				if (!$this->_GetData($Sql, $Data)) return false;
+				$this->_CacheUpdate($Data);
 			}
 		}
-		$this->_Dbs_RsClose($RsId);
-		return $x;
+		
+		// At this point, $Data contain bold data.
+		$Data2 = array();
+		if (!isset($Data[0])) return $Data2;
+		$this->_ItemFoundCol($Data[0], $col1, $col2);
+		foreach ($Data as $r) $this->_ItemAdd($Data2, $r, $col1, $col2);
+		return $Data2;
+		
 	}
 
 	function GetSql($Sql) {
@@ -164,7 +200,8 @@ class clsTbsSql {
 			}
 		}
 		$this->TbsKey = $Key;
-		$_TBS_UserFctLst['k:'.$Key] = array('type'=>4,'open'=>array(&$this,'_Tbs_RsOpen'),'fetch'=>array(&$this,'_Tbs_RsFecth'),'close'=>array(&$this,'_Tbs_RsClose'));
+		$this->_Tbs_FetchFct = '_Tbs_RsFetch_Default'; // saved in a property in order to be passed by reference and then be modified when cache is enabled
+		$_TBS_UserFctLst['k:'.$Key] = array('type'=>4,'open'=>array(&$this,'_Tbs_RsOpen'),'fetch'=>array(&$this,&$this->_Tbs_FetchFct),'close'=>array(&$this,'_Tbs_RsClose'));
 	}
 
 // Private methods
@@ -173,47 +210,57 @@ class clsTbsSql {
 	// -------------------------
 	function _Tbs_RsOpen($Src,$Sql) {
 		$Sql = $this->_SqlProtect(array($Sql)); // just in order to manage the Mode when it is TRACE or DEBUG
-		$Data = false;
-		if ($this->_CacheTbsOk=$this->_CacheTryRetrieve($Sql,$Data)) {
+		$this->_CacheTbsData = array(); // default value in case of data to be saved
+		if ($this->_CacheTbsOk=$this->_CacheTryRetrieve($Sql,$this->_CacheTbsData)) {
 			// Data is retrieved from the cache
-			$this->_CacheTbsEnd = count($Data);
+			$this->_CacheTbsEnd = count($this->_CacheTbsData);
 			$this->_CacheTbsCurr = -1;
-			$this->_CacheTbsData = $Data;
-			return true;
+			$this->_Tbs_FetchFct = '_Tbs_RsFetch_FromCache'; // from cache
+			$RecSet = true;
 		} else {
 			// No cache
 			$RecSet = $this->_Dbs_RsOpen($Sql);
 			if ($RecSet===false) $this->_SqlError(false);
-			if ($this->_CacheNewTimeout!==false) $this->_CacheTbsData = array();
-			return $RecSet;
-		}
-	}
-
-	function _Tbs_RsFecth(&$RsId) {
-		if ($this->_CacheTbsOk) {
-			// Read from the cache
-			$this->_CacheTbsCurr++;
-			if ($this->_CacheTbsCurr>=$this->_CacheTbsEnd) {
-				return false;
+			if ($this->_CacheSql===false) {
+				$this->_Tbs_FetchFct = '_Tbs_RsFetch_Default'; // no cache
 			} else {
-				return $this->_CacheTbsData[$this->_CacheTbsCurr];
+				$this->_Tbs_FetchFct = '_Tbs_RsFetch_ToBeSaved'; // cache to be saved
 			}
-		} else {
-			$Rec = $this->_Dbs_RsFetch($RsId);
-			if (($this->_CacheNewTimeout!==false) && ($Rec!==false)) $this->_CacheTbsData[] = $Rec;
-			return $Rec;
 		}
+		return $RecSet;
 	}
 
+	function _Tbs_RsFetch_Default(&$RsId) {
+		// no cache
+		return $this->_Dbs_RsFetch($RsId);
+	}
+	function _Tbs_RsFetch_FromCache(&$RsId) {
+		// read data from cache
+		$this->_CacheTbsCurr++;
+		if ($this->_CacheTbsCurr>=$this->_CacheTbsEnd) {
+			return false;
+		} else {
+			return $this->_CacheTbsData[$this->_CacheTbsCurr];
+		}
+	}	
+	function _Tbs_RsFetch_ToBeSaved(&$RsId) {
+		// data to be saved
+		$Rec = $this->_Dbs_RsFetch($RsId);
+		if ($Rec!==false) $this->_CacheTbsData[] = $Rec;
+		return $Rec;
+	}
+	
 	function _Tbs_RsClose(&$RsId) {
 		if ($this->_CacheTbsOk) {
 			unset($this->_CacheTbsData); // free memory
 			return true;
 		} else {
-			$this->_CacheTryUpdate();
+			if ($this->_CacheSql!==false) $this->_CacheUpdate($this->_CacheTbsData);
 			return $this->_Dbs_RsClose($RsId);
 		}
 	}
+
+  // Other private methods
 
 	function _SqlError($ObjId) {
 		if ($this->Mode==TBSSQL_SILENT) return;
@@ -302,29 +349,73 @@ class clsTbsSql {
 		return $Sql;
 	}
 
+	function _GetData($Sql, &$Data, $OnlyFirstRow=false) {
+		
+		$RsId = $this->_Dbs_RsOpen($Sql);
+		if ($RsId===false) return $this->_SqlError($this->Id);
+		
+		$Data = array();
+		if ($OnlyFirstRow) {
+			$r =  $this->_Dbs_RsFetch($RsId);
+			if ($r!==false) $Data[] = $r;
+		} else {
+			while ($r = $this->_Dbs_RsFetch($RsId)) {
+				$Data[] = $r;
+			}
+		}
+		$this->_Dbs_RsClose($RsId);
+		return true;
+	}
+
+	function _GetFirstRow($Data, $FirstVal) {
+		if (isset($Data[0])) {
+			if ($FirstVal) {
+				return reset($Data[0]);
+			} else {
+				return $Data[0];
+			}
+		} else {
+			return false;
+		}
+	}
+
+	function _ItemFoundCol($Row, &$col1, &$col2) {
+		if ($Row===false) return false;
+		$col_lst = array_keys($Row);
+		$col1 = $col_lst[0];
+		$col2 = isset($col_lst[1]) ? $col_lst[1] : false;
+		return true;
+	}
+	
+	function _ItemAdd(&$Data, $Row, $col1, $col2) {
+		if ($col2===false) {
+			$Data[] = $Row[$col1];	
+		} else {
+			$Data[$Row[$col1]] = $Row[$col2];	
+		}
+	}
+
+  // cache functions
+
 	function _CacheTryRetrieve($Sql, &$Data) {
 	// Try to retrieve data from the cache file. Return true if $Data contains the data from the cache.
 	
-		// at this point $this->_CacheNewTimeout is always false
-		$this->_CacheNewTimeout = false; // for security
+		// at this point $this->_CacheSql is always false
+		$this->_CacheSql = false; // for security
 	
-		// update $this->_CacheTimeout and continue if has to retrieve data
+		// check if cache is enabled
 		if ($this->CacheSpecialTimeout===false) {
-			if ($this->CacheEnabled) {
-				$timeout = $this->CacheTimeout;
-			} else {
- 				return false;
- 			}
+			if ($this->CacheTimeout===false) return false;
+			$timeout = $this->CacheTimeout;
 		} else {
 			$timeout = $this->CacheSpecialTimeout;
-			if ($timeout===TBSSQL_DEFAULT) $timeout = $this->CacheTimeout;
 		}
 
 		// 
-		$this->_CacheFile = $this->CacheDir.'/cache_tbssql_'.md5($Sql).'.php'; // we save it as a PHP file in order to hide the contents from web users
+		$this->_CacheFile = $this->CacheDir.'/cache_tbssql_'.md5($Sql).$this->CacheSuffix.'.php'; // we save it as a PHP file in order to hide the contents from web users
 		$now = time();
-		//echo 'debug CacheTryRetrieve : cache file='.date('Y-m-d h:i:s',@filemtime($this->_CacheFile)).' , now='.date('Y-m-d h:i:s',$now)."<br>\r\n";
-		if ( file_exists($this->_CacheFile) && ($now<=filemtime($this->_CacheFile)) ) {
+		//echo 'debug CacheTryRetrieve : timout= '.$timeout.', cache file='.date('Y-m-d h:i:s',@filemtime($this->_CacheFile)).' , limit='.date('Y-m-d h:i:s',@filemtime($this->_CacheFile)+60*$timeout).' , now='.date('Y-m-d h:i:s',$now)."<br>\r\n";
+		if ( file_exists($this->_CacheFile) && ($now<=(filemtime($this->_CacheFile)+60*$timeout)) ) {
 			// retrieve the data
 			// echo 'debug CacheTryRetrieve : cache still current'."<br>\r\n";
 			include($this->_CacheFile); // set $CacheSql and $Data
@@ -339,91 +430,75 @@ class clsTbsSql {
 		}
 		
 		//echo 'debug CacheTryRetrieve : cache to be updated.'."<br>\r\n";
-		$this->_CacheNewTimeout = $timeout;
+		$this->_CacheSql = $Sql;
 		return false;
 		
 	}
 
-	function _CacheTryUpdate($Sql, $Data) {
-	// Try to update the cache if necessary
-		if ($this->_CacheNewTimeout===false) return false;
-		$cache_end = time() + 60*$this->_CacheNewTimeout;
-		$this->_CacheNewTimeout = false;
+	function _CacheUpdate($Data) {
+	// Update the cache
+
 		$fid = @fopen($this->_CacheFile, 'w');
 		if ($fid===false) {
 			$this->_Message('The cache file '.$this->_CacheFile.' cannot be saved.');
-			return false;
+			$ok = false;
 		} else {
 			flock($fid,2); // acquire an exlusive lock
-			fwrite($fid,'<?php $CacheSql='.var_export($Sql,true).'; ');
+			fwrite($fid,'<?php $CacheSql='.var_export($this->_CacheSql,true).'; ');
 			fwrite($fid,'$Data='.var_export($Data,true).';');
 			flock($fid,3); // release the lock
 			fclose($fid);
-			$ok = touch($this->_CacheFile, $cache_end);
 		  //echo 'debug CacheTryUpdate : cache file='.date('Y-m-d h:i:s',filemtime($this->_CacheFile)).' end='.date('Y-m-d h:i:s',$cache_end).' , now='.date('Y-m-d h:i:s',time()).' , ok='.var_export($ok,true)."<br>\r\n";
 			if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: Data saved in cache file '.$this->_CacheFile,'#663399');
-			return true;
+			$ok = true;
 		}
+		$this->_CacheSql = false;
+		$this->_CacheTryClearDir();
+		return $ok;
 	}
 
-	function _CacheCount() {
-
-		$file = $this->CacheDir.'/cache_tbssql_count.php';
-
-		if (file_exists($file)) include($file);
-		if (!isset($count)) $count = 0;
-
-		if ($count>=$this->CacheAutoClear) {
-			$this->_CacheClearDir();
-			$count = 1;
-		} else {
-			$count++;
-		}
-
-		// Updates the file
-		$fid = @fopen($file, 'w');
-		if ($fid===false) {
-			$this->_Message('The counter file '.$file.' cannot be saved.');
-		} else {
-			flock($fid,2); // acquire an exlusive lock
-			fwrite($fid,'<php? $count='.$count.';');
-			flock($fid,3); // release the lock
-			fclose($fid);
-		}
-	}
+	function _CacheTryClearDir() {
+	// Try to delete too old cache files
 	
-	function _CacheClearDir() {
-		$del = array();
+		// check if an auto clear must be done
+		if ($this->CacheAutoClear===false) return;
+		
+		$check_file = $this->CacheDir.'/cache_tbssql_info.php';
+		
+		// if the check file does not exist yet, we create it
+		if (!file_exists($check_file)) {
+			touch($check_file);
+			return;
+		}
+
+		// if the check file is too young, we do not clear
+		$limit = time()-60*$this->CacheAutoClear;
+		if (filemtime($check_file)>$limit) return;
+		
+		// clear the directory
+		$lst = array();
 		$dir = opendir($this->CacheDir);
-		$now = time();
+		$pref = 'cache_tbssql_';
+		$suff = $this->CacheSuffix.'.php';
+		$pref_len = strlen($pref);
+		$suff_len = strlen($suff);
+		$file_len = $pref_len+30+$suff_len;
 		while ($file = readdir($dir)) {
-			if ( (strlen($file)==47) && (substr($file,0,13)==='cache_tbssql_') ) {
+			if ( (strlen($file)==$file_len) && (substr($file,0,$pref)===$pref) && (substr($file,0,-$suff_len)===$suff) ) {
 				$fullpath = $this->CacheDir.'/'.$file;
-				if (filectime($fullpath)>=$now) unlink($fullpath);
+				if (filemtime($fullpath)<=$limit) $lst[] = $fullpath;
 			}
 		}
 		closedir($dir);		
-	}
 
-// Deprecated
+		foreach ($lst as $fullpath) {
+			unlink($fullpath);
+		}
 
-	function Value($DefVal,$Sql) {
-		$ArgLst = func_get_args();
-		array_shift($ArgLst);
-		$Sql = $this->_SqlProtect($ArgLst,false);
-		$x = $this->GetVal($Sql);
-		if ($x===false) $x = $DefVal;
-		return $x;
-	}
+		touch($check_file);
 
-	function Row1($Sql) {
-		$Sql = $this->_SqlProtect(func_get_args(),false);
-		return $this->GetRow($Sql);
-	}
-
-	function Rows($Sql) {
-		$Sql = $this->_SqlProtect(func_get_args(),false);
-		return $this->GetRows($Sql);
+	  if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: '.count($lst).' old cache files have been deleted from the cache directory '.$this->CacheDir,'#663399');
+		
 	}
 
 // -------------------------------
