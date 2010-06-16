@@ -2,12 +2,16 @@
 
 // TbsSql Engine
 // Version 2.7beta, 2010-06-10, Skrol29
-// [ok] bug: Trace doesn't work when using TinyButStrong
-// [  ] enh: Compatibility PHP 4
-// [  ] fct: Trace info for connexion with user or not
-// [  ] fct: Cache
-// [  ] fct: Version
-// [  ] suffix in cache fil names in order to separate databases if needed
+/*
+[ok] bug: Trace doesn't work when using TinyButStrong
+[ok] fct: Cache
+[ok] enh: Compatibility PHP 4
+[ok] fct: Version (what for ?)
+[ok] suffix in cache fil names in order to separate databases if needed
+[  ] fct: Trace info for connexion with user or not
+[  ] fct: TBSSQL_NOCACHE
+[  ] fct: retour objet
+*/
 
 define('TBSSQL_SILENT', 0);
 define('TBSSQL_NORMAL', 1);
@@ -453,15 +457,14 @@ class clsTbsSql {
 			$ok = true;
 		}
 		$this->_CacheSql = false;
-		$this->_CacheTryClearDir();
+		if ($this->CacheAutoClear!==false) $this->_CacheTryClearDir();
 		return $ok;
 	}
 
 	function _CacheTryClearDir() {
 	// Try to delete too old cache files
 	
-		// check if an auto clear must be done
-		if ($this->CacheAutoClear===false) return;
+		$this->CacheAutoClear = false; // only one try per script call is enought, no need to check for each SQL query
 		
 		$check_file = $this->CacheDir.'/cache_tbssql_info.php';
 		
