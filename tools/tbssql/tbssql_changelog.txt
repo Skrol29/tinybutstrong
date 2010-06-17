@@ -4,6 +4,13 @@ TbsSQL changelog
 Skrol29
 http://www.tinybutstrong.com/onlyyou.html
 
+Version 3.0, 2010-06-17
+
+- New cache feature
+- New property Version (is it useful?)
+- More compatibility with PHP 4
+- Trace mode now works when TbsSQL is used within TinyButStrong
+
 Version 2.6, 2009-11-26
 
 - Argument $Mode has been added to the class instantiation and to method Connect().

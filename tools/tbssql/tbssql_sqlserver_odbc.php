@@ -1,16 +1,16 @@
 <?php
 
 // TbsSql Engine
-// Version 2.7beta, 2010-06-10, Skrol29
+// Version 3.0beta, 2010-06-17, Skrol29
 /*
 [ok] bug: Trace doesn't work when using TinyButStrong
 [ok] fct: Cache
 [ok] enh: Compatibility PHP 4
 [ok] fct: Version (what for ?)
-[ok] suffix in cache fil names in order to separate databases if needed
+[ok] suffix in cache file names in order to separate databases if needed
+[ok] fct: TBSSQL_NOCACHE
 [  ] fct: Trace info for connexion with user or not
-[  ] fct: TBSSQL_NOCACHE
-[  ] fct: retour objet
+[  ] fct: return records as objects
 */
 
 define('TBSSQL_SILENT', 0);
@@ -20,18 +20,19 @@ define('TBSSQL_TRACE', 3);
 define('TBSSQL_1HOUR', 60);
 define('TBSSQL_1DAY', 24*60);
 define('TBSSQL_1WEEK', 7*24*60);
+define('TBSSQL_NOCACHE', -1);
 
 class clsTbsSql {
 
 	function __construct($srv='',$uid='',$pwd='',$db='',$drv='',$Mode=TBSSQL_NORMAL) {
 		// Default values (defined here to be compatible with both PHP 4 & 5)
-		$this->Version = '2.7beta';
+		$this->Version = '3.0beta2010-06-17';
 		$this->Id = false;
 		$this->SqlNull = 'NULL'; // can be modified by user
 		$this->CacheDir = '.';
 		$this->CacheTimeout = false; // in minutes
 		$this->CacheSpecialTimeout = false;
-		$this->CacheAutoClear = 7*24*60; // 1 week in minutes
+		$this->CacheAutoClear = TBSSQL_1WEEK; // 1 week in minutes
 		$this->CacheSuffix = '';
 		$this->_CacheSql = false; // is different from false if data as to be saved
 		if ($srv==='') {
@@ -409,10 +410,12 @@ class clsTbsSql {
 	
 		// check if cache is enabled
 		if ($this->CacheSpecialTimeout===false) {
-			if ($this->CacheTimeout===false) return false;
+			if (($this->CacheTimeout===false) || ($this->CacheTimeout===TBSSQL_NOCACHE)) return false;
 			$timeout = $this->CacheTimeout;
 		} else {
 			$timeout = $this->CacheSpecialTimeout;
+			$this->CacheSpecialTimeout = false;
+			if ($timeout===TBSSQL_NOCACHE) return false;
 		}
 
 		// 
@@ -457,15 +460,16 @@ class clsTbsSql {
 			$ok = true;
 		}
 		$this->_CacheSql = false;
-		if ($this->CacheAutoClear!==false) $this->_CacheTryClearDir();
+		if ($this->CacheAutoClear!==false) {
+			$this->_CacheTryClearDir();
+			$this->CacheAutoClear = false; // only one try per script call is enought, no need to check for each SQL query
+		}
 		return $ok;
 	}
 
 	function _CacheTryClearDir() {
 	// Try to delete too old cache files
 	
-		$this->CacheAutoClear = false; // only one try per script call is enought, no need to check for each SQL query
-		
 		$check_file = $this->CacheDir.'/cache_tbssql_info.php';
 		
 		// if the check file does not exist yet, we create it
@@ -485,9 +489,9 @@ class clsTbsSql {
 		$suff = $this->CacheSuffix.'.php';
 		$pref_len = strlen($pref);
 		$suff_len = strlen($suff);
-		$file_len = $pref_len+30+$suff_len;
+		$file_len = $pref_len+strlen(md5(''))+$suff_len;
 		while ($file = readdir($dir)) {
-			if ( (strlen($file)==$file_len) && (substr($file,0,$pref)===$pref) && (substr($file,0,-$suff_len)===$suff) ) {
+			if ( (strlen($file)==$file_len) && (substr($file,0,$pref_len)===$pref) && (substr($file,-$suff_len)===$suff) ) {
 				$fullpath = $this->CacheDir.'/'.$file;
 				if (filemtime($fullpath)<=$limit) $lst[] = $fullpath;
 			}
@@ -500,7 +504,7 @@ class clsTbsSql {
 
 		touch($check_file);
 
-	  if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: '.count($lst).' old cache files have been deleted from the cache directory '.$this->CacheDir,'#663399');
+	  if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: CacheAutoClear has deleted '.count($lst).' old cache files from directory '.$this->CacheDir,'#663399');
 		
 	}
 
@@ -638,7 +642,3 @@ class clsTbsSql {
 	}
 
 }
-
-
-
-?>
