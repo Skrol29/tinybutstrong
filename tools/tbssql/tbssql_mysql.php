@@ -1,7 +1,7 @@
 <?php
 
 // TbsSql Engine
-// Version 3.0beta, 2010-06-17, Skrol29
+// Version 3.0beta, 2010-06-23, Skrol29
 /*
 [ok] bug: Trace doesn't work when using TinyButStrong
 [ok] fct: Cache
@@ -21,12 +21,14 @@ define('TBSSQL_1HOUR', 60);
 define('TBSSQL_1DAY', 24*60);
 define('TBSSQL_1WEEK', 7*24*60);
 define('TBSSQL_NOCACHE', -1);
+define('TBSSQL_ARRAY', 1);
+define('TBSSQL_OBJECT', 2);
 
 class clsTbsSql {
 
 	function __construct($srv='',$uid='',$pwd='',$db='',$drv='',$Mode=TBSSQL_NORMAL) {
 		// Default values (defined here to be compatible with both PHP 4 & 5)
-		$this->Version = '3.0beta2010-06-17';
+		$this->Version = '3.0beta2010-06-23';
 		$this->Id = false;
 		$this->SqlNull = 'NULL'; // can be modified by user
 		$this->CacheDir = '.';
@@ -127,18 +129,45 @@ class clsTbsSql {
 		
 	}
 
-	function GetRows($Sql) {
+	function GetRows($Arg0) {
 		
 		$ArgLst = func_get_args();
-		$Sql = $this->_SqlProtect($ArgLst);
+		
+		// check if first argument may be an object option
+		$SqlPos = 0;
+		$ObjType = false;
+		if (is_string($Arg0)) {
+			if( (strpos($Arg0,' ')===false) && (count($ArgLst)>1) ) {
+				$SqlPos = 1;
+				$ObjType = 1;
+				$ObjClass = $Sql;
+			}
+		} elseif (is_object($Sql)) {
+			$SqlPos = 1;
+			$ObjType = 2;
+			$ObjRef = $Sql;
+		} elseif ($Sql===TBSSQL_OBJECT) {
+			$SqlPos = 1;
+			$ObjType = 3
+		}
+		
+		$Sql = $this->_SqlProtect($ArgLst, $SqlPos);
 		
 		$Data = array();
-		if ($this->_CacheTryRetrieve($Sql,$Data)) return $Data;
+		if (!$this->_CacheTryRetrieve($Sql,$Data)) {
+			if (!$this->_GetData($Sql, $Data)) return false;
+			if ($this->_CacheSql!==false) $this->_CacheUpdate($Data);
+		}
 		
-		if (!$this->_GetData($Sql, $Data)) return false;
-		
-		if ($this->_CacheSql!==false) $this->_CacheUpdate($Data);
-		
+		if ($ObjType!==false) {
+			$iMax = count($Data)-1;
+			if ($ObjType===1) {
+				for ($i=0;$i<=$iMax) $Data[$i] = () $Data[$i];
+			} elseif ($ObjType===2) {
+			} elseif ($ObjType===3) {
+			}
+		}
+
 		return $Data;
 		
 	}
@@ -284,6 +313,7 @@ class clsTbsSql {
 	}
 
 	function _TakeVar($VarName,$Key,&$Target,$MustBe=true) {
+	// Read gloabl variables for automatic connexion
 		if (isset($GLOBALS[$VarName][$Key])) {
 			$Target = $GLOBALS[$VarName][$Key];
 		} elseif ($MustBe) {
@@ -291,6 +321,16 @@ class clsTbsSql {
 			return false;
 		}
 		return true;
+	}
+
+	function _ObjConvStd(&$Val,$Key) {
+		$Val = (object) $Val;
+	}
+	function _ObjConvCls(&$Val,$Key) {
+		$Val = (object) $Val;
+	}
+	function _ObjConvClone(&$Val,$Key) {
+		$Val = clone $this->ObjRef;
 	}
 
 	function _SqlDate($Date,$Mode) {
@@ -309,12 +349,12 @@ class clsTbsSql {
 		return $this->_Dbs_Date($x,$Mode);
 	}
 
-	function _SqlProtect($ArgLst,$Normal=true) {
+	function _SqlProtect($ArgLst, $SqlPos=0, $Normal=true) {
 	// Replace items (%i% , @i@ , #i#, ~i~) with the corresponding protected values
-		$Sql = $ArgLst[0];
+		$Sql = $ArgLst[$SqlPos];
 		$IdxMax = count($ArgLst) - 1;
 		$ChrLst = array('%','@','#','~');
-		for ($i=1;$i<=$IdxMax;$i++) {
+		for ($i=$SqlPos+1;$i<=$IdxMax;$i++) {
 			for ($t=0;$t<=1;$t++) {
 				if ($t==0) {
 					// Scann normal tags
