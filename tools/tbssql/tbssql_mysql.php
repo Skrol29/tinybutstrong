@@ -13,6 +13,10 @@
 [  ] fct: return records as objects
 */
 
+if ( (version_compare(PHP_VERSION,'5')<0) && (!function_exists('clone'))  ) {
+	eval('function clone($object) {return $object;}'); // eval is needed because the syntax function clone() is refused in PHP 5
+}
+
 define('TBSSQL_SILENT', 0);
 define('TBSSQL_NORMAL', 1);
 define('TBSSQL_DEBUG', 2);
@@ -21,8 +25,8 @@ define('TBSSQL_1HOUR', 60);
 define('TBSSQL_1DAY', 24*60);
 define('TBSSQL_1WEEK', 7*24*60);
 define('TBSSQL_NOCACHE', -1);
-define('TBSSQL_ARRAY', 1);
-define('TBSSQL_OBJECT', 2);
+define('TBSSQL_ARRAY', 'array');
+define('TBSSQL_OBJECT', 'object');
 
 class clsTbsSql {
 
@@ -93,81 +97,55 @@ class clsTbsSql {
 		$Sql = $this->_SqlProtect($ArgLst);
 		
 		$Data = array();
-		if ($this->_CacheTryRetrieve($Sql,$Data)) return $this->_GetFirstRow($Data, true);
-			
-		if ($this->_CacheSql===false) {
-			// no cache
-			if (!$this->_GetData($Sql, $Data, true)) return false;
-		} else {
-			// cache has to be updated first
-			if (!$this->_GetData($Sql, $Data)) return false;
-			$this->_CacheUpdate($Data);
+		if (!$this->_CacheTryRetrieve($Sql,$Data)) {
+			if (!$this->_GetDataFromDb($Sql, $Data, ($this->_CacheSql===false))) return false; // if CacheSql is false, then we do not need to reteive all the records from the db
+			if ($this->_CacheSql!==false) $this->_CacheUpdate($Data);
 		}
 
-		return $this->_GetFirstRow($Data, true);
-
-	}
+		if (count($Data)==0) {
+			return false;
+		} else {
+			return reset($Data[0]);
+		}
 
 	function GetRow($Sql) {
 		
 		$ArgLst = func_get_args();
-		$Sql = $this->_SqlProtect($ArgLst);
-		
-		$Data = array();
-		if ($this->_CacheTryRetrieve($Sql,$Data)) return $this->_GetFirstRow($Data, false);
-			
-		if ($this->_CacheSql===false) {
-			// no cache
-			if (!$this->_GetData($Sql, $Data, true)) return false;
-		} else {
-			// cache has to be updated first
-			if (!$this->_GetData($Sql, $Data)) return false;
-			$this->_CacheUpdate($Data);
-		}
 
-		return $this->_GetFirstRow($Data, false);
-		
-	}
-
-	function GetRows($Arg0) {
-		
-		$ArgLst = func_get_args();
-		
-		// check if first argument may be an object option
-		$SqlPos = 0;
-		$ObjType = false;
-		if (is_string($Arg0)) {
-			if( (strpos($Arg0,' ')===false) && (count($ArgLst)>1) ) {
-				$SqlPos = 1;
-				$ObjType = 1;
-				$ObjClass = $Sql;
-			}
-		} elseif (is_object($Sql)) {
-			$SqlPos = 1;
-			$ObjType = 2;
-			$ObjRef = $Sql;
-		} elseif ($Sql===TBSSQL_OBJECT) {
-			$SqlPos = 1;
-			$ObjType = 3
-		}
-		
+		$ObjConv = $this->_ObjCheck($Arg0, $ArgLst);
+		$SqlPos = ($ObjConv) ? 1 : 0;
 		$Sql = $this->_SqlProtect($ArgLst, $SqlPos);
 		
 		$Data = array();
 		if (!$this->_CacheTryRetrieve($Sql,$Data)) {
-			if (!$this->_GetData($Sql, $Data)) return false;
+			if (!$this->_GetDataFromDb($Sql, $Data, ($this->_CacheSql===false))) return false; // if CacheSql is false, then we do not need to reteive all the records from the db
+			if ($this->_CacheSql!==false) $this->_CacheUpdate($Data);
+		}
+
+		if (count($Data)==0) return false;
+		
+		$Data = array($Data[0]);
+		if ($ObjConv!==false) $this->_ObjConversion($Data, $Arg0);
+		return $Data[0];
+
+	}
+
+	function GetRows($Arg0) {
+
+		$ArgLst = func_get_args();
+
+		$ObjConv = $this->_ObjCheck($Arg0, $ArgLst);
+		$SqlPos = ($ObjConv) ? 1 : 0;
+		$Sql = $this->_SqlProtect($ArgLst, $SqlPos);
+
+		$Data = array();
+		if (!$this->_CacheTryRetrieve($Sql,$Data)) {
+			if (!$this->_GetDataFromDb($Sql, $Data)) return false;
 			if ($this->_CacheSql!==false) $this->_CacheUpdate($Data);
 		}
 		
-		if ($ObjType!==false) {
-			$iMax = count($Data)-1;
-			if ($ObjType===1) {
-				for ($i=0;$i<=$iMax) $Data[$i] = () $Data[$i];
-			} elseif ($ObjType===2) {
-			} elseif ($ObjType===3) {
-			}
-		}
-
+		if ($ObjConv!==false) $this->_ObjConversion($Data, $Arg0);
+		
 		return $Data;
 		
 	}
@@ -194,7 +172,7 @@ class clsTbsSql {
 				$this->_Dbs_RsClose($RsId);
 				return $Data;
 			} else {
-				if (!$this->_GetData($Sql, $Data)) return false;
+				if (!$this->_GetDataFromDb($Sql, $Data)) return false;
 				$this->_CacheUpdate($Data);
 			}
 		}
@@ -323,14 +301,34 @@ class clsTbsSql {
 		return true;
 	}
 
-	function _ObjConvStd(&$Val,$Key) {
-		$Val = (object) $Val;
+	function _ObjCheck($Arg0, $ArgLst) {
+	// Check if an object conversion is asked
+		if (is_string($Arg0)) {
+			if( (strpos($Arg0,' ')===false) && (count($ArgLst)>1) ) return true;
+		} elseif (is_object($Arg0)) {
+			return true;
+		}
+		return false;
 	}
-	function _ObjConvCls(&$Val,$Key) {
-		$Val = (object) $Val;
-	}
-	function _ObjConvClone(&$Val,$Key) {
-		$Val = clone $this->ObjRef;
+
+	function _ObjConversion(&$Data, $ObjRef) {
+	// Convert the records from arrays to objects
+	// Note: foreach() is twice faster than array_walk() for both record and column loops.
+		if (is_object($ObjRef)) {
+			foreach ($Data as $idx => $rec) {
+				$obj = clone($ObjRef);
+				foreach ($rec as $col => $val) {$obj->$col = $val;}
+				$Data[$idx] = $obj;
+			}
+		} else {
+			if ($ObjRef==='array') return;
+			if (($ObjRef==='') || ($ObjRef==='object')) $ObjRef = 'stdClass';
+			foreach ($Data as $idx => $rec) {
+				$obj = new $ObjRef; // the class name
+				foreach ($rec as $col => $val) {$obj->$col = $val;}
+				$Data[$idx] = $obj;
+			}
+		}
 	}
 
 	function _SqlDate($Date,$Mode) {
@@ -394,7 +392,7 @@ class clsTbsSql {
 		return $Sql;
 	}
 
-	function _GetData($Sql, &$Data, $OnlyFirstRow=false) {
+	function _GetDataFromDb($Sql, &$Data, $OnlyFirstRow=false) {
 		
 		$RsId = $this->_Dbs_RsOpen($Sql);
 		if ($RsId===false) return $this->_SqlError($this->Id);
@@ -410,18 +408,6 @@ class clsTbsSql {
 		}
 		$this->_Dbs_RsClose($RsId);
 		return true;
-	}
-
-	function _GetFirstRow($Data, $FirstVal) {
-		if (isset($Data[0])) {
-			if ($FirstVal) {
-				return reset($Data[0]);
-			} else {
-				return $Data[0];
-			}
-		} else {
-			return false;
-		}
 	}
 
 	function _ItemFoundCol($Row, &$col1, &$col2) {
