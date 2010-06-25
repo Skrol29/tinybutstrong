@@ -554,80 +554,37 @@ class clsTbsSql {
 // Specific to the Database System
 // -------------------------------
 
-// Database Engine: MySQL, using the MySQL Improved Extension
-// Version 1.03, 2010-06-10, Skrol29
-	
 	function _Dbs_Prepare() {
-		return true;
 	}
 
 	function _Dbs_Connect($srv,$uid,$pwd,$db,$drv) {
-	// Should set $this->Id, value false means connection failed.
-
-		// Information, must be the same for any database type	
-		if ($this->Mode==TBSSQL_DEBUG) $this->LastSql = 'Connection String='.$srv;
-		if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace Connection String: '.$srv,'#663399');
-
-		$this->Id = @new MySQLi($srv,$uid,$pwd,$db);
-		if (mysqli_connect_errno()!=0) $this->Id = false;
-
 	}
 
 	function _Dbs_Close() {
-		$this->Id->close();
-		$this->Id = false;
 	}
 
 	function _Dbs_Error($ObjId) {
-		if ($this->Id===false) {
-			return mysqli_connect_error();
-		} else {
-			return $this->Id->error;
-		}
 	}
-
+	
 	function _Dbs_RsOpen($Sql) {
-		return $this->Id->query($Sql,MYSQLI_USE_RESULT);
 	}
 
 	function _Dbs_RsFetch(&$RsId) {
-		$x = $RsId->fetch_assoc();
-		if (is_null($x)) $x = false;
-		return $x;
 	}
 
 	function _Dbs_RsClose(&$RsId) {
-		if (is_object($RsId)) $RsId->free_result(); // Maty not be an object for Non Select statements
-		return true;
 	}
 	
 	function _Dbs_ProtectStr($Txt) {
-		return $this->Id->real_escape_string($Txt);
 	}
 	
 	function _Dbs_Date($Timestamp,$Mode) {
-		switch ($Mode) {
-		case 1:
-			// Date only
-			return '\''.date('Y-m-d',$Timestamp).'\'';
-		case 2:
-			// Date and time
-			return '\''.date('Y-m-d H:i:s',$Timestamp).'\'';
-		case 0:
-			// Value is a string
-			return '\''.$this->_Dbs_ProtectStr($Timestamp).'\'';
-		default:
-			// Error in date recognization
-			return '\'0000-00-00\'';
-		}  
 	}
 
 	function _Dbs_LastRowId() {
-		return $this->Id->insert_id;
 	}
 	
 	function _Dbs_AffectedRows() {
-		return $this->Id->affected_rows;
 	}
 
 }

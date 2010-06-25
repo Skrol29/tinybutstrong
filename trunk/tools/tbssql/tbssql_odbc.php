@@ -1,7 +1,7 @@
 <?php
 
 // TbsSql Engine
-// Version 3.0beta, 2010-06-17, Skrol29
+// Version 3.0beta, 2010-06-25, Skrol29
 /*
 [ok] bug: Trace doesn't work when using TinyButStrong
 [ok] fct: Cache
@@ -9,9 +9,14 @@
 [ok] fct: Version (what for ?)
 [ok] suffix in cache file names in order to separate databases if needed
 [ok] fct: TBSSQL_NOCACHE
+[ok] fct: return records as objects
+[  ] fct: debug grid
 [  ] fct: Trace info for connexion with user or not
-[  ] fct: return records as objects
 */
+
+if ( (version_compare(PHP_VERSION,'5')<0) && (!function_exists('clone'))  ) {
+	eval('function clone($object) {return $object;}'); // eval is needed because the syntax function clone() is refused in PHP 5
+}
 
 define('TBSSQL_SILENT', 0);
 define('TBSSQL_NORMAL', 1);
@@ -21,14 +26,17 @@ define('TBSSQL_1HOUR', 60);
 define('TBSSQL_1DAY', 24*60);
 define('TBSSQL_1WEEK', 7*24*60);
 define('TBSSQL_NOCACHE', -1);
+define('TBSSQL_ARRAY', 'array');
+define('TBSSQL_OBJECT', 'object');
 
 class clsTbsSql {
 
 	function __construct($srv='',$uid='',$pwd='',$db='',$drv='',$Mode=TBSSQL_NORMAL) {
 		// Default values (defined here to be compatible with both PHP 4 & 5)
-		$this->Version = '3.0beta2010-06-17';
+		$this->Version = '3.0beta2010-06-23';
 		$this->Id = false;
 		$this->SqlNull = 'NULL'; // can be modified by user
+		$this->DefaultRecType = TBSSQL_ARRAY;
 		$this->CacheDir = '.';
 		$this->CacheTimeout = false; // in minutes
 		$this->CacheSpecialTimeout = false;
@@ -91,53 +99,68 @@ class clsTbsSql {
 		$Sql = $this->_SqlProtect($ArgLst);
 		
 		$Data = array();
-		if ($this->_CacheTryRetrieve($Sql,$Data)) return $this->_GetFirstRow($Data, true);
-			
-		if ($this->_CacheSql===false) {
-			// no cache
-			if (!$this->_GetData($Sql, $Data, true)) return false;
-		} else {
-			// cache has to be updated first
-			if (!$this->_GetData($Sql, $Data)) return false;
-			$this->_CacheUpdate($Data);
+		if (!$this->_CacheTryRetrieve($Sql,$Data)) {
+			if (!$this->_GetDataFromDb($Sql, $Data, ($this->_CacheSql===false))) return false; // if CacheSql is false, then we do not need to retrieve all the records from the db
+			if ($this->_CacheSql!==false) $this->_CacheUpdate($Data);
 		}
 
-		return $this->_GetFirstRow($Data, true);
+		if (count($Data)==0) {
+			return false;
+		} else {
+			return reset($Data[0]);
+		}
 
 	}
 
-	function GetRow($Sql) {
+	function GetRow($Arg0) {
 		
 		$ArgLst = func_get_args();
-		$Sql = $this->_SqlProtect($ArgLst);
+
+		$ObjConv = $this->_ObjCheck($Arg0, $ArgLst);
+		$SqlPos = ($ObjConv) ? 1 : 0;
+		$Sql = $this->_SqlProtect($ArgLst, $SqlPos);
 		
 		$Data = array();
-		if ($this->_CacheTryRetrieve($Sql,$Data)) return $this->_GetFirstRow($Data, false);
-			
-		if ($this->_CacheSql===false) {
-			// no cache
-			if (!$this->_GetData($Sql, $Data, true)) return false;
-		} else {
-			// cache has to be updated first
-			if (!$this->_GetData($Sql, $Data)) return false;
-			$this->_CacheUpdate($Data);
+		if (!$this->_CacheTryRetrieve($Sql,$Data)) {
+			if (!$this->_GetDataFromDb($Sql, $Data, ($this->_CacheSql===false))) return false; // if CacheSql is false, then we do not need to retrieve all the records from the db
+			if ($this->_CacheSql!==false) $this->_CacheUpdate($Data);
 		}
 
-		return $this->_GetFirstRow($Data, false);
+		if (count($Data)==0) return false;
 		
+		$Data = array($Data[0]);
+
+		// conversion to object		
+		if ($ObjConv) {
+			$this->_ObjConversion($Data, $Arg0);
+		} elseif ($this->DefaultRecType!==TBSSQL_ARRAY) {
+			$this->_ObjConversion($Data, $this->DefaultRecType);
+		}
+
+		return $Data[0];
+
 	}
 
-	function GetRows($Sql) {
-		
+	function GetRows($Arg0) {
+
 		$ArgLst = func_get_args();
-		$Sql = $this->_SqlProtect($ArgLst);
-		
+
+		$ObjConv = $this->_ObjCheck($Arg0, $ArgLst);
+		$SqlPos = ($ObjConv) ? 1 : 0;
+		$Sql = $this->_SqlProtect($ArgLst, $SqlPos);
+
 		$Data = array();
-		if ($this->_CacheTryRetrieve($Sql,$Data)) return $Data;
-		
-		if (!$this->_GetData($Sql, $Data)) return false;
-		
-		if ($this->_CacheSql!==false) $this->_CacheUpdate($Data);
+		if (!$this->_CacheTryRetrieve($Sql,$Data)) {
+			if (!$this->_GetDataFromDb($Sql, $Data)) return false;
+			if ($this->_CacheSql!==false) $this->_CacheUpdate($Data);
+		}
+
+		// conversion to object		
+		if ($ObjConv) {
+			$this->_ObjConversion($Data, $Arg0);
+		} elseif ($this->DefaultRecType!==TBSSQL_ARRAY) {
+			$this->_ObjConversion($Data, $this->DefaultRecType);
+		}
 		
 		return $Data;
 		
@@ -165,7 +188,7 @@ class clsTbsSql {
 				$this->_Dbs_RsClose($RsId);
 				return $Data;
 			} else {
-				if (!$this->_GetData($Sql, $Data)) return false;
+				if (!$this->_GetDataFromDb($Sql, $Data)) return false;
 				$this->_CacheUpdate($Data);
 			}
 		}
@@ -284,6 +307,7 @@ class clsTbsSql {
 	}
 
 	function _TakeVar($VarName,$Key,&$Target,$MustBe=true) {
+	// Read gloabl variables for automatic connexion
 		if (isset($GLOBALS[$VarName][$Key])) {
 			$Target = $GLOBALS[$VarName][$Key];
 		} elseif ($MustBe) {
@@ -291,6 +315,36 @@ class clsTbsSql {
 			return false;
 		}
 		return true;
+	}
+
+	function _ObjCheck($Arg0, $ArgLst) {
+	// Check if an object conversion is asked
+		if (is_string($Arg0)) {
+			if( (strpos($Arg0,' ')===false) && (strpos($Arg0,"\r")===false) && (strpos($Arg0,"\n")===false) && (count($ArgLst)>1) ) return true;
+		} elseif (is_object($Arg0)) {
+			return true;
+		}
+		return false;
+	}
+
+	function _ObjConversion(&$Data, $ObjRef) {
+	// Convert the records from arrays to objects
+	// Note: foreach() is twice faster than array_walk() for both record and column loops.
+		if (is_object($ObjRef)) {
+			foreach ($Data as $idx => $rec) {
+				$obj = clone($ObjRef);
+				foreach ($rec as $col => $val) {$obj->$col = $val;}
+				$Data[$idx] = $obj;
+			}
+		} else {
+			if ($ObjRef==='array') return;
+			if (($ObjRef==='') || ($ObjRef==='object')) $ObjRef = 'stdClass';
+			foreach ($Data as $idx => $rec) {
+				$obj = new $ObjRef; // the class name
+				foreach ($rec as $col => $val) {$obj->$col = $val;}
+				$Data[$idx] = $obj;
+			}
+		}
 	}
 
 	function _SqlDate($Date,$Mode) {
@@ -309,12 +363,12 @@ class clsTbsSql {
 		return $this->_Dbs_Date($x,$Mode);
 	}
 
-	function _SqlProtect($ArgLst,$Normal=true) {
+	function _SqlProtect($ArgLst, $SqlPos=0, $Normal=true) {
 	// Replace items (%i% , @i@ , #i#, ~i~) with the corresponding protected values
-		$Sql = $ArgLst[0];
+		$Sql = $ArgLst[$SqlPos];
 		$IdxMax = count($ArgLst) - 1;
 		$ChrLst = array('%','@','#','~');
-		for ($i=1;$i<=$IdxMax;$i++) {
+		for ($i=$SqlPos+1;$i<=$IdxMax;$i++) {
 			for ($t=0;$t<=1;$t++) {
 				if ($t==0) {
 					// Scann normal tags
@@ -354,7 +408,7 @@ class clsTbsSql {
 		return $Sql;
 	}
 
-	function _GetData($Sql, &$Data, $OnlyFirstRow=false) {
+	function _GetDataFromDb($Sql, &$Data, $OnlyFirstRow=false) {
 		
 		$RsId = $this->_Dbs_RsOpen($Sql);
 		if ($RsId===false) return $this->_SqlError($this->Id);
@@ -370,18 +424,6 @@ class clsTbsSql {
 		}
 		$this->_Dbs_RsClose($RsId);
 		return true;
-	}
-
-	function _GetFirstRow($Data, $FirstVal) {
-		if (isset($Data[0])) {
-			if ($FirstVal) {
-				return reset($Data[0]);
-			} else {
-				return $Data[0];
-			}
-		} else {
-			return false;
-		}
 	}
 
 	function _ItemFoundCol($Row, &$col1, &$col2) {
@@ -427,11 +469,11 @@ class clsTbsSql {
 			// echo 'debug CacheTryRetrieve : cache still current'."<br>\r\n";
 			include($this->_CacheFile); // set $CacheSql and $Data
 			if ($Sql===$CacheSql) {
-				if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: Data retreived from cache file '.$this->_CacheFile,'#663399');
+				if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: Data retrieved from cache file '.$this->_CacheFile,'#663399');
 				return true;
 			} else {
 				// It can happens very rarely that two different SQL queries have the same md5, with this chech we are sure to have to good result
-				if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: Data not retreived from cache file '.$this->_CacheFile.' because SQL is different.','#663399');
+				if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: Data not retrieved from cache file '.$this->_CacheFile.' because SQL is different.','#663399');
 				return false;
 			}
 		}
@@ -512,7 +554,7 @@ class clsTbsSql {
 // Specific to the Database System
 // -------------------------------
 
-// Database Engine: SQL-Server via ODBC
+// Database Engine: Windows or Linux ODBC
 // Version 1.03, 2010-06-10, Skrol29
 	
 	function _Dbs_Prepare() {

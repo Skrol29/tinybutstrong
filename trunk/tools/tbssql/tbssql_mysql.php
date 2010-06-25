@@ -1,7 +1,7 @@
 <?php
 
 // TbsSql Engine
-// Version 3.0beta, 2010-06-23, Skrol29
+// Version 3.0beta, 2010-06-25, Skrol29
 /*
 [ok] bug: Trace doesn't work when using TinyButStrong
 [ok] fct: Cache
@@ -9,8 +9,9 @@
 [ok] fct: Version (what for ?)
 [ok] suffix in cache file names in order to separate databases if needed
 [ok] fct: TBSSQL_NOCACHE
+[ok] fct: return records as objects
+[  ] fct: debug grid
 [  ] fct: Trace info for connexion with user or not
-[  ] fct: return records as objects
 */
 
 if ( (version_compare(PHP_VERSION,'5')<0) && (!function_exists('clone'))  ) {
@@ -35,6 +36,7 @@ class clsTbsSql {
 		$this->Version = '3.0beta2010-06-23';
 		$this->Id = false;
 		$this->SqlNull = 'NULL'; // can be modified by user
+		$this->DefaultRecType = TBSSQL_ARRAY;
 		$this->CacheDir = '.';
 		$this->CacheTimeout = false; // in minutes
 		$this->CacheSpecialTimeout = false;
@@ -98,7 +100,7 @@ class clsTbsSql {
 		
 		$Data = array();
 		if (!$this->_CacheTryRetrieve($Sql,$Data)) {
-			if (!$this->_GetDataFromDb($Sql, $Data, ($this->_CacheSql===false))) return false; // if CacheSql is false, then we do not need to reteive all the records from the db
+			if (!$this->_GetDataFromDb($Sql, $Data, ($this->_CacheSql===false))) return false; // if CacheSql is false, then we do not need to retrieve all the records from the db
 			if ($this->_CacheSql!==false) $this->_CacheUpdate($Data);
 		}
 
@@ -108,7 +110,9 @@ class clsTbsSql {
 			return reset($Data[0]);
 		}
 
-	function GetRow($Sql) {
+	}
+
+	function GetRow($Arg0) {
 		
 		$ArgLst = func_get_args();
 
@@ -118,14 +122,21 @@ class clsTbsSql {
 		
 		$Data = array();
 		if (!$this->_CacheTryRetrieve($Sql,$Data)) {
-			if (!$this->_GetDataFromDb($Sql, $Data, ($this->_CacheSql===false))) return false; // if CacheSql is false, then we do not need to reteive all the records from the db
+			if (!$this->_GetDataFromDb($Sql, $Data, ($this->_CacheSql===false))) return false; // if CacheSql is false, then we do not need to retrieve all the records from the db
 			if ($this->_CacheSql!==false) $this->_CacheUpdate($Data);
 		}
 
 		if (count($Data)==0) return false;
 		
 		$Data = array($Data[0]);
-		if ($ObjConv!==false) $this->_ObjConversion($Data, $Arg0);
+
+		// conversion to object		
+		if ($ObjConv) {
+			$this->_ObjConversion($Data, $Arg0);
+		} elseif ($this->DefaultRecType!==TBSSQL_ARRAY) {
+			$this->_ObjConversion($Data, $this->DefaultRecType);
+		}
+
 		return $Data[0];
 
 	}
@@ -143,8 +154,13 @@ class clsTbsSql {
 			if (!$this->_GetDataFromDb($Sql, $Data)) return false;
 			if ($this->_CacheSql!==false) $this->_CacheUpdate($Data);
 		}
-		
-		if ($ObjConv!==false) $this->_ObjConversion($Data, $Arg0);
+
+		// conversion to object		
+		if ($ObjConv) {
+			$this->_ObjConversion($Data, $Arg0);
+		} elseif ($this->DefaultRecType!==TBSSQL_ARRAY) {
+			$this->_ObjConversion($Data, $this->DefaultRecType);
+		}
 		
 		return $Data;
 		
@@ -304,7 +320,7 @@ class clsTbsSql {
 	function _ObjCheck($Arg0, $ArgLst) {
 	// Check if an object conversion is asked
 		if (is_string($Arg0)) {
-			if( (strpos($Arg0,' ')===false) && (count($ArgLst)>1) ) return true;
+			if( (strpos($Arg0,' ')===false) && (strpos($Arg0,"\r")===false) && (strpos($Arg0,"\n")===false) && (count($ArgLst)>1) ) return true;
 		} elseif (is_object($Arg0)) {
 			return true;
 		}
@@ -453,11 +469,11 @@ class clsTbsSql {
 			// echo 'debug CacheTryRetrieve : cache still current'."<br>\r\n";
 			include($this->_CacheFile); // set $CacheSql and $Data
 			if ($Sql===$CacheSql) {
-				if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: Data retreived from cache file '.$this->_CacheFile,'#663399');
+				if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: Data retrieved from cache file '.$this->_CacheFile,'#663399');
 				return true;
 			} else {
 				// It can happens very rarely that two different SQL queries have the same md5, with this chech we are sure to have to good result
-				if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: Data not retreived from cache file '.$this->_CacheFile.' because SQL is different.','#663399');
+				if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: Data not retrieved from cache file '.$this->_CacheFile.' because SQL is different.','#663399');
 				return false;
 			}
 		}
@@ -538,7 +554,7 @@ class clsTbsSql {
 // Specific to the Database System
 // -------------------------------
 
-// Database Engine: SQL-Server via ODBC
+// Database Engine: MySQL, using mysql functions
 // Version 1.03, 2010-06-10, Skrol29
 	
 	function _Dbs_Prepare() {
