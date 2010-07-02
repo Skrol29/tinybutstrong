@@ -21,7 +21,8 @@ if ( (version_compare(PHP_VERSION,'5')<0) && (!function_exists('clone'))  ) {
 define('TBSSQL_SILENT', 0);
 define('TBSSQL_NORMAL', 1);
 define('TBSSQL_DEBUG', 2);
-define('TBSSQL_TRACE', 3);
+define('TBSSQL_TRACE', 4);
+define('TBSSQL_GRID', 8);
 define('TBSSQL_1HOUR', 60);
 define('TBSSQL_1DAY', 24*60);
 define('TBSSQL_1WEEK', 7*24*60);
@@ -65,7 +66,7 @@ class clsTbsSql {
 		if ($auto) {
 			// Connection by a global variable
 			$var = $srv;
-			if (!isset($GLOBALS[$var])) return $this->_Message('Automatic Connection: global variable \''.$var.'\' is not found.');
+			if (!isset($GLOBALS[$var])) return $this->_Message('[Error] Automatic Connection failed because the global variable \''.$var.'\' is not found.');
 			if (!$this->_TakeVar($var,'srv',$srv)) return false;
 			if (!$this->_TakeVar($var,'uid',$uid)) return false;
 			if (!$this->_TakeVar($var,'pwd',$pwd)) return false;
@@ -300,7 +301,7 @@ class clsTbsSql {
 
 	function _Message($Txt,$Color='#FF0000') {
 		if ($this->Mode!=TBSSQL_SILENT) {
-			echo '<div style="color: '.$Color.';">[TbsSql] '.nl2br(htmlentities($Txt)).'</div>'."\r\n";
+			echo '<div style="color: '.$Color.';">[TbsSql]'.nl2br(htmlentities($Txt)).'</div>'."\r\n";
 			flush();
 		}
 		return false;
@@ -311,7 +312,7 @@ class clsTbsSql {
 		if (isset($GLOBALS[$VarName][$Key])) {
 			$Target = $GLOBALS[$VarName][$Key];
 		} elseif ($MustBe) {
-			$this->_Message('Automatic Connection: item \''.$Key.'\' is not found in the global variable \''.$VarName.'\'.');
+			$this->_Message('[Error]: Automatic Connection failed because the item \''.$Key.'\' is not found in the global variable \''.$VarName.'\'.');
 			return false;
 		}
 		return true;
@@ -353,7 +354,7 @@ class clsTbsSql {
 			$x = strtotime($Date);
 			if (($x===-1) or ($x===false)) {
 				// display error message
-				$this->_Message('Date value not recognized: '.$Date);
+				$this->_Message('[Error]: Date value not recognized: '.$Date);
 				$Mode = 0; // Try with the string mode
 				$x = $Date;
 			}
@@ -401,8 +402,8 @@ class clsTbsSql {
 		if ($Normal) {
 			if ($this->Mode==TBSSQL_DEBUG) {
 				$this->LastSql = $Sql;
-			} elseif ($this->Mode==TBSSQL_TRACE) {
-				$this->_Message('Trace SQL: '.$Sql,'#663399');
+			} elseif (($this->Mode & TBSSQL_TRACE)===TBSSQL_TRACE) {
+				$this->_Message('[Trace]: '.$Sql,'#663399');
 			}
 		}
 		return $Sql;
@@ -422,7 +423,11 @@ class clsTbsSql {
 				$Data[] = $r;
 			}
 		}
+		
 		$this->_Dbs_RsClose($RsId);
+		
+		if (($this->Mode & TBSSQL_GRID)===TBSSQL_GRID) echo $this->_HtmlGrid($Data);
+		
 		return true;
 	}
 
@@ -442,7 +447,54 @@ class clsTbsSql {
 		}
 	}
 
-  // cache functions
+// trace functions
+// ---------------
+
+	function _HtmlGrid($Data) {
+
+		$nl = "\n";
+		$nbsp = '&nbsp;';
+		$firstrow = true;
+		$row_bg = array(0=>'#faebd7', 1=>'#fff8dc');
+		$row_idx = 0;
+
+		$html = $nl.'<table border="1" cellspacing="0" cellpadding="2">';
+		
+		foreach ($Data as $id => $row) {
+			if ($firstrow) {
+				$html .= $nl.' <tr bgcolor="#999999"><td>#</td>';
+				foreach ($row as $col => $val) $html .= '<td>'.str_replace(' ',$nbsp,$col).'</td>';
+				$html .= '</tr>';
+				$firstrow = false;
+			}
+			$html .= $nl.' <tr bgcolor="'.$row_bg[$row_idx].'"><td>'.$id.'</td>';
+			foreach ($row as $col => $val) $html .= '<td>'.str_replace(' ',$nbsp,strval($val)).'</td>';
+			$html .= '</tr>';
+			$row_idx++;
+			if ($row_idx>1) $row_idx=0;
+		}
+		
+		if ($firstrow) {
+			$html .= $nl.' <tr bgcolor="'.$row_bg[0].'"><td>No data</td></tr>';
+		}
+		
+		$html .= $nl.'</table>';
+
+		return $html;
+
+	}
+
+	function _TraceGetTime() {
+	// return the current timer in milli-seconds
+		$x = microtime();
+		$p = strpos($x,' ');
+		if ($p===false) return (float)0;
+		$x = substr($x,$p+1).substr($x,1,$p);
+		return (float)$x;
+	}
+
+// cache functions
+// ---------------
 
 	function _CacheTryRetrieve($Sql, &$Data) {
 	// Try to retrieve data from the cache file. Return true if $Data contains the data from the cache.
@@ -469,11 +521,12 @@ class clsTbsSql {
 			// echo 'debug CacheTryRetrieve : cache still current'."<br>\r\n";
 			include($this->_CacheFile); // set $CacheSql and $Data
 			if ($Sql===$CacheSql) {
-				if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: Data retrieved from cache file '.$this->_CacheFile,'#663399');
+				if (($this->Mode & TBSSQL_TRACE)===TBSSQL_TRACE) $this->_Message('[Trace]: Data retrieved from cache file '.$this->_CacheFile,'#663399');
+				if (($this->Mode & TBSSQL_GRID)===TBSSQL_GRID) echo $this->_HtmlGrid($Data);
 				return true;
 			} else {
 				// It can happens very rarely that two different SQL queries have the same md5, with this chech we are sure to have to good result
-				if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: Data not retrieved from cache file '.$this->_CacheFile.' because SQL is different.','#663399');
+				if (($this->Mode & TBSSQL_TRACE)===TBSSQL_TRACE) $this->_Message('[Trace]: Data not retrieved from cache file '.$this->_CacheFile.' because SQL is different.','#663399');
 				return false;
 			}
 		}
@@ -489,7 +542,7 @@ class clsTbsSql {
 
 		$fid = @fopen($this->_CacheFile, 'w');
 		if ($fid===false) {
-			$this->_Message('The cache file '.$this->_CacheFile.' cannot be saved.');
+			$this->_Message('[Error]: The cache file '.$this->_CacheFile.' cannot be saved.');
 			$ok = false;
 		} else {
 			flock($fid,2); // acquire an exlusive lock
@@ -498,7 +551,7 @@ class clsTbsSql {
 			flock($fid,3); // release the lock
 			fclose($fid);
 		  //echo 'debug CacheTryUpdate : cache file='.date('Y-m-d h:i:s',filemtime($this->_CacheFile)).' end='.date('Y-m-d h:i:s',$cache_end).' , now='.date('Y-m-d h:i:s',time()).' , ok='.var_export($ok,true)."<br>\r\n";
-			if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: Data saved in cache file '.$this->_CacheFile,'#663399');
+			if (($this->Mode & TBSSQL_TRACE)===TBSSQL_TRACE) $this->_Message('[Trace]: Data saved in cache file '.$this->_CacheFile,'#663399');
 			$ok = true;
 		}
 		$this->_CacheSql = false;
@@ -546,7 +599,7 @@ class clsTbsSql {
 
 		touch($check_file);
 
-	  if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace SQL: CacheAutoClear has deleted '.count($lst).' old cache files from directory '.$this->CacheDir,'#663399');
+	  if (($this->Mode & TBSSQL_TRACE)===TBSSQL_TRACE) $this->_Message('[Trace]: CacheAutoClear has deleted '.count($lst).' old cache files from directory '.$this->CacheDir,'#663399');
 		
 	}
 
