@@ -10,7 +10,8 @@
 [ok] suffix in cache file names in order to separate databases if needed
 [ok] fct: TBSSQL_NOCACHE
 [ok] fct: return records as objects
-[  ] fct: debug grid
+[ok] fct: debug grid
+[  ] fct: console
 [  ] fct: Trace info for connexion with user or not
 */
 
@@ -23,6 +24,7 @@ define('TBSSQL_NORMAL', 1);
 define('TBSSQL_DEBUG', 2);
 define('TBSSQL_TRACE', 4);
 define('TBSSQL_GRID', 8);
+define('TBSSQL_CONSOLE', 16);
 define('TBSSQL_1HOUR', 60);
 define('TBSSQL_1DAY', 24*60);
 define('TBSSQL_1WEEK', 7*24*60);
@@ -43,6 +45,8 @@ class clsTbsSql {
 		$this->CacheSpecialTimeout = false;
 		$this->CacheAutoClear = TBSSQL_1WEEK; // 1 week in minutes
 		$this->CacheSuffix = '';
+		$this->InitMsg = true;
+		$this->InitCsl = true;
 		$this->_CacheSql = false; // is different from false if data as to be saved
 		if ($srv==='') {
 			$this->Mode = $Mode;
@@ -300,11 +304,43 @@ class clsTbsSql {
 	}
 
 	function _Message($Txt,$Color='#FF0000') {
-		if ($this->Mode!=TBSSQL_SILENT) {
-			echo '<div style="color: '.$Color.';">[TbsSql]'.nl2br(htmlentities($Txt)).'</div>'."\r\n";
-			flush();
+	// display a message right now in the Html page or in the console. Must return false.
+
+		if ($this->Mode===TBSSQL_SILENT) return false;
+
+		if ($this->InitMsg) {
+			// display the TbsSql version the very first time and continue
+			$this->InitMsg = false;
+			$this->_Message('[Trace]: TbsSql version '.$this->Version, '#663399');
 		}
+
+		if (is_array($Txt)) {
+			$Html =  $this->_HtmlGrid($Txt);
+		} else {
+			$Html = '<div style="color: '.$Color.';">[TbsSql]'.nl2br(htmlentities($Txt)).'</div>'."\r\n";
+		}
+
+		if (($this->Mode & TBSSQL_CONSOLE)===TBSSQL_CONSOLE) {
+			$Html = addslashes($Html); // apply to ('), ("), (\) and (null)
+			$Html = str_replace(array("\n","\r","\t"),array('\n','\r','\t'),$Html);
+			if ($this->InitCsl) {
+				$this->InitCsl = false;
+				$Html = '
+<script type="text/javascript">
+var TbsSqlConsole = window.open("","","width=650,height=660,resizable,scrollbars=yes");
+TbsSqlConsole.moveTo(10,10);
+TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>TbsSQL Console</title></head><body id="console">'.$Html.'</body></html>\');
+//TbsSqlConsole.scroll(0,9999);
+</script>';
+			} else {
+				$Html = '<script type="text/javascript">TbsSqlConsole.document.getElementById("console").innerHTML += "'.$Html.'";</script>';
+			}
+		}
+
+		echo $Html;
+		flush();
 		return false;
+		
 	}
 
 	function _TakeVar($VarName,$Key,&$Target,$MustBe=true) {
@@ -426,7 +462,7 @@ class clsTbsSql {
 		
 		$this->_Dbs_RsClose($RsId);
 		
-		if (($this->Mode & TBSSQL_GRID)===TBSSQL_GRID) echo $this->_HtmlGrid($Data);
+		if (($this->Mode & TBSSQL_GRID)===TBSSQL_GRID) $this->_Message($Data);
 		
 		return true;
 	}
@@ -468,7 +504,11 @@ class clsTbsSql {
 				$firstrow = false;
 			}
 			$html .= $nl.' <tr bgcolor="'.$row_bg[$row_idx].'"><td>'.$id.'</td>';
-			foreach ($row as $col => $val) $html .= '<td>'.str_replace(' ',$nbsp,strval($val)).'</td>';
+			foreach ($row as $col => $val) {
+				$x = str_replace(' ',$nbsp,strval($val));
+				if ($x==='') $x = $nbsp;
+				$html .= '<td>'.$x.'</td>';
+			}
 			$html .= '</tr>';
 			$row_idx++;
 			if ($row_idx>1) $row_idx=0;
@@ -522,7 +562,7 @@ class clsTbsSql {
 			include($this->_CacheFile); // set $CacheSql and $Data
 			if ($Sql===$CacheSql) {
 				if (($this->Mode & TBSSQL_TRACE)===TBSSQL_TRACE) $this->_Message('[Trace]: Data retrieved from cache file '.$this->_CacheFile,'#663399');
-				if (($this->Mode & TBSSQL_GRID)===TBSSQL_GRID) echo $this->_HtmlGrid($Data);
+				if (($this->Mode & TBSSQL_GRID)===TBSSQL_GRID) $this->_Message($Data);
 				return true;
 			} else {
 				// It can happens very rarely that two different SQL queries have the same md5, with this chech we are sure to have to good result
@@ -611,6 +651,7 @@ class clsTbsSql {
 // Version 1.03, 2010-06-10, Skrol29
 	
 	function _Dbs_Prepare() {
+		$this->Version .= '/1.03 for OBDC (Windows or Linux)';
 	}
 
 	function _Dbs_Connect($srv,$uid,$pwd,$db,$drv) {
