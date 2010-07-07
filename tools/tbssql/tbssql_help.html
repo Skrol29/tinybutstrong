@@ -53,7 +53,7 @@ h3 {
 <body>
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
   <tr>
-    <td width="200"><a href="http://www.tinybutstrong.com">Skrol29</a>, 2010-06-16 </td>
+    <td width="200"><a href="http://www.tinybutstrong.com">Skrol29</a>, 2010-07-07 </td>
     <td><h1 align="center">TbsSQL 3.0</h1></td>
     <td width="200">&nbsp;</td>
   </tr>
@@ -166,61 +166,143 @@ The goal of TbsSQL is to reduce the code when working with SQL through PHP. It i
         <td valign="top" class="split">$Db-&gt;<strong>Id</strong></td>
         <td valign="top" class="split">(read/write) The resource  Id of your connection. </td>
       </tr>
-      <tr>
+      <tr id="mode">
         <td valign="top" class="split">$Db-&gt;<strong>Mode</strong></td>
         <td valign="top" class="split">(read/write) default value is TBSSQL_NORMAL.<br />
-          TBSSQL_SILENT: silent mode, no database error message is displayed. <br />
-          TBSSQL_NORMAL: normal mode, the database error message is displayed when an error occurs. <br />
-          TBSSQL_DEBUG: debug mode, the full SQL statement is also recalled when an error occurs.<br />
-          TBSSQL_TRACE: trace mode, all queries are displayed.<br />
-          <div class="versioning">Versioning: the constants TBSSQL_* are supported since TbsSQL version 2.5<br />
+          You can choose a value among the following:
+          <br />
+          <table border="0" cellspacing="2" cellpadding="0">
+            <tr>
+              <td width="10" valign="top">&bull;</td>
+              <td valign="top">TBSSQL_SILENT</td>
+              <td width="10">&nbsp;</td>
+              <td>TbsSql never display messages. </td>
+            </tr>
+            <tr>
+              <td valign="top">&bull;</td>
+              <td valign="top">TBSSQL_NORMAL</td>
+              <td>&nbsp;</td>
+              <td>The database error message is displayed only when an error occurs.</td>
+            </tr>
+            <tr>
+              <td valign="top">&bull;</td>
+              <td valign="top">TBSSQL_DEBUG</td>
+              <td>&nbsp;</td>
+              <td>Both database error message and the full SQL statement are recalled but only when an error occurs.</td>
+            </tr>
+            <tr>
+              <td valign="top">&bull;</td>
+              <td valign="top">TBSSQL_TRACE</td>
+              <td>&nbsp;</td>
+              <td>All queries  are displayed.</td>
+            </tr>
+          </table>
+          You can also add the following values:
+          <table border="0" cellspacing="2" cellpadding="0">
+            <tr>
+              <td width="10" valign="top">&bull;</td>
+              <td valign="top">TBSSQL_CONSOLE</td>
+              <td width="10">&nbsp;</td>
+              <td>TbsSql messages are displayed in a Html popup window.</td>
+            </tr>
+            <tr>
+              <td valign="top">&bull;</td>
+              <td valign="top">TBSSQL_GRID</td>
+              <td>&nbsp;</td>
+              <td>Full data results are displayed in an Html grid.</td>
+            </tr>
+          </table>
+          <br />
+          <div class="decal"><u>Example:</u> $Db-&gt;Mode = TBSSQL_TRACE + TBSSQL_GRID + TBSSQL_CONSOLE</div><br />
+          <div class="versioning">Versioning:  constants TBSSQL_* are supported since TbsSQL version 2.5<br />
+            TBSSQL_CONSOLE and 
+            TBSSQL_GRID are supported since version 3.0<br />
           </div></td>
       </tr>
+      <tr id="defaultrowtype">
+        <td valign="top" class="split">$Db-&gt;<strong>DefaultRowType</strong></td>
+        <td valign="top" class="split">(read/write) The type of row returned by default by methods GetRow() and GetRows().<br />
+          The defaut value is TBSSQL_ARRAY.<br />
+          <table border="0" cellspacing="3" cellpadding="0">
+            <tr>
+              <td colspan="2"><u>Value</u></td>
+              <td width="10">&nbsp;</td>
+              <td><u>Description</u></td>
+            </tr>
+            <tr>
+              <td width="10">&bull;</td>
+              <td>TBSSQL_ARRAY</td>
+              <td>&nbsp;</td>
+              <td>each returned row is an associative PHP array</td>
+            </tr>
+            <tr>
+              <td>&bull;</td>
+              <td>TBSSQL_OBJECT</td>
+              <td>&nbsp;</td>
+              <td>each returned row is a primary object (class=stdClass)</td>
+            </tr>
+            <tr>
+              <td>&bull;</td>
+              <td>a string which is a class name</td>
+              <td>&nbsp;</td>
+              <td>each returned row is a new instance of the corresponding class</td>
+            </tr>
+            <tr>
+              <td>&bull;</td>
+              <td>an instance of an object</td>
+              <td>&nbsp;</td>
+              <td>each returned row is build from a clone of the given object</td>
+            </tr>
+          </table>
+          Please note that methods GetRow() and GetRows() have an optional argument which allow to choose the type of returned row.</td>
+      </tr>
     </table>
-  </div>
+</div>
  
   <h3>Working with SQL</h3>
   <div class="decal">
     <table width="100%" border="0" cellspacing="0" cellpadding="4">
-      <tr>
+      <tr id="execute">
         <td width="260" valign="top" class="split split0">$Db-&gt;<strong>Execute</strong>($sql,...*...)</td>
         <td valign="top" class="split split0">Execute the Sql statement.</td>
       </tr>
-      <tr>
+      <tr id="getval">
         <td valign="top" class="split">$Db-&gt;<strong>GetVal</strong>($sql,...*...)</td>
         <td valign="top" class="split">Returns the value of the first column in the first record of the query.<br />
           If no record is returned by the query, then the function returns False.</td>
       </tr>
-      <tr>
-        <td valign="top" class="split">$Db-&gt;<strong>GetRow</strong>($sql,...*...)</td>
-        <td valign="top" class="split">Returns an associative PHP array which is the first record returned by the query.</td>
+      <tr id="getrow">
+        <td valign="top" class="split">$Db-&gt;<strong>GetRow</strong>([$rowtype,] $sql,...*...)</td>
+        <td valign="top" class="split">Returns the first record returned by the query. Return false in case of no record.<br />
+        You can  precise the row type for this query using  argument $rowtype. See  property <a href="#defaultrowtype">DefaultRowType</a> for accepted values. If argument $rowtype is omitted, then the returned row type depends of  property DefaultRowType.</td>
       </tr>
-      <tr>
-        <td valign="top" class="split">$Db-&gt;<strong>GetRows</strong>($sql,...*...)</td>
-        <td valign="top" class="split">Returns a PHP array of all records returned by the query.</td>
+      <tr id="getrows">
+        <td valign="top" class="split">$Db-&gt;<strong>GetRows</strong>([$rowtype,] $sql,...*...)</td>
+        <td valign="top" class="split">Returns all records returned by the query. Return an empty array in case of no record.<br />
+        You can  precise the row type for this query using  argument $rowtype. See  property <a href="#defaultrowtype">DefaultRowType</a> for accepted values. If argument $rowtype is omitted, then the returned row type depends of  property DefaultRowType.</td>
       </tr>
-      <tr>
+      <tr id="getlist">
         <td valign="top" class="split">$Db-&gt;<strong>GetList</strong>($sql,...*...)</td>
         <td valign="top" class="split">Returns a PHP array with first column as keys and second column as values. If only one columns is given by the query then they the values of the array.<br />
           <div class="decal"><u>Example:</u> $Db-&gt;GetList('SELECT id,name FROM t_people');<br />
             will return something like: array(1=&gt;'Peter', 2=&gt;'Dave', 3=&gt;'Jane' ,...)</div></td>
       </tr>
-      <tr>
+      <tr id="getsql">
         <td valign="top" class="split">$Db-&gt;<strong>GetSql</strong>($sql,...*...)</td>
         <td valign="top" class="split">Returns the SQL statement with merged arguments.</td>
       </tr>
-      <tr>
+      <tr id="lastrowid">
         <td valign="top" class="split">$Db-&gt;<strong>LastRowId</strong>()</td>
         <td valign="top" class="split">Returns the value of the identifier generated by the last INSERT query of your connection. <br />
           <u>Note:</u> This method is not available for ODBC Generic.</td>
       </tr>
-      <tr>
+      <tr id="affectedrows">
         <td valign="top" class="split">$Db-&gt;<strong>AffectedRows</strong>()</td>
         <td valign="top" class="split">Returns the number of rows affected  by the last UPDATE or DELETE query of your connection.<br />
           <u>Note:</u> This method is not available for ODBC Generic.</td>
       </tr>
     </table>
-  <em>...*... means a variable number of arguments that will be merged in the SQL statement. </em></div>
+<em>...*... means a variable number of arguments that will be merged in the SQL statement. </em></div>
  
   <h3>Using cache</h3>
   <div class="decal">
