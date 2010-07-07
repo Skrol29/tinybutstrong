@@ -42,7 +42,7 @@ class clsTbsSql {
 		$this->DefaultRowType = TBSSQL_ARRAY;
 		$this->CacheDir = '.';
 		$this->CacheTimeout = false; // in minutes
-		$this->CacheSpecialTimeout = false;
+		$this->TempCacheTimeout = false;
 		$this->CacheAutoClear = TBSSQL_1WEEK; // 1 week in minutes
 		$this->CacheSuffix = '';
 		$this->InitMsg = true;
@@ -547,12 +547,12 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 		$this->_CacheSql = false; // for security
 	
 		// check if cache is enabled
-		if ($this->CacheSpecialTimeout===false) {
+		if ($this->TempCacheTimeout===false) {
 			if (($this->CacheTimeout===false) || ($this->CacheTimeout===TBSSQL_NOCACHE)) return false;
 			$timeout = $this->CacheTimeout;
 		} else {
-			$timeout = $this->CacheSpecialTimeout;
-			$this->CacheSpecialTimeout = false;
+			$timeout = $this->TempCacheTimeout;
+			$this->TempCacheTimeout = false;
 			if ($timeout===TBSSQL_NOCACHE) return false;
 		}
 
