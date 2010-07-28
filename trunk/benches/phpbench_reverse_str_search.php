@@ -18,12 +18,16 @@ $p_beg = strpos($txt, 'super_conforming_strrpos');
 $res_php_stop = f_strrpos_php_stop($txt, $zz, $p_beg);
 $res_php_stopcut = f_strrpos_php_stopcut($txt, $zz, $p_beg);
 $res_manual_stop = f_strrpos_manual_stop($txt, $zz, $p_beg);
+$res_direct_stop = f_strrpos_direct_stop($txt, $zz, $p_beg);
+$res_direct_stop2 = f_strrpos_direct_stop2($txt, $zz, $p_beg);
 
 f_EchoLine("len(txt) = ".strlen($txt)); 
 f_EchoLine("p_beg = ".$p_beg." , extract: ".f_GiveExample($txt,$p_beg)); 
 f_EchoLine("res_php_stop = ".$res_php_stop." , extract: ".f_GiveExample($txt,$res_php_stop)); 
 f_EchoLine("res_php_stopcut = ".$res_php_stopcut." , extract: ".f_GiveExample($txt,$res_php_stopcut)); 
 f_EchoLine("res_manual_stop = ".$res_manual_stop." , extract: ".f_GiveExample($txt,$res_manual_stop)); 
+f_EchoLine("res_direct_stop = ".$res_direct_stop." , extract: ".f_GiveExample($txt,$res_direct_stop)); 
+f_EchoLine("res_direct_stop2 = ".$res_direct_stop2." , extract: ".f_GiveExample($txt,$res_direct_stop2)); 
 
 
 // run benches 
@@ -36,15 +40,20 @@ $prm_2 =array(&$txt, $zz, $p_beg);
 
 $b0 = f_BechThisFct('f_Nothing');
 
-$b_strrpos_php = f_BechThisFct('f_strrpos_php', $prm_1, $nbr) - $b0;
-$b_strrpos_manual = f_BechThisFct('f_strrpos_manual', $prm_1, $nbr) - $b0;
-f_EchoLine("(php) / (manual) = ".f_Rate($b_strrpos_php,$b_strrpos_manual));
+$b_strrpos_php = f_BechThisFct('f_strrpos_php', $prm_1, $nbr) ;
+$b_strrpos_manual = f_BechThisFct('f_strrpos_manual', $prm_1, $nbr);
+f_Compare("php", $b_strrpos_php, "manual", $b_strrpos_manual);
 
-$b_strrpos_php_stop = f_BechThisFct('f_strrpos_php_stop', $prm_2, $nbr) - $b0;
-$b_strrpos_php_stopcut = f_BechThisFct('f_strrpos_php_stopcut', $prm_2, $nbr) - $b0;
-$b_strrpos_manual_stop = f_BechThisFct('f_strrpos_manual_stop', $prm_2, $nbr) - $b0;
+$b_strrpos_direct_stop = f_BechThisFct('f_strrpos_direct_stop', $prm_2, $nbr);
+$b_strrpos_direct_stop2 = f_BechThisFct('f_strrpos_direct_stop2', $prm_2, $nbr);
+$b_strrpos_php_stop = f_BechThisFct('f_strrpos_php_stop', $prm_2, $nbr);
+$b_strrpos_php_stopcut = f_BechThisFct('f_strrpos_php_stopcut', $prm_2, $nbr);
+$b_strrpos_manual_stop = f_BechThisFct('f_strrpos_manual_stop', $prm_2, $nbr);
+
 f_Compare("php_stop", $b_strrpos_php_stop, "php_stopcut", $b_strrpos_php_stopcut);
 f_Compare("php_stop", $b_strrpos_php_stop, "manual_stop", $b_strrpos_manual_stop);
+f_Compare("php_stopcut", $b_strrpos_php_stopcut, "direct_stop", $b_strrpos_direct_stop);
+f_Compare("direct_stop", $b_strrpos_direct_stop, "direct_stop2", $b_strrpos_direct_stop2);
 
 
 
@@ -81,7 +90,7 @@ function f_strrpos_manual($txt, $x) {
 }
 
 function f_strrpos_manual_stop($txt, $x, $stop) {
-	$p = -1;
+	$p = $stop;
 	$b = -1;
 	while ( (($p=strpos($txt, $x,$b+1))!==false) && ($p<$stop) ) {
 		$b = $p; // continue to search
@@ -95,9 +104,56 @@ function f_strrpos_manual_stop($txt, $x, $stop) {
 	}
 }
 
+function f_strrpos_direct_stop($txt, $x, $stop) {
+	$x0 = $x[0];
+	$x_len = strlen($x);
+	$p = $stop;
+	$ok = false;
+	$cont = true;
+	do {
+		if (($txt[$p]===$x0) && (substr($txt,$p,$x_len)===$x)) {
+			$ok = true;
+			$cont = false;
+		} elseif ($p===0) {
+			$cont = false;
+		} else {
+			$p--;
+		}
+	} while ($cont);
+	if ($ok) {
+		return $p;
+	} else {
+		return false;
+	}
+}
+
+function f_strrpos_direct_stop2($txt, $x, $stop) {
+	$x0 = $x[0];
+	$x_len = strlen($x);
+	$p = $stop;
+	$ok = false;
+	$cont = true;
+	do {
+		if ((substr($txt,$p,1)===$x0) && (substr($txt,$p,$x_len)===$x)) {
+			$ok = true;
+			$cont = false;
+		} elseif ($p===0) {
+			$cont = false;
+		} else {
+			$p--;
+		}
+	} while ($cont);
+	if ($ok) {
+		return $p;
+	} else {
+		return false;
+	}
+}
+
 function f_GiveExample($txt,$p,$len=50) {
 	return substr($txt, $p, $len);
 }
+
 
 
 /* ---------------------------------
@@ -148,7 +204,7 @@ function f_Compare($a_name, $a_val, $b_name, $b_val) {
 		$a_name = $b_name;
 		$b_name = $x_name;
 	} 
-	f_EchoLine( '['.$a_name.'] is '.number_format($b_val/$a_val,2).' time faster than ['.$b_name.'] , that is a gain of '.number_format(100*($b_val-$a_val)/$b_val,2).'% compared to ['.$b_name.'].' );
+	f_EchoLine( '['.$a_name.'] is '.number_format($b_val/$a_val,2).' time faster than ['.$b_name.'] , that is a gain of -'.number_format(100*($b_val-$a_val)/$b_val,2).'% compared to ['.$b_name.'].' );
 }
 
 function f_GetHtml() {
