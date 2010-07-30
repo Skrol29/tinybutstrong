@@ -1,15 +1,8 @@
 <?php
 
-f_EchoLine("PHP Benches: Reverse seach in a String");
-f_EchoLine("PHP version: ".PHP_VERSION);
-f_EchoLine("OS type: ".PHP_OS." (".php_uname('s').")");
+f_InfoStart('Reverse seach in a String');
 
 // speed tests
-
-f_EchoLine();
-
-/* ---------------------------------
-*/
 
 // initilize data and check the result of functions
 $txt = f_GetHtml();
@@ -55,13 +48,14 @@ f_Compare("php_stop", $b_strrpos_php_stop, "manual_stop", $b_strrpos_manual_stop
 f_Compare("php_stopcut", $b_strrpos_php_stopcut, "direct_stop", $b_strrpos_direct_stop);
 f_Compare("direct_stop", $b_strrpos_direct_stop, "direct_stop2", $b_strrpos_direct_stop2);
 
-
-
+// end
+f_InfoEnd();
 exit;
 
 /* ---------------------------------
-*/
-
+   SPECIFIC FUNCTIONS AND CLASSES
+   ---------------------------------*/
+   
 function f_strrpos_php($txt, $x) {
 	$p = strrpos($txt, $x);
 	return $p;
@@ -157,14 +151,17 @@ function f_GiveExample($txt,$p,$len=50) {
 
 
 /* ---------------------------------
-*/
+   COMMON FUNCTIONS
+   ---------------------------------*/
 
 function f_Nothing() {
+// used to bench a function that does nothing
 	$x = false;
 	return $x;
 }
 
 function f_BechThisFct($fct, $prm=false, $nbr = 10000) {
+// bench a function
 	$x = false;
 	if ($prm===false) $prm = array();
 	$t1 = f_Timer();
@@ -176,7 +173,7 @@ function f_BechThisFct($fct, $prm=false, $nbr = 10000) {
 }
 
 function f_Timer() {
-// compatible with PHP 4 and higher
+// return the currentdate-time in secondes, compatible with PHP 4 and higher
 	$x = microtime() ;
 	$p = strpos($x,' ') ;
 	if ($p===False) {
@@ -188,14 +185,12 @@ function f_Timer() {
 }
 
 function f_EchoLine($x='') {
+// display a line of information
 	echo htmlentities($x)."<br />\r";
 }
 
-function f_Rate($a, $b) {
-	return number_format($a/$b,2);
-}
-
 function f_Compare($a_name, $a_val, $b_name, $b_val) {
+// display the result of the comparison between two values
 	if ($a_val>$b_val) {
 		$x_val = $a_val;
 		$a_val = $b_val;
@@ -204,8 +199,32 @@ function f_Compare($a_name, $a_val, $b_name, $b_val) {
 		$a_name = $b_name;
 		$b_name = $x_name;
 	} 
-	f_EchoLine( '['.$a_name.'] is '.number_format($b_val/$a_val,2).' time faster than ['.$b_name.'] , that is a gain of -'.number_format(100*($b_val-$a_val)/$b_val,2).'% compared to ['.$b_name.'].' );
+	f_EchoLine( '['.$a_name.'] is '.number_format($b_val/$a_val,2).' time faster than ['.$b_name.'] , that is a reduction of -'.number_format(100*($b_val-$a_val)/$b_val,2).'% compared to ['.$b_name.'].' );
 }
+
+function f_InfoStart($Title) {
+// display information at the start of the test	
+	global $t_start;
+	$t_start = f_Timer();
+	
+	f_EchoLine('PHP Benches: '.$Title);
+	f_EchoLine('PHP version: '.PHP_VERSION);
+	f_EchoLine('OS type: '.PHP_OS.' ('.php_uname('s').')');
+	f_EchoLine();
+	
+}
+
+function f_InfoEnd() {
+// display information at the end of the test	
+	global $t_start;
+	$t_end = f_Timer();
+	f_EchoLine();
+	f_EchoLine("End of the test. Duration: ".number_format($t_end-$t_start,2)." sec.");
+}
+
+/* ---------------------------------
+   SPECIFIC TO THIS TEST
+   ---------------------------------*/
 
 function f_GetHtml() {
 	
