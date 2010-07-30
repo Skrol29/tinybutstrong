@@ -3,14 +3,17 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.5.3 for PHP 4
-Date     : 2010-04-12
+Version  : 3.5.4 for PHP 4
+Date     : 2010-07-30
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
 This library is free software.
 You can redistribute and modify it even for commercial usage,
 but you must accept and respect the LPGL License version 3.
+[tt   ] BUG : paramètre getbody sans valeur ne fonctionne pas car dans f_Xml_GetPart() on a $Tag = 'BODY'; au lieu de $TagLst = 'BODY';
+[     ] SEC : limiter "script", "onformat" et "ondata" à une liste de fonctions où à un préfixe.
+
 */
 // Check PHP version
 if (version_compare(PHP_VERSION,'4.0.6')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 4.0.6 or higher.';
@@ -3547,7 +3550,7 @@ static function f_Xml_Max(&$Txt,&$Nbr,$MaxEnd) {
 static function f_Xml_GetPart(&$Txt,$TagLst,$AllIfNothing=false) {
 // Returns parts of the XML/HTML content, default is BODY.
 
-	if (($TagLst===true) or ($TagLst==='')) $Tag = 'BODY';
+	if (($TagLst===true) or ($TagLst==='')) $TagLst = 'body';
 
 	$x = '';
 	$nothing = true;
