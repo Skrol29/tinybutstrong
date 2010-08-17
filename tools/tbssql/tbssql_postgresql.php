@@ -13,6 +13,9 @@
 [ok] fct: debug grid
 [ok] fct: console
 [  ] fct: Trace info for connexion with user or not
+[ok] fct: mew method CacheGetTime($sql)
+[  ] fct: mew method CacheDelete($sql)
+[ok] debug: year after 2038 on win32, change the error message
 */
 
 if ( (version_compare(PHP_VERSION,'5')<0) && (!function_exists('clone'))  ) {
@@ -237,6 +240,16 @@ class clsTbsSql {
 		$_TBS_UserFctLst['k:'.$Key] = array('type'=>4,'open'=>array(&$this,'_Tbs_RsOpen'),'fetch'=>array(&$this,&$this->_Tbs_FetchFct),'close'=>array(&$this,'_Tbs_RsClose'));
 	}
 
+	function CacheGetTime($Sql) {
+	// return the timestamp of the cache file
+		$x = $this->_CacheFilePath($Sql);
+		if (file_exists($x)) {
+			return filemtime($x);
+		} else {
+			return false;
+		}
+	}
+
 // Private methods
 
 	// Special for TinyButStrong
@@ -388,22 +401,65 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 		}
 	}
 
-	function _SqlDate($Date,$Mode) {
-		// Return the date formated for the current Database
+	function _SqlDate($Date,$FrmMode) {
+	// Prepare the date item before to merge it in an SQL query
+	
 		if (is_string($Date)) {
-			$x = strtotime($Date);
-			if (($x===-1) or ($x===false)) {
-				// display error message
-				$this->_Message('[Error]: Date value not recognized: '.$Date);
-				$Mode = 0; // Try with the string mode
-				$x = $Date;
+			if (!isset($this->_SqlDateParseOk)) $this->_SqlDateParseOk = function_exists('date_parse'); // date_parse() is available since PHP 5.2
+			if ($this->_SqlDateParseOk) {
+				$x = date_parse($Date);
+				if (($x===false) || ($x['warning_count']>0) || ($x['error_count']>0)) {
+					$this->_Message('[Error]: the date argument (string) \''.$Date.'\' is not recognized as a valide date. It will be merged as is in the SQL query.');
+					$Mode = 0; // The date will be passed as is to the SQL
+					$x = $Date;
+				} else {
+					$x = array( 'y'=>$x['year'] , 'm'=>$x['month'] , 'd'=>$x['day'] , 'h'=>intval($x['hour']) , 'i'=>intval($x['minute']) , 's'=>intval($x['second'])); // intval() helps to force false to 0
+				}
+			} else {
+				$x = strtotime($Date);
+				if (($x===-1) || ($x===false)) {
+					$this->_Message('[Error]: the date argument (string) \''.$Date.'\' is not recognized as a valide date. This can happens on 32bit systems for dates over 2038-01-19. TbsSQL can workaround this date limit if you use PHP>=5.2');
+					$Mode = 0; // The date will be passed as is to the SQL
+					$x = $Date;
+				} else {
+					$x = $this->_SqlDateFromTimestamp($x);
+				}
 			}
-		} else {
+		} elseif (is_int($Date) || is_float($Date)) {
+			// It's a timestamp
+			$x = $this->_SqlDateFromTimestamp($Date);
+		} elseif (is_array($Date)) {
+			// It's an array supported by TbsSQL
 			$x = $Date;
+			if (!isset($x['y'])) {
+				$this->_Message('[Error]: the date argument is an array but has no key \'y\'. The value will be replaced with the current date-time.');
+				$x = $this->_SqlDateFromTimestamp(time());
+			}
+			if (!isset($x['m'])) $x['m'] = 1;
+			if (!isset($x['d'])) $x['d'] = 1;
+			if (!isset($x['h'])) $x['h'] = 0;
+			if (!isset($x['i'])) $x['i'] = 0;
+			if (!isset($x['s'])) $x['s'] = 0;
+		} else {
+			$this->_Message('[Error]: the date argument can not be recognized as date: '.var_export($Date,true));
 		}
-		return $this->_Dbs_Date($x,$Mode);
+
+		return $this->_Dbs_Date($x,$FrmMode);
+		
 	}
 
+	function _SqlDateFromTimestamp($Timestamp) {
+		$x = getdate($Timestamp);
+		return array( 'y'=>$x['year'] , 'm'=>$x['mon'] , 'd'=>$x['mday'] , 'h'=>$x['hours'] , 'i'=>$x['minutes'] , 's'=>$x['seconds']);
+	}
+
+	function _SqlDateFormat($d, $s1, $s2=false, $s3=false) {
+	// useful function for common date formating, to be used in method _Dbs_Date();
+		$x = $d['y'].$s1.str_pad($d['m'],2,'0',STR_PAD_LEFT).$s1.str_pad($d['d'],2,'0',STR_PAD_LEFT);
+		if ($s2!==false) $x .= $s2.str_pad($d['h'],2,'0',STR_PAD_LEFT).$s3.str_pad($d['i'],2,'0',STR_PAD_LEFT).$s3.str_pad($d['s'],2,'0',STR_PAD_LEFT);
+		return $x;
+	}
+	
 	function _SqlProtect($ArgLst, $SqlPos=0, $Normal=true) {
 	// Replace items (%i% , @i@ , #i#, ~i~) with the corresponding protected values
 		$Sql = $ArgLst[$SqlPos];
@@ -540,6 +596,10 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 // cache functions
 // ---------------
 
+	function _CacheFilePath($Sql) {
+		return $this->CacheDir.'/cache_tbssql_'.md5($Sql).$this->CacheSuffix.'.php';  // we save it as a PHP file in order to hide the contents from web users
+	}
+
 	function _CacheTryRetrieve($Sql, &$Data) {
 	// Try to retrieve data from the cache file. Return true if $Data contains the data from the cache.
 	
@@ -557,7 +617,7 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 		}
 
 		// 
-		$this->_CacheFile = $this->CacheDir.'/cache_tbssql_'.md5($Sql).$this->CacheSuffix.'.php'; // we save it as a PHP file in order to hide the contents from web users
+		$this->_CacheFile = $this->_CacheFilePath($Sql);
 		$now = time();
 		//echo 'debug CacheTryRetrieve : timout= '.$timeout.', cache file='.date('Y-m-d h:i:s',@filemtime($this->_CacheFile)).' , limit='.date('Y-m-d h:i:s',@filemtime($this->_CacheFile)+60*$timeout).' , now='.date('Y-m-d h:i:s',$now)."<br>\r\n";
 		if ( file_exists($this->_CacheFile) && ($now<=(filemtime($this->_CacheFile)+60*$timeout)) ) {
