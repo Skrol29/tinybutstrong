@@ -1,22 +1,8 @@
 <?php
 
 // TbsSql Engine
-// Version 3.0beta, 2010-07-08, Skrol29
-/*
-[ok] bug: Trace doesn't work when using TinyButStrong
-[ok] fct: Cache
-[ok] enh: Compatibility PHP 4
-[ok] fct: Version (what for ?)
-[ok] suffix in cache file names in order to separate databases if needed
-[ok] fct: TBSSQL_NOCACHE
-[ok] fct: return records as objects
-[ok] fct: debug grid
-[ok] fct: console
-[  ] fct: Trace info for connexion with user or not
-[ok] fct: mew method CacheGetTime($sql)
-[  ] fct: mew method CacheDelete($sql)
-[ok] debug: year after 2038 on win32, change the error message
-*/
+// Version 3.0, 2010-08-19, Skrol29
+// www.tinybutstrong.com
 
 if ( (version_compare(PHP_VERSION,'5')<0) && (!function_exists('clone'))  ) {
 	eval('function clone($object) {return $object;}'); // eval is needed because the syntax function clone() is refused in PHP 5
@@ -50,7 +36,7 @@ class clsTbsSql {
 		$this->CacheSuffix = '';
 		$this->InitMsg = true;
 		$this->InitCsl = true;
-		$this->_CacheSql = false; // is different from false if data as to be saved
+		$this->_CacheCurrSql = false; // is different from false if data as to be saved
 		if ($srv==='') {
 			$this->Mode = $Mode;
 		} else {
@@ -66,7 +52,7 @@ class clsTbsSql {
 	}
 
 // Public methods
-	
+
 	function Connect($srv,$uid='',$pwd='',$db='',$drv='',$Mode=false) {
 		if ($Mode!==false) $this->Mode = $Mode;
 		$auto = (($srv!='') and ($uid.$pwd.$db.$drv==''));
@@ -105,11 +91,11 @@ class clsTbsSql {
 
 		$ArgLst = func_get_args();
 		$Sql = $this->_SqlProtect($ArgLst);
-		
+
 		$Data = array();
 		if (!$this->_CacheTryRetrieve($Sql,$Data)) {
-			if (!$this->_GetDataFromDb($Sql, $Data, ($this->_CacheSql===false))) return false; // if CacheSql is false, then we do not need to retrieve all the records from the db
-			if ($this->_CacheSql!==false) $this->_CacheUpdate($Data);
+			if (!$this->_GetDataFromDb($Sql, $Data, ($this->_CacheCurrSql===false))) return false; // if CacheSql is false, then we do not need to retrieve all the records from the db
+			if ($this->_CacheCurrSql!==false) $this->_CacheUpdate($Data);
 		}
 
 		if (count($Data)==0) {
@@ -130,8 +116,8 @@ class clsTbsSql {
 		
 		$Data = array();
 		if (!$this->_CacheTryRetrieve($Sql,$Data)) {
-			if (!$this->_GetDataFromDb($Sql, $Data, ($this->_CacheSql===false))) return false; // if CacheSql is false, then we do not need to retrieve all the records from the db
-			if ($this->_CacheSql!==false) $this->_CacheUpdate($Data);
+			if (!$this->_GetDataFromDb($Sql, $Data, ($this->_CacheCurrSql===false))) return false; // if CacheSql is false, then we do not need to retrieve all the records from the db
+			if ($this->_CacheCurrSql!==false) $this->_CacheUpdate($Data);
 		}
 
 		if (count($Data)==0) return false;
@@ -160,7 +146,7 @@ class clsTbsSql {
 		$Data = array();
 		if (!$this->_CacheTryRetrieve($Sql,$Data)) {
 			if (!$this->_GetDataFromDb($Sql, $Data)) return false;
-			if ($this->_CacheSql!==false) $this->_CacheUpdate($Data);
+			if ($this->_CacheCurrSql!==false) $this->_CacheUpdate($Data);
 		}
 
 		// conversion to object		
@@ -184,7 +170,7 @@ class clsTbsSql {
 		$col2 = false;
 
 		if (!$this->_CacheTryRetrieve($Sql,$Data)) {
-			if ($this->_CacheSql===false) {
+			if ($this->_CacheCurrSql===false) {
 				// no cache
 				$RsId = $this->_Dbs_RsOpen($Sql);
 				if ($RsId===false) return $this->_SqlError($this->Id);
@@ -240,11 +226,31 @@ class clsTbsSql {
 		$_TBS_UserFctLst['k:'.$Key] = array('type'=>4,'open'=>array(&$this,'_Tbs_RsOpen'),'fetch'=>array(&$this,&$this->_Tbs_FetchFct),'close'=>array(&$this,'_Tbs_RsClose'));
 	}
 
-	function CacheGetTime($Sql) {
+	function CacheTimestamp($Sql) {
 	// return the timestamp of the cache file
 		$x = $this->_CacheFilePath($Sql);
 		if (file_exists($x)) {
 			return filemtime($x);
+		} else {
+			return false;
+		}
+	}
+
+	function CacheDelete($Sql) {
+	// delete the cache file
+		$x = $this->_CacheFilePath($Sql);
+		if (file_exists($x)) {
+			return unlink($x);
+		} else {
+			return false;
+		}
+	}
+
+	function CacheFile($Sql) {
+	// return the full path of the cache file
+		$x = $this->_CacheFilePath($Sql);
+		if (file_exists($x)) {
+			return $x;
 		} else {
 			return false;
 		}
@@ -267,7 +273,7 @@ class clsTbsSql {
 			// No cache
 			$RecSet = $this->_Dbs_RsOpen($Sql);
 			if ($RecSet===false) $this->_SqlError(false);
-			if ($this->_CacheSql===false) {
+			if ($this->_CacheCurrSql===false) {
 				$this->_Tbs_FetchFct = '_Tbs_RsFetch_Default'; // no cache
 			} else {
 				$this->_Tbs_FetchFct = '_Tbs_RsFetch_ToBeSaved'; // cache to be saved
@@ -289,24 +295,25 @@ class clsTbsSql {
 			return $this->_CacheTbsData[$this->_CacheTbsCurr];
 		}
 	}	
+
 	function _Tbs_RsFetch_ToBeSaved(&$RsId) {
 		// data to be saved
 		$Rec = $this->_Dbs_RsFetch($RsId);
 		if ($Rec!==false) $this->_CacheTbsData[] = $Rec;
 		return $Rec;
 	}
-	
+
 	function _Tbs_RsClose(&$RsId) {
 		if ($this->_CacheTbsOk) {
 			unset($this->_CacheTbsData); // free memory
 			return true;
 		} else {
-			if ($this->_CacheSql!==false) $this->_CacheUpdate($this->_CacheTbsData);
+			if ($this->_CacheCurrSql!==false) $this->_CacheUpdate($this->_CacheTbsData);
 			return $this->_Dbs_RsClose($RsId);
 		}
 	}
 
-  // Other private methods
+	// Other private methods
 
 	function _SqlError($ObjId) {
 		if ($this->Mode===TBSSQL_SILENT) return;
@@ -401,9 +408,9 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 		}
 	}
 
-	function _SqlDate($Date,$FrmMode) {
+	function _SqlDateFrmDb($Date,$FrmMode) {
 	// Prepare the date item before to merge it in an SQL query
-	
+
 		if (is_string($Date)) {
 			if (!isset($this->_SqlDateParseOk)) $this->_SqlDateParseOk = function_exists('date_parse'); // date_parse() is available since PHP 5.2
 			if ($this->_SqlDateParseOk) {
@@ -413,7 +420,7 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 					$Mode = 0; // The date will be passed as is to the SQL
 					$x = $Date;
 				} else {
-					$x = array( 'y'=>$x['year'] , 'm'=>$x['month'] , 'd'=>$x['day'] , 'h'=>intval($x['hour']) , 'i'=>intval($x['minute']) , 's'=>intval($x['second'])); // intval() helps to force false to 0
+					$x = array( 'y'=>$x['year'] , 'm'=>$x['month'] , 'd'=>$x['day'] , 'h'=>intval($x['hour']) , 'i'=>intval($x['minute']) , 's'=>intval($x['second']), 'f'=>intval($x['fraction'])); // intval() helps to force false to 0
 				}
 			} else {
 				$x = strtotime($Date);
@@ -422,18 +429,18 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 					$Mode = 0; // The date will be passed as is to the SQL
 					$x = $Date;
 				} else {
-					$x = $this->_SqlDateFromTimestamp($x);
+					$x = $this->_SqlDateInfo($x);
 				}
 			}
 		} elseif (is_int($Date) || is_float($Date)) {
 			// It's a timestamp
-			$x = $this->_SqlDateFromTimestamp($Date);
+			$x = $this->_SqlDateInfo($Date);
 		} elseif (is_array($Date)) {
 			// It's an array supported by TbsSQL
 			$x = $Date;
 			if (!isset($x['y'])) {
 				$this->_Message('[Error]: the date argument is an array but has no key \'y\'. The value will be replaced with the current date-time.');
-				$x = $this->_SqlDateFromTimestamp(time());
+				$x = $this->_SqlDateInfo(time());
 			}
 			if (!isset($x['m'])) $x['m'] = 1;
 			if (!isset($x['d'])) $x['d'] = 1;
@@ -445,21 +452,26 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 		}
 
 		return $this->_Dbs_Date($x,$FrmMode);
-		
+
 	}
 
-	function _SqlDateFromTimestamp($Timestamp) {
+	function _SqlDateInfo($Timestamp) {
+	// return a date info array from a timestamp
 		$x = getdate($Timestamp);
-		return array( 'y'=>$x['year'] , 'm'=>$x['mon'] , 'd'=>$x['mday'] , 'h'=>$x['hours'] , 'i'=>$x['minutes'] , 's'=>$x['seconds']);
+		return array( 'y'=>$x['year'] , 'm'=>$x['mon'] , 'd'=>$x['mday'] , 'h'=>$x['hours'] , 'i'=>$x['minutes'] , 's'=>$x['seconds'], 'f'=>0.0);
 	}
 
-	function _SqlDateFormat($d, $s1, $s2=false, $s3=false) {
+	function _SqlDateFrmStd($d, $s_date, $s_ent=false, $s_time=false, $s_frac=false, $s_frac_nbr=3) {
 	// useful function for common date formating, to be used in method _Dbs_Date();
-		$x = $d['y'].$s1.str_pad($d['m'],2,'0',STR_PAD_LEFT).$s1.str_pad($d['d'],2,'0',STR_PAD_LEFT);
-		if ($s2!==false) $x .= $s2.str_pad($d['h'],2,'0',STR_PAD_LEFT).$s3.str_pad($d['i'],2,'0',STR_PAD_LEFT).$s3.str_pad($d['s'],2,'0',STR_PAD_LEFT);
+		$x = $d['y'].$s_date.str_pad($d['m'],2,'0',STR_PAD_LEFT).$s_date.str_pad($d['d'],2,'0',STR_PAD_LEFT);
+		if ($s_ent!==false) {
+			// time is added to the date
+			$x .= $s_ent.str_pad($d['h'],2,'0',STR_PAD_LEFT).$s_time.str_pad($d['i'],2,'0',STR_PAD_LEFT).$s_time.str_pad($d['s'],2,'0',STR_PAD_LEFT);
+			if ($s_frac!==false) $x .= $s_frac.substr(number_format($d['f'],$s_frac_nbr,'.',''),2); // fraction of seconds is added to the date-time
+		}
 		return $x;
 	}
-	
+
 	function _SqlProtect($ArgLst, $SqlPos=0, $Normal=true) {
 	// Replace items (%i% , @i@ , #i#, ~i~) with the corresponding protected values
 		$Sql = $ArgLst[$SqlPos];
@@ -486,9 +498,9 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 						} elseif ($Chr==='@') {
 							$x = $x = '\''.$this->_Dbs_ProtectStr(''.$ArgLst[$i]).'\''; // String value
 						} elseif ($Chr==='#') {
-							$x = $x = $this->_SqlDate($ArgLst[$i],1); // Date value
+							$x = $x = $this->_SqlDateFrmDb($ArgLst[$i],1); // Date value
 						} elseif ($Chr==='~') {
-							$x = $x = $this->_SqlDate($ArgLst[$i],2); // Date and time value
+							$x = $x = $this->_SqlDateFrmDb($ArgLst[$i],2); // Date and time value
 						}
 						$Sql = str_replace($tag,$x,$Sql) ;
 					}
@@ -506,10 +518,10 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 	}
 
 	function _GetDataFromDb($Sql, &$Data, $OnlyFirstRow=false) {
-		
+
 		$RsId = $this->_Dbs_RsOpen($Sql);
 		if ($RsId===false) return $this->_SqlError($this->Id);
-		
+
 		$Data = array();
 		if ($OnlyFirstRow) {
 			$r =  $this->_Dbs_RsFetch($RsId);
@@ -519,11 +531,11 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 				$Data[] = $r;
 			}
 		}
-		
+
 		$this->_Dbs_RsClose($RsId);
 		
 		if ($this->_ModeHas(TBSSQL_GRID)) $this->_Message($Data);
-		
+
 		return true;
 	}
 
@@ -534,7 +546,7 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 		$col2 = isset($col_lst[1]) ? $col_lst[1] : false;
 		return true;
 	}
-	
+
 	function _ItemAdd(&$Data, $Row, $col1, $col2) {
 		if ($col2===false) {
 			$Data[] = $Row[$col1];	
@@ -602,10 +614,10 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 
 	function _CacheTryRetrieve($Sql, &$Data) {
 	// Try to retrieve data from the cache file. Return true if $Data contains the data from the cache.
-	
-		// at this point $this->_CacheSql is always false
-		$this->_CacheSql = false; // for security
-	
+
+		// at this point $this->_CacheCurrSql is always false
+		$this->_CacheCurrSql = false; // for security
+
 		// check if cache is enabled
 		if ($this->TempCacheTimeout===false) {
 			if (($this->CacheTimeout===false) || ($this->CacheTimeout===TBSSQL_NOCACHE)) return false;
@@ -617,26 +629,26 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 		}
 
 		// 
-		$this->_CacheFile = $this->_CacheFilePath($Sql);
+		$this->_CacheCurrFile = $this->_CacheFilePath($Sql);
 		$now = time();
-		//echo 'debug CacheTryRetrieve : timout= '.$timeout.', cache file='.date('Y-m-d h:i:s',@filemtime($this->_CacheFile)).' , limit='.date('Y-m-d h:i:s',@filemtime($this->_CacheFile)+60*$timeout).' , now='.date('Y-m-d h:i:s',$now)."<br>\r\n";
-		if ( file_exists($this->_CacheFile) && ($now<=(filemtime($this->_CacheFile)+60*$timeout)) ) {
+		//echo 'debug CacheTryRetrieve : timout= '.$timeout.', cache file='.date('Y-m-d h:i:s',@filemtime($this->_CacheCurrFile)).' , limit='.date('Y-m-d h:i:s',@filemtime($this->_CacheCurrFile)+60*$timeout).' , now='.date('Y-m-d h:i:s',$now)."<br>\r\n";
+		if ( file_exists($this->_CacheCurrFile) && ($now<=(filemtime($this->_CacheCurrFile)+60*$timeout)) ) {
 			// retrieve the data
 			// echo 'debug CacheTryRetrieve : cache still current'."<br>\r\n";
-			include($this->_CacheFile); // set $CacheSql and $Data
+			include($this->_CacheCurrFile); // set $CacheSql and $Data
 			if ($Sql===$CacheSql) {
-				if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('[Trace]: Data retrieved from cache file '.$this->_CacheFile,'#060');
+				if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('[Trace]: Data retrieved from cache file '.$this->_CacheCurrFile,'#060');
 				if ($this->_ModeHas(TBSSQL_GRID))  $this->_Message($Data);
 				return true;
 			} else {
 				// It can happens very rarely that two different SQL queries have the same md5, with this chech we are sure to have to good result
-				if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('[Trace]: Data not retrieved from cache file '.$this->_CacheFile.' because SQL is different.','#060');
+				if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('[Trace]: Data not retrieved from cache file '.$this->_CacheCurrFile.' because SQL is different.','#060');
 				return false;
 			}
 		}
 		
 		//echo 'debug CacheTryRetrieve : cache to be updated.'."<br>\r\n";
-		$this->_CacheSql = $Sql;
+		$this->_CacheCurrSql = $Sql;
 		return false;
 		
 	}
@@ -644,21 +656,21 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 	function _CacheUpdate($Data) {
 	// Update the cache
 
-		$fid = @fopen($this->_CacheFile, 'w');
+		$fid = @fopen($this->_CacheCurrFile, 'w');
 		if ($fid===false) {
-			$this->_Message('[Error]: The cache file '.$this->_CacheFile.' cannot be saved.');
+			$this->_Message('[Error]: The cache file '.$this->_CacheCurrFile.' cannot be saved.');
 			$ok = false;
 		} else {
 			flock($fid,2); // acquire an exlusive lock
-			fwrite($fid,'<?php $CacheSql='.var_export($this->_CacheSql,true).'; ');
+			fwrite($fid,'<?php $CacheSql='.var_export($this->_CacheCurrSql,true).'; ');
 			fwrite($fid,'$Data='.var_export($Data,true).';');
 			flock($fid,3); // release the lock
 			fclose($fid);
-		  //echo 'debug CacheTryUpdate : cache file='.date('Y-m-d h:i:s',filemtime($this->_CacheFile)).' end='.date('Y-m-d h:i:s',$cache_end).' , now='.date('Y-m-d h:i:s',time()).' , ok='.var_export($ok,true)."<br>\r\n";
-			if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('[Trace]: Data saved in cache file '.$this->_CacheFile,'#060');
+			//echo 'debug CacheTryUpdate : cache file='.date('Y-m-d h:i:s',filemtime($this->_CacheCurrFile)).' end='.date('Y-m-d h:i:s',$cache_end).' , now='.date('Y-m-d h:i:s',time()).' , ok='.var_export($ok,true)."<br>\r\n";
+			if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('[Trace]: Data saved in cache file '.$this->_CacheCurrFile,'#060');
 			$ok = true;
 		}
-		$this->_CacheSql = false;
+		$this->_CacheCurrSql = false;
 		if ($this->CacheAutoClear!==false) {
 			$this->_CacheTryClearDir();
 			$this->CacheAutoClear = false; // only one try per script call is enought, no need to check for each SQL query
@@ -668,7 +680,7 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 
 	function _CacheTryClearDir() {
 	// Try to delete too old cache files
-	
+
 		$check_file = $this->CacheDir.'/cache_tbssql_info.php';
 		
 		// if the check file does not exist yet, we create it
@@ -703,7 +715,7 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 
 		touch($check_file);
 
-	  if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('[Trace]: CacheAutoClear has deleted '.count($lst).' old cache files from directory '.$this->CacheDir,'#060');
+		if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('[Trace]: CacheAutoClear has deleted '.count($lst).' old cache files from directory '.$this->CacheDir,'#060');
 
 	}
 
@@ -810,27 +822,21 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 		return str_replace('\'','\'\'',$Txt);
 	}
 	
-	function _Dbs_Date($Timestamp,$Mode) {
-		switch ($Mode) {
+	function _Dbs_Date($DateInfo,$FrmMode) {
+		switch ($FrmMode) {
 		case 1:
 			// Date only
-			return '{d \''.date('Y-m-d',$Timestamp).'\'}'; // Works both for proc-stock and functions
+			return '{d \''.$this->_SqlDateFrmStd($DateInfo, '-').'\'}'; // Canonical ODBC date, works both for stored-procedures and functions
 		case 2:
 			// Date and time
-			$ms = date('u',$Timestamp);
-			if ($ms==='u') {
-				$ms = '000'; // 'u' is supported since PHP 5.2.2 only
-			} else {
-				$ms = substr($ms,0,3); // only 3 digits for the milliseconds for ODBC
-			}
-			return '{ts \''.date('Y-m-d H:i:s',$Timestamp).'.'.$ms.'\'}';
+			return '{ts \''.$this->_SqlDateFrmStd($DateInfo, '-', ' ', ':', '.', 3).'\'}'; // only 3 digits for the milliseconds for ODBC
 		case 0:
 			// Value is a string
-			return '\''.$this->_Dbs_ProtectStr($Timestamp).'\'';
+			return '\''.$this->_Dbs_ProtectStr($DateInfo).'\'';
 		default:
 			// Error in date recognization
 			return '\'0000-00-00\'';
-		}  
+		}
 	}
 
 	function _Dbs_LastRowId() {
