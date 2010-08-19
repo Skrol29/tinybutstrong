@@ -4,13 +4,14 @@ TbsSQL changelog
 Skrol29
 http://www.tinybutstrong.com/onlyyou.html
 
-Version 3.0, 2010-07-07
+Version 3.0, 2010-08-19
 
 - New cache feature
-- Can return records as objects
+- Can return records as objects (as stdClass instances, or as your own class instances or as clones of any instances)
 - Can return trace in a console, and can trace data in a grid
 - New property Version (is it useful?)
 - More compatibility with PHP 4
+- Can handle dates over the 32bit limites (1970-2038) if PHP => 5.2 
 - Trace mode now works when TbsSQL is used within TinyButStrong
 
 Version 2.6, 2009-11-26

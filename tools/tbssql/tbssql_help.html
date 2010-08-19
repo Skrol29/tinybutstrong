@@ -57,7 +57,7 @@ h3 {
 <body>
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
   <tr>
-    <td width="200"><a href="http://www.tinybutstrong.com">Skrol29</a>, 2010-07-07 </td>
+    <td width="200"><a href="http://www.tinybutstrong.com">Skrol29</a>, 2010-08-19 </td>
     <td><h1 align="center">TbsSQL 3.0</h1></td>
     <td width="200">&nbsp;</td>
   </tr>
@@ -157,10 +157,10 @@ The goal of TbsSQL is to reduce the code when working with SQL through PHP. It i
           <u>ODBC:</u> (and SQL server with ODBC)<br />
           Argument $srv can be a server name, or a connection string. You can define a DSN (Data Source Name) using the connection string: 'DSN=my_dsn'.<br />
           Examples:<br />
-          $drv	= 'my_server';<br />
+          <span class="sql">$drv	= 'my_server';<br />
           $drv = 'DSN=my_dsn'<br />
           $drv = 'DRIVER={SQL Server};SERVER=my_server'<br />
-          $drv = 'Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\mydatabase.mdb;'</td>
+          $drv = 'Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\mydatabase.mdb;'</span></td>
       </tr>
       <tr id="close">
         <td valign="top" class="split">$Db-&gt;<strong>Close</strong>()</td>
@@ -178,25 +178,25 @@ The goal of TbsSQL is to reduce the code when working with SQL through PHP. It i
           <table border="0" cellspacing="2" cellpadding="0">
             <tr>
               <td width="10" valign="top">&bull;</td>
-              <td valign="top">TBSSQL_SILENT</td>
+              <td width="120" valign="top" class="sql">TBSSQL_SILENT</td>
               <td width="10">&nbsp;</td>
               <td>TbsSql never display messages. </td>
             </tr>
             <tr>
               <td valign="top">&bull;</td>
-              <td valign="top">TBSSQL_NORMAL</td>
+              <td width="120" valign="top" class="sql">TBSSQL_NORMAL</td>
               <td>&nbsp;</td>
               <td>The database error message is displayed only when an error occurs.</td>
             </tr>
             <tr>
               <td valign="top">&bull;</td>
-              <td valign="top">TBSSQL_DEBUG</td>
+              <td width="120" valign="top" class="sql">TBSSQL_DEBUG</td>
               <td>&nbsp;</td>
               <td>Both database error message and the full SQL statement are recalled but only when an error occurs.</td>
             </tr>
             <tr>
               <td valign="top">&bull;</td>
-              <td valign="top">TBSSQL_TRACE</td>
+              <td width="120" valign="top" class="sql">TBSSQL_TRACE</td>
               <td>&nbsp;</td>
               <td>All queries  are displayed.</td>
             </tr>
@@ -205,19 +205,20 @@ The goal of TbsSQL is to reduce the code when working with SQL through PHP. It i
           <table border="0" cellspacing="2" cellpadding="0">
             <tr>
               <td width="10" valign="top">&bull;</td>
-              <td valign="top">TBSSQL_CONSOLE</td>
+              <td width="120" valign="top" class="sql">TBSSQL_CONSOLE</td>
               <td width="10">&nbsp;</td>
               <td>TbsSql messages are displayed in a Html popup window.</td>
             </tr>
             <tr>
               <td valign="top">&bull;</td>
-              <td valign="top">TBSSQL_GRID</td>
+              <td width="120" valign="top" class="sql">TBSSQL_GRID</td>
               <td>&nbsp;</td>
               <td>Full data results are displayed in an Html grid.</td>
             </tr>
           </table>
           <br />
-          <div class="decal"><u>Example:</u> $Db-&gt;Mode = TBSSQL_TRACE + TBSSQL_GRID + TBSSQL_CONSOLE</div><br />
+          <div class="decal"><u>Example:</u> <span class="sql">$Db-&gt;Mode = TBSSQL_TRACE + TBSSQL_GRID + TBSSQL_CONSOLE;</span></div>
+          <br />
           <div class="versioning">Versioning:  constants TBSSQL_* are supported since TbsSQL version 2.5<br />
             TBSSQL_CONSOLE and 
             TBSSQL_GRID are supported since version 3.0<br />
@@ -235,13 +236,13 @@ The goal of TbsSQL is to reduce the code when working with SQL through PHP. It i
             </tr>
             <tr>
               <td width="10">&bull;</td>
-              <td>TBSSQL_ARRAY</td>
+              <td class="sql">TBSSQL_ARRAY</td>
               <td>&nbsp;</td>
               <td>each returned row is an associative PHP array</td>
             </tr>
             <tr>
               <td>&bull;</td>
-              <td>TBSSQL_OBJECT</td>
+              <td class="sql">TBSSQL_OBJECT</td>
               <td>&nbsp;</td>
               <td>each returned row is a primary object (class=stdClass)</td>
             </tr>
@@ -292,7 +293,7 @@ Argument $sql can contain <a href="#placeholders">placeholders</a> for $val1, va
       <tr id="getlist">
         <td valign="top" class="split">$Db-&gt;<strong>GetList</strong>($sql <span class="optional">[,$val1, $val2, ...]</span>)</td>
         <td valign="top" class="split">Returns a PHP array with first column as keys and second column as values. If only one columns is given by the query then they the values of the array. <br />
-          <div class="decal"><u>Example:</u> $Db-&gt;GetList('SELECT id,name FROM t_people');<br />
+          <div class="decal"><u>Example:</u> <span class="sql">$Db-&gt;GetList('SELECT id,name FROM t_people');</span><br />
             will return something like: array(1=&gt;'Peter', 2=&gt;'Dave', 3=&gt;'Jane' ,...)</div>
 Argument $sql can contain <a href="#placeholders">placeholders</a> for $val1, val2, ...</td>
       </tr>
@@ -342,8 +343,8 @@ Argument $sql can contain <a href="#placeholders">placeholders</a> for $val1, va
           Default value is false, which means there is no special timeout for the next query.<br />
         If the cache is enabled (i.e. CacheTimeout &gt; 0), you can disable the cache only for the next query by setting TempCacheTimeout to TBSSQL_NOCACHE.
         <div class="decal"><u>Example:</u><br /> 
-          $Db-&gt;TempCacheTimeout = TBSSQL_1DAY;<br />
-        $x = $Db-&gt;GetRows('SELECT id, name FROM table1 ORDER BY id');<br />
+          <span class="sql">$Db-&gt;TempCacheTimeout = TBSSQL_1DAY;<br />
+        $x = $Db-&gt;GetRows('SELECT id, name FROM table1 ORDER BY id');</span><br />
         </div></td>
       </tr>
       <tr id="cacheautoclear">
@@ -359,6 +360,18 @@ Argument $sql can contain <a href="#placeholders">placeholders</a> for $val1, va
       <tr id="cachesuffix">
         <td valign="top" class="split">$Db-&gt;<strong>CacheSuffix</strong></td>
         <td valign="top" class="split">Default value is '' (empty string). This property enables you to add a suffix in the cache file names. You do not need it most of the time. It is designed to separate the cached results  for the same SQL queries string, for example when a project may use the same queries in  two different Databases.</td>
+      </tr>
+      <tr>
+        <td valign="top" class="split">$Db-&gt;<strong>CacheTimestamp</strong>($sql)</td>
+        <td valign="top" class="split">Returns the timestamp of the cache file corresponding to $sql. Returns <span class="sql">false</span> if the SQL has no cache file.</td>
+      </tr>
+      <tr>
+        <td valign="top" class="split">$Db-&gt;<strong>CacheFileName</strong>($sql)</td>
+        <td valign="top" class="split">Returns the file path of the cache file corresponding to $sql. Returns <span class="sql">false</span> if the SQL has no cache file.</td>
+      </tr>
+      <tr>
+        <td valign="top" class="split">$Db-&gt;<strong>CacheDelete</strong>($sql)</td>
+        <td valign="top" class="split">Try to delete the cache file corresponding to $sql. Returns <span class="sql">true</span> if succeed, otherwise returns <span class="sql">false</span>.</td>
       </tr>
     </table>
 </div>
