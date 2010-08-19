@@ -240,8 +240,15 @@ class clsTbsSql {
 	// delete the cache file
 		$x = $this->_CacheFilePath($Sql);
 		if (file_exists($x)) {
-			return unlink($x);
+			$ok = unlink($x);
+			if ($ok) {
+				if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('[Trace]: CacheDelete() has deleted the cache file: '.$x, '#060');
+			} else {
+				$this->_Message('[Error]: CacheDelete() unexpected failure. Check permissions for deleting cache file '.$x);
+			}
+			return $ok;
 		} else {
+			if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('[Trace]: CacheDelete() has not found the cache file '.$x, '#060');
 			return false;
 		}
 	}
@@ -323,8 +330,8 @@ class clsTbsSql {
 		return false;
 	}
 
-	function _Message($Txt,$Color='#FF0000') {
-	// display a message right now in the Html page or in the console. Must return false.
+	function _Message($Txt, $Color='#FF0000') {
+	// display a message right now in the Html page or in the console. Must return false. Default color is red, which means error.
 
 		if ($this->Mode===TBSSQL_SILENT) return false;
 
