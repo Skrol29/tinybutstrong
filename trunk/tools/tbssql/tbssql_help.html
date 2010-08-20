@@ -63,13 +63,49 @@ h3 {
   </tr>
 </table>
 <hr />
-The goal of TbsSQL is to reduce the code when working with SQL through PHP. It is called a SQL abstraction tool. The TbsSQL is available for the following databases:<br />
-<div class="decal">- MySQL<br />
-  - MySQLi<br />
-  - SQL-Server (via Ms ODBC or UnixODBC)<br />
-  - PostgreSQL (version 7.2 or higher) <br />
-  - ODBC Generic (<span class="versioning">available since TbsSQL version 2.6</span>) </div>
-<h2 id="placeholders">&bull; SQL statements with placeholders</h2>
+<h2 id="placeholders2">Summary</h2>
+<div class="decal">
+  <ol>
+    <li><a href="#presentation">Presentation</a></li>
+    <li><a href="#placeholders">SQL statements with placeholders</a></li>
+    <li><a href="#synopsis">Synopsis</a>
+      <ol>
+        <li><a href="#connecting">Connecting to the database</a></li>
+        <li><a href="#sql">Working with SQL</a></li>
+        <li><a href="#cache">Using the cache feature</a></li>
+        <li><a href="#tbs">Working with TinyButStrong template engine</a></li>
+      </ol>
+    </li>
+    <li><a href="#hook">Hook for TinyButStrong template engine</a></li>
+    <li><a href="#deprecated">Deprecated</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#changlog">Change log</a></li>
+  </ol>
+  <div class="decal"></div>
+</div>
+<hr />
+<h2><a name="presentation" id="presentation" />1. Presentation</h2>
+<div class="decal"> The goal of TbsSQL is to reduce the code when working with SQL through PHP. It is called a SQL abstraction tool.<br />
+  <br />
+  The TbsSQL 
+  trumps are:<div class="decal">
+  - simple to use, easy to install (only one class), few methods an properties<br />
+  - placeholders for merging values in one shot<br />
+- return data as array, standard objects, specific class objects or clone objects<br />
+- a simple cache feature with strict SQL identification (unlike ezSQL)<br />
+- a trace mode, and a debug console<br />
+- recognized by the TinyButStrong template engine
+<br />
+  </div>
+<br />
+  TbsSQL is available for the following databases:<br />
+  <div class="decal">- MySQL<br />
+    - MySQLi<br />
+    - SQL-Server (via Ms ODBC or UnixODBC)<br />
+    - PostgreSQL (version 7.2 or higher) <br />
+    - ODBC Generic (<span class="versioning">available since TbsSQL version 2.6</span>) </div>
+</div>
+<h2><a name="placeholders" id="placeholders" />2. SQL statements with placeholders</h2>
 <div class="decal"> The main asset of TbsSQL is that SQL statement  writing  is really simplified because you can use placeholders in the SQL for placing item data coming from PHP. And item data are always protected against <a href="http://en.wikipedia.org/wiki/Sql_injection">SQL injection</a>.<br />
   <br />
   <u>Example:</u> <br />
@@ -113,294 +149,280 @@ The goal of TbsSQL is to reduce the code when working with SQL through PHP. It i
     In this example, the SQL statement sent to the database will be: <span class="sql">UPDATE table1 SET fd=NULL WHERE (id=29)</span></div>
   <div class="versioning">Versioning: Jokers for nullable values are supported since TbsSQL version 2.5.</div>
 </div>
-<h2 id="hook">&bull; Hook for TinyButStrong template engine</h2>
-<div class="decal"> TbsSQL is compatible with the <a href="http://www.tinybutstrong.com">TinyButStrong</a> Template Engine.<br />
-  Use the property $Db-&gt;TbsKey in order to have the MergeBlock() method using your TbsSQL instance.<br />
-  Example : <span class="sql">$TBS-&gt;MergeBlock('b',$Db-&gt;TbsKey,'SELECT * FROM table1');</span><br />
-  <div class="versioning">Versioning: before version 2.5, property $Db-&gt;TbsKey doesn't exist and the TBS key is the same for all TbsSQL instance. You must use the keyword 'tbssql' instead of $Db-&gt;TbsKey.</div>
-</div>
-<h2 id="license">&bull; License</h2>
-<div class="decal"> TbsSQL is a free and open source. It is published under the LGPL license. </div>
-<h2 id="synopsis">&bull; Synopsis</h2>
-  <h3>Connecting to the database</h3>
-  <div class="decal">
-    <table width="100%" border="0" cellspacing="0" cellpadding="4">
-      <tr id="clstbssql">
-        <td width="260" valign="top" class="split0 split">$Db = new <strong>clsTbsSQL</strong>($srv='',$uid='',$pwd='',$db='',$drv='',$mode=TBSSQL_NORMAL); </td>
-        <td valign="top" class="split0 split">Instantiates the class. 
-          Giving connection information is optional. <br />
-          <span class="versioning">Versioning: optional argument $mode is supported since TbsSQL version 2.6.</span></td>
-      </tr>
-      <tr id="connect">
-        <td valign="top" class="split">$Db-&gt;<strong>Connect</strong>($srv,$uid,$pwd,$db,$drv='',$mode=TBSSQL_NORMAL)<br />
-          &nbsp;&nbsp;or<br />
-          $Db-&gt;<strong>Connect</strong>('glob_var');<br />
-          <br />
-          <u>Arguments:</u><br />
-          $srv: server (or connection string for some database type)<br />
-          $uid: user id<br />
-          $db: database name<br />
-          $drv: driver (optional, needed for some database type)<br />
-          $mode: TbsSQL warning mode (see property Mode)</td>
-        <td valign="top" class="split">Open a connection to the database.<br />
-          Syntax 1 example:<br />
-          <div class="decal"><span class="sql">$Db-&gt;Connect('localhost','root','xxx','db_prod');</span><br />
-            The argument $drv is needed only for some Database Systems.</div>
-          Syntax 2 example:<br />
-          <div class="decal"><span class="sql">$glob_var = array('srv'=&gt;'localhost','uid'=&gt;'root','pwd'=&gt;'xxx','db'=&gt;'db_prod');<br />
-            $Db-&gt;Connect('glob_var');</span><br />
-            'glob_var' must be the name of a global variable containing a PHP array with the keys described above.<br />
-            The global variable is <strong>destroyed</strong> just after the connection. </div>
-          <div class="versioning">Versioning: syntax2 is available since TbsSQL version 2.0. Optional argument $mode is supported since TbsSQL version 2.6.<br />
-          </div>
-          <u>Note:</u> You don't need to call this method if your connection has already been opened before. In this case, you just have to assign the connection id to property -&gt;Id. (example: $Db-&gt;Id = $mycn). You don't have to do this assignation when PHP can work automatically with the last opened connection. This is the case for MySQL for example.<br />
-          <u>ODBC:</u> (and SQL server with ODBC)<br />
-          Argument $srv can be a server name, or a connection string. You can define a DSN (Data Source Name) using the connection string: 'DSN=my_dsn'.<br />
-          Examples:<br />
-          <span class="sql">$drv	= 'my_server';<br />
-          $drv = 'DSN=my_dsn'<br />
-          $drv = 'DRIVER={SQL Server};SERVER=my_server'<br />
-          $drv = 'Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\mydatabase.mdb;'</span></td>
-      </tr>
-      <tr id="close">
-        <td valign="top" class="split">$Db-&gt;<strong>Close</strong>()</td>
-        <td valign="top" class="split">Close the current connection to the database.</td>
-      </tr>
-      <tr id="id">
-        <td valign="top" class="split">$Db-&gt;<strong>Id</strong></td>
-        <td valign="top" class="split">(read/write) The resource  Id of your connection. </td>
-      </tr>
-      <tr id="mode">
-        <td valign="top" class="split">$Db-&gt;<strong>Mode</strong></td>
-        <td valign="top" class="split">(read/write) default value is TBSSQL_NORMAL.<br />
-          You can choose a value among the following:
-          <br />
-          <table border="0" cellspacing="2" cellpadding="0">
-            <tr>
-              <td width="10" valign="top">&bull;</td>
-              <td width="120" valign="top" class="sql">TBSSQL_SILENT</td>
-              <td width="10">&nbsp;</td>
-              <td>TbsSql never display messages. </td>
-            </tr>
-            <tr>
-              <td valign="top">&bull;</td>
-              <td width="120" valign="top" class="sql">TBSSQL_NORMAL</td>
-              <td>&nbsp;</td>
-              <td>The database error message is displayed only when an error occurs.</td>
-            </tr>
-            <tr>
-              <td valign="top">&bull;</td>
-              <td width="120" valign="top" class="sql">TBSSQL_DEBUG</td>
-              <td>&nbsp;</td>
-              <td>Both database error message and the full SQL statement are recalled but only when an error occurs.</td>
-            </tr>
-            <tr>
-              <td valign="top">&bull;</td>
-              <td width="120" valign="top" class="sql">TBSSQL_TRACE</td>
-              <td>&nbsp;</td>
-              <td>All queries  are displayed.</td>
-            </tr>
-          </table>
-          You can also add the following values:
-          <table border="0" cellspacing="2" cellpadding="0">
-            <tr>
-              <td width="10" valign="top">&bull;</td>
-              <td width="120" valign="top" class="sql">TBSSQL_CONSOLE</td>
-              <td width="10">&nbsp;</td>
-              <td>TbsSql messages are displayed in a Html popup window.</td>
-            </tr>
-            <tr>
-              <td valign="top">&bull;</td>
-              <td width="120" valign="top" class="sql">TBSSQL_GRID</td>
-              <td>&nbsp;</td>
-              <td>Full data results are displayed in an Html grid.</td>
-            </tr>
-          </table>
-          <br />
-          <div class="decal"><u>Example:</u> <span class="sql">$Db-&gt;Mode = TBSSQL_TRACE + TBSSQL_GRID + TBSSQL_CONSOLE;</span></div>
-          <br />
-          <div class="versioning">Versioning:  constants TBSSQL_* are supported since TbsSQL version 2.5<br />
-            TBSSQL_CONSOLE and 
-            TBSSQL_GRID are supported since version 3.0<br />
-          </div></td>
-      </tr>
-      <tr id="defaultrowtype">
-        <td valign="top" class="split">$Db-&gt;<strong>DefaultRowType</strong></td>
-        <td valign="top" class="split">(read/write) The type of row returned by default by methods GetRow() and GetRows().<br />
-          The default value is TBSSQL_ARRAY.<br />
-          <table border="0" cellspacing="3" cellpadding="0">
-            <tr>
-              <td colspan="2"><u>Value</u></td>
-              <td width="10">&nbsp;</td>
-              <td><u>Description</u></td>
-            </tr>
-            <tr>
-              <td width="10">&bull;</td>
-              <td class="sql">TBSSQL_ARRAY</td>
-              <td>&nbsp;</td>
-              <td>each returned row is an associative PHP array</td>
-            </tr>
-            <tr>
-              <td>&bull;</td>
-              <td class="sql">TBSSQL_OBJECT</td>
-              <td>&nbsp;</td>
-              <td>each returned row is a primary object (class=stdClass)</td>
-            </tr>
-            <tr>
-              <td>&bull;</td>
-              <td>a string which is a class name</td>
-              <td>&nbsp;</td>
-              <td>each returned row is a new instance of the corresponding class</td>
-            </tr>
-            <tr>
-              <td>&bull;</td>
-              <td>an instance of an object</td>
-              <td>&nbsp;</td>
-              <td>each returned row is built from a clone of the given object</td>
-            </tr>
-          </table>
-          Please note that methods GetRow() and GetRows() have an optional argument which allow to choose the type of returned row.</td>
-      </tr>
-    </table>
-</div>
- 
-  <h3>Working with SQL</h3>
-  <div class="decal">
-    <table width="100%" border="0" cellspacing="0" cellpadding="4">
-      <tr id="execute">
-        <td width="260" valign="top" class="split split0">$Db-&gt;<strong>Execute</strong>($sql <span class="optional">[,$val1, $val2, ...]</span>)</td>
-        <td valign="top" class="split split0">Execute the Sql statement.<br />
+<h2><a name="synopsis" id="synopsis" />3. Synopsis</h2>
+<div class="decal">
+  <h3><a name="connecting" id="connecting" /></a>3.1 Connecting to the database</h3>
+  <table width="100%" border="0" cellpadding="4" cellspacing="0" class="decal">
+    <tr id="clstbssql">
+      <td width="260" valign="top" class="split0 split">$Db = new <strong>clsTbsSQL</strong>($srv='',$uid='',$pwd='',$db='',$drv='',$mode=TBSSQL_NORMAL); </td>
+      <td valign="top" class="split0 split">Instantiates the class. 
+        Giving connection information is optional. <br />
+        <span class="versioning">Versioning: optional argument $mode is supported since TbsSQL version 2.6.</span></td>
+    </tr>
+    <tr id="connect">
+      <td valign="top" class="split">$Db-&gt;<strong>Connect</strong>($srv,$uid,$pwd,$db,$drv='',$mode=TBSSQL_NORMAL)<br />
+        &nbsp;&nbsp;or<br />
+        $Db-&gt;<strong>Connect</strong>('glob_var');<br />
+        <br />
+        <u>Arguments:</u><br />
+        $srv: server (or connection string for some database type)<br />
+        $uid: user id<br />
+        $db: database name<br />
+        $drv: driver (optional, needed for some database type)<br />
+        $mode: TbsSQL warning mode (see property Mode)</td>
+      <td valign="top" class="split">Open a connection to the database.<br />
+        Syntax 1 example:<br />
+        <div class="decal"><span class="sql">$Db-&gt;Connect('localhost','root','xxx','db_prod');</span><br />
+          The argument $drv is needed only for some Database Systems.</div>
+        Syntax 2 example:<br />
+        <div class="decal"><span class="sql">$glob_var = array('srv'=&gt;'localhost','uid'=&gt;'root','pwd'=&gt;'xxx','db'=&gt;'db_prod');<br />
+          $Db-&gt;Connect('glob_var');</span><br />
+          'glob_var' must be the name of a global variable containing a PHP array with the keys described above.<br />
+          The global variable is <strong>destroyed</strong> just after the connection. </div>
+        <div class="versioning">Versioning: syntax2 is available since TbsSQL version 2.0. Optional argument $mode is supported since TbsSQL version 2.6.<br />
+        </div>
+        <u>Note:</u> You don't need to call this method if your connection has already been opened before. In this case, you just have to assign the connection id to property -&gt;Id. (example: $Db-&gt;Id = $mycn). You don't have to do this assignation when PHP can work automatically with the last opened connection. This is the case for MySQL for example.<br />
+        <u>ODBC:</u> (and SQL server with ODBC)<br />
+        Argument $srv can be a server name, or a connection string. You can define a DSN (Data Source Name) using the connection string: 'DSN=my_dsn'.<br />
+        Examples:<br />
+        <span class="sql">$drv	= 'my_server';<br />
+        $drv = 'DSN=my_dsn'<br />
+        $drv = 'DRIVER={SQL Server};SERVER=my_server'<br />
+        $drv = 'Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\mydatabase.mdb;'</span></td>
+    </tr>
+    <tr id="close">
+      <td valign="top" class="split">$Db-&gt;<strong>Close</strong>()</td>
+      <td valign="top" class="split">Close the current connection to the database.</td>
+    </tr>
+    <tr id="id">
+      <td valign="top" class="split">$Db-&gt;<strong>Id</strong></td>
+      <td valign="top" class="split">(read/write) The resource  Id of your connection. </td>
+    </tr>
+    <tr id="mode">
+      <td valign="top" class="split"><a name="mode" id="mode" /></a>$Db-&gt;<strong>Mode</strong></td>
+      <td valign="top" class="split">(read/write) default value is TBSSQL_NORMAL.<br />
+        You can choose a value among the following: <br />
+        <table border="0" cellspacing="2" cellpadding="0">
+          <tr>
+            <td width="10" valign="top">&bull;</td>
+            <td width="120" valign="top" class="sql">TBSSQL_SILENT</td>
+            <td width="10">&nbsp;</td>
+            <td>TbsSql never display messages. </td>
+          </tr>
+          <tr>
+            <td valign="top">&bull;</td>
+            <td width="120" valign="top" class="sql">TBSSQL_NORMAL</td>
+            <td>&nbsp;</td>
+            <td>The database error message is displayed only when an error occurs.</td>
+          </tr>
+          <tr>
+            <td valign="top">&bull;</td>
+            <td width="120" valign="top" class="sql">TBSSQL_DEBUG</td>
+            <td>&nbsp;</td>
+            <td>Both database error message and the full SQL statement are recalled but only when an error occurs.</td>
+          </tr>
+          <tr>
+            <td valign="top">&bull;</td>
+            <td width="120" valign="top" class="sql">TBSSQL_TRACE</td>
+            <td>&nbsp;</td>
+            <td>All queries  are displayed.</td>
+          </tr>
+        </table>
+        You can also add the following values:
+        <table border="0" cellspacing="2" cellpadding="0">
+          <tr>
+            <td width="10" valign="top">&bull;</td>
+            <td width="120" valign="top" class="sql">TBSSQL_CONSOLE</td>
+            <td width="10">&nbsp;</td>
+            <td>TbsSql messages are displayed in a Html popup window.</td>
+          </tr>
+          <tr>
+            <td valign="top">&bull;</td>
+            <td width="120" valign="top" class="sql">TBSSQL_GRID</td>
+            <td>&nbsp;</td>
+            <td>Full data results are displayed in an Html grid.</td>
+          </tr>
+        </table>
+        <br />
+        <div class="decal"><u>Example:</u> <span class="sql">$Db-&gt;Mode = TBSSQL_TRACE + TBSSQL_GRID + TBSSQL_CONSOLE;</span></div>
+        <br />
+        <div class="versioning">Versioning:  constants TBSSQL_* are supported since TbsSQL version 2.5<br />
+          TBSSQL_CONSOLE and 
+          TBSSQL_GRID are supported since version 3.0<br />
+        </div></td>
+    </tr>
+    <tr id="defaultrowtype">
+      <td valign="top" class="split">$Db-&gt;<strong>DefaultRowType</strong></td>
+      <td valign="top" class="split">(read/write) The type of row returned by default by methods GetRow() and GetRows().<br />
+        The default value is TBSSQL_ARRAY.<br />
+        <table border="0" cellspacing="3" cellpadding="0">
+          <tr>
+            <td colspan="2"><u>Value</u></td>
+            <td width="10">&nbsp;</td>
+            <td><u>Description</u></td>
+          </tr>
+          <tr>
+            <td width="10">&bull;</td>
+            <td class="sql">TBSSQL_ARRAY</td>
+            <td>&nbsp;</td>
+            <td>each returned row is an associative PHP array</td>
+          </tr>
+          <tr>
+            <td>&bull;</td>
+            <td class="sql">TBSSQL_OBJECT</td>
+            <td>&nbsp;</td>
+            <td>each returned row is a primary object (class=stdClass)</td>
+          </tr>
+          <tr>
+            <td>&bull;</td>
+            <td>a string which is a class name</td>
+            <td>&nbsp;</td>
+            <td>each returned row is a new instance of the corresponding class</td>
+          </tr>
+          <tr>
+            <td>&bull;</td>
+            <td>an instance of an object</td>
+            <td>&nbsp;</td>
+            <td>each returned row is built from a clone of the given object</td>
+          </tr>
+        </table>
+        Please note that methods GetRow() and GetRows() have an optional argument which allow to choose the type of returned row.</td>
+    </tr>
+  </table>
+  <h3><a name="sql" id="sql" /></a>3.2 Working with SQL</h3>
+  <table width="100%" border="0" cellpadding="4" cellspacing="0" class="decal">
+    <tr id="execute">
+      <td width="260" valign="top" class="split split0">$Db-&gt;<strong>Execute</strong>($sql <span class="optional">[,$val1, $val2, ...]</span>)</td>
+      <td valign="top" class="split split0">Execute the Sql statement.<br />
         Argument $sql can contain <a href="#placeholders">placeholders</a> for $val1, val2, ...</td>
-      </tr>
-      <tr id="getval">
-        <td valign="top" class="split">$Db-&gt;<strong>GetVal</strong>($sql <span class="optional">[,$val1, $val2, ...]</span>)</td>
-        <td valign="top" class="split">Returns the value of the first column in the first record of the query.<br />
-          If no record is returned by the query, then the function returns false.<br /> 
-          Argument $sql can contain <a href="#placeholders">placeholders</a> for $val1, val2, ...</td>
-      </tr>
-      <tr id="getrow">
-        <td valign="top" class="split">$Db-&gt;<strong>GetRow</strong>(<span class="optional">[$rowtype,]</span> $sql <span class="optional">[,$val1, $val2, ...]</span>)</td>
-        <td valign="top" class="split">Returns the first record returned by the query. Return false in case of no record.<br />
+    </tr>
+    <tr id="getval">
+      <td valign="top" class="split">$Db-&gt;<strong>GetVal</strong>($sql <span class="optional">[,$val1, $val2, ...]</span>)</td>
+      <td valign="top" class="split">Returns the value of the first column in the first record of the query.<br />
+        If no record is returned by the query, then the function returns false.<br />
+        Argument $sql can contain <a href="#placeholders">placeholders</a> for $val1, val2, ...</td>
+    </tr>
+    <tr id="getrow">
+      <td valign="top" class="split">$Db-&gt;<strong>GetRow</strong>(<span class="optional">[$rowtype,]</span> $sql <span class="optional">[,$val1, $val2, ...]</span>)</td>
+      <td valign="top" class="split">Returns the first record returned by the query. Return false in case of no record.<br />
         You can  precise the row type for this query using  argument $rowtype. See  property <a href="#defaultrowtype">DefaultRowType</a> for accepted values. If argument $rowtype is omitted, then the returned row type depends of  property DefaultRowType.<br />
-Argument $sql can contain <a href="#placeholders">placeholders</a> for $val1, val2, ...</td>
-      </tr>
-      <tr id="getrows">
-        <td valign="top" class="split">$Db-&gt;<strong>GetRows</strong>(<span class="optional">[$rowtype,]</span> $sql <span class="optional">[,$val1, $val2, ...]</span>)</td>
-        <td valign="top" class="split">Returns all records returned by the query. Return an empty array in case of no record.<br />
+        Argument $sql can contain <a href="#placeholders">placeholders</a> for $val1, val2, ...</td>
+    </tr>
+    <tr id="getrows">
+      <td valign="top" class="split">$Db-&gt;<strong>GetRows</strong>(<span class="optional">[$rowtype,]</span> $sql <span class="optional">[,$val1, $val2, ...]</span>)</td>
+      <td valign="top" class="split">Returns all records returned by the query. Return an empty array in case of no record.<br />
         You can  precise the row type for this query using  argument $rowtype. See  property <a href="#defaultrowtype">DefaultRowType</a> for accepted values. If argument $rowtype is omitted, then the returned row type depends of  property DefaultRowType.<br />
-Argument $sql can contain <a href="#placeholders">placeholders</a> for $val1, val2, ...</td>
-      </tr>
-      <tr id="getlist">
-        <td valign="top" class="split">$Db-&gt;<strong>GetList</strong>($sql <span class="optional">[,$val1, $val2, ...]</span>)</td>
-        <td valign="top" class="split">Returns a PHP array with first column as keys and second column as values. If only one columns is given by the query then they the values of the array. <br />
-          <div class="decal"><u>Example:</u> <span class="sql">$Db-&gt;GetList('SELECT id,name FROM t_people');</span><br />
-            will return something like: array(1=&gt;'Peter', 2=&gt;'Dave', 3=&gt;'Jane' ,...)</div>
-Argument $sql can contain <a href="#placeholders">placeholders</a> for $val1, val2, ...</td>
-      </tr>
-      <tr id="getsql">
-        <td valign="top" class="split">$Db-&gt;<strong>GetSql</strong>($sql <span class="optional">[,$val1, $val2, ...]</span>)</td>
-        <td valign="top" class="split">Returns the SQL statement with merged arguments.<br />
-Argument $sql can contain <a href="#placeholders">placeholders</a> for $val1, val2, ...</td>
-      </tr>
-      <tr id="lastrowid">
-        <td valign="top" class="split">$Db-&gt;<strong>LastRowId</strong>()</td>
-        <td valign="top" class="split">Returns the value of the identifier generated by the last INSERT query of your connection. <br />
-          <u>Note:</u> This method is not available for ODBC Generic.</td>
-      </tr>
-      <tr id="affectedrows">
-        <td valign="top" class="split">$Db-&gt;<strong>AffectedRows</strong>()</td>
-        <td valign="top" class="split">Returns the number of rows affected  by the last UPDATE or DELETE query of your connection.<br />
-          <u>Note:</u> This method is not available for ODBC Generic.</td>
-      </tr>
-    </table>
-</div>
- 
-  <h3>Using cache</h3>
-  <div class="decal">
-  <p>What is the TbsSQL cache feature? SQL queries results can be saved in cache files in order to save time execution when they are recalled. Cache files are available for a limited duration (timeout) in order to ensure the actualization of the data. <br />
+        Argument $sql can contain <a href="#placeholders">placeholders</a> for $val1, val2, ...</td>
+    </tr>
+    <tr id="getlist">
+      <td valign="top" class="split">$Db-&gt;<strong>GetList</strong>($sql <span class="optional">[,$val1, $val2, ...]</span>)</td>
+      <td valign="top" class="split">Returns a PHP array with first column as keys and second column as values. If only one columns is given by the query then they the values of the array. <br />
+        <div class="decal"><u>Example:</u> <span class="sql">$Db-&gt;GetList('SELECT id,name FROM t_people');</span><br />
+          will return something like: array(1=&gt;'Peter', 2=&gt;'Dave', 3=&gt;'Jane' ,...)</div>
+        Argument $sql can contain <a href="#placeholders">placeholders</a> for $val1, val2, ...</td>
+    </tr>
+    <tr id="getsql">
+      <td valign="top" class="split">$Db-&gt;<strong>GetSql</strong>($sql <span class="optional">[,$val1, $val2, ...]</span>)</td>
+      <td valign="top" class="split">Returns the SQL statement with merged arguments.<br />
+        Argument $sql can contain <a href="#placeholders">placeholders</a> for $val1, val2, ...</td>
+    </tr>
+    <tr id="lastrowid">
+      <td valign="top" class="split">$Db-&gt;<strong>LastRowId</strong>()</td>
+      <td valign="top" class="split">Returns the value of the identifier generated by the last INSERT query of your connection. <br />
+        <u>Note:</u> This method is not available for ODBC Generic.</td>
+    </tr>
+    <tr id="affectedrows">
+      <td valign="top" class="split">$Db-&gt;<strong>AffectedRows</strong>()</td>
+      <td valign="top" class="split">Returns the number of rows affected  by the last UPDATE or DELETE query of your connection.<br />
+        <u>Note:</u> This method is not available for ODBC Generic.</td>
+    </tr>
+  </table>
+  <h3><a name="cache" id="cache" /></a>3.3 Using the cache feature</h3>
+  <p class="decal">What is the TbsSQL cache feature? SQL queries results can be saved in cache files in order to save time execution when they are recalled. Cache files are available for a limited duration (timeout) in order to ensure the actualization of the data. <br />
     The TbsSQL cache feature is disabled by default. You can enable it simply by setting a positive value to property $Db-&gt;CacheTimeout.<br />
-    Interesting technical notes: 
-    <br />
+    Interesting technical notes: <br />
     - 
     TbsSQL cache files cannot be read by users because they are PHP files.<br />
     - 
     The TbsSQL cache feature will never provide data from another SQL query. Other tools, like  ezSQL for example, can <span id="result_box2"><span title="">theoretically</span></span> be wrong when identifying a cache file because they are identified only by a hash value (md5). Hash values are not  unique ids, even if the probability of doubles is very poor.<br />
     - 
-  When the cache is enabled, TbsSQL will (by default) automatically get rid of cache files that come from old unused queries.</p>
-    <table width="100%" border="0" cellspacing="0" cellpadding="4">
-      <tr id="cachetimeout">
-        <td width="260" valign="top" class="split0 split">$Db-&gt;<strong>CacheTimeout</strong></td>
-        <td valign="top" class="split0 split">Defines the cache timeout in minutes for all SQL queries called by methods GetVal(), GetRow(), GetRows() and GetList().        The default value is false, which means the cache feature is disabled. Method Execute() is not concerned by the cache feature.<br />
-          You can use constants TBSSQL_1HOUR, 
-          TBSSQL_1DAY or TBSSQL_1WEEK in order to easier define the timeout.<br />
-          Use property TempCacheTimeout to force the cache for<span id="result_box"><span title=""> only one query, whether default cache is enabled or not.</span></span>
-          <div class="decal"><u>Example:</u> $Db-&gt;CacheTimeout = 2 * TBSSQL_1DAY;<br />
+    When the cache is enabled, TbsSQL will (by default) automatically get rid of cache files that come from old unused queries.</p>
+  <table width="100%" border="0" cellpadding="4" cellspacing="0" class="decal">
+    <tr id="cachetimeout">
+      <td width="260" valign="top" class="split0 split">$Db-&gt;<strong>CacheTimeout</strong></td>
+      <td valign="top" class="split0 split">Defines the cache timeout in minutes for all SQL queries called by methods GetVal(), GetRow(), GetRows() and GetList().        The default value is false, which means the cache feature is disabled. Method Execute() is not concerned by the cache feature.<br />
+        You can use constants TBSSQL_1HOUR, 
+        TBSSQL_1DAY or TBSSQL_1WEEK in order to easier define the timeout.<br />
+        Use property TempCacheTimeout to force the cache for<span id="result_box"><span title=""> only one query, whether default cache is enabled or not.</span></span>
+        <div class="decal"><u>Example:</u> $Db-&gt;CacheTimeout = 2 * TBSSQL_1DAY;<br />
           this  does enable the cache for all queries with a cache duration of one day.</div></td>
-      </tr>
-      <tr id="tempcachetimeout">
-        <td valign="top" class="split">$Db-&gt;<strong>TempCacheTimeout</strong></td>
-        <td valign="top" class="split">Define the cache timeout in minutes but only for the next query. You can use this property to active the cache for only one query, or to change the cache timeout for a only one query.<br />
-          Default value is false, which means there is no special timeout for the next query.<br />
+    </tr>
+    <tr id="tempcachetimeout">
+      <td valign="top" class="split">$Db-&gt;<strong>TempCacheTimeout</strong></td>
+      <td valign="top" class="split">Define the cache timeout in minutes but only for the next query. You can use this property to active the cache for only one query, or to change the cache timeout for a only one query.<br />
+        Default value is false, which means there is no special timeout for the next query.<br />
         If the cache is enabled (i.e. CacheTimeout &gt; 0), you can disable the cache only for the next query by setting TempCacheTimeout to TBSSQL_NOCACHE.
-        <div class="decal"><u>Example:</u><br /> 
+        <div class="decal"><u>Example:</u><br />
           <span class="sql">$Db-&gt;TempCacheTimeout = TBSSQL_1DAY;<br />
-        $x = $Db-&gt;GetRows('SELECT id, name FROM table1 ORDER BY id');</span><br />
+          $x = $Db-&gt;GetRows('SELECT id, name FROM table1 ORDER BY id');</span><br />
         </div></td>
-      </tr>
-      <tr id="cacheautoclear">
-        <td valign="top" class="split">$Db-&gt;<strong>CacheAutoClear</strong></td>
-        <td valign="top" class="split"> When the cache is enabled, TbsSQL can try to delete old cached queries in the cache directory. <br />
+    </tr>
+    <tr id="cacheautoclear">
+      <td valign="top" class="split">$Db-&gt;<strong>CacheAutoClear</strong></td>
+      <td valign="top" class="split"> When the cache is enabled, TbsSQL can try to delete old cached queries in the cache directory. <br />
         The default value is TBSSQL_1WEEK.</td>
-      </tr>
-      <tr id="cachedir">
-        <td valign="top" class="split">$Db-&gt;<strong>CacheDir</strong></td>
-        <td valign="top" class="split"> This property defines the directory where cached queries are stored.<br />
+    </tr>
+    <tr id="cachedir">
+      <td valign="top" class="split">$Db-&gt;<strong>CacheDir</strong></td>
+      <td valign="top" class="split"> This property defines the directory where cached queries are stored.<br />
         The default value is '.'.</td>
-      </tr>
-      <tr id="cachesuffix">
-        <td valign="top" class="split">$Db-&gt;<strong>CacheSuffix</strong></td>
-        <td valign="top" class="split">Default value is '' (empty string). This property enables you to add a suffix in the cache file names. You do not need it most of the time. It is designed to separate the cached results  for the same SQL queries string, for example when a project may use the same queries in  two different Databases.</td>
-      </tr>
-      <tr>
-        <td valign="top" class="split">$Db-&gt;<strong>CacheTimestamp</strong>($sql)</td>
-        <td valign="top" class="split">Returns the timestamp of the cache file corresponding to $sql. Returns <span class="sql">false</span> if the SQL has no cache file.</td>
-      </tr>
-      <tr>
-        <td valign="top" class="split">$Db-&gt;<strong>CacheFileName</strong>($sql)</td>
-        <td valign="top" class="split">Returns the file path of the cache file corresponding to $sql. Returns <span class="sql">false</span> if the SQL has no cache file.</td>
-      </tr>
-      <tr>
-        <td valign="top" class="split">$Db-&gt;<strong>CacheDelete</strong>($sql)</td>
-        <td valign="top" class="split">Try to delete the cache file corresponding to $sql. Returns <span class="sql">true</span> if succeed, otherwise returns <span class="sql">false</span>.</td>
-      </tr>
-    </table>
+    </tr>
+    <tr id="cachesuffix">
+      <td valign="top" class="split">$Db-&gt;<strong>CacheSuffix</strong></td>
+      <td valign="top" class="split">Default value is '' (empty string). This property enables you to add a suffix in the cache file names. You do not need it most of the time. It is designed to separate the cached results  for the same SQL queries string, for example when a project may use the same queries in  two different Databases.</td>
+    </tr>
+    <tr>
+      <td valign="top" class="split">$Db-&gt;<strong>CacheTimestamp</strong>($sql)</td>
+      <td valign="top" class="split">Returns the timestamp of the cache file corresponding to $sql. Returns <span class="sql">false</span> if the SQL has no cache file.</td>
+    </tr>
+    <tr>
+      <td valign="top" class="split">$Db-&gt;<strong>CacheFileName</strong>($sql)</td>
+      <td valign="top" class="split">Returns the file path of the cache file corresponding to $sql. Returns <span class="sql">false</span> if the SQL has no cache file.</td>
+    </tr>
+    <tr>
+      <td valign="top" class="split">$Db-&gt;<strong>CacheDelete</strong>($sql)</td>
+      <td valign="top" class="split">Try to delete the cache file corresponding to $sql. Returns <span class="sql">true</span> if succeed, otherwise returns <span class="sql">false</span>.</td>
+    </tr>
+  </table>
+  <h3><a name="tbs" id="tbs" /></a>3.4 Working with TinyButStrong template engine</h3>
+  <table width="100%" border="0" cellpadding="4" cellspacing="0" class="decal">
+    <tr id="tbskey">
+      <td width="260" valign="top" class="split0 split">$Db-&gt;<strong>TbsKey</strong></td>
+      <td valign="top" class="split0 split">(read) Return the TinyButStrong key string for the current connection (see chapter Hook above). This property has always a default value which is unique for each new instance.<br />
+        Most of the time there is no need know the value of this property,  since you can use the property directly with TBS.<br />
+        Example: <span class="sql">$TBS-&gt;MergeBlock('b',$Db-&gt;TbsKey,'SELECT * FROM table1');</span> <br />
+        <div class="versioning">Versioning: this property is available since TbsSQL version 2.5<br />
+        </div></td>
+    </tr>
+    <tr id="settbskey">
+      <td valign="top" class="split">$Db-&gt;<strong>SetTbsKey</strong>($key)</td>
+      <td valign="top" class="split">Change the value of property $Db-&gt;TbsKey. Most of the time, there is no need to use this method because property TbsKey has always a default value which is unique. Use this method only if your application do need a customized key value for the TinyButStrong merging.<br />
+        Example:<br />
+        <div class="sql decal">$Db-&gt;SetTbsKey('myconnection');<br />
+          $TBS-&gt;MergeBlock('b', 'myconnection', 'SELECT * FROM table1');</div>
+        <div class="versioning">Versioning: this method is available since TbsSQL version 2.5</div></td>
+    </tr>
+  </table>
 </div>
- 
-  <h3>Working with TinyButStrong template engine</h3>
-  <div class="decal">
-    <table width="100%" border="0" cellspacing="0" cellpadding="4">
-      <tr id="tbskey">
-        <td width="260" valign="top" class="split0 split">$Db-&gt;<strong>TbsKey</strong></td>
-        <td valign="top" class="split0 split">(read) Return the TinyButStrong key string for the current connection (see chapter Hook above). This property has always a default value which is unique for each new instance.<br />
-          Most of the time there is no need know the value of this property,  since you can use the property directly with TBS.<br />
-          Example: <span class="sql">$TBS-&gt;MergeBlock('b',$Db-&gt;TbsKey,'SELECT * FROM table1');</span> <br />
-          <div class="versioning">Versioning: this property is available since TbsSQL version 2.5<br />
-          </div></td>
-      </tr>
-      <tr id="settbskey">
-        <td valign="top" class="split">$Db-&gt;<strong>SetTbsKey</strong>($key)</td>
-        <td valign="top" class="split">Change the value of property $Db-&gt;TbsKey. Most of the time, there is no need to use this method because property TbsKey has always a default value which is unique. Use this method only if your application do need a customized key value for the TinyButStrong merging.<br />
-          Example:<br />
-          <div class="sql decal">$Db-&gt;SetTbsKey('myconnection');<br />
-            $TBS-&gt;MergeBlock('b', 'myconnection', 'SELECT * FROM table1');</div>
-          <div class="versioning">Versioning: this method is available since TbsSQL version 2.5</div></td>
-      </tr>
-    </table>
-  </div>
+<h2><a name="hook" id="hook" /></a>4. Hook for TinyButStrong template engine</h2>
+<div class="decal"> TbsSQL is compatible with the <a href="http://www.tinybutstrong.com">TinyButStrong</a> Template Engine.<br />
+  Use the property $Db-&gt;TbsKey in order to have the MergeBlock() method using your TbsSQL instance.<br />
+  Example : <span class="sql">$TBS-&gt;MergeBlock('b',$Db-&gt;TbsKey,'SELECT * FROM table1');</span><br />
+  <div class="versioning">Versioning: before version 2.5, property $Db-&gt;TbsKey doesn't exist and the TBS key is the same for all TbsSQL instance. You must use the keyword 'tbssql' instead of $Db-&gt;TbsKey.</div>
 </div>
-<h2>&bull; Deprecated</h2>
+<h2><a name="deprecated" id="deprecated" />5. Deprecated</h2>
 <div class="decal">
-<p>Those methods are deprecated in TbsSQL version 2.x, and unsupported since version 3.x</p>
+  <p>Those methods are deprecated in TbsSQL version 2.x, and unsupported since version 3.x</p>
   <table width="100%" border="0" cellspacing="0" cellpadding="3">
     <tr>
       <td width="260" valign="top">$Db-&gt;Row1($sql,...*...)</td>
@@ -416,5 +438,41 @@ Argument $sql can contain <a href="#placeholders">placeholders</a> for $val1, va
     </tr>
   </table>
 </div>
+<h2><a name="license" id="license" /></a></a>6. License</h2>
+<div class="decal"> TbsSQL is a free and open source. It is published under the LGPL license. </div>
+<h2><a name="changelog" id="changelog" />7. Change log</h2>
+<div class="decal">
+  <p>Version 3.0, 2010-08-19</p>
+  <p>- New cache feature<br />
+    - Can return records as objects (as stdClass instances, or as your own class instances or as clones of any instances)<br />
+    - Can return trace in a console, and can trace data in a grid<br />
+    - New property Version (is it useful?)<br />
+    - More compatibility with PHP 4<br />
+    - Can handle dates over the 32bit limits (1970-2038) if PHP =&gt; 5.2 <br />
+    - Trace mode now works when TbsSQL is used within TinyButStrong</p>
+  <p>Version 2.6, 2009-11-26</p>
+  <p>- Argument $Mode has been added to the class instantiation and to method Connect().<br />
+    This allows to display error message and trace when the connection is made.<br />
+    - Display the connection string in trace mode (Mode=TBSSQL_TRACE)<br />
+    - New database support : ODBC (generic), for both Windows and Unix) <br />
+    - Support UnixODBC for ODBC Generic and ODBC for SQL Server.<br />
+    - Use canonical formats for date and time with ODBC Generic and ODBC for SQL Server.<br />
+    - Support ODBC connection string with ODBC and ODBC Generic for SQL Server.<br />
+    - Do not use @ with odbc_connect() because some error of connection can make a PHP critical error.<br />
+    In this case @ avoid any error and warning messages which is uncomfortable.</p>
+  <p>Version 2.5, 2009-09-16</p>
+  <p>- New set of jokers that supports NULL values for SQL.<br />
+    - constants that can be used for property $Db-&gt;Mode :<br />
+    TBSSQL_SILENT<br />
+    TBSSQL_NORMAL<br />
+    TBSSQL_DEBUG<br />
+    TBSSQL_TRACE<br />
+    - Bug for TbsSQL with MySQL : each TbsSQL instance was always linked to the <br />
+    last MySQL connection. That was because property $Db-&gt;Id was always set to True<br />
+    instead of the MySQL connection resource. <br />
+    - New property $Db-&gt;TbsKey : enables you to use several instances of TbsSQL with TinyButStrong.<br />
+    - New method $Db-&gt;SetTbsKey() : enables you to customize instances of TbsSQL with TinyButStrong.</p>
+</div>
+<h2 id="placeholders4"></h2>
 </body>
 </html>
