@@ -25,7 +25,7 @@ class clsTbsSql {
 
 	function __construct($srv='',$uid='',$pwd='',$db='',$drv='',$Mode=TBSSQL_NORMAL) {
 		// Default values (defined here to be compatible with both PHP 4 & 5)
-		$this->Version = '3.0-beta-2010-07-08';
+		$this->Version = '3.0';
 		$this->Id = false;
 		$this->SqlNull = 'NULL'; // can be modified by user
 		$this->DefaultRowType = TBSSQL_ARRAY;
