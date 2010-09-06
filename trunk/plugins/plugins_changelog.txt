@@ -1,0 +1,46 @@
+2008-02-29
+
+  Plug-in NavBar version 1.0.6 : fixes a bug on endpoint management when parameter 'pagemin' is set to 0.
+  Plug-in HTML   version 1.0.6 : modified to work with TBS 3.3.0.
+  Plug-in Cache  version 1.0.6 : modifier to work with TBS 3.3.0.
+
+2006-11-26
+
+  All plug-ins provided with TBS 3.2.0 are set to version 1.0.5
+     - Plug-in version is display with [tbs..tbsinfo]
+		 - Plug-in Cache: new commande TBS_CACHEDELETEMASK and a bug fixed about TBS_CACHEDELETE.
+		 - Plug-in MergeOnFly: output forced using flush().  
+
+2006-08-25
+
+  Plug-in HTML version 1.0.4
+     - Fixes a bug about a blank item added at the end of a list of options.
+
+2006-08-03
+
+  Plug-in HTML version 1.0.3
+     - Fixes a bug when no item is found in a list of option
+     - New parameter "addmissing": enables you to insert searched values which are not found in a list of options.
+     - List of options are merged twice faster in average. 
+
+2006-06-16
+
+  Plug-in ByPage version 1.0.3 (for TBS >= 3.1.0).
+     - Fixes a bug when display first record of first page, with a non Array data source (like SQL).
+
+2006-06-14
+
+  Plug-in NavBar version 1.0.2 fixes a bug with bmagnet.
+
+2006-06-07
+
+  Plug-in HTML   version 1.0.2 (for TBS >= 3.1.0).
+  Plug-in ByPage version 1.0.2 (for TBS >= 3.1.0).
+
+2006-05-14:
+
+  Plug-in CacheSystem version 1.0.3 (for TBS >= 3.0.3).
+
+2006-05-13:
+
+  Plug-in CacheSystem version 1.0.2 (for TBS >= 3.0.2).
