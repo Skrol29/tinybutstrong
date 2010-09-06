@@ -11,7 +11,7 @@ The tool 'tbs_build.php' does make this conversion.
 Skrol29, 2010-05-27
 */
 
-if (!isset($_GET['source'])) exit("Enter the name of a TBS development file in argument 'source' in the URL.");
+if (!isset($_GET['source'])) exit("Enter the name of a TBS development file in argument 'source' in the URL. Usually: source=tbs_class_dev.php");
 
 $Src = basename($_GET['source']);
 if (!file_exists($Src)) exit("File '".$Src."' is not found.");
@@ -56,6 +56,12 @@ $Ok = $Ok && f_Replace($Txt, 'if (PHP_VERSION===\'4.4.1\') {$this->RecSet = $thi
 $Ok = $Ok && f_Replace($Txt, 'if (PHP_VERSION===\'4.4.1\') {$this->RecSet = $Query;} else {$this->RecSet = &$Query;}', '$this->RecSet = &$Query;', 'Delete bug 2 specific to PHP 4.4.1');
 $Ok = $Ok && f_Replace($Txt, 'if ((PHP_VERSION===\'4.4.1\') and is_array($GLOBALS[$Item0])) {$Var = $GLOBALS[$Item0];} else {$Var = &$GLOBALS[$Item0];}', '$Var = &$GLOBALS[$Item0];', 'Delete bug 3 specific to PHP 4.4.1');
 $Ok = $Ok && f_Replace($Txt, '$this->CurrRec = @pg_fetch_array($this->RecSet,$this->RecNum,PGSQL_ASSOC); // warning comes when no record left.', '$this->CurrRec = pg_fetch_assoc($this->RecSet);', 'Delete a fix for PostgreSQL on PHP<4.1.0');
+$Ok = $Ok && f_Replace($Txt, "\n".'	var $', "\n".'	public $', 'Replace var declarations with public (1)');
+$Ok = $Ok && f_Replace($Txt, "\n".'var $', "\n".'public $', 'Replace var declarations with public (2)');
+$Ok = $Ok && f_Replace($Txt, ' = &new ', ' = new ', ' &new replaced with new');
+$Ok = $Ok && f_Replace($Txt, ' for PHP 4', ' for PHP 5', 'version: for PHP 5');
+$Ok = $Ok && f_Replace($Txt, 'if (version_compare(PHP_VERSION,\'4.0.6\')<0) echo \'<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is \'.PHP_VERSION.\' while TinyButStrong needs PHP version 4.0.6 or higher.\';'."\n".'if (!is_callable(\'array_key_exists\')) {'."\n".'	function array_key_exists (&$key,&$array) {return key_exists($key,$array);}'."\n".'}'."\n".'if (!is_callable(\'property_exists\')) {'."\n".'	function property_exists(&$obj,$prop) {return true;}'."\n".'}', 'if (version_compare(PHP_VERSION,\'5.0\')<0) echo \'<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is \'.PHP_VERSION.\' while TinyButStrong needs PHP version 5.0 or higher. You should try with TinyButStrong Edition for PHP 4.\';', 'check PHP version');
+
 if ($Ok) {
 	f_Save($Dst5, $Txt);
 	echo "Conversion complete and saved into file <b>".$Dst5."</b><br> \r\n";
@@ -71,13 +77,13 @@ function f_Replace(&$Txt, $ReplWhat, $ReplWith, $Msg) {
 	$Txt = str_replace($ReplWhat, $ReplWith, $Txt);
 	$NbrAfter = substr_count($Txt, $ReplWhat);
 	if ($NbrBefore==0) {
-		$ResMsg = '<span style="font-style: italic;">no items found</span>';
+		$ResMsg = '<span style="color: purple; font-style: italic;">no items found</span>';
 		$Ok = false;
 	} elseif ($NbrAfter>0) {
-		$ResMsg = '<span style="color: #F00; font-weight: bold;">ERROR</span>';
+		$ResMsg = '<span style="color: red; font-weight: bold;">ERROR</span>. '.$NbrBefore.' founds before, '.$NbrAfter.' found after.';
 		$Ok = false;
 	} else {
-		$ResMsg = '<span style="color: #060; font-weight: bold;">OK</span>';
+		$ResMsg = '<span style="color: green; font-weight: bold;">OK</span>. '.$NbrBefore.' founds before, '.$NbrAfter.' found after.';
 		$Ok = true;
 	}
 	
