@@ -11,11 +11,12 @@ Author   : http://www.tinybutstrong.com/onlyyou.html
 This library is free software.
 You can redistribute and modify it even for commercial usage,
 but you must accept and respect the LPGL License version 3.
-[ok   ] BUG : paramètre getbody sans valeur ne fonctionne pas car dans f_Xml_GetPart() on a $Tag = 'BODY'; au lieu de $TagLst = 'BODY';
-[ok   ] BUG : parameter att didn't work when placed in the same tag in an attribute placed before the target attribute. http://tinybutstrong.com/forum.php?msg_id=10899
-[ok   ] FCT : new plugin event OnCacheField
-[ok   ] FCT : parameter htmlconv=utf8
-[ok   ] FCT : new properties OnLoad and OnShow to the attention of plugins
+[ok   ] BUG paramètre getbody sans valeur ne fonctionne pas car dans f_Xml_GetPart() on a $Tag = 'BODY'; au lieu de $TagLst = 'BODY';
+[ok   ] BUG parameter att didn't work when placed in the same tag in an attribute placed before the target attribute. http://tinybutstrong.com/forum.php?msg_id=10899
+[ok   ] FCT new plugin event OnCacheField
+[ok   ] FCT parameter htmlconv=utf8
+[ok   ] FCT new properties OnLoad and OnShow to the attention of plugins
+[ok   ] BUG GetBlockSource() with AsArray=false and DefTags=false did return DefTags
 
 */
 // Check PHP version
@@ -592,23 +593,38 @@ public function LoadTemplate($File,$Charset='') {
 	return $Ok;
 }
 
-public function GetBlockSource($BlockName,$List=false,$KeepDefTags=true,$ReplaceWith=false) {
+public function GetBlockSource($BlockName,$AsArray=false,$DefTags=true,$ReplaceWith=false) {
 	$RetVal = array();
 	$Nbr = 0;
 	$Pos = 0;
 	$FieldOutside = false;
 	$P1 = false;
-	$Mode = ($KeepDefTags) ? 3 : 2;
+	$Mode = ($DefTags) ? 3 : 2;
 	$PosBeg1 = 0;
+	$PosEndPrec = false;
 	while ($Loc = $this->meth_Locator_FindBlockNext($this->Source,$BlockName,$Pos,'.',$Mode,$P1,$FieldOutside)) {
 		$Nbr++;
-		if ($Nbr==1) $PosBeg1 = $Loc->PosBeg;
-		if ($List) $RetVal[$Nbr] = $Loc->BlockSrc;
+		$Sep = '';
+		if ($Nbr==1) {
+			$PosBeg1 = $Loc->PosBeg;
+		} elseif (!$AsArray) {
+			$Sep = substr($this->Source,$PosSep,$Loc->PosBeg-$PosSep); // part of the source between sections
+		}
+		$RetVal[$Nbr] = $Sep.$Loc->BlockSrc;
 		$Pos = $Loc->PosEnd;
+		$PosSep = $Loc->PosEnd+1;
 		$P1 = false;
 	}
 	if ($Nbr==0) return false;
-	if (!$List) $RetVal = substr($this->Source,$PosBeg1,$Pos-$PosBeg1+1);
+	if (!$AsArray) {
+		if ($DefTags)  {
+			// Return the true part of the template
+			$RetVal = substr($this->Source,$PosBeg1,$Pos-$PosBeg1+1);
+		} else {
+			// Return the concatenated section without def tags
+			$RetVal = implode('', $RetVal);
+		}
+	}
 	if ($ReplaceWith!==false) $this->Source = substr($this->Source,0,$PosBeg1).$ReplaceWith.substr($this->Source,$Pos+1);
 	return $RetVal;
 }
@@ -673,7 +689,7 @@ public function MergeField($NameLst,$Value='assigned',$IsUserFct=false,$DefaultP
 			$SubStart = false;
 			$FctCheck = false;
 		}
-		while ($Loc = $this->meth_Locator_FindTbs($this->Source,$Name,$PosBeg,'.')) {
+		while ($Loc = clsTinyButStrong::meth_Locator_FindTbs($this->Source,$Name,$PosBeg,'.',$this->_ChrOpen,$this->_ChrClose,$this)) {
 			if ($Prm) $Loc->PrmLst = array_merge($DefaultPrm,$Loc->PrmLst);
 			// Apply user function
 			if ($IsUserFct) {
@@ -767,12 +783,12 @@ public function PlugIn($Prm1,$Prm2=0) {
 
 // *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-function meth_Locator_FindTbs(&$Txt,$Name,$Pos,$ChrSub) {
+static function meth_Locator_FindTbs(&$Txt,$Name,$Pos,$ChrSub,$ChrOpen,$ChrClose,$tbs=false) {
 // Find a TBS Locator
 
 	$PosEnd = false;
 	$PosMax = strlen($Txt) -1;
-	$Start = $this->_ChrOpen.$Name;
+	$Start = $ChrOpen.$Name;
 
 	do {
 		// Search for the opening char
@@ -788,7 +804,7 @@ function meth_Locator_FindTbs(&$Txt,$Name,$Pos,$ChrSub) {
 			$PosX = $Pos + strlen($Start);
 			$x = $Txt[$PosX];
 
-			if ($x===$this->_ChrClose) {
+			if ($x===$ChrClose) {
 				$PosEnd = $PosX;
 			} elseif ($x===$ChrSub) {
 				$Loc->SubOk = true; // it is no longer the false value
@@ -803,9 +819,14 @@ function meth_Locator_FindTbs(&$Txt,$Name,$Pos,$ChrSub) {
 
 			$Loc->PosBeg = $Pos;
 			if ($ReadPrm) {
-				$this->f_Loc_PrmRead($Txt,$PosX,false,'\'',$this->_ChrOpen,$this->_ChrClose,$Loc,$PosEnd);
+				clsTinyButStrong::f_Loc_PrmRead($Txt,$PosX,false,'\'',$ChrOpen,$ChrClose,$Loc,$PosEnd);
 				if ($PosEnd===false) {
-					$this->meth_Misc_Alert('','can\'t found the end of the tag \''.substr($Txt,$Pos,$PosX-$Pos+10).'...\'.');
+					$Msg = 'can\'t found the end of the tag \''.substr($Txt,$Pos,$PosX-$Pos+10).'...\'.';
+					if (is_object($tbs)) {
+						$tbs->meth_Misc_Alert('',$Msg);
+					} else {
+						echo clsTinyButStrong::meth_Misc_AlertMsg('',$Msg);
+					}
 					$Pos++;
 				}
 			}
@@ -827,9 +848,9 @@ function meth_Locator_FindTbs(&$Txt,$Name,$Pos,$ChrSub) {
 		$Loc->PosEnd0 = $Loc->PosEnd;
 		$comm = $Loc->PrmLst['comm'];
 		if (($comm===true) or ($comm==='')) {
-			$Loc->Enlarged = $this->f_Loc_EnlargeToStr($Txt,$Loc,'<!--' ,'-->');
+			$Loc->Enlarged = clsTinyButStrong::f_Loc_EnlargeToStr($Txt,$Loc,'<!--' ,'-->');
 		} else {
-			$Loc->Enlarged = $this->f_Loc_EnlargeToTag($Txt,$Loc,$comm,false);
+			$Loc->Enlarged = clsTinyButStrong::f_Loc_EnlargeToTag($Txt,$Loc,$comm,false);
 		}
 	}
 
@@ -857,7 +878,7 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst) {
 		$Pos = 0;
 		$PrevEnd = -1;
 		$PrevIsAMF = false; // AMF means Attribute Moved Forward
-		while ($Loc = $this->meth_Locator_FindTbs($Txt,$BlockName,$Pos,'.')) {
+		while ($Loc = clsTinyButStrong::meth_Locator_FindTbs($Txt,$BlockName,$Pos,'.',$this->_ChrOpen,$this->_ChrClose,$this)) {
 			
 			$IsAMF = false;
 			
@@ -1351,7 +1372,7 @@ function meth_Locator_FindBlockNext(&$Txt,$BlockName,$PosBeg,$ChrSub,$Mode,&$P1,
 	$SearchDef = true;
 	$FirstField = false;
 	// Search for the first tag with parameter "block"
-	while ($SearchDef and ($Loc = $this->meth_Locator_FindTbs($Txt,$BlockName,$PosBeg,$ChrSub))) {
+	while ($SearchDef and ($Loc = clsTinyButStrong::meth_Locator_FindTbs($Txt,$BlockName,$PosBeg,$ChrSub,$this->_ChrOpen,$this->_ChrClose,$this))) {
 		if (isset($Loc->PrmLst['block'])) {
 			if (isset($Loc->PrmLst['p1'])) {
 				if ($P1) return false;
@@ -1379,7 +1400,7 @@ function meth_Locator_FindBlockNext(&$Txt,$BlockName,$PosBeg,$ChrSub,$Mode,&$P1,
 		if (($FirstField!==false) and ($FirstField->PosEnd<$Loc->PosBeg)) $FieldBefore = true;
 
 		$Opened = 1;
-		while ($Loc2 = $this->meth_Locator_FindTbs($Txt,$BlockName,$PosBeg,$ChrSub)) {
+		while ($Loc2 = clsTinyButStrong::meth_Locator_FindTbs($Txt,$BlockName,$PosBeg,$ChrSub,$this->_ChrOpen,$this->_ChrClose,$this)) {
 			if (isset($Loc2->PrmLst['block'])) {
 				switch ($Loc2->PrmLst['block']) {
 				case 'end':   $Opened--; break;
@@ -2003,7 +2024,7 @@ function meth_Merge_AutoVar(&$Txt,$ConvStr,$Id='var') {
 	// Then we scann all fields in the model
 	$x = '';
 	$Pos = 0;
-	while ($Loc = $this->meth_Locator_FindTbs($Txt,$Id,$Pos,'.')) {
+	while ($Loc = clsTinyButStrong::meth_Locator_FindTbs($Txt,$Id,$Pos,'.',$this->_ChrOpen,$this->_ChrClose,$this)) {
 		if ($Loc->SubNbr==0) $Loc->SubLst[0]=''; // In order to force error message
 		if ($Loc->SubLst[0]==='') {
 			$Pos = $this->meth_Merge_AutoSpe($Txt,$Loc);
@@ -2110,7 +2131,7 @@ function meth_Merge_FieldOutside(&$Txt, &$CurrRec, $RecNum, $PosMax) {
 	$Pos = 0;
 	$SubStart = ($CurrRec===false) ? false : 0;
 	do {
-		$Loc = $this->meth_Locator_FindTbs($Txt,$this->_CurrBlock,$Pos,'.');
+		$Loc = clsTinyButStrong::meth_Locator_FindTbs($Txt,$this->_CurrBlock,$Pos,'.',$this->_ChrOpen,$this->_ChrClose,$this);
 		if ($Loc!==false) {
 			if (($PosMax!==false) and ($Loc->PosEnd>$PosMax)) return;
 			if ($Loc->SubName==='#') {
@@ -2152,7 +2173,7 @@ function meth_Merge_SectionNormal(&$BDef,&$Src) {
 		if ($BDef->Chk) {
 			$BlockName = &$BDef->Name;
 			$Pos = 0;
-			while ($Loc = $this->meth_Locator_FindTbs($Txt,$BlockName,$Pos,'.')) $Pos = $this->meth_Locator_Replace($Txt,$Loc,$x,false);
+			while ($Loc = clsTinyButStrong::meth_Locator_FindTbs($Txt,$BlockName,$Pos,'.',$this->_ChrOpen,$this->_ChrClose,$this)) $Pos = $this->meth_Locator_Replace($Txt,$Loc,$x,false);
 		}
 
 	} else {
@@ -2184,14 +2205,14 @@ function meth_Merge_SectionNormal(&$BDef,&$Src) {
 			foreach ($Src->CurrRec as $key => $val) {
 				$Pos = 0;
 				$Name = $BlockName.'.'.$key;
-				while ($Loc = $this->meth_Locator_FindTbs($Txt,$Name,$Pos,'.')) $Pos = $this->meth_Locator_Replace($Txt,$Loc,$val,0);
+				while ($Loc = clsTinyButStrong::meth_Locator_FindTbs($Txt,$Name,$Pos,'.',$this->_ChrOpen,$this->_ChrClose,$this)) $Pos = $this->meth_Locator_Replace($Txt,$Loc,$val,0);
 			}
 			$Pos = 0;
 			$Name = $BlockName.'.#';
-			while ($Loc = $this->meth_Locator_FindTbs($Txt,$Name,$Pos,'.')) $Pos = $this->meth_Locator_Replace($Txt,$Loc,$Src->RecNum,0);
+			while ($Loc = clsTinyButStrong::meth_Locator_FindTbs($Txt,$Name,$Pos,'.',$this->_ChrOpen,$this->_ChrClose,$this)) $Pos = $this->meth_Locator_Replace($Txt,$Loc,$Src->RecNum,0);
 			$Pos = 0;
 			$Name = $BlockName.'.$';
-			while ($Loc = $this->meth_Locator_FindTbs($Txt,$Name,$Pos,'.')) $Pos = $this->meth_Locator_Replace($Txt,$Loc,$Src->RecKey,0);
+			while ($Loc = clsTinyButStrong::meth_Locator_FindTbs($Txt,$Name,$Pos,'.',$this->_ChrOpen,$this->_ChrClose,$this)) $Pos = $this->meth_Locator_Replace($Txt,$Loc,$Src->RecKey,0);
 		}
 
 	}
@@ -2358,21 +2379,13 @@ function meth_Conv_Str(&$Txt,$ConvBr=true) {
 }
 
 // Standard alert message provided by TinyButStrong, return False is the message is cancelled.
-function meth_Misc_Alert($Src,$Msg,$NoErrMsg=false,$SrcType=false) {
+function meth_Misc_Alert($Src,$Msg,$CancelOpt=false,$SrcType=false) {
 	$this->ErrCount++;
-	if ($this->NoErr) {
-		$t = array('','','','','');
-	} else {
-		$t = array('<br /><b>','</b>','<em>','</em>','<br />');
-		$Msg = htmlentities($Msg);
-	}
 	if (!is_string($Src)) {
 		if ($SrcType===false) $SrcType='in field';
 		$Src = $SrcType.' '.$this->_ChrOpen.$Src->FullName.'...'.$this->_ChrClose;
 	}
-	$x = $t[0].'TinyButStrong Error'.$t[1].' '.$Src.' : '.$Msg;
-	if ($NoErrMsg) $x = $x.' '.$t[2].'This message can be cancelled using parameter \'noerr\'.'.$t[3];
-	$x = $x.$t[4]."\n";
+	$x = clsTinyButStrong::meth_Misc_AlertMsg($Src,$Msg,$this->NoErr,$CancelOpt);
 	if ($this->NoErr) {
 		$this->ErrMsg .= $x;
 	} else {
@@ -2380,6 +2393,20 @@ function meth_Misc_Alert($Src,$Msg,$NoErrMsg=false,$SrcType=false) {
 		echo $x;
 	}
 	return false;
+}
+
+static function meth_Misc_AlertMsg($Src,$Msg,$CancelOpt=false,$PlainText=false) {
+// Returns the TBS error message only, can be used by other static functions
+	if ($PlainText) {
+		$t = array('','','','','');
+	} else {
+		$t = array('<br /><b>','</b>','<em>','</em>','<br />');
+		$Msg = htmlentities($Msg);
+	}
+	$x = $t[0].'TinyButStrong Error'.$t[1].' '.$Src.' : '.$Msg;
+	if ($CancelOpt) $x = $x.' '.$t[2].'This message can be cancelled using parameter \'noerr\'.'.$t[3];
+	$x = $x.$t[4]."\n";
+	return $x;
 }
 
 function meth_Misc_Assign($Name,&$ArgLst,$CallingMeth) {
