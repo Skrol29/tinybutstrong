@@ -3,7 +3,7 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.5.4 for PHP 4
+Version  : 3.6.0 for PHP 4
 Date     : 2010-07-30
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
@@ -11,8 +11,11 @@ Author   : http://www.tinybutstrong.com/onlyyou.html
 This library is free software.
 You can redistribute and modify it even for commercial usage,
 but you must accept and respect the LPGL License version 3.
-[tt   ] BUG : paramètre getbody sans valeur ne fonctionne pas car dans f_Xml_GetPart() on a $Tag = 'BODY'; au lieu de $TagLst = 'BODY';
-[     ] SEC : limiter "script", "onformat" et "ondata" à une liste de fonctions où à un préfixe.
+[ok   ] BUG : paramètre getbody sans valeur ne fonctionne pas car dans f_Xml_GetPart() on a $Tag = 'BODY'; au lieu de $TagLst = 'BODY';
+[ok   ] BUG : parameter att didn't work when placed in the same tag in an attribute placed before the target attribute. http://tinybutstrong.com/forum.php?msg_id=10899
+[ok   ] FCT : new plugin event OnCacheField
+[ok   ] FCT : parameter htmlconv=utf8
+[ok   ] FCT : new properties OnLoad and OnShow to the attention of plugins
 
 */
 // Check PHP version
@@ -496,7 +499,7 @@ var $ObjectRef = false;
 var $NoErr = false;
 var $Assigned = array();
 // Undocumented (can change at any version)
-var $Version = '3.5.3';
+var $Version = '3.6.0';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -505,6 +508,8 @@ var $ErrCount = 0;
 var $ErrMsg = '';
 var $AttDelim = false;
 var $MethodsAllowed = false;
+var $OnLoad = true;
+var $OnShow = true;
 // Private
 var $_ErrMsgName = '';
 var $_LastFile = '';
@@ -586,7 +591,7 @@ public function LoadTemplate($File,$Charset='') {
 			$this->meth_Misc_Charset($Charset);
 		}
 		// Automatic fields and blocks
-		$this->meth_Merge_AutoOn($this->Source,'onload',true,true);
+		if ($this->OnLoad) $this->meth_Merge_AutoOn($this->Source,'onload',true,true);
 	}
 	// Plug-ins
 	if ($this->_PlugIns_Ok and isset($ArgLst) and isset($this->_piAfterLoadTemplate)) $Ok = $this->meth_PlugIn_RunAll($this->_piAfterLoadTemplate,$ArgLst);
@@ -708,7 +713,7 @@ public function Show($Render=false) {
 		}
 	}
 	if ($Ok!==false) {
-		$this->meth_Merge_AutoOn($this->Source,'onshow',true,true);
+		if ($this->OnShow) $this->meth_Merge_AutoOn($this->Source,'onshow',true,true);
 		$this->meth_Merge_AutoVar($this->Source,true);
 	}
 	if ($this->_PlugIns_Ok and isset($ArgLst) and isset($this->_piAfterShow)) $this->meth_PlugIn_RunAll($this->_piAfterShow,$ArgLst);
@@ -844,15 +849,29 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst) {
 	$LocLst = array();
 	$LocNbr = 0;
 
+	if ($this->_PlugIns_Ok && isset($this->_piOnCacheField)) {
+		$pi = true;
+		$ArgLst = array(0=>$BlockName, 1=>false, 2=>&$Txt, 3=>array('att'=>true));
+	} else {
+		$pi = false;
+	}
+
 	// Cache TBS locators
 	if ($this->TurboBlock) {
 
 		$Chk = false;
 		$Pos = 0;
 		$PrevEnd = -1;
-		$PrevIsAMF = false;
+		$PrevIsAMF = false; // AMF means Attribute Moved Forward
 		while ($Loc = $this->meth_Locator_FindTbs($Txt,$BlockName,$Pos,'.')) {
+			
 			$IsAMF = false;
+			
+			if ($pi) {
+				$ArgLst[1] = &$Loc;
+				$this->meth_Plugin_RunAll($this->_piOnCacheField,$ArgLst);
+			}
+
 			if (($Loc->SubName==='#') or ($Loc->SubName==='$')) {
 				$Loc->IsRecInfo = true;
 				$Loc->RecInfo = $Loc->SubName;
@@ -860,6 +879,7 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst) {
 			} else {
 				$Loc->IsRecInfo = false;
 			}
+
 			if ($Loc->PosBeg>$PrevEnd) { // No embedding
 				if (isset($Loc->PrmLst['att'])) {
 					$LocSrc = substr($Txt,$Loc->PosBeg,$Loc->PosEnd-$Loc->PosBeg+1);
@@ -886,6 +906,7 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst) {
 					$this->meth_Misc_Alert('','TBS is not able to merge the field '.$LocSrc.' because parameter \'att\' makes this fied moving forward over another TBS field.');
 				}
 			}
+
 			$PrevEnd = $Loc->PosEnd;
 			$PrevIsAMF = false;
 			if ($IsAMF) {
@@ -897,7 +918,9 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst) {
 			} else {
 				$Pos = $Loc->PosBeg+1;
 			}
+
 			$LocLst[$LocNbr] = $Loc;
+
 		}
 
 	}
@@ -1037,6 +1060,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 				if (strpos($x,'+wsp+')!==false)  {$this->f_Misc_ConvSpe($Loc); $Loc->ConvWS = true; }
 				if (strpos($x,'+js+')!==false)   {$this->f_Misc_ConvSpe($Loc); $Loc->ConvStr = false; $Loc->ConvJS = true; }
 				if (strpos($x,'+url+')!==false)  {$this->f_Misc_ConvSpe($Loc); $Loc->ConvStr = false; $Loc->ConvUrl = true; }
+				if (strpos($x,'+utf8+')!==false)  {$this->f_Misc_ConvSpe($Loc); $Loc->ConvStr = false; $Loc->ConvUtf8 = true; }
 				if (strpos($x,'+no+')!==false)   $Loc->ConvStr = false;
 				if (strpos($x,'+yes+')!==false)  $Loc->ConvStr = true;
 				if (strpos($x,'+nobr+')!==false) {$Loc->ConvStr = true; $Loc->ConvBr = false; }
@@ -1169,6 +1193,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 			$CurrVal = str_replace(array("\n","\r","\t"),array('\n','\r','\t'),$CurrVal);
 		}
 		if ($Loc->ConvUrl) $CurrVal = urlencode($CurrVal);
+		if ($Loc->ConvUtf8) $CurrVal = utf8_encode($CurrVal);
 	}
 
 	// if/then/else process, there may be several if/then
@@ -2025,7 +2050,7 @@ function meth_Merge_AutoVar(&$Txt,$ConvStr,$Id='var') {
 }
 
 function meth_Merge_AutoSpe(&$Txt,&$Loc) {
-// Merge [var..*] (Special Var Fields)
+// Merge Special Var Fields ([var..*])
 
 	$ErrMsg = false;
 	$SubStart = false;
@@ -2633,7 +2658,7 @@ function meth_PlugIn_Install($PlugInId,$ArgLst,$Auto) {
 	if (!is_array($EventLst)) return $this->meth_Misc_Alert($ErrMsg,'OnInstall() method does not return an array.');
 
 	// Add activated methods
-	$EventRef = explode(',','OnCommand,BeforeLoadTemplate,AfterLoadTemplate,BeforeShow,AfterShow,OnData,OnFormat,OnOperation,BeforeMergeBlock,OnMergeSection,OnMergeGroup,AfterMergeBlock,OnSpecialVar,OnMergeField');
+	$EventRef = explode(',','OnCommand,BeforeLoadTemplate,AfterLoadTemplate,BeforeShow,AfterShow,OnData,OnFormat,OnOperation,BeforeMergeBlock,OnMergeSection,OnMergeGroup,AfterMergeBlock,OnSpecialVar,OnMergeField,OnCacheField');
 	foreach ($EventLst as $Event) {
 		$Event = trim($Event);
 		if (!in_array($Event,$EventRef)) return $this->meth_Misc_Alert($ErrMsg,'OnInstall() method return an unknowed plug-in event named \''.$Event.'\' (case-sensitive).');
@@ -2908,6 +2933,7 @@ static function f_Misc_ConvSpe(&$Loc) {
 		$Loc->ConvWS = false;
 		$Loc->ConvJS = false;
 		$Loc->ConvUrl = false;
+		$Loc->ConvUtf8 = false;
 	}
 }
 
@@ -3460,6 +3486,8 @@ static function f_Xml_AttMove(&$Txt, &$Loc, $AttDelim=false) {
 	if ($Loc->AttForward) {
 		$Loc->AttTagBeg += -$sz;
 		$Loc->AttTagEnd += -$sz;
+	} elseif ($Loc->PosBeg<$Loc->AttTagEnd) {
+		$Loc->AttTagEnd += -$sz;
 	}
 
 	$InsPos = false;
@@ -3472,10 +3500,8 @@ static function f_Xml_AttMove(&$Txt, &$Loc, $AttDelim=false) {
 		$Loc->AttBeg = $InsPos + 1;
 		$Loc->AttValBeg = $InsPos + strlen($Ins1) - 1;
 	} else {
-		if ($Loc->AttForward) {
-			$Loc->AttBeg += -$sz;
-			$Loc->AttEnd += -$sz;
-		}
+		if ($Loc->PosEnd<$Loc->AttBeg) $Loc->AttBeg += -$sz;
+		if ($Loc->PosEnd<$Loc->AttEnd) $Loc->AttEnd += -$sz;
 		if ($Loc->AttValBeg===false) {
 			$InsPos = $Loc->AttEnd+1;
 			$Ins1 = '='.$AttDelim;
@@ -3487,7 +3513,7 @@ static function f_Xml_AttMove(&$Txt, &$Loc, $AttDelim=false) {
 			$Ins2 = '';
 		} else {
 			// value already existing
-			if ($Loc->AttForward) $Loc->AttValBeg += -$sz;
+			if ($Loc->PosEnd<$Loc->AttValBeg) $Loc->AttValBeg += -$sz;
 			$PosBeg = $Loc->AttValBeg;
 			$PosEnd = $Loc->AttEnd;
 			if ($Loc->AttDelimCnt>0) {$PosBeg++; $PosEnd--;}
@@ -3621,7 +3647,7 @@ To ignore encapsulation and opengin/closing just set $LevelStop=false.
 			if ($Pos<=0) {
 				$Pos = false;
 			} else {
-				$Pos = strrpos(substr($Txt,0,$Pos - 1),'<'); // compatible with strrpos() for PHP 4
+				$Pos = strrpos(substr($Txt,0,$Pos - 1),'<'); // strrpos() syntax compatible with PHP 4
 			}
 		}
 
