@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>test TBS</title>
+<style type="text/css">
+<!--
+.essai1 {
+	background-color: #FC6;
+}
+.essai2 {
+	background-color: #CFC;
+}
+.effet1 {
+	background-color: #0C6;
+}
+.effet2 {
+	background-color: #CC0;
+}
+.effet3 {
+	background-color: #0CC;
+}
+.effet4 {
+	background-color: #F9C;
+}
+-->
+</style>
+</head>
+
+<body>
+<h1>Test TBS version 3.6.0</h1>
+<p>TBS version [var..version]<br />
+PHP version [var..cst.PHP_VERSION]<br />
+TBS erreurs nbr = [var.ErrCount]
+</p>
+<h3>Test de d&eacute;placement vers attribut :</h3>
+début des div
+<div class="essai1" att1 att2=v2 att3></div>
+<div title="[var.deplace;att=class;attadd]" class="essai1" att1 att2=v2 att3>coucou ok 14 - valeur ajoutée sur attribut existant vers la gauche mais depuis un autre attribut</div>
+
+fin des div
+<h3>Test event OnCacheField</h3>
+<table border="1" cellpadding="1" cellspacing="0">
+  <tr>
+    <td bgcolor="#999999">#</td>
+    <td bgcolor="#999999"><strong>val</strong></td>
+    <td bgcolor="#999999"><strong>test att</strong></td>
+  </tr>
+  <tr>
+    <td>[z.#</td>
+    <td>[z.val;block=tr]</td>
+    <td>[z.val;att=id;opex=mask:cell*]ok</td>
+  </tr>
+</table>
+
+<h3>Test htmlconv=utf8</h3>
+$x1={[var.x1]}, $x1(utf8)={[var.x1;htmlconv=utf8]}
+<br />
+$x2={[var.x2]}, $x2(utf8)={[var.x2;htmlconv=utf8]}
+<h3>Test OnLoad OnShow</h3>
+<p>onload : [onload.x1], onshow : [onshow.x1]<br />
+  [onload;block=p;when 1=0]
+  <br />
+</p>
+<h3>Test GetBlockSource</h3>
+<table border="1" cellpadding="1" cellspacing="0">
+  <tr>
+    <td bgcolor="#999999">#</td>
+    <td bgcolor="#999999"><strong>val</strong></td>
+  </tr>
+  <tr>
+    <td>[w.#]</td>
+    <td>section 1 [w;block=tr]</td>
+  </tr>
+  <tr>
+    <td>[w.#]</td>
+    <td>section 2 [w.val;block=tr]</td>
+  </tr>
+</table>
+<br />
+<textarea name="textarea" id="textarea" cols="200" rows="10">[var.bsrc;htmlconv=nobr]</textarea>
+<h3>Bench meth_Locator_FindTbs()</h3>
+[here.iam;prm1=val1;prm2=val2]
+</body>
+</html>

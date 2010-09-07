@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>test TBS</title></head><body><br><b>TinyButStrong Error</b>
+  : TBS is not able to merge the field [am4.maquille;att=+td#class] 
+because parameter 'att' makes this fied moving forward over another TBS 
+field.<br>
+
+
+
+
+
+<style type="text/css">
+<!--
+.essai1 {
+	background-color: #FC6;
+}
+.essai2 {
+	background-color: #CFC;
+}
+.effet1 {
+	background-color: #0C6;
+}
+.effet2 {
+	background-color: #CC0;
+}
+.effet3 {
+	background-color: #0CC;
+}
+.effet4 {
+	background-color: #F9C;
+}
+-->
+</style>
+
+<h1>Test du paramètre ATT </h1>
+<h3> Test de déplacement vers attribut :</h3>
+début des div
+<div class="essai2" att1="" att2="v2" att3="">coucou () ok 1 - attribut existant</div>
+<div class="essai1" att1="essai2" att2="v2" att3="">coucou () ok 2 - attribut existant sans valeur</div>
+<div class="essai1" att1="" att2="essai2" att3="">coucou () ok 3 - attribut existant avec valeur sans délimiteur</div>
+<div class="essai1" att1="" att2="v2" att3="essai2">coucou () ok 4 - attribut existant en fin sans valeur</div>
+<div class="essai1" att1="" att2="v2" att3="essai2">coucou () ok 5 - attribut existant en fin sans valeur avec espace</div>
+<div class="essai1" att1="" att2="v2" att3="essai2">coucou () ok 6 - attribut existant en fin sans valeur mais avec délimiteur simple sur premier attribut</div> 
+<div class="essai1" att1="" att2="v2" att3="">coucou () ok 7 <span class="essai2">c'est vrai</span> - vers la droite avec attribut existant</div>
+<div class="essai1" att1="" att2="v2" att3="">coucou () ok 8 <span class="essai2">c'est vrai</span> - vers la droite avec attribut absent</div>
+<div att1="" att2="v2" att3="">coucou () ok 9 - avec suppression d'attribut existant</div>
+<div class="essai1" att1="" att2="v2" att3="">coucou <img class="essai2" height="5" width="5"> () ok 10 - balise autofermante</div>
+<div class="essai1" att1="" att2="v2" att3="">coucou <img class="essai2" height="5" width="5"> () ok 11 - balise autofermante sans espace de fin</div>
+<div class="essai1 essai2" att1="" att2="v2" att3="">coucou () ok 12 - valeur ajoutée sur attribut existant</div>
+<div class="essai1" att1="" att2="v2" att3="">coucou () ok 13 <span class="effet4 essai2">c'est vrai</span> - valeur ajoutée sur attribut existant vers la droite</div>
+<div title="" class="essai1" att1="" att2="v2" att3="">coucou ok  essai214 - valeur ajoutée sur attribut existant vers la gauche mais depuis un autre attribut</div>
+<div title="" class="essai1" att1="" att2="v2" att3="">coucou ok  essai215 - valeur ajoutée sur attribut existant vers la droite mais depuis un autre attribut</div>
+fin des div
+<h3>Test attribut mis en cache par MergeBlock()</h3>
+<table border="1" cellpadding="1" cellspacing="0">
+  <tbody><tr>
+    <td bgcolor="#999999">#</td>
+    <td bgcolor="#999999"><strong>id</strong></td>
+    <td bgcolor="#999999"><strong>maquille</strong></td>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>AttCache x12</td>
+    <td class="effet1">hi hi</td>
+  </tr><tr>
+    <td>2</td>
+    <td>AttCache x13</td>
+    <td class="effet2">hi hi</td>
+  </tr><tr>
+    <td>3</td>
+    <td>AttCache x14</td>
+    <td class="effet3">hi hi</td>
+  </tr><tr>
+    <td>4</td>
+    <td>AttCache x15</td>
+    <td class="effet4">hi hi</td>
+  </tr>
+</tbody></table>
+
+<h3>Idem avec un champ placé avant</h3>
+<table border="1" cellpadding="1" cellspacing="0">
+  <tbody><tr>
+    <td bgcolor="#999999">#</td>
+    <td bgcolor="#999999"><strong>id</strong></td>
+    <td bgcolor="#999999"><strong>maquille</strong></td>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>AttCache x12</td>
+    <td class="effet1">effet1 </td>
+  </tr><tr>
+    <td>2</td>
+    <td>AttCache x13</td>
+    <td class="effet2">effet2 </td>
+  </tr><tr>
+    <td>3</td>
+    <td>AttCache x14</td>
+    <td class="effet3">effet3 </td>
+  </tr><tr>
+    <td>4</td>
+    <td>AttCache x15</td>
+    <td class="effet4">effet4 </td>
+  </tr>
+</tbody></table>
+
+<h3>Idem avec mouvement vers l'avant</h3>
+<table border="1" cellpadding="1" cellspacing="0">
+  <tbody><tr>
+    <td bgcolor="#999999">#</td>
+    <td bgcolor="#999999"><strong>id</strong></td>
+    <td bgcolor="#999999"><strong>maquille</strong></td>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>AttCache x12</td>
+    <td class="effet1">effet1</td>
+  </tr><tr>
+    <td>2</td>
+    <td>AttCache x13</td>
+    <td class="effet2">effet2</td>
+  </tr><tr>
+    <td>3</td>
+    <td>AttCache x14</td>
+    <td class="effet3">effet3</td>
+  </tr><tr>
+    <td>4</td>
+    <td>AttCache x15</td>
+    <td class="effet4">effet4</td>
+  </tr>
+</tbody></table>
+
+<h3>Idem avec mouvement vers l'avant et saut incorrect</h3>
+<table border="1" cellpadding="1" cellspacing="0">
+  <tbody><tr>
+    <td bgcolor="#999999">#</td>
+    <td bgcolor="#999999"><strong>id</strong></td>
+    <td bgcolor="#999999"><strong>maquille</strong></td>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>AttCache x12</td>
+    <td class="[]">effet1</td>
+  </tr><tr>
+    <td>2</td>
+    <td>AttCache x13</td>
+    <td class="[]">effet2</td>
+  </tr><tr>
+    <td>3</td>
+    <td>AttCache x14</td>
+    <td class="[]">effet3</td>
+  </tr><tr>
+    <td>4</td>
+    <td>AttCache x15</td>
+    <td class="[]">effet4</td>
+  </tr>
+</tbody></table>
+
+<h3>Tests Att + Magnet</h3>
+<div></div>
+<div></div>
+<div att1="coucou">sans monatt, sans espace</div>
+<div att1="coucou">sans monatt, avec espace</div>
+<div att1="coucou">avec monatt en fin, sans espace</div>
+<div att1="coucou">avec monatt en fin, avec espace</div>
+<div att1="coucou">avec monatt en début, sans espace</div>
+<div att1="coucou">avec monatt en début, avec espace</div>
+<div>avec monatt seul, sans espace</div>
+<div>avec monatt seul, avec espace</div>
+
+</body></html>
