@@ -18,6 +18,16 @@ if (!file_exists($Src)) exit("File '".$Src."' is not found.");
 
 $SrcTxt = file_get_contents($Src);
 
+// Check TBS version consistency
+echo "TBS version consistency:<br> \r\n";
+$va = f_TextBetween($SrcTxt, 'Version  : ', ' ');
+if ($va===false) exit("Check TBS version consistency: TBS version not found in the header");
+$vb = f_TextBetween($SrcTxt, '$Version = \'', '\'');
+if ($vb===false) exit("Check TBS version consistency: TBS version not found in the property");
+if ($va!==$vb) exit("Check TBS version consistency: $va is mentioned in the header while $vb is mentioned in the property.");
+echo "OK version $va<br> \r\n";
+echo "<br> \r\n";
+
 if (substr_count($Src, '_dev.php')>0) {
 	$Dst4 = str_replace('_dev.php','_php4.php',$Src);
 	$Dst5 = str_replace('_dev.php','_php5.php',$Src);
@@ -98,4 +108,13 @@ function f_Save($Dst, $Txt) {
 	$f = fopen($Dst, 'w');
 	fwrite($f, $Txt);
 	fclose($f);
+}
+
+function f_TextBetween($Txt, $str1, $str2) {
+	$p1 = strpos($Txt, $str1);
+	if ($p1===false) return false;
+	$p1 = $p1+strlen($str1);
+	$p2 = strpos($Txt, $str2, $p1);
+	if ($p2===false) return false;
+	return substr($Txt, $p1, $p2-$p1 );
 }

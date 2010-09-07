@@ -94,8 +94,17 @@ class clsTbsThisPlugIn {
 		// $Loc:       optional, undocumented.
 	}
 
+	function OnCacheField($BlockName,&$Loc,&$Txt,$PrmProc) {
+		// Executed each time a TBS field is found during the block analysis and about to be cached.
+		// No merging is processed here, only parameter att. This event is supported since TBS version 3.6.0.
+		// $BlockName: name of the block currently merged
+		// $Loc:       the TBS field object just found
+		// $Txt:       undocumented.
+		// $PrmProc:   an array that contains paremeters that will be processed before the field is cached (denpends only of the TBS version)
+	}
+
 	function BeforeMergeBlock(&$TplSource,&$BlockBeg,&$BlockEnd,$PrmLst,&$DataSrc,&$LocR) {
-		// Executed each time a named block is found and ready for merging.
+		// Executed each time a named block is found, analyzed and ready for merging.
 		// $TplSource: source of the current template.
 		// $BlockBeg, $BlockEnd: positions of block's bound in the template's source.
 		// $PrmLst:   (Read only) the array of the block's parameters.
