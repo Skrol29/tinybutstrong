@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>test TBS</title>
+<style type="text/css">
+<!--
+.essai1 {
+	background-color: #FC6;
+}
+.essai2 {
+	background-color: #CFC;
+}
+.effet1 {
+	background-color: #0C6;
+}
+.effet2 {
+	background-color: #CC0;
+}
+.effet3 {
+	background-color: #0CC;
+}
+.effet4 {
+	background-color: #F9C;
+}
+-->
+</style>
+</head>
+
+<body>
+<h1>Test du param&egrave;tre ATT </h1>
+<h3> Test de d&eacute;placement vers attribut :</h3>
+début des div
+<div class="essai1" att1 att2=v2 att3>coucou ([var.deplace;att=class]) ok 1 - attribut existant</div>
+<div class="essai1" att1 att2=v2 att3>coucou ([var.deplace;att=att1]) ok 2 - attribut existant sans valeur</div>
+<div class="essai1" att1 att2=v2 att3>coucou ([var.deplace;att=att2]) ok 3 - attribut existant avec valeur sans délimiteur</div>
+<div class="essai1" att1 att2=v2 att3>coucou ([var.deplace;att=att3]) ok 4 - attribut existant en fin sans valeur</div>
+<div class="essai1" att1 att2=v2 att3 >coucou ([var.deplace;att=att3]) ok 5 - attribut existant en fin sans valeur avec espace</div>
+<div class='essai1' att1 att2=v2 att3>coucou ([var.deplace;att=att3]) ok 6 - attribut existant en fin sans valeur mais avec délimiteur simple sur premier attribut</div> 
+<div class="essai1" att1 att2=v2 att3>coucou ([var.deplace;att=+span#class]) ok 7 <span class="effet4">c'est vrai</span> - vers la droite avec attribut existant</div>
+<div class="essai1" att1 att2=v2 att3>coucou ([var.deplace;att=+span#class]) ok 8 <span>c'est vrai</span> - vers la droite avec attribut absent</div>
+<div class="essai1" att1 att2=v2 att3>coucou ([var.depvide;att=div#class;magnet=#]) ok 9 - avec suppression d'attribut existant</div>
+<div class="essai1" att1 att2=v2 att3>coucou <img width="5" height="5" /> ([var.deplace;att=img#class]) ok 10 - balise autofermante</div>
+<div class="essai1" att1 att2=v2 att3>coucou <img width="5" height="5"/> ([var.deplace;att=img#class]) ok 11 - balise autofermante sans espace de fin</div>
+<div class="essai1" att1 att2=v2 att3>coucou ([var.deplace;att=class;attadd]) ok 12 - valeur ajoutée sur attribut existant</div>
+<div class="essai1" att1 att2=v2 att3>coucou ([var.deplace;att=+span#class;attadd]) ok 13 <span class="effet4">c'est vrai</span> - valeur ajoutée sur attribut existant vers la droite</div>
+<div title="[var.deplace;att=class;attadd]" class="essai1" att1 att2=v2 att3>coucou ok 14 - valeur ajoutée sur attribut existant vers la gauche mais depuis un autre attribut</div>
+<div title="[var.deplace;att=class;attadd]" class="essai1" att1 att2=v2 att3>coucou ok 15 - valeur ajoutée sur attribut existant vers la droite mais depuis un autre attribut</div>
+fin des div
+<h3>Test attribut mis en cache par MergeBlock()</h3>
+<table border="1" cellpadding="1" cellspacing="0">
+  <tr>
+    <td bgcolor="#999999">#</td>
+    <td bgcolor="#999999"><strong>id</strong></td>
+    <td bgcolor="#999999"><strong>maquille</strong></td>
+  </tr>
+  <tr>
+    <td>[am1.#]</td>
+    <td>[am1.id;block=tr]</td>
+    <td>[am1.maquille;att=td#class]hi hi</td>
+  </tr>
+</table>
+
+<h3>Idem avec un champ plac&eacute; avant</h3>
+<table border="1" cellpadding="1" cellspacing="0">
+  <tr>
+    <td bgcolor="#999999">#</td>
+    <td bgcolor="#999999"><strong>id</strong></td>
+    <td bgcolor="#999999"><strong>maquille</strong></td>
+  </tr>
+  <tr>
+    <td>[am2.#]</td>
+    <td>[am2.id;block=tr]</td>
+    <td>[am2.maquille] [am2.maquille;att=td#class]</td>
+  </tr>
+</table>
+
+<h3>Idem avec mouvement vers l'avant</h3>
+<table border="1" cellpadding="1" cellspacing="0">
+  <tr>
+    <td bgcolor="#999999">#</td>
+    <td bgcolor="#999999"><strong>id</strong></td>
+    <td bgcolor="#999999"><strong>maquille</strong></td>
+  </tr>
+  <tr>
+    <td>[am3.#]</td>
+    <td>[am3.id;block=tr][am3.maquille;att=+td#class]</td>
+    <td>[am3.maquille]</td>
+  </tr>
+</table>
+
+<h3>Idem avec mouvement vers l'avant et saut incorrect</h3>
+<table border="1" cellpadding="1" cellspacing="0">
+  <tr>
+    <td bgcolor="#999999">#</td>
+    <td bgcolor="#999999"><strong>id</strong></td>
+    <td bgcolor="#999999"><strong>maquille</strong></td>
+  </tr>
+  <tr>
+    <td>[am4.#]</td>
+    <td>[am4.maquille;att=+td#class][am4.id;block=tr]</td>
+    <td>[am4.maquille]</td>
+  </tr>
+</table>
+
+<h3>Tests Att + Magnet</h3>
+<div>[onshow.x;att=monatt;magnet=#]</div>
+<div >[onshow.x;att=monatt;magnet=#]</div>
+<div att1=coucou>[onshow.x;att=monatt;magnet=#]sans monatt, sans espace</div>
+<div att1=coucou >[onshow.x;att=monatt;magnet=#]sans monatt, avec espace</div>
+<div att1="coucou" monatt="22">[onshow.x;att=monatt;magnet=#]avec monatt en fin, sans espace</div>
+<div att1="coucou" monatt="22" >[onshow.x;att=monatt;magnet=#]avec monatt en fin, avec espace</div>
+<div monatt="22" att1="coucou">[onshow.x;att=monatt;magnet=#]avec monatt en début, sans espace</div>
+<div monatt="22" att1="coucou" >[onshow.x;att=monatt;magnet=#]avec monatt en début, avec espace</div>
+<div monatt="22">[onshow.x;att=monatt;magnet=#]avec monatt seul, sans espace</div>
+<div monatt="22" >[onshow.x;att=monatt;magnet=#]avec monatt seul, avec espace</div>
+
+</body>
+</html>
