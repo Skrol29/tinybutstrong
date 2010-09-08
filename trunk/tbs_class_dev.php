@@ -3598,15 +3598,34 @@ static function f_Xml_GetPart(&$Txt,$TagLst,$AllIfNothing=false) {
 	$nothing = true;
 	$TagLst = explode('+',$TagLst);
 
-	foreach ($TagLst as $Tag) {
-
-		$Tag = trim($Tag);
-		$KeepTags = false;
-		if ((substr($Tag,0,1)=='(') and (substr($Tag,-1,1)==')')) {
-			$Tag = substr($Tag,1,strlen($Tag)-2);
-			$KeepTags = true;
+	// Build a clean list of tags
+	$UTagLst = array();
+	$PosLst = array();
+	foreach ($TagLst as $t) {
+		if ((substr($t,0,1)=='(') and (substr($t,-1,1)==')')) {
+			$t = substr($t,1,strlen($t)-2);
+			$Keep = false;
+		} else {
+			$Keep = true;
 		}
+		$UTagLst[$t] = $Keep;
+		$PosLst[$t] = -1;
+	}
 
+	$PosMin = -1;
+	$TagMin = '';
+	$Pos = 0;
+	foreach ($UTagLst as $Tag) {
+
+		if ($PosLst[$t]<$Pos) {
+			$LocOpen = clsTinyButStrong::f_Xml_FindTag($Txt,$Tag,true,$Pos,true,false,false);
+			if ($LocOpen===false) {
+				unset($UTagLst[$Tag]); // no more search on this tag
+			} else {
+				if ($LocOpen->PosBeg<$PosMin)
+			}
+		}
+/*
 		$Pos = 0;
 		while ($LocOpen = clsTinyButStrong::f_Xml_FindTag($Txt,$Tag,true,$Pos,true,false,false)) {
 			$Pos = $LocOpen->PosEnd+1;
@@ -3622,7 +3641,7 @@ static function f_Xml_GetPart(&$Txt,$TagLst,$AllIfNothing=false) {
 		}
 
 	}
-
+*/
 	if ($AllIfNothing and $nothing) return $Txt;
 	return $x;
 
