@@ -20,6 +20,13 @@ $TBS->LoadTemplate('test_tbs_3.6.0.html');
 
 $TBS->MergeBlock('z', 'num', 5);
 
+$dq_data = array();
+$dq_data['1'] = array(array('id'=>29, 'name'=>'George'), array('id'=>30, 'name'=>'Kevin'));
+$dq_data[''] = array(array('id'=>31, 'name'=>'Boby'), array('id'=>32, 'name'=>'Steph'));
+$dq_data['3'] = array(array('id'=>33, 'name'=>'Julia'), array('id'=>34, 'name'=>'Louis'));
+$TBS->MergeBlock('dq', 'array', 'dq_data[%p1%]'); // dynamic query avec "p1="
+$TBS->MergeBlock('dr', 'array', 'dq_data[3]'); // dynamic query avec "p1="
+
 $bsrc = $TBS->GetBlockSource('w', false, false);
 
 $ErrCount = $TBS->ErrCount;
