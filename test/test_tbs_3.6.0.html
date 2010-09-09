@@ -90,5 +90,32 @@ $x2={[var.x2]}, $x2(utf8)={[var.x2;htmlconv=utf8]}
     <td>[var.x1;file=test_tbs_3.6.0_sub.html;getbody=(script)+(style)+body] </td>
   </tr>
 </table>
+<h3>Test dynamic query</h3>
+<table border="1" cellpadding="1" cellspacing="0">
+  <tr>
+    <td bgcolor="#999999"><strong>Requête dynamique</strong></td>
+  </tr>
+  <tr class="essai1">
+    <td>[dq.id;block=tr;p1=1] : [dq.name]</td>
+  </tr>
+  <tr>
+    <td class="essai2">[dq.id;block=tr;p1=] : [dq.name]</td>
+  </tr>
+  <tr>
+    <td class="effet2">[dq.id;block=tr;p1=3] : [dq.name]</td>
+  </tr>
+</table>
+<br />
+<table border="1" cellpadding="1" cellspacing="0">
+  <tr>
+    <td bgcolor="#999999"><strong>Requête dynamique</strong></td>
+  </tr>
+  <tr>
+    <td class="effet3">[dr.id;block=tr;p1] : [dr.name]</td>
+  </tr>
+  <tr>
+    <td class="effet2">[dr.id;block=tr;p1] : [dr.name]</td>
+  </tr>
+</table>
 </body>
 </html>

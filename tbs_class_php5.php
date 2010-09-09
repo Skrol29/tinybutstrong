@@ -17,7 +17,7 @@ but you must accept and respect the LPGL License version 3.
 [ok   ] FCT parameter htmlconv=utf8
 [ok   ] FCT new properties OnLoad and OnShow to the attention of plugins
 [ok   ] BUG GetBlockSource() with AsArray=false and DefTags=false did return DefTags
-
+[ok   ] BUG a sublock with a dynamic queries can display "TinyButStrong Error when merging block" with a %p1% in the query when it found parameter "p1=" with no value because the main block had a null or empty value
 */
 // Check PHP version
 if (version_compare(PHP_VERSION,'5.0')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 5.0 or higher. You should try with TinyButStrong Edition for PHP 4.';
@@ -1724,7 +1724,7 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum) {
 			}
 			// Dynamic query
 			if ($LocR->P1) {
-				if ($LocR->PrmLst['p1']===true) { // a trick to perform new block
+				if ( ($LocR->PrmLst['p1']===true) && ((!is_string($Query)) || (strpos($Query,'%p1%')===false)) ) { // p1 with no value is a trick to perform new block with same name
 					if ($Src->RecSaved===false) $Src->RecSaving = true;
 				} elseif (is_string($Query)) {
 					$Src->RecSaved = false;
