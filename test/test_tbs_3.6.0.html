@@ -81,5 +81,14 @@ $x2={[var.x2]}, $x2(utf8)={[var.x2;htmlconv=utf8]}
 <textarea name="textarea" id="textarea" cols="200" rows="10">[var.bsrc;htmlconv=nobr]</textarea>
 <h3>Bench meth_Locator_FindTbs()</h3>
 [here.iam;prm1=val1;prm2=val2]
+<h3>Test getbody</h3>
+<table border="1" cellpadding="1" cellspacing="0">
+  <tr>
+    <td bgcolor="#999999"><strong>insertion de sous modèle</strong></td>
+  </tr>
+  <tr>
+    <td>[var.x1;file=test_tbs_3.6.0_sub.html;getbody=(script)+(style)+body] </td>
+  </tr>
+</table>
 </body>
 </html>
