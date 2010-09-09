@@ -18,6 +18,8 @@ but you must accept and respect the LPGL License version 3.
 [ok   ] FCT new properties OnLoad and OnShow to the attention of plugins
 [ok   ] BUG GetBlockSource() with AsArray=false and DefTags=false did return DefTags
 [ok   ] BUG a sublock with a dynamic queries can display "TinyButStrong Error when merging block" with a %p1% in the query when it found parameter "p1=" with no value because the main block had a null or empty value
+[ok   ] FCT new parameter "ope=msk:", usefull to use with att for example
+[encours] parameter "attbool"
 */
 // Check PHP version
 if (version_compare(PHP_VERSION,'4.0.6')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 4.0.6 or higher.';
@@ -1120,6 +1122,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 					} elseif ($x==='mok:') {$Loc->OpeAct[$i] = 9; $Loc->OpeMOK[] = trim(substr($ope,4)); $Loc->MSave = $Loc->MagnetId;
 					} elseif ($x==='mko:') {$Loc->OpeAct[$i] =10; $Loc->OpeMKO[] = trim(substr($ope,4)); $Loc->MSave = $Loc->MagnetId;
 					} elseif ($x==='nif:') {$Loc->OpeAct[$i] =12; $Loc->OpePrm[$i] = trim(substr($ope,4));
+					} elseif ($x==='msk:') {$Loc->OpeAct[$i] =13; $Loc->OpePrm[$i] = trim(substr($ope,4));
 					} elseif (isset($this->_piOnOperation)) {
 						$Loc->OpeAct[$i] = 0;
 						$Loc->OpePrm[$i] = $ope;
@@ -1182,6 +1185,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 				}
 				break;
 			case 12: if ((string)$CurrVal===$Loc->OpePrm[$i]) $CurrVal = ''; break;
+			case 13: $CurrVal = str_replace('*',$CurrVal,$Loc->OpePrm[$i]); break;
 			}
 		}
 	}
@@ -1283,7 +1287,13 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 		}
 	}
 
-	if (isset($Loc->PrmLst['att'])) $this->f_Xml_AttFind($Txt,$Loc,true,$this->AttDelim);
+	if (isset($Loc->PrmLst['att'])) {
+		$this->f_Xml_AttFind($Txt,$Loc,true,$this->AttDelim);
+		if (isset($Loc->PrmLst['attbool'])) {
+			$CurrVal = f_Loc_AttBoolean($CurrVal, $Loc->PrmLst['attbool'], $Loc->AttName);
+			$Loc->PrmLst['magnet'] = '#';
+		}
+	}
 
 	// Case when it's an empty string
 	if ($CurrVal==='') {
@@ -3418,6 +3428,21 @@ static function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagLst,$RetInnerSrc) {
 	$Loc->PosEnd = $PosEnd;
 	return $RetVal;
 
+}
+
+static function f_Loc_AttBoolean($CurrVal, $AttBool, $AttName) {
+// Return the good value for a boolean attribute
+	if ($AttBool===true) {
+		if ($CurrVal==='') {
+			return '';
+		} else {
+			return $AttName;
+		}
+	} elseif ($AttBool===$CurrVal) {
+		return $AttName;
+	} else {
+		return '';
+	}
 }
 
 static function f_Xml_AttFind(&$Txt,&$Loc,$Move=false,$AttDelim=false) {
