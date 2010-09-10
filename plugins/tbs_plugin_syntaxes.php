@@ -29,7 +29,6 @@ class clsTbsThisPlugIn {
 		//  or the first call of:
 		// $TBS->PlugIn(TBS_THIS_PLUGIN);
 		$this->Version = '1.00'; // Version can be displayed using [var..tbs_info] since TBS 3.2.0
-		$this->DirectCommands = array(); // values that will be directly recoknized by $TBS->PlugIn
 		return array('OnCommand','BeforeLoadTemplate','AfterLoadTemplate','BeforeShow','AfterShow','OnData','OnFormat','OnOperation','BeforeMergeBlock','OnMergeSection','OnMergeGroup','AfterMergeBlock','OnSpecialVar','OnMergeField');
 	}
 
