@@ -20,11 +20,11 @@ $SrcTxt = file_get_contents($Src);
 
 // Check TBS version consistency
 echo "TBS version consistency:<br> \r\n";
-$va = f_TextBetween($SrcTxt, 'Version  : ', ' ');
+$va = f_TextBetween($SrcTxt, 'Version  : ', ' for PHP ');
 if ($va===false) exit("Check TBS version consistency: TBS version not found in the header");
 $vb = f_TextBetween($SrcTxt, '$Version = \'', '\'');
 if ($vb===false) exit("Check TBS version consistency: TBS version not found in the property");
-if ($va!==$vb) exit("Check TBS version consistency: $va is mentioned in the header while $vb is mentioned in the property.");
+if ($va!==$vb) exit("Check TBS version consistency: '<b>$va</b>' is mentioned in the header while '<b>$vb</b>' is mentioned in the property.");
 echo "OK version $va<br> \r\n";
 echo "<br> \r\n";
 
