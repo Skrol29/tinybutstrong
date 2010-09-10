@@ -39,6 +39,9 @@ $ErrCount = $TBS->ErrCount;
 //$TBS->FctPrefix = 'f_test1_';
 $TBS->MergeField('mf1', 'coucou');
 
+$x_list = array('un','deux','trois');
+$x_list2 = array(array('un','deux','trois'),array('quatre','cinq','six'));
+
 $TBS->Show();
 
 // -----------------------------------

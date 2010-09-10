@@ -3,7 +3,7 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.6.0 for PHP 4
+Version  : 3.6.0 RC 2010-09-10 for PHP 4
 Date     : 2010-07-30
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
@@ -11,16 +11,6 @@ Author   : http://www.tinybutstrong.com/onlyyou.html
 This library is free software.
 You can redistribute and modify it even for commercial usage,
 but you must accept and respect the LPGL License version 3.
-[ok   ] BUG paramètre getbody sans valeur ne fonctionne pas car dans f_Xml_GetPart() on a $Tag = 'BODY'; au lieu de $TagLst = 'BODY';
-[ok   ] BUG parameter att didn't work when placed in the same tag in an attribute placed before the target attribute. http://tinybutstrong.com/forum.php?msg_id=10899
-[ok   ] FCT new plugin event OnCacheField
-[ok   ] FCT parameter htmlconv=utf8
-[ok   ] FCT new properties OnLoad and OnShow to the attention of plugins
-[ok   ] BUG GetBlockSource() with AsArray=false and DefTags=false did return DefTags
-[ok   ] BUG a sublock with a dynamic queries can display "TinyButStrong Error when merging block" with a %p1% in the query when it found parameter "p1=" with no value because the main block had a null or empty value
-[ok   ] FCT new parameter "ope=msk:", usefull to use with att for example
-[ok   ] FCT parameter "atttrue"
-[ok   ] FCT property FctPrefix for parameters "ondata" and "onformat", set on instance
 */
 // Check PHP version
 if (version_compare(PHP_VERSION,'4.0.6')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 4.0.6 or higher.';
@@ -503,7 +493,7 @@ var $ObjectRef = false;
 var $NoErr = false;
 var $Assigned = array();
 // Undocumented (can change at any version)
-var $Version = '3.6.0';
+var $Version = '3.6.0 RC 2010-09-10';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -1112,6 +1102,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 				if ($ope==='list') {
 					$Loc->OpeAct[$i] = 1;
 					$Loc->OpePrm[$i] = (isset($Loc->PrmLst['valsep'])) ? $Loc->PrmLst['valsep'] : ',';
+					if (($Loc->ConvMode===1) && $Loc->ConvStr) $Loc->ConvMode = -1; // special mode for item list conversion
 				} elseif ($ope==='minv') {
 					$Loc->OpeAct[$i] = 11;
 					$Loc->MSave = $Loc->MagnetId;
@@ -1168,7 +1159,23 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 				$OpeArg[1] = &$CurrVal; $OpeArg[3] = &$Txt;
 				if (!$this->meth_PlugIn_RunAll($this->_piOnOperation,$OpeArg)) return $Loc->PosBeg;
 				break;
-			case  1: if (is_array($CurrVal)) $CurrVal = implode($Loc->OpePrm[$i],$CurrVal); break;
+			case  1:
+				if ($Loc->ConvMode===-1) {
+					if (is_array($CurrVal)) {
+						foreach ($CurrVal as $k=>$v) {
+							if (!is_string($v)) $v = (string)$v;
+							$this->meth_Conv_Str($v,$Loc->ConvBr);
+							$CurrVal[$k] = $v;
+						}
+						$CurrVal = implode($Loc->OpePrm[$i],$CurrVal);
+					} else {
+						if (!is_string($CurrVal)) $CurrVal = (string)$CurrVal;
+						$this->meth_Conv_Str($CurrVal,$Loc->ConvBr);
+					}
+				} else {
+					if (is_array($CurrVal)) $CurrVal = implode($Loc->OpePrm[$i],$CurrVal);
+				}
+				break;
 			case  2: if (strlen(''.$CurrVal)>$Loc->OpePrm[$i]) $this->f_Xml_Max($CurrVal,$Loc->OpePrm[$i],$Loc->OpeEnd); break;
 			case  3: if (strlen(''.$CurrVal)>$Loc->OpePrm[$i]) $CurrVal = substr(''.$CurrVal,0,$Loc->OpePrm[$i]).$Loc->OpeEnd; break;
 			case  4: if (strlen(''.$CurrVal)>$Loc->OpePrm[$i]) $CurrVal = mb_substr(''.$CurrVal,0,$Loc->OpePrm[$i],'UTF-8').$Loc->OpeEnd; break;
