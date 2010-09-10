@@ -18,6 +18,9 @@ but you must accept and respect the LPGL License version 3.
 [ok   ] FCT new properties OnLoad and OnShow to the attention of plugins
 [ok   ] BUG GetBlockSource() with AsArray=false and DefTags=false did return DefTags
 [ok   ] BUG a sublock with a dynamic queries can display "TinyButStrong Error when merging block" with a %p1% in the query when it found parameter "p1=" with no value because the main block had a null or empty value
+[ok   ] FCT new parameter "ope=msk:", usefull to use with att for example
+[ok   ] FCT parameter "atttrue"
+[ok   ] FCT property FctPrefix for parameters "ondata" and "onformat", set on instance
 */
 // Check PHP version
 if (version_compare(PHP_VERSION,'4.0.6')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 4.0.6 or higher.';
@@ -144,7 +147,7 @@ function DataPrepare(&$SrcId,&$TBS) {
 
 	if ($FctInfo!==false) {
 		$ErrMsg = false;
-		if ($TBS->meth_Misc_UserFctCheck($FctInfo,$FctCat,$FctObj,$ErrMsg)) {
+		if ($TBS->meth_Misc_UserFctCheck($FctInfo,$FctCat,$FctObj,$ErrMsg,false)) {
 			$this->Type = $FctInfo['type'];
 			if ($this->Type!==5) {
 				if ($this->Type===4) {
@@ -504,6 +507,7 @@ var $Version = '3.6.0';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
+var $FctPrefix = '';
 var $Protect = true;
 var $ErrCount = 0;
 var $ErrMsg = '';
@@ -525,7 +529,7 @@ var $_PlugIns = array();
 var $_PlugIns_Ok = false;
 var $_piOnFrm_Ok = false;
 
-function clsTinyButStrong($Chrs='',$VarPrefix='') {
+function clsTinyButStrong($Chrs='',$VarPrefix='',$FctPrefix='') {
 	if ($Chrs!=='') {
 		$Ok = false;
 		$Len = strlen($Chrs);
@@ -549,6 +553,7 @@ function clsTinyButStrong($Chrs='',$VarPrefix='') {
 		}
 	}
 	$this->VarPrefix = $VarPrefix;
+	$this->FctPrefix = $FctPrefix;
 	// Links to global variables
 	global $_TBS_FormatLst, $_TBS_UserFctLst, $_TBS_AutoInstallPlugIns;
 	if (!isset($_TBS_FormatLst))  $_TBS_FormatLst  = array();
@@ -690,7 +695,7 @@ function MergeField($NameLst,$Value='assigned',$IsUserFct=false,$DefaultPrm=fals
 		if ($FctCheck) {
 			$FctInfo = $Value;
 			$ErrMsg = false;
-			if (!$this->meth_Misc_UserFctCheck($FctInfo,'f',$ErrMsg,$ErrMsg)) return $this->meth_Misc_Alert('with MergeField() method',$ErrMsg);
+			if (!$this->meth_Misc_UserFctCheck($FctInfo,'f',$ErrMsg,$ErrMsg,false)) return $this->meth_Misc_Alert('with MergeField() method',$ErrMsg);
 			$FctArg = array('','');
 			$SubStart = false;
 			$FctCheck = false;
@@ -900,6 +905,10 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst) {
 				if (isset($Loc->PrmLst['att'])) {
 					$LocSrc = substr($Txt,$Loc->PosBeg,$Loc->PosEnd-$Loc->PosBeg+1);
 					$this->f_Xml_AttFind($Txt,$Loc,true,$this->AttDelim);
+					if (isset($Loc->PrmLst['atttrue'])) {
+						$Loc->PrmLst['magnet'] = '#';
+						$Loc->PrmLst['ope'] = (isset($Loc->PrmLst['ope'])) ? $Loc->PrmLst['ope'].',attbool' : 'attbool';
+					}
 					if ($Loc->AttForward) {
 						$IsAMF = true;
 					} else {
@@ -1043,7 +1052,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 			$Loc->OnFrmInfo = $Loc->PrmLst['onformat'];
 			$Loc->OnFrmArg = array($Loc->FullName,'',&$Loc->PrmLst,&$this);
 			$ErrMsg = false;
-			if (!$this->meth_Misc_UserFctCheck($Loc->OnFrmInfo,'f',$ErrMsg,$ErrMsg)) {
+			if (!$this->meth_Misc_UserFctCheck($Loc->OnFrmInfo,'f',$ErrMsg,$ErrMsg,true)) {
 				unset($Loc->PrmLst['onformat']);
 				if (!isset($Loc->PrmLst['noerr'])) $this->meth_Misc_Alert($Loc,'(parameter onformat) '.$ErrMsg);
 				$Loc->OnFrmInfo = 'pi'; // Execute the function pi() just to avoid extra error messages
@@ -1106,6 +1115,8 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 				} elseif ($ope==='minv') {
 					$Loc->OpeAct[$i] = 11;
 					$Loc->MSave = $Loc->MagnetId;
+				} elseif ($ope==='attbool') { // this operation key is set when a loc is cached with paremeter atttrue
+					$Loc->OpeAct[$i] = 14;
 				} else {
 					$x = substr($ope,0,4);
 					if ($x==='max:') {
@@ -1184,6 +1195,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 				break;
 			case 12: if ((string)$CurrVal===$Loc->OpePrm[$i]) $CurrVal = ''; break;
 			case 13: $CurrVal = str_replace('*',$CurrVal,$Loc->OpePrm[$i]); break;
+			case 14: $CurrVal = clsTinyButStrong::f_Loc_AttBoolean($CurrVal, $Loc->PrmLst['atttrue'], $Loc->AttName); break;
 			}
 		}
 	}
@@ -1285,7 +1297,13 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 		}
 	}
 
-	if (isset($Loc->PrmLst['att'])) $this->f_Xml_AttFind($Txt,$Loc,true,$this->AttDelim);
+	if (isset($Loc->PrmLst['att'])) {
+		$this->f_Xml_AttFind($Txt,$Loc,true,$this->AttDelim);
+		if (isset($Loc->PrmLst['atttrue'])) {
+			$CurrVal = clsTinyButStrong::f_Loc_AttBoolean($CurrVal, $Loc->PrmLst['atttrue'], $Loc->AttName);
+			$Loc->PrmLst['magnet'] = '#';
+		}
+	}
 
 	// Case when it's an empty string
 	if ($CurrVal==='') {
@@ -1722,7 +1740,7 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum) {
 					$Src->OnDataPrm = false;
 				} else {
 					$ErrMsg = false;
-					if ($this->meth_Misc_UserFctCheck($Src->OnDataPrmRef,'f',$ErrMsg,$ErrMsg)) {
+					if ($this->meth_Misc_UserFctCheck($Src->OnDataPrmRef,'f',$ErrMsg,$ErrMsg,true)) {
 						$Src->OnDataOk = true;
 					} else {
 						$LocR->FullName = $this->_CurrBlock;
@@ -2455,7 +2473,7 @@ function meth_Misc_ChangeMode($Init,&$Loc,&$CurrVal) {
 	}
 }
 
-function meth_Misc_UserFctCheck(&$FctInfo,$FctCat,&$FctObj,&$ErrMsg) {
+function meth_Misc_UserFctCheck(&$FctInfo,$FctCat,&$FctObj,&$ErrMsg,$FctCheck=false) {
 
 	$FctId = $FctCat.':'.$FctInfo;
 	if (isset($this->_UserFctLst[$FctId])) {
@@ -2592,7 +2610,9 @@ function meth_Misc_UserFctCheck(&$FctInfo,$FctCat,&$FctObj,&$ErrMsg) {
 		}
 
 	} else {
-		if (!function_exists($FctStr)) {
+		if ( $FctCheck && ($this->FctPrefix!=='') && (strncmp($this->FctPrefix,$FctStr,strlen($this->FctPrefix))!==0) ) {
+			$ErrMsg = 'user function \''.$FctStr.'\' does not match the allowed prefix.'; return false;
+		} else if (!function_exists($FctStr)) {
 			$x = explode('.',$FctStr);
 			if (count($x)==2) {
 				if (class_exists($x[0])) {
@@ -2623,7 +2643,7 @@ function meth_Misc_Charset($Charset) {
 		if (($Charset!=='') and ($Charset[0]==='=')) {
 			$ErrMsg = false;
 			$Charset = substr($Charset,1);
-			if ($this->meth_Misc_UserFctCheck($Charset,'f',$ErrMsg,$ErrMsg)) {
+			if ($this->meth_Misc_UserFctCheck($Charset,'f',$ErrMsg,$ErrMsg,false)) {
 				$this->_CharsetFct = true;
 			} else {
 				$this->meth_Misc_Alert('with LoadTemplate() method',$ErrMsg);
@@ -3420,6 +3440,21 @@ function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagLst,$RetInnerSrc) {
 	$Loc->PosEnd = $PosEnd;
 	return $RetVal;
 
+}
+
+function f_Loc_AttBoolean($CurrVal, $AttTrue, $AttName) {
+// Return the good value for a boolean attribute
+	if ($AttTrue===true) {
+		if ((string)$CurrVal==='') {
+			return '';
+		} else {
+			return $AttName;
+		}
+	} elseif ((string)$CurrVal===$AttTrue) {
+		return $AttName;
+	} else {
+		return '';
+	}
 }
 
 function f_Xml_AttFind(&$Txt,&$Loc,$Move=false,$AttDelim=false) {

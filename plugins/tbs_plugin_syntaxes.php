@@ -25,10 +25,11 @@ class clsTbsThisPlugIn {
 		// You can define additional arguments to this method for the manual installation, but they should be optional in order to have the method compatible with automatic install.
 		// This method must return the list of TBS reserved methods that you want to be activated.
 		// Manual installation:
-		// $TBS->PlugIn(TBS_INSTALL,TBS_PLUGIN_TEMPLATE);
+		// $TBS->PlugIn(TBS_INSTALL,TBS_THIS_PLUGIN);
 		//  or the first call of:
 		// $TBS->PlugIn(TBS_THIS_PLUGIN);
 		$this->Version = '1.00'; // Version can be displayed using [var..tbs_info] since TBS 3.2.0
+		$this->DirectCommands = array(); // values that will be directly recoknized by $TBS->PlugIn
 		return array('OnCommand','BeforeLoadTemplate','AfterLoadTemplate','BeforeShow','AfterShow','OnData','OnFormat','OnOperation','BeforeMergeBlock','OnMergeSection','OnMergeGroup','AfterMergeBlock','OnSpecialVar','OnMergeField');
 	}
 
