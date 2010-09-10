@@ -11,7 +11,7 @@ $deplace = "essai2";
 $x1 = 'e';
 $x2 = 'é';
 
-$TBS = new clsTinyButStrong;
+$TBS = new clsTinyButStrong('','','f_test1_');
 $TBS->OnLoad = false;
 $TBS->OnShow = false;
 $TBS->PlugIn(TBS_INSTALL,'clsTestPlugin');
@@ -27,9 +27,18 @@ $dq_data['3'] = array(array('id'=>33, 'name'=>'Julia'), array('id'=>34, 'name'=>
 $TBS->MergeBlock('dq', 'array', 'dq_data[%p1%]'); // dynamic query avec "p1="
 $TBS->MergeBlock('dr', 'array', 'dq_data[3]'); // dynamic query avec "p1="
 
+// test du paramètre atttrue
+$TBS->MergeBlock('att', 'num', 6);
+
+// test bug du GetBlock Source
 $bsrc = $TBS->GetBlockSource('w', false, false);
 
 $ErrCount = $TBS->ErrCount;
+
+// test limite de fonction
+//$TBS->FctPrefix = 'f_test1_';
+$TBS->MergeField('mf1', 'coucou');
+
 $TBS->Show();
 
 // -----------------------------------
@@ -43,5 +52,12 @@ class clsTestPlugin {
 		echo "* OnCacheField: ".$Loc->FullName."<br>\r\n";
 	}
 }
+
+function f_test1_onformat($FieldName,&$Value) {
+	$Value .= '+1';
+} 
+function f_test2_onformat($FieldName,&$Value) {
+	$Value .= '+2';
+} 
 
 ?>

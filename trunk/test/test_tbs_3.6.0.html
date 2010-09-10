@@ -119,5 +119,32 @@ $x2={[var.x2]}, $x2(utf8)={[var.x2;htmlconv=utf8]}
 </table>
 <h3>Test ope=msk</h3>
 x1={[var.x1;ope=msk:toto_*_.zzz]}
+<h3>Test parameter atttrue</h3>
+dynamic: 
+
+<br />
+désactivé : 
+<input name="textfield" type="text" id="textfield" value="coucou" />
+[var.x1;att=input#disabled;atttrue=e]<br />
+activé :
+<input name="textfield2" type="text" id="textfield2" value="coucou" />
+[var.x1;att=input#disabled;atttrue=x] <br />
+cached:<br />
+<table border="1" cellpadding="1" cellspacing="0">
+  <tr>
+    <td bgcolor="#999999">#</td>
+    <td bgcolor="#999999"><strong>val</strong></td>
+    <td bgcolor="#999999"><strong>att</strong></td>
+  </tr>
+  <tr>
+    <td>[att.#;block=tr]</td>
+    <td>[att.val]</td>
+    <td><input name="textfield3" type="text" id="textfield3" value="coucou" /> 
+    {[att.val;att=input#disabled;atttrue=3]}</td>
+  </tr>
+</table>
+<h3>Test property FctPrefix</h3>
+ f_test1_onformat : {[mf1;onformat=f_test1_onformat]}<br />
+f_test2_onformat : {[mf1;onformat=f_test2_onformat]}
 </body>
 </html>
