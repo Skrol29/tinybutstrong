@@ -158,7 +158,7 @@ a.opt-name:hover {
         </tr>
         <tr class="txt-tiny">
           <td>Date:</td>
-          <td>2010-07-26</td>
+          <td>2010-09-13</td>
         </tr>
       </table></td>
     <td width="34%" align="center">
@@ -1302,41 +1302,45 @@ Most often, it is the row of an HTML table. The syntax for TBS Blocks is describ
       <td align="left" valign="top">Description</td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_htmlconv" id="html_field_prm_htmlconv"></a>htmlconv</span>=<span class="opt-name"><span class="opt-value">val</span></span></td>
+      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_htmlconv" id="html_field_prm_htmlconv"></a>htmlconv</span>=<span class="opt-value">val</span></td>
       <td align="left" valign="top" class="border-sep">Ennables you to modify the special character conversion for this TBS field only. Note that the special character conversion  used by default for all TBS fields is the one defined by <a href="#php_loadtemplate">LoadTemplate()</a>. It is often corresponding to an Xml/Html charset but not necessary.<br>
-        The value <span class="opt-name"><span class="opt-value">val</span></span> can be one of the following keywords:
+        The value <span class="opt-value">val</span> can be one of the following keywords:
         <div class="decal">
           <table border="0" cellspacing="0" cellpadding="2">
             <tr>
-              <td width="50" valign="top"><span class="opt-name"><span class="opt-value">yes</span></span>:</td>
+              <td width="50" valign="top"><span class="opt-value">yes</span></td>
               <td>(default value) Performe  the default special character conversion, including new lines.</td>
             </tr>
             <tr>
-              <td valign="top"><span class="opt-name"><span class="opt-value">no</span></span>:</td>
+              <td valign="top"><span class="opt-value">no</span></td>
               <td>No special character conversion. Useful to modify Xml/Html source.</td>
             </tr>
             <tr>
-              <td valign="top"><span class="opt-name"><span class="opt-value">nobr</span></span>:</td>
+              <td valign="top"><span class="opt-value">nobr</span></td>
               <td>Let  the default special character conversion, except new lines (useful for &lt;pre&gt; tags for example).</td>
             </tr>
             <tr>
-              <td valign="top"><span class="opt-name"><span class="opt-value">wsp</span></span>:</td>
+              <td valign="top"><span class="opt-value">wsp</span></td>
               <td>Preserve white spaces (useful for spaces at the beginning of lines).</td>
             </tr>
             <tr>
-              <td valign="top"><span class="opt-name"><span class="opt-value">esc</span></span>:</td>
+              <td valign="top"><span class="opt-value">esc</span></td>
               <td>No special character conversion and double the single quote characters (').</td>
             </tr>
-            <tr id="v202_js">
-              <td valign="top"><span class="opt-name"><span class="opt-value">js</span></span>:</td>
+            <tr>
+              <td valign="top"><span class="opt-value">js</span></td>
               <td>Convert the data item to a string that can be inserted between JavaScript text delimiters. </td>
             </tr>
-            <tr id="v202_js2">
-              <td valign="top"><span class="opt-name"><span class="opt-value">url</span></span>:</td>
-              <td>Convert the data item to a string that can be inserted inside an URL. <span class="versioning">(Keyword url is supported since TBS version 3.5.2)</span></td>
+            <tr>
+              <td valign="top"><span class="opt-value">url</span></td>
+              <td>Convert the data item to a string that can be inserted inside an URL. <span class="versioning">(supported since TBS version 3.5.2)</span></td>
             </tr>
             <tr>
-              <td valign="top"><span class="opt-name"><span class="opt-value">look</span></span>:</td>
+              <td valign="top"><span class="opt-value">utf8</span></td>
+              <td>Convert the data item into UTF-8. <span class="versioning">(supported since TBS version 3.6.0)</span></td>
+            </tr>
+            <tr>
+              <td valign="top"><span class="opt-value">look</span></td>
               <td>Deprecated. Performe the default special character conversion  only if no Xml/Html entities are found inside the data item.</td>
             </tr>
           </table>
@@ -1348,11 +1352,11 @@ Most often, it is the row of an HTML table. The syntax for TBS Blocks is describ
       <td align="left" valign="top" class="border-sep">If the data item is empty, then an unbreakable space is displayed. Useful for cells in tables.</td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_ifempty" id="html_field_prm_ifempty"></a>ifempty</span>=<span class="opt-name"><span class="opt-value">val</span></span></td>
+      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_ifempty" id="html_field_prm_ifempty"></a>ifempty</span>=<span class="opt-value">val</span></td>
       <td align="left" valign="top" class="border-sep">If the data item is empty, then it is replaced with the specified value.</td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_att" id="html_field_prm_ifempty2"></a>att</span>=<span class="opt-name"><span class="opt-value">path</span></span></td>
+      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_att" id="html_field_prm_ifempty2"></a>att</span>=<span class="opt-value">path</span></td>
       <td align="left" valign="top" class="border-sep">Move the current field into an attribute of an XML/HTML  tag before it is merged. This parameter is very useful when it is too difficult for the template designer  to place a TBS field into an attribute.<br>
         The value <span class="opt-value">path</span> must indicate the place of the attribute relatively to the current field.<br>
         If the attribute doesn't exist in the specified tag, then it is created.<br>
@@ -1378,8 +1382,21 @@ Most often, it is the row of an HTML table. The syntax for TBS Blocks is describ
     </tr>
     <tr>
       <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_attadd" id="html_field_prm_ifempty3"></a>attadd</span></td>
-      <td align="left" valign="top" class="border-sep">To be used with parameter<span class="opt-name"> att</span>. Indicate that the field is added into the attribute's value, instead of beeing replacing the attribute's value.<br>
+      <td align="left" valign="top" class="border-sep">To be used with parameter<span class="opt-name"> att</span>. Indicates that the field is added into the attribute's value, instead of beeing replacing the attribute's value.<br>
         <span class="versioning">Versioning: Parameter attadd is supported since TBS version 3.5.0</span></td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" class="border-sep"><a name="html_field_prm_atttrue" id="html_field_prm_ifempty4"></a><span class="opt-name">atttrue</span><br>
+        <span class="txt-small">or</span><br>        <span class="opt-name">atttrue</span>=<span class="opt-value">value</span></td>
+      <td align="left" valign="top" class="border-sep">To be used with parameter<span class="opt-name"> att</span>. Indicates that the attribute must be managed as a boolan XHTML/HTML attribute. I.e. it can be only <span class="opt-html">attribute=&quot;attribute&quot;</span> in order to mean true, or be omitted in order to means false.<br>
+        If <span class="opt-name">atttrue</span> is set with  a given <span class="opt-value">value</span>, then the boolean attribute
+        will be present if the field's value is equal to the <span class="opt-name">attrue</span>'s value, otherwise it will be omitted.<br>
+        If <span class="opt-name">atttrue</span> is set with no value, then the boolean attribute
+        will be omitted only if the field's value is empty, otherwise the attribute it will be present. <br>
+        Examples:
+        <div class="decal"><span class="opt-html">&lt;input type=&quot;checkbox&quot;&gt;</span>[<span class="opt-name">onshow.accept</span>;<span class="opt-name">att</span>=<span class="opt-value">selected</span>;<span class="opt-name">atttrue</span>=<span class="opt-value">1</span>]</div>
+        <br>
+        <span class="versioning">Versioning: Parameter atttrue is supported since TBS version 3.6.0</span></td>
     </tr>
     <tr>
       <td align="left" valign="top" class="border-sep"><a name="html_field_prm_magnet" id="html_field_prm_magnet"></a><span class="opt-name">magnet</span>=<span class="opt-value">tag</span><br>
@@ -1452,7 +1469,7 @@ Most often, it is the row of an HTML table. The syntax for TBS Blocks is describ
       <td align="left" valign="top" class="border-sep">Avoid some of the TBS Error messages. When a message can be cancelled, it is mentioned in the message.</td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_file"></a>file</span>=<span class="opt-name"><span class="opt-value">filename</span></span></td>
+      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_file"></a>file</span>=<span class="opt-value">filename</span></td>
       <td align="left" valign="top" class="border-sep">Replace the field with the contents of the file.<br>
         <span class="opt-name"><span class="opt-value">Filename</span></span> can be a string or an expression.<br>
         You can use the keyword <span class="opt-value">[val]</span> inside the expression to insert the current data item.<br>
@@ -1488,7 +1505,7 @@ Most often, it is the row of an HTML table. The syntax for TBS Blocks is describ
         See chapter '<a href="#html_subtemplate">Subtemplates</a>' for more details about subtemplates.</td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_script"></a>script</span>=<span class="opt-name"><span class="opt-value">filename</span></span></td>
+      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_script"></a>script</span>=<span class="opt-value">filename</span></td>
       <td align="left" valign="top" class="border-sep">Execute the Php script just before replacing the TBS field.<br>
         <span class="opt-name"><span class="opt-value">Filename</span></span> can be a string or an expression.<br>
         You can use the keyword <span class="opt-value">[val]</span> inside the expression to insert the current data item.<br>
@@ -1562,7 +1579,7 @@ Most often, it is the row of an HTML table. The syntax for TBS Blocks is describ
         See parameters <span class="opt-name">then</span> and <span class="opt-name">else</span> for some examples.</td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_then" id="html_field_prm_then"></a>then</span><span class="opt-name"><span class="opt-value"> val1</span></span></td>
+      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_then" id="html_field_prm_then"></a>then</span><span class="opt-value"> val1</span></td>
       <td align="left" valign="top" class="border-sep">If the parameter <span class="opt-name">if</span> is defined and its condition is verified, then the data item is replaced with <span class="opt-value">val1</span>.<br>
         <span class="versioning">Since TBS version 3.0,</span> it is also possible to define several couples of <span class="opt-name">if</span>/<span class="opt-name">then</span> in the same field.<br>
         Examples:<br>
@@ -1617,7 +1634,7 @@ Most often, it is the row of an HTML table. The syntax for TBS Blocks is describ
         <span id="v202_subtpl_onformat">See chapter '<a href="#html_subtemplate">Subtemplates</a>' for more details about how to use this arguments in subtemplate mode.</span></td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_protect" id="html_field_prm_protect"></a>protect</span>=<span class="opt-name"><span class="opt-value">val</span></span></td>
+      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_protect" id="html_field_prm_protect"></a>protect</span>=<span class="opt-value">val</span></td>
       <td align="left" valign="top" class="border-sep">Enables you to protect or unprotect the data item to be merged by replacing the characters '<span class="opt-html">[</span>' with their corresponding XML/HTML code '<span class="opt-html">&amp;#91;</span>'. The value <span class="opt-name"><span class="opt-value">val</span></span> can be one of the following keywords:<br>
         &nbsp; <span class="opt-name"><span class="opt-value">yes</span></span>: (default value) data item is protected.<br>
         &nbsp; <span class="opt-name"><span class="opt-value">no</span></span>: data item is not protected.<br>
@@ -1625,7 +1642,7 @@ Most often, it is the row of an HTML table. The syntax for TBS Blocks is describ
         Nevertheless, it is possible to disable the protection by default if you set property <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">Protect</span> to <span class="opt-value">false</span>.</td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="border-sep"><span class="opt-name"><span class="opt-value"><a name="html_field_prm_ope" id="html_field_prm_ope"></a></span>ope</span>=<span class="opt-name"><span class="opt-value">action</span></span></td>
+      <td align="left" valign="top" class="border-sep"><span class="opt-name"><span class="opt-value"><a name="html_field_prm_ope" id="html_field_prm_ope"></a></span>ope</span>=<span class="opt-value">action</span></td>
       <td align="left" valign="top" class="border-sep">Makes one or several operations on the value to merge. You can define several operations to be processed in order by separating them with coma (,).<br>
         Example: <br>
         <div class="decal">[<span class="opt-name">onshow</span>.<span class="opt-name">x</span>;<span class="opt-name">ope</span>=<span class="opt-value">add:-1</span>,<span class="opt-value">mod:10</span>]</div>
@@ -1680,6 +1697,10 @@ Most often, it is the row of an HTML table. The syntax for TBS Blocks is describ
             <tr>
               <td valign="top" class="opt-value">minv</td>
               <td><em>(means &quot;magnet invisible&quot;)</em> Replace the value with <span class="opt-value">''</span> <span class="txt-small">(empty string)</span> but parameter <a href="#html_field_prm_magnet" class="opt-name">magnet</a> will consider the old value. This operation is designed to make totaly invisible a TBS field which do magnet stuffs. <span class="versioning">(supported since TBS version 3.3.0)</span></td>
+            </tr>
+            <tr>
+              <td valign="top" class="opt-value">msk:x</td>
+              <td><em>(means &quot;mask&quot;)</em> Apply a mask to the value. Characters '<span class="opt-value">*</span>' in the mask will be replaced by the original value.  Example: [onshow.img_id;<span class="opt-name">ope</span>=<span class="opt-value">msk:img_*.gif</span>] <span class="versioning">(supported since TBS version 3.6.0)</span></td>
             </tr>
           </table>
         </div>
@@ -1989,6 +2010,13 @@ Most often, it is the row of an HTML table. The syntax for TBS Blocks is describ
     NB: the first parameter <span class="opt-value">''</span> of clsTinyButStrong() in the example above is used to define TBS tag delimiters. But this is not described in this manual. <br>
   </div>
   <br>
+  <span class="title-1b">Prevent from processing automatic fields [onload] and [onshow]</span><br>
+  <br>
+  Properties <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnLoad</span> and <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnShow</span> enable you to cancel the processing of [onload] and [onshow] fields, but not [var] fields. They accept only <span class="opt-value">true</span> of <span class="opt-value">false</span> values. This can be very useful especially, but not only, for some TBS plug-ins.<br>
+Example:<br>
+&nbsp;&nbsp;<span class="txt-code"><span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnShow</span> = </span><span class="opt-value">false</span><span class="txt-code">;</span><br>
+  <span class="versioning">Properties 
+  OnLoad and OnShow are supported since TBS version 3.6.0.</span><br>
 </div>
 <h3><a name="html_field_special" id="html_field_special3"></a>Special automatic fields :</h3>
 <div class="norm"> A Special [var] field is a TBS Field which displays data provided by the TinyButStrong system.<br>
@@ -3199,6 +3227,11 @@ In both cases, a plug-in is made of a set of PHP functions or one PHP class whic
         <td valign="top">&bull;</td>
         <td valign="top">OnOperation</td>
         <td>Executed each time parameter 'ope' is defined with an unsupported  keyword.</td>
+      </tr>
+      <tr>
+        <td valign="top">&bull;</td>
+        <td valign="top">OnCacheField</td>
+        <td>Executed each time a field is put in the cache of a Block definition. (<span class="versioning">supported since TBS 3.6.0</span>)</td>
       </tr>
       <tr>
         <td valign="top" width="10">&bull;</td>
