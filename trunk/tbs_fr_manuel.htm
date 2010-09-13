@@ -158,7 +158,7 @@ a.opt-name:hover {
         </tr>
         <tr class="txt-tiny">
           <td>Date :</td>
-          <td>2010-05-01</td>
+          <td>2010-09-13</td>
         </tr>
       </table></td>
     <td width="34%" align="center"><div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div>
@@ -1304,41 +1304,45 @@ Le plus souvent il s'agit d'une ligne d'un tableau HTML. La syntaxe des blocs TB
       <td align="left" valign="top">Description</td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_htmlconv" id="html_field_prm_htmlconv"></a>htmlconv</span>=<span class="opt-name"><span class="opt-value">val</span></span></td>
+      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_htmlconv" id="html_field_prm_htmlconv"></a>htmlconv</span>=<span class="opt-value">val</span></td>
       <td align="left" valign="top" class="border-sep">Permet de modifier la conversion des caract&egrave;res sp&eacute;ciaux pour ce champ TBS uniquement. Notez que la conversion de caract&egrave;res sp&eacute;ciaux utilis&eacute;e par d&eacute;faut pour tous les champs TBS est celle d&eacute;finie par la m&eacute;thode <a href="#php_loadtemplate">LoadTemplate()</a>. Elle correspond souvent &agrave; un charset Xml/Html, mais pas n&eacute;cessairement.<br>
         La valeur <span class="opt-name"><span class="opt-value">val</span></span> peut être l'un des mots-clés suivants :
         <div class="decal">
           <table border="0" cellspacing="0" cellpadding="2">
             <tr>
-              <td width="50" valign="top"><span class="opt-name"><span class="opt-value">yes</span></span> :</td>
+              <td width="50" valign="top"><span class="opt-value">yes</span></td>
               <td>(valeur par défaut) Applique la conversion des caract&egrave;res sp&eacute;ciaux par d&eacute;faut, y compris les sauts de ligne.</td>
             </tr>
             <tr>
-              <td valign="top"><span class="opt-name"><span class="opt-value">no</span></span> :</td>
+              <td valign="top"><span class="opt-value">no</span></td>
               <td>Annule la conversion des caract&egrave;res sp&eacute;ciaux. Utile pour modifier le source Xml/Html.</td>
             </tr>
             <tr>
-              <td valign="top"><span class="opt-name"><span class="opt-value">nobr</span></span> :</td>
+              <td valign="top"><span class="opt-value">nob</span></td>
               <td> Laisse la conversion des caract&egrave;res sp&eacute;ciaux mais  sans les sauts de ligne (utile pour la balise &lt;pre&gt; par exemple).</td>
             </tr>
             <tr>
-              <td valign="top"><span class="opt-name"><span class="opt-value">wsp</span></span> :</td>
+              <td valign="top"><span class="opt-value">wsp</span></td>
               <td>Préserve les espaces blancs (utile pour les espaces de début de ligne).</td>
             </tr>
             <tr>
-              <td valign="top"><span class="opt-name"><span class="opt-value">esc</span></span> :</td>
+              <td valign="top"><span class="opt-value">esc</span></td>
               <td>Annule la conversion des caract&egrave;res sp&eacute;ciaux et double les caract&egrave;res guillemets simples ('). </td>
             </tr>
-            <tr id="v202_js">
-              <td valign="top"><span class="opt-value">js</span> : </td>
+            <tr>
+              <td valign="top"><span class="opt-value">js</span></td>
               <td>Convertie la donn&eacute;e en une cha&icirc;ne qui peut &ecirc;tre ins&eacute;r&eacute;e entre des d&eacute;limiteurs texte JavaScript </td>
             </tr>
-            <tr id="v202_js2">
-              <td valign="top"><span class="opt-name"><span class="opt-value">url</span></span>:</td>
-              <td>Convertie la donn&eacute;e en une cha&icirc;ne qui peut &ecirc;tre ins&eacute;r&eacute;e dans une URL. <span class="versioning">(le mot-cl&eacute;  url est support&eacute; depuis TBS version 3.5.2)</span></td>
+            <tr>
+              <td valign="top"><span class="opt-value">url</span></td>
+              <td>Convertie la donn&eacute;e en une cha&icirc;ne qui peut &ecirc;tre ins&eacute;r&eacute;e dans une URL. <span class="versioning">(support&eacute; depuis TBS version 3.5.2)</span></td>
             </tr>
             <tr>
-              <td valign="top"><span class="opt-name"><span class="opt-value">look</span></span> :</td>
+              <td valign="top"><span class="opt-value">utf8</span></td>
+              <td>Convertie la donn&eacute;e en UTF-8. <span class="versioning">(support&eacute; depuis TBS version 3.6.0)</span></td>
+            </tr>
+            <tr>
+              <td valign="top"><span class="opt-value">look</span></td>
               <td>D&eacute;pr&eacute;ci&eacute;. Applique la conversion des caract&egrave;res sp&eacute;ciaux par d&eacute;faut uniquement  si aucune balise Xml/Html n'est trouvée dans cette donnée.</td>
             </tr>
           </table>
@@ -1350,11 +1354,11 @@ Le plus souvent il s'agit d'une ligne d'un tableau HTML. La syntaxe des blocs TB
       <td align="left" valign="top" class="border-sep">Si la donnée est vide, on affiche un espace Html insécable. Utile pour les cellules d'un tableau.</td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_ifempty" id="html_field_prm_ifempty"></a>ifempty</span>=<span class="opt-name"><span class="opt-value">val</span></span></td>
+      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_ifempty" id="html_field_prm_ifempty"></a>ifempty</span>=<span class="opt-value">val</span></td>
       <td align="left" valign="top" class="border-sep">Si la donnée est vide, on la remplace par la valeur indiquée.</td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_att" id="html_field_prm_ifempty2"></a>att</span>=<span class="opt-name"><span class="opt-value">chemin</span></span></td>
+      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_att" id="html_field_prm_ifempty2"></a>att</span>=<span class="opt-value">chemin</span></td>
       <td align="left" valign="top" class="border-sep">D&eacute;place le champ en cours dans un attribut d'une balise XML/HTML avant d'&ecirc;tre fusionn&eacute;. Ce param&egrave;tre est tr&egrave;s utile quand il est trop difficile  pour le concepteur du mod&egrave;le de placer un champ TBS dans un attribut.<br>
         La valeur <span class="opt-value">chemin</span> doit indiquer l'emplacement de l'attribut relativement au champ en cours.<br>
         Si l'attribut n'existe pas dans la balise sp&eacute;cifi&eacute;e, alors il est cr&eacute;e.<br>
@@ -1382,6 +1386,20 @@ Le plus souvent il s'agit d'une ligne d'un tableau HTML. La syntaxe des blocs TB
       <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_attadd" id="html_field_prm_ifempty3"></a>attadd</span></td>
       <td align="left" valign="top" class="border-sep">S'utilise avec la param&egrave;tre<span class="opt-name"> att</span>. Indique que le champ s'ajoute &agrave; la valeur de l'attribut au lieu  remplacer la valeur de l'attribut.<br>
         <span class="versioning">Historique: Le param&egrave;tre attadd est support&eacute; depuis TBS version 3.5.0</span></td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" class="border-sep"><a name="html_field_prm_atttrue" id="html_field_prm_ifempty4"></a><span class="opt-name">atttrue</span><br>
+        <span class="txt-small">or</span><br>
+        <span class="opt-name">atttrue</span>=<span class="opt-value">valeur</span></td>
+      <td align="left" valign="top" class="border-sep">S'utilise avec la param&egrave;tre<span class="opt-name"> att</span>. Indique that the attribute must be managed as a boolan XHTML/HTML attribute. I.e. it can be only <span class="opt-html">attribute=&quot;attribute&quot;</span> in order to mean true, or be omitted in order to means false.<br>
+        If <span class="opt-name">atttrue</span> is set with  a given <span class="opt-value">value</span>, then the boolean attribute
+        will be present if the field's value is equal to the <span class="opt-name">attrue</span>'s value, otherwise it will be omitted.<br>
+        If <span class="opt-name">atttrue</span> is set with no value, then the boolean attribute
+        will be omitted only if the field's value is empty, otherwise the attribute it will be present. <br>
+        Examples:
+        <div class="decal"><span class="opt-html">&lt;input type=&quot;checkbox&quot;&gt;</span>[<span class="opt-name">onshow.accept</span>;<span class="opt-name">att</span>=<span class="opt-value">selected</span>;<span class="opt-name">atttrue</span>=<span class="opt-value">1</span>]</div>
+        <br>
+        <span class="versioning">Historique: Le param&egrave;tre atttrue est support&eacute; depuis TBS version 3.6.0</span></td>
     </tr>
     <tr>
       <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_magnet" id="html_field_prm_magnet"></a></span><span class="opt-name">magnet</span>=<span class="opt-value">tag</span><br>
@@ -1454,7 +1472,7 @@ Le plus souvent il s'agit d'une ligne d'un tableau HTML. La syntaxe des blocs TB
       <td align="left" valign="top" class="border-sep">Empêche l'affichage de certains messages d'erreurs TBS. Quand un message peut être annulé, cela est mentionné dans le message.</td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_file"></a>file</span>=<span class="opt-name"><span class="opt-value">nomfichier</span></span></td>
+      <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_file"></a>file</span>=<span class="opt-value">nomfichier</span></td>
       <td align="left" valign="top" class="border-sep">Remplace le champ par le contenu du fichier. <span class="opt-name"><span class="opt-value">Nomfichier</span></span> peut être une chaîne fixe ou une expression.<br>
         Vous pouvez utiliser le mot-cl&eacute; <span class="opt-value">[val]</span> dans l'expression pour ins&eacute;rer la valeur  du champ en cours.<br>
         Vous pouvez utiliser des champs <span class="opt-value">[var]</span> dans l'expression.<br>
@@ -1489,7 +1507,7 @@ Le plus souvent il s'agit d'une ligne d'un tableau HTML. La syntaxe des blocs TB
         Voir rubrique '<a href="#html_subtemplate">Sous-mod&egrave;les</a>' pour plus de d&eacute;tails &agrave; propos des sous-mod&egrave;les.</td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="border-sep"><span class="opt-name"><span class="opt-value"><a name="html_field_prm_script"></a></span>script</span>=<span class="opt-name"><span class="opt-value">nomfichier</span></span></td>
+      <td align="left" valign="top" class="border-sep"><span class="opt-name"><span class="opt-value"><a name="html_field_prm_script"></a></span>script</span>=<span class="opt-value">nomfichier</span></td>
       <td align="left" valign="top" class="border-sep">Exécute le script PHP juste avant le remplacement du champ.<br>
         <span class="opt-name"><span class="opt-value">Nomfichier</span></span> peut être une chaîne fixe ou une expression.<br>
         Vous pouvez utiliser le mot-cl&eacute; <span class="opt-value">[val]</span> dans l'expression pour ins&eacute;rer la valeur  du champ en cours.<br>
@@ -1564,7 +1582,7 @@ Le plus souvent il s'agit d'une ligne d'un tableau HTML. La syntaxe des blocs TB
         Voir paramètres <span class="opt-name">then</span> et <span class="opt-name">else</span> pour des exemples. </td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="border-sep"><span class="opt-name"><span class="opt-value"><a name="html_field_prm_then" id="html_field_prm_then"></a></span>then</span><span class="opt-name"><span class="opt-value"> val1</span></span></td>
+      <td align="left" valign="top" class="border-sep"><span class="opt-name"><span class="opt-value"><a name="html_field_prm_then" id="html_field_prm_then"></a></span>then</span><span class="opt-value"> val1</span></td>
       <td align="left" valign="top" class="border-sep">Si le paramètre <span class="opt-name">if</span> a été défini et que sa condition est vérifiée, alors la donnée sera replacée par <span class="opt-value">val1</span>.<br>
         <span class="versioning">Depuis TBS version 3.0</span>, il est aussi possible de d&eacute;finir plusieurs couples de if/then dans le m&ecirc;me champ. <br>
         Exemple :
@@ -1619,7 +1637,7 @@ Le plus souvent il s'agit d'une ligne d'un tableau HTML. La syntaxe des blocs TB
         <span id="v202_subtpl_onformat">Voir le paragraphe  '<a href="#html_subtemplate">Sous-mod&egrave;les</a>' pour plus de d&eacute;tails sur l'utilisation de ces arguments en mode sous-mod&egrave;le.</span></td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="border-sep"><span class="opt-name"><span class="opt-value"><a name="html_field_prm_protect" id="html_field_prm_protect"></a></span>protect</span>=<span class="opt-name"><span class="opt-value">val</span></span></td>
+      <td align="left" valign="top" class="border-sep"><span class="opt-name"><span class="opt-value"><a name="html_field_prm_protect" id="html_field_prm_protect"></a></span>protect</span>=<span class="opt-value">val</span></td>
       <td align="left" valign="top" class="border-sep">Permet de protéger ou non la donnée à fusionner en remplaçant les caractères '<span class="opt-html">[</span>' pour leur équivalent Html '<span class="opt-html">&amp;#91;</span>'. La valeur <span class="opt-name"><span class="opt-value">val</span></span> peut être l'un des mots-clés suivants :<br>
         &nbsp; <span class="opt-name"><span class="opt-value">yes</span></span> : (valeur par défaut) la donnée est protégée.<br>
         &nbsp; <span class="opt-name"><span class="opt-value">no</span></span> : la donnée n'est pas protégée.<br>
@@ -1627,7 +1645,7 @@ Le plus souvent il s'agit d'une ligne d'un tableau HTML. La syntaxe des blocs TB
         Il est n&eacute;anmoins possible de d&eacute;sactiver la protection par d&eacute;faut en mettant la propri&eacute;t&eacute; <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">Protect</span> &agrave; <span class="opt-value">false</span>.</td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="border-sep"><span class="opt-name"><span class="opt-value"><a name="html_field_prm_ope" id="html_field_prm_ope"></a></span>ope</span>=<span class="opt-name"><span class="opt-value">action</span></span></td>
+      <td align="left" valign="top" class="border-sep"><span class="opt-name"><span class="opt-value"><a name="html_field_prm_ope" id="html_field_prm_ope"></a></span>ope</span>=<span class="opt-value">action</span></td>
       <td align="left" valign="top" class="border-sep">Effectue une ou plusieurs op&eacute;rations sur la valeur &agrave; fusionner. Vous pouvez d&eacute;finir plusieurs op&eacute;ration &agrave; ex&eacute;cuter en ordre en les s&eacute;parant par des virgules (,). <br>
         Exemple : <br>
         <div class="decal">[<span class="opt-name">onshow</span>.<span class="opt-name">x</span>;<span class="opt-name">ope</span>=<span class="opt-value">add:-1</span>,<span class="opt-value">mod:10</span>]</div>
@@ -1683,6 +1701,10 @@ Le plus souvent il s'agit d'une ligne d'un tableau HTML. La syntaxe des blocs TB
             <tr>
               <td valign="top" class="opt-value">minv</td>
               <td><em>(veut dire &quot;magnet invisible&quot;)</em> Remplace la valeur par <span class="opt-value">''</span> <span class="txt-small">(cha&icirc;ne vide)</span> mais le param&egrave;tre <a href="#html_field_prm_magnet" class="opt-name">magnet</a><a href="#html_field_prm_magnet"></a> ne prendra en compte que l'ancienne valeur. Cette op&eacute;ration est con&ccedil;ue pour rendre compl&egrave;tement invisible un champ TBS qui actionne un magnet. <span class="versioning">(support&eacute; depuis TBS version 3.3.0)</span></td>
+            </tr>
+            <tr>
+              <td valign="top" class="opt-value">msk:x</td>
+              <td><em>(veut dire &quot;mask&quot;)</em> Applique un masque &agrave; la valeur. Les caract&egrave;res '<span class="opt-value">*</span>' dans le masque seront remplac&eacute;s par la valeur d'origine du champ.  Exemple : [onshow.img_id;<span class="opt-name">ope</span>=<span class="opt-value">msk:img_*.gif</span>] <span class="versioning">(support&eacute; depuis TBS version 3.6.0)</span></td>
             </tr>
           </table>
         </div>
@@ -1990,8 +2012,14 @@ Le plus souvent il s'agit d'une ligne d'un tableau HTML. La syntaxe des blocs TB
     &nbsp;&nbsp;[<span class="opt-name">onload</span>.x1_title] sera fusionné si la variable globale <span class="opt-name">$x1_title</span> existe. <br>
     &nbsp;&nbsp;[<span class="opt-name">onload</span>.x2_title] produira un message d'erreur explicite.<br>
     <br>
-    NB: le premier paramètre <span class="opt-value">''</span> de clsTinyButStrong() dans cet exemple est utilisé pour définir les délimiteurs de balises TBS. Mais cela n'est pas décrit dans ce manuel.<br>
-  </div>
+    NB: le premier paramètre <span class="opt-value">''</span> de clsTinyButStrong() dans cet exemple est utilisé pour définir les délimiteurs de balises TBS. Mais cela n'est pas décrit dans ce manuel.</div>
+  <span class="title-1b"><br>
+  Emp&ecirc;cher le traitement des champs automatiques [onload] et [onshow]</span><br>
+  <br>
+  Les prori&eacute;t&eacute;s <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnLoad</span> et <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnShow</span> vous permettent d'annuler le traitement des champs  [onload] et [onshow], mais pas des champs [var]. Elles acceptent uniquement les valeurs  <span class="opt-value">true</span> et <span class="opt-value">false</span>. Cela peut &ecirc;tre tr&egrave;s pratique principalement, mais pas uniquement, pour certains plug-ins TBS.<br>
+Exemple :<br>
+&nbsp;&nbsp;<span class="txt-code"><span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnShow</span> = false;</span><br>
+<span class="versioning">Les propri&eacute;t&eacute;s OnLoad et OnShow sont support&eacute;es depuis  TBS version 3.6.0.</span><br>
 </div>
 <h3><a name="html_field_special" id="html_field_special"></a>Les champs automatiques spéciaux :</h3>
 <div class="norm">Un champ automatique sp&eacute;cial est un champ automatique <span class="opt-name">onload</span>, <span class="opt-name">onshow</span> ou <span class="opt-name">var</span> qui affiche des donn&eacute;es fournies par le syst&egrave;me TinyButStrong.<br>
@@ -3206,6 +3234,11 @@ Dans le deux cas, un  plug-in se pr&eacute;sente sous la forme d'un jeu de fonct
         <td valign="top">&bull;</td>
         <td valign="top">OnOperation</td>
         <td>Executed each time parameter 'ope' is defined with an unsupported  keyword.</td>
+      </tr>
+      <tr>
+        <td valign="top">&bull;</td>
+        <td valign="top">OnCacheField</td>
+        <td>Executed each time a field is put in the cache of a Block definition. (<span class="versioning">supported since TBS 3.6.0</span>)</td>
       </tr>
       <tr>
         <td valign="top" width="10">&bull;</td>
