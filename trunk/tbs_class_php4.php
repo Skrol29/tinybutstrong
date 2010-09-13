@@ -3,7 +3,7 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.6.0 RC 2010-09-10 for PHP 4
+Version  : 3.6.0 for PHP 4
 Date     : 2010-07-30
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
@@ -493,7 +493,7 @@ var $ObjectRef = false;
 var $NoErr = false;
 var $Assigned = array();
 // Undocumented (can change at any version)
-var $Version = '3.6.0 RC 2010-09-10';
+var $Version = '3.6.0';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
