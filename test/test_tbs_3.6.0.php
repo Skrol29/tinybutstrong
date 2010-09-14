@@ -1,5 +1,10 @@
 <?php
 
+/*
+$x = array('a'=>'coucou', 'b'=>null, 'c'=>'salut');
+var_export(isset($x['b']));
+exit;
+*/
 if (intval(PHP_VERSION)>=5) {
 	include_once('../tbs_class_php5.php');
 } else {
@@ -41,6 +46,15 @@ $TBS->MergeField('mf1', 'coucou');
 
 $x_list = array('un','deux','trois');
 $x_list2 = array(array('un','deux','trois'),array('quatre','cinq','six'));
+
+// test bug du subblock automatique avec valeur null
+$sb_data = array();
+$sb_data[] = array('nom'=>'Pierre' , 'notes'=>array('A','B','C'));
+$sb_data[] = array('nom'=>'Paul'   , 'notes'=>array('D','E','F'));
+$sb_data[] = array('nom'=>'Jacques', 'notes'=>null);
+$sb_data[] = array('nom'=>'Jacques2');
+$sb_data[] = array('nom'=>'Thomas' , 'notes'=>array('J','K','L'));
+$TBS->MergeBlock('sb', $sb_data);
 
 $TBS->Show();
 

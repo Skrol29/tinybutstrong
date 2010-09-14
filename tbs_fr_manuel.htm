@@ -158,7 +158,7 @@ a.opt-name:hover {
         </tr>
         <tr class="txt-tiny">
           <td>Date :</td>
-          <td>2010-09-13</td>
+          <td>2010-09-14</td>
         </tr>
       </table></td>
     <td width="34%" align="center"><div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div>
@@ -394,7 +394,7 @@ Vous utilisez une variable objet TBS pour piloter la fusion de votre modèle  ave
     <td>2.</td>
     <td>Au début de votre programme PHP, ajoutez les lignes :<br>
       <span class="txt-code">&nbsp;&nbsp;include_once(<span class="opt-value">'tbs_class.php'</span>);</span><br>
-      <span class="txt-code"><span class="opt-name">&nbsp;&nbsp;$TBS</span> = <strong>new</strong> clsTinyButStrong ;</span> <br>
+      <span class="txt-code"><span class="opt-name">&nbsp;&nbsp;$TBS</span> = <strong>new</strong> clsTinyButStrong;</span> <br>
       <span class="txt-small">Remarque : si le fichier tbs_class.php se trouve dans un répertoire différent de celui de votre programme, vous devrez préciser le répertoire devant le nom du fichier.</span></td>
   </tr>
 </table>
@@ -419,11 +419,11 @@ Exemple 1 : <br>
     <td valign="top" class="txt-code">&lt;?<br>
       <br>
       include_once(<span class="opt-value">'tbs_class.php'</span>);<br>
-      <span class="opt-name">$TBS</span> = <strong>new</strong> clsTinyButStrong ;<br>
-      <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>) ;<br>
+      <span class="opt-name">$TBS</span> = <strong>new</strong> clsTinyButStrong;<br>
+      <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>);<br>
       <br>
       $message = <span class="opt-value">'Hello'</span> ;<br>
-      <span class="opt-name">$TBS</span>-&gt;Show() ;<br>
+      <span class="opt-name">$TBS</span>-&gt;Show();<br>
       <br>
       ?&gt; <br></td>
     <td valign="top" class="opt-html">&lt;html&gt;<br>
@@ -448,12 +448,12 @@ Exemple 1 : <br>
     <td valign="top" class="txt-code">&lt;?<br>
       <br>
       include_once(<span class="opt-value">'tbs_class.php'</span>);<br>
-      <span class="opt-name">$TBS</span> = <strong>new</strong> clsTinyButStrong ;<br>
-      <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>) ;<br>
+      <span class="opt-name">$TBS</span> = <strong>new</strong> clsTinyButStrong;<br>
+      <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>);<br>
       <br>
-      $liste = array(<span class="opt-value">'X'</span>,<span class="opt-value">'Y'</span>,<span class="opt-value">'Z'</span>) ;<br>
-      <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'blk'</span>,$liste) ; <br>
-      <span class="opt-name">$TBS</span>-&gt;Show() ;<br>
+      $liste = array(<span class="opt-value">'X'</span>,<span class="opt-value">'Y'</span>,<span class="opt-value">'Z'</span>);<br>
+      <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'blk'</span>,$liste); <br>
+      <span class="opt-name">$TBS</span>-&gt;Show();<br>
       <br>
       ?&gt; <br></td>
     <td valign="top" class="opt-html">&lt;table&gt;<br>
@@ -465,16 +465,16 @@ Exemple 1 : <br>
 </table>
 <a name="php_side"></a><h2>Coté PHP :</h2>
 Le pilotage de la fusion d'un modèle se fait dans un programme PHP en utilisant une variable objet déclaré à partir de la classe <span class="opt-html">clsTinyButStrong</span>.<br>
-Exemple de déclaration : <span class="txt-code"><span class="opt-name">$TBS</span> = <strong>new</strong> clsTinyButStrong ;</span> <br>
+Exemple de déclaration : <span class="txt-code"><span class="opt-name">$TBS</span> = <strong>new</strong> clsTinyButStrong;</span> <br>
 Cet objet vous permet de charger un modèle, piloter sa fusion avec des données, puis afficher le résultat.<br>
 <br>
 Exemple de code PHP :<br>
 <br>
 <div class=" txt-code decal"> include_once(<span class="opt-value">'tbs_class.php'</span>);<br>
-  <span class="opt-name">$TBS</span> = <strong>new</strong> clsTinyButStrong ;<br>
-  <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>) ;<br>
-  <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'ctry','mysql','SELECT * FROM t_coutry'</span>) ;<br>
-  <span class="opt-name">$TBS</span>-&gt;Show() ; </div>
+  <span class="opt-name">$TBS</span> = <strong>new</strong> clsTinyButStrong;<br>
+  <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>);<br>
+  <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'ctry','mysql','SELECT * FROM t_coutry'</span>);<br>
+  <span class="opt-name">$TBS</span>-&gt;Show(); </div>
 <br>
 Voici la liste des propriétés et méthodes d'un objet TinyButStrong :
 <h3><a name="php_loadtemplate" id="php_loadtemplate"></a>Méthode LoadTemplate() :</h3>
@@ -1391,13 +1391,11 @@ Le plus souvent il s'agit d'une ligne d'un tableau HTML. La syntaxe des blocs TB
       <td align="left" valign="top" class="border-sep"><a name="html_field_prm_atttrue" id="html_field_prm_ifempty4"></a><span class="opt-name">atttrue</span><br>
         <span class="txt-small">or</span><br>
         <span class="opt-name">atttrue</span>=<span class="opt-value">valeur</span></td>
-      <td align="left" valign="top" class="border-sep">S'utilise avec la param&egrave;tre<span class="opt-name"> att</span>. Indique that the attribute must be managed as a boolan XHTML/HTML attribute. I.e. it can be only <span class="opt-html">attribute=&quot;attribute&quot;</span> in order to mean true, or be omitted in order to means false.<br>
-        If <span class="opt-name">atttrue</span> is set with  a given <span class="opt-value">value</span>, then the boolean attribute
-        will be present if the field's value is equal to the <span class="opt-name">attrue</span>'s value, otherwise it will be omitted.<br>
-        If <span class="opt-name">atttrue</span> is set with no value, then the boolean attribute
-        will be omitted only if the field's value is empty, otherwise the attribute it will be present. <br>
-        Examples:
-        <div class="decal"><span class="opt-html">&lt;input type=&quot;checkbox&quot;&gt;</span>[<span class="opt-name">onshow.accept</span>;<span class="opt-name">att</span>=<span class="opt-value">selected</span>;<span class="opt-name">atttrue</span>=<span class="opt-value">1</span>]</div>
+      <td align="left" valign="top" class="border-sep">S'utilise avec la param&egrave;tre<span class="opt-name"> att</span>. Indique que l'attribut (d&eacute;sign&eacute; par la param&egrave;tre <span class="opt-name">att</span>) doit &ecirc;tre g&eacute;r&eacute; en tant qu'attribut  bool&eacute;en XHTML/HTML. C'est &agrave; dire qu'il est soit pr&eacute;sent dans la balise sous la forme  <span class="opt-html">attribute=&quot;attribute&quot;</span> pour dire <em>VRAI</em>, soit &ecirc;tre omis dans la balise pour dire <em>FAUX</em>.<br>
+        Si <span class="opt-name">atttrue</span> est d&eacute;fini avec une <span class="opt-value">valeur</span>, alors l'attribut bool&eacute;en sera <em>VRAI</em> (<em>pr&eacute;sent</em>) si la valeur du champ est &eacute;gale &agrave; cette <span class="opt-value">valeur</span>, sinon il sera <em>FAUX</em> (<em>omis</em>).<br>
+Si <span class="opt-name">atttrue</span> est d&eacute;fini sans valeur, alors l'attribut bool&eacute;en sera <em>VRAI</em> (<em>pr&eacute;sent</em>) pour toute valeur du champ non vide, et sera <em>FAUX</em> (<em>omis</em>) si la valeur du champ est vide.<br>
+Exemple :
+<div class="decal"><span class="opt-html">&lt;input type=&quot;checkbox&quot;&gt;</span>[<span class="opt-name">onshow.accepter</span>;<span class="opt-name">att</span>=<span class="opt-value">selected</span>;<span class="opt-name">atttrue</span>=<span class="opt-value">1</span>]</div>
         <br>
         <span class="versioning">Historique: Le param&egrave;tre atttrue est support&eacute; depuis TBS version 3.6.0</span></td>
     </tr>
@@ -2005,7 +2003,7 @@ Le plus souvent il s'agit d'une ligne d'un tableau HTML. La syntaxe des blocs TB
   <br>
   <span class="title-1b">Sécurité : comment limiter l'utilisation des champs automatiques dans les modèles ?</span><br>
   <br>
-  Vous pouvez limiter l'utilisation des champs automatiques en définissant un préfixe de variable autorisé lors de la création de l'objet TinyButStrong.<br>
+  Vous pouvez limiter l'utilisation des champs automatiques en définissant un préfixe de variable autorisé, cela se fait  lors de la création de l'instance TinyButStrong.<br>
   <div class="decal">Exemple :<br>
     <span class="txt-code"><span class="opt-name">&nbsp;&nbsp;$TBS</span> = new clsTinyButStrong(<span class="opt-value">''</span>,<span class="opt-value">'x1_'</span>);</span><br>
     Dans cet exemple, seules les variables Php globales préfixées par <span class="opt-value">'x1_'</span> sont autorisées dans le modèle. Les autres champs automatiques produiront un message d'erreur explicite au moment de leur fusion.<br>
@@ -2016,7 +2014,7 @@ Le plus souvent il s'agit d'une ligne d'un tableau HTML. La syntaxe des blocs TB
   <span class="title-1b"><br>
   Emp&ecirc;cher le traitement des champs automatiques [onload] et [onshow]</span><br>
   <br>
-  Les prori&eacute;t&eacute;s <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnLoad</span> et <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnShow</span> vous permettent d'annuler le traitement des champs  [onload] et [onshow], mais pas des champs [var]. Elles acceptent uniquement les valeurs  <span class="opt-value">true</span> et <span class="opt-value">false</span>. Cela peut &ecirc;tre tr&egrave;s pratique principalement, mais pas uniquement, pour certains plug-ins TBS.<br>
+  Les propri&eacute;t&eacute;s <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnLoad</span> et <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnShow</span> vous permettent d'annuler le traitement des champs  [onload] et [onshow]. Ces propri&eacute;t&eacute;s acceptent uniquement les valeurs  <span class="opt-value">true</span> et <span class="opt-value">false</span>. Cela peut &ecirc;tre tr&egrave;s pratique principalement, mais pas uniquement, pour certains plug-ins TBS. Les champs [var] sont trait&eacute;s automatiquement m&ecirc;me si <span class="txt-code">$TBS-&gt;OnShow = false</span>.<br>
 Exemple :<br>
 &nbsp;&nbsp;<span class="txt-code"><span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnShow</span> = false;</span><br>
 <span class="versioning">Les propri&eacute;t&eacute;s OnLoad et OnShow sont support&eacute;es depuis  TBS version 3.6.0.</span><br>
@@ -2722,6 +2720,22 @@ Exemple :<br>
             </tr>
             <tr>
               <td width="190" class="border-1">IT</td>
+            </tr>
+          </table></td>
+      </tr>
+    </table>
+  </div>
+  <br>
+  <span class="title-1b">Avoir une colonne optionnelle :</span> Si vous ne voulez pas de message d'erreur quand la colonne est omise dans les donn&eacute;es parent, alors vous pouvez la d&eacute;finir comme optionnelle en utilisant des parenth&egrave;ses. Cela fonctionne uniquement si les donn&eacute;es parent est un tableau PHP. <span class="versioning">La colonne optionnelle est support&eacute;e depuis TBS version 3.6.0.</span><br>
+  <br>
+  <div class="decal">Exemple :<br>
+    <br>
+    <table width="400" cellpadding="2" cellspacing="0" class="border-2">
+      <tr>
+        <td class="border-2"><font color="#336699">Nom :</font> [pers.nom;block=tr;sub1=(langue)]<br>
+          <table cellpadding="1" cellspacing="0" class="border-1">
+            <tr>
+              <td width="200" class="border-1">[pers_sub1.val;block=tr]</td>
             </tr>
           </table></td>
       </tr>

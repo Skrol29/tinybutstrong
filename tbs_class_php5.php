@@ -4,7 +4,7 @@
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
 Version  : 3.6.0 for PHP 5
-Date     : 2010-07-30
+Date     : 2010-09-14
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -513,7 +513,7 @@ public $_PlugIns = array();
 public $_PlugIns_Ok = false;
 public $_piOnFrm_Ok = false;
 
-function clsTinyButStrong($Chrs='',$VarPrefix='',$FctPrefix='') {
+function __construct($Chrs='',$VarPrefix='',$FctPrefix='') {
 	if ($Chrs!=='') {
 		$Ok = false;
 		$Len = strlen($Chrs);
@@ -2245,8 +2245,23 @@ function meth_Merge_SectionNormal(&$BDef,&$Src) {
 			$name = $BDef->Name.'_sub'.$i;
 			$query = '';
 			$col = $BDef->Prm['sub'.$i];
-			if (is_object($Src->CurrRec)) $data = &$Src->CurrRec->$col; else $data = &$Src->CurrRec[$col];
-			if (is_string($data)) $data = explode(',',$data);
+			$col_opt = (substr($col,0,1)==='(') && (substr($col,-1,1)===')');
+			if ($col_opt) $col = substr($col,2,strlen($col)-2);
+			if (is_object($Src->CurrRec)) {
+				$data = &$Src->CurrRec->$col;
+			} else {
+				if (array_key_exists($col, $Src->CurrRec)) {
+					$data = &$Src->CurrRec[$col];
+				} else {
+					if (!$col_opt) $this->meth_Misc_Alert('for merging the automatic sub-block ['.$name.']','key \''.$col.'\' is not found in record #'.$Src->RecNum.' of block ['.$BDef->Name.']. This key can becomes optional if you designate it with parenthesis in the main block, i.e.: sub'.$i.'=('.$col.')');
+					unset($data); $data = array();
+				}
+			}
+			if (is_string($data)) {
+				$data = explode(',',$data);
+			} elseif (is_null($data) || ($data===false)) {
+				$data = array();
+			}
 			$this->meth_Merge_Block($Txt, $name, $data, $query, false, 0);
 		}
 	}
@@ -2413,7 +2428,7 @@ function meth_Misc_Alert($Src,$Msg,$NoErrMsg=false,$SrcType=false) {
 		if ($SrcType===false) $SrcType='in field';
 		$Src = $SrcType.' '.$this->_ChrOpen.$Src->FullName.'...'.$this->_ChrClose;
 	}
-	$x = $t[0].'TinyButStrong Error'.$t[1].' '.$Src.' : '.$Msg;
+	$x = $t[0].'TinyButStrong Error'.$t[1].' '.$Src.': '.$Msg;
 	if ($NoErrMsg) $x = $x.' '.$t[2].'This message can be cancelled using parameter \'noerr\'.'.$t[3];
 	$x = $x.$t[4]."\n";
 	if ($this->NoErr) {
