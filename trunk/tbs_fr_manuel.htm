@@ -163,7 +163,7 @@ a.opt-name:hover {
       </table></td>
     <td width="34%" align="center"><div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div>
       <h1>TinyButStrong</h1>
-      <div class="txt-tiny">version 3.5</div>
+      <div class="txt-tiny">version 3.6</div>
       <div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div></td>
     <td width="33%" align="right" valign="top" class="txt-small">&nbsp;</td>
   </tr>
@@ -210,6 +210,10 @@ a.opt-name:hover {
     <tr>
       <td>&nbsp;&nbsp;&nbsp;&nbsp;&#8226; Pour commencer</td>
       <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_instanciate">cr&eacute;e un nouvel object TBS</a></td>
+      <td> pour travailler avec des mod&egrave;les</td>
     </tr>
     <tr>
       <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_loadtemplate"><span class="txt-small">méthode</span> LoadTemplate()</a></td>
@@ -476,7 +480,40 @@ Exemple de code PHP :<br>
   <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'ctry','mysql','SELECT * FROM t_coutry'</span>);<br>
   <span class="opt-name">$TBS</span>-&gt;Show(); </div>
 <br>
-Voici la liste des propriétés et méthodes d'un objet TinyButStrong :
+Voici la description d'un objet TinyButStrong :
+<h3><a name="php_instanciate" id="php_instanciate"></a>cr&eacute;er un nouvel object TBS :</h3>
+<div class="norm"> A TBS object is created as a new instance of the clsTinyButStrong class. A TBS object enables you to work with one or several templates using its methods and properties.<br>
+  <br>
+  Syntax to create a new TBS object: <span class="txt-code"><span class="opt-name">$TBS</span> = new clsTinyButStrong({<span class="opt-type">string</span> <span class="opt-name">TagDelim</span> {, <span class="opt-type">string</span><span class="opt-name"> VarPrefix</span> {, <span class="opt-type">string </span><span class="opt-name">FctPrefix</span>}}});</span><br>
+  <br>
+  <table border="0" cellpadding="5" cellspacing="0">
+    <tr class="title-1b">
+      <td width="80" align="left" valign="top">Argument</td>
+      <td align="left" valign="top">Description</td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" class="opt-name">TagDelim</td>
+      <td align="left" valign="top">Define the couple of delimiters for TBS tags in templates. The default value is <span class="opt-value">''</span> (empty string) which means the default TBS delimiters.<br>
+        It's recommended to let the default TBS delimiters, while changing them is working well. Default TBS delimiters are <span class="opt-value">[</span> and <span class="opt-value">]</span> because they are available quite anywhere in  XML/HTML documents and they are found faster than  delimiters <span class="opt-value">{</span> / <span class="opt-value">}</span> or <span class="opt-value">(</span> / <span class="opt-value">)</span> since they are  rarer, especially in HTML.<br>
+        Example: if you want to have the delimiters to be <span class="opt-value">{{</span> and <span class="opt-value">}}</span> for TBS fields, then set <span class="opt-name">TagDelim</span> to the value <span class="opt-value">'{{,}}'</span>. Such a TBS field could be <span class="opt-html">{{var.x}}</span> instead of <span class="opt-html">[var.x]</span>.</td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" class="opt-name">VarPrefix</td>
+      <td align="left" valign="top">Limit the usage of <a href="#html_field_auto">automatic fields</a> ([onload] [onshow] and [var])  in templates. TBS  will display  global PHP variables only if they have the <span class="opt-name">VarPrefix</span> prefix. Otherwise it will display an error message. The default value is <span class="opt-value">''</span> (empty string) which means no limitation.</td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" class="opt-name">FctPrefix</td>
+      <td align="left" valign="top">Limit the usage of custom PHP functions (relative to parameters <a href="#html_field_prm_onformat" class="opt-name">onformat</a> and <a href="#html_block_prm_ondata" class="opt-name">ondata</a>) in templates. TBS  will call   PHP function only if they have the <span class="opt-name">FctPrefix </span>prefix. Otherwise it will display an error message. The default value is <span class="opt-value">''</span> (empty string) which means no limitation.<br>
+        <span class="versioning">This argument is supported since TBS version 3.6.0.</span></td>
+    </tr>
+  </table>
+  <br>
+  Examples:
+  <div class="decal txt-code"><span class="opt-name">$TBS1</span> = new clsTinyButStrong; <span class="opt-html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// default behavior</span><br>
+    <span class="opt-name">$TBS2</span> = new clsTinyButStrong(<span class="opt-value">'{{,}}'</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="opt-html">// TBS tags will be like {{var.x}} instead of [var.x]</span><br>
+    <span class="opt-name">$TBS3</span> = new clsTinyButStrong(<span class="opt-value">''</span>, <span class="opt-value">'tbs_var_'</span>);<span class="opt-html"> &nbsp;&nbsp;&nbsp;// TBS will display only PHP global variables beginning with tbs_var_</span><br>
+    <span class="opt-name">$TBS4</span> = new clsTinyButStrong(<span class="opt-value">''</span>, <span class="opt-value">''</span>, <span class="opt-value">'tbs_fct_'</span>);<span class="opt-html">// TBS will call only PHP function beginning with tbs_fct_</span></div>
+</div>
 <h3><a name="php_loadtemplate" id="php_loadtemplate"></a>Méthode LoadTemplate() :</h3>
 <div class="norm">Charge un modèle en vue de son traitement pour la fusion.<br>
   Le contenu complet du fichier est enregistré dans la propriété <a href="#php_source">Source</a> de l'objet TinyButStrong, puis les <a href="#html_field_auto">champs</a> et <a href="#html_block_auto">blocs</a> [onload] sont fusionn&eacute;s.<br>
@@ -1632,7 +1669,8 @@ Exemple :
               Utilisez cet argument avec prudence. Il est fournit pour le mode Sous-mod&egrave;le.</td>
           </tr>
         </table>
-        <span id="v202_subtpl_onformat">Voir le paragraphe  '<a href="#html_subtemplate">Sous-mod&egrave;les</a>' pour plus de d&eacute;tails sur l'utilisation de ces arguments en mode sous-mod&egrave;le.</span></td>
+        <span id="v202_subtpl_onformat">Voir le paragraphe  '<a href="#html_subtemplate">Sous-mod&egrave;les</a>' pour plus de d&eacute;tails sur l'utilisation de ces arguments en mode sous-mod&egrave;le.<br>
+        Depuis  TBS version 3.6.0, il est possible de limiter les fonctions PHP autoris&eacute;es pour le param&egrave;tre <span class="opt-name">onformat</span>. Voir <a href="#php_instanciate">cr&eacute;er un nouvel objet PHP</a>.        </span></td>
     </tr>
     <tr>
       <td align="left" valign="top" class="border-sep"><span class="opt-name"><span class="opt-value"><a name="html_field_prm_protect" id="html_field_prm_protect"></a></span>protect</span>=<span class="opt-value">val</span></td>
@@ -2003,14 +2041,7 @@ Exemple :
   <br>
   <span class="title-1b">Sécurité : comment limiter l'utilisation des champs automatiques dans les modèles ?</span><br>
   <br>
-  Vous pouvez limiter l'utilisation des champs automatiques en définissant un préfixe de variable autorisé, cela se fait  lors de la création de l'instance TinyButStrong.<br>
-  <div class="decal">Exemple :<br>
-    <span class="txt-code"><span class="opt-name">&nbsp;&nbsp;$TBS</span> = new clsTinyButStrong(<span class="opt-value">''</span>,<span class="opt-value">'x1_'</span>);</span><br>
-    Dans cet exemple, seules les variables Php globales préfixées par <span class="opt-value">'x1_'</span> sont autorisées dans le modèle. Les autres champs automatiques produiront un message d'erreur explicite au moment de leur fusion.<br>
-    &nbsp;&nbsp;[<span class="opt-name">onload</span>.x1_title] sera fusionné si la variable globale <span class="opt-name">$x1_title</span> existe. <br>
-    &nbsp;&nbsp;[<span class="opt-name">onload</span>.x2_title] produira un message d'erreur explicite.<br>
-    <br>
-    NB: le premier paramètre <span class="opt-value">''</span> de clsTinyButStrong() dans cet exemple est utilisé pour définir les délimiteurs de balises TBS. Mais cela n'est pas décrit dans ce manuel.</div>
+  Vous pouvez limiter l'utilisation des champs automatiques en définissant un préfixe pour les variables PHP autorisées. Pour les d&eacute;tails, voir <a href="#php_instanciate">cr&eacute;er un nouvel objet TBS</a>.<br>
   <span class="title-1b"><br>
   Emp&ecirc;cher le traitement des champs automatiques [onload] et [onshow]</span><br>
   <br>
@@ -2325,7 +2356,9 @@ Exemple :<br>
         <span class="title-1b">Exemples :</span>
         <div class="decal txt-code"> function f_ajout_colonne(<span class="opt-name">$NomBloc</span>,<span class="opt-name">&amp;$Enreg</span>,<span class="opt-name">$NumEnreg</span>) {<br>
           &nbsp;&nbsp;<span class="opt-name">$</span><span class="opt-name">Enreg</span>[<span class="opt-value">'taille'</span>] = strlen(<span class="opt-name">$</span><span class="opt-name">Enreg</span>[<span class="opt-value">'texte'</span>]); <br>
-          } </div></td>
+          } </div>
+        <br>
+        Depuis  TBS version 3.6.0, il est possible de limiter les fonctions PHP autoris&eacute;es pour le param&egrave;tre <span class="opt-name">ondata</span>. Voir <a href="#php_instanciate">cr&eacute;er un nouvel objet PHP</a>.</td>
     </tr>
     <tr>
       <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_when" id="html_block_prm_when"></a>when</span> <span class="opt-value">expr1</span><span class="opt-name">=</span><span class="opt-value">expr2</span></td>
@@ -3316,6 +3349,10 @@ Dans le deux cas, un  plug-in se pr&eacute;sente sous la forme d'un jeu de fonct
     <tr>
       <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">attadd</a></td>
       <td align="left" valign="top">S'utilise avec <span class="opt-name">att</span>. Indique que la valeur fusionn&eacute;e doit &ecirc;tre ajout&eacute;e &agrave; la valeur de l'attribut.</td>
+    </tr>
+    <tr>
+      <td align="left" valign="top"><a href="#html_field_prm_atttrue" class="opt-name">atttrue</a></td>
+      <td align="left" valign="top">S'utilise  with <span class="opt-name">att</span>. Indique que l'attribut cible doit &ecirc;tre g&eacute;r&eacute; comme un attribut bool&eacute;en.</td>
     </tr>
     <tr>
       <td align="left" valign="top"><a href="#html_field_prm_magnet" class="opt-name">magnet</a></td>
