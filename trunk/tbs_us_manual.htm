@@ -158,7 +158,7 @@ a.opt-name:hover {
         </tr>
         <tr class="txt-tiny">
           <td>Date:</td>
-          <td>2010-09-13</td>
+          <td>2010-09-14</td>
         </tr>
       </table></td>
     <td width="34%" align="center">
@@ -211,6 +211,10 @@ a.opt-name:hover {
     <tr>
       <td>&nbsp;&nbsp;&nbsp;&nbsp;&#8226; To begin</td>
       <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_instanciate"><span class="txt-small">instanciate</span> clsTinyButStrong()</a></td>
+      <td>create a new TBS instance for working with templates</td>
     </tr>
     <tr>
       <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_loadtemplate"><span class="txt-small">method</span> LoadTemplate()</a></td>
@@ -395,7 +399,7 @@ You use an object TBS variable to manage the merge of your template with the dat
     <td>2.</td>
     <td>At the beginning of your PHP program, add the lines:<br>
       <span class="txt-code">&nbsp;&nbsp;include_once(<span class="opt-value">'tbs_class.php'</span>);</span><br>
-      <span class="txt-code"><span class="opt-name">&nbsp;&nbsp;$TBS</span> =&amp; <strong>new</strong> clsTinyButStrong ;</span> <br>
+      <span class="txt-code"><span class="opt-name">&nbsp;&nbsp;$TBS</span> =&amp; <strong>new</strong> clsTinyButStrong;</span> <br>
       <span class="txt-small">Remark: if the TBS file tbs_class.php is in a different directory than your application, then you have to precise the directory in front of the TBS file name.</span></td>
   </tr>
 </table>
@@ -420,11 +424,11 @@ Example 1: <br>
     <td valign="top" class="txt-code">&lt;?<br>
       <br>
       include_once(<span class="opt-value">'tbs_class.php'</span>);<br>
-      <span class="opt-name">$TBS</span> =&amp; <strong>new</strong> clsTinyButStrong ;<br>
-      <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>) ;<br>
+      <span class="opt-name">$TBS</span> =&amp; <strong>new</strong> clsTinyButStrong;<br>
+      <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>);<br>
       <br>
-      $message = <span class="opt-value">'Hello'</span> ;<br>
-      <span class="opt-name">$TBS</span>-&gt;Show() ;<br>
+      $message = <span class="opt-value">'Hello'</span>;<br>
+      <span class="opt-name">$TBS</span>-&gt;Show();<br>
       <br>
       ?&gt; <br></td>
     <td valign="top" class="opt-html">&lt;html&gt;<br>
@@ -449,12 +453,12 @@ Example 2:<br>
     <td valign="top" class="txt-code">&lt;?<br>
       <br>
       include_once(<span class="opt-value">'tbs_class.php'</span>);<br>
-      <span class="opt-name">$TBS</span> =&amp; <strong>new</strong> clsTinyButStrong ;<br>
-      <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>) ;<br>
+      <span class="opt-name">$TBS</span> =&amp; <strong>new</strong> clsTinyButStrong;<br>
+      <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>);<br>
       <br>
-      $list = array(<span class="opt-value">'X'</span>,<span class="opt-value">'Y'</span>,<span class="opt-value">'Z'</span>) ;<br>
-      <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'blk'</span>,$list) ; <br>
-      <span class="opt-name">$TBS</span>-&gt;Show() ;<br>
+      $list = array(<span class="opt-value">'X'</span>,<span class="opt-value">'Y'</span>,<span class="opt-value">'Z'</span>);<br>
+      <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'blk'</span>, $list); <br>
+      <span class="opt-name">$TBS</span>-&gt;Show();<br>
       <br>
       ?&gt; <br></td>
     <td valign="top" class="opt-html">&lt;table&gt;<br>
@@ -466,18 +470,43 @@ Example 2:<br>
 </table>
 <a name="php_side"></a><h2>PHP side:</h2>
 The merging of a template is done in a PHP program using an object variable declared as a <span class="opt-html">clsTinyButStrong</span> class.<br>
-Example of statement: <span class="txt-code"><span class="opt-name">$TBS</span> = <strong>new</strong> clsTinyButStrong ;</span> <br>
+Example of statement: <span class="txt-code"><span class="opt-name">$TBS</span> = <strong>new</strong> clsTinyButStrong;</span> <br>
 This object allows you to load a template, to handle the merging of it with data, and then to show the result.<br>
 <br>
 Example of PHP code:<br>
 <br>
 <div class="txt-code decal">include_once(<span class="opt-value">'tbs_class.php'</span>);<br>
-  <span class="opt-name">$TBS</span> =&amp; <strong>new</strong> clsTinyButStrong ;<br>
+  <span class="opt-name">$TBS</span> =&amp; <strong>new</strong> clsTinyButStrong;<br>
   <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>) ;<br>
-  <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'ctry','mysql','SELECT * FROM t_country'</span>) ;<br>
-  <span class="opt-name">$TBS</span>-&gt;Show() ; </div>
+  <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'ctry','mysql','SELECT * FROM t_country'</span>);<br>
+  <span class="opt-name">$TBS</span>-&gt;Show(); </div>
 <br>
 Here is the list of the TinyButStrong object's properties and methods:
+<h3><a name="php_instanciate" id="php_instanciate"></a>instanciate clsTinyButStrong():</h3>
+<div class="norm">
+xxx<br>
+<br>
+Syntax: <span class="txt-code"><span class="opt-name">$TBS</span> = new clsTinyButStrong({<span class="opt-type">string</span> <span class="opt-name">TagDelim</span> {, <span class="opt-type">string</span><span class="opt-name"> VarPrefix</span> {, <span class="opt-type">string </span><span class="opt-name">FctPrefix</span>}}});</span><br>
+<br>
+<table border="0" cellpadding="5" cellspacing="0">
+  <tr class="title-1b">
+    <td width="80" align="left" valign="top">Argument</td>
+    <td align="left" valign="top">Description</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" class="opt-name">TagDelim</td>
+    <td align="left" valign="top">Define the delimiters for TBS tags in templates. The default value is '' which is the same as '[,]'.</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" class="opt-name">VarPrefix</td>
+    <td align="left" valign="top">Limit the usage in templates of automatic fields displaying a PHP global variable. The default value is '' which means no limitation.</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" class="opt-name">FctPrefix</td>
+    <td align="left" valign="top">Limit the usage in templates of PHP functions for parameters on format and ondata. The default value is '' which means no limitation.</td>
+  </tr>
+</table>
+</div>
 <h3><a name="php_loadtemplate" id="php_loadtemplate"></a>method LoadTemplate():</h3>
 <div class="norm">Loads a template for the merging process.<br>
   The complete contents of the file is immediately stored in the <a href="#php_source">Source</a> property of the TBS object, then [onload] <a href="#html_field_auto">fields</a> and <a href="#html_block_auto">blocks</a> are merged.<br>
@@ -1388,11 +1417,11 @@ Most often, it is the row of an HTML table. The syntax for TBS Blocks is describ
     <tr>
       <td align="left" valign="top" class="border-sep"><a name="html_field_prm_atttrue" id="html_field_prm_ifempty4"></a><span class="opt-name">atttrue</span><br>
         <span class="txt-small">or</span><br>        <span class="opt-name">atttrue</span>=<span class="opt-value">value</span></td>
-      <td align="left" valign="top" class="border-sep">To be used with parameter<span class="opt-name"> att</span>. Indicates that the attribute must be managed as a boolan XHTML/HTML attribute. I.e. it can be only <span class="opt-html">attribute=&quot;attribute&quot;</span> in order to mean true, or be omitted in order to means false.<br>
+      <td align="left" valign="top" class="border-sep">To be used with parameter<span class="opt-name"> att</span>. Indicates that the attribute (indicated with parameter <span class="opt-name">att</span>) must be managed as a boolan XHTML/HTML attribute. I.e. it is either present in the tag with the format <span class="opt-html">attribute=&quot;attribute&quot;</span> in order to mean <em>TRUE</em>, or ommited in the tag in order to mean <em>FALSE</em>.<br>
         If <span class="opt-name">atttrue</span> is set with  a given <span class="opt-value">value</span>, then the boolean attribute
-        will be present if the field's value is equal to the <span class="opt-name">attrue</span>'s value, otherwise it will be omitted.<br>
+        will be <em>TRUE</em> (<em>present</em>) if the field is equal to this <span class="opt-value">value</span>, otherwise  it will be <em>FALSE</em> (<em>omitted</em>).<br>
         If <span class="opt-name">atttrue</span> is set with no value, then the boolean attribute
-        will be omitted only if the field's value is empty, otherwise the attribute it will be present. <br>
+        will be <em>TRUE</em> (<em>present</em>) if the field's value is non empty, and it will be  <em>FALSE</em> (<em>omitted</em>) if the field's value is empty. <br>
         Examples:
         <div class="decal"><span class="opt-html">&lt;input type=&quot;checkbox&quot;&gt;</span>[<span class="opt-name">onshow.accept</span>;<span class="opt-name">att</span>=<span class="opt-value">selected</span>;<span class="opt-name">atttrue</span>=<span class="opt-value">1</span>]</div>
         <br>
@@ -2000,20 +2029,30 @@ Most often, it is the row of an HTML table. The syntax for TBS Blocks is describ
   <br>
   <span class="title-1b">Security: how to limit automatic fields usage in templates?</span><br>
   <br>
-  You can limit the automatic fields usage by defining an Allowed Variable Prefix when you create the TinyButStrong object.<br>
-  <div class="decal">Example :<br>
-    <span class="txt-code"><span class="opt-name">&nbsp;&nbsp;$TBS</span> = new clsTinyButStrong(<span class="opt-value">''</span>,<span class="opt-value">'x1_'</span>);</span><br>
+  You can limit the automatic fields usage by defining an Allowed Variable Prefix, this is done when  the TinyButStrong  instance is created.<br>
+  <div class="decal">Example:<br>
+    <span class="txt-code"><span class="opt-name">&nbsp;&nbsp;$TBS</span> = new clsTinyButStrong(<span class="opt-value">''</span>, <span class="opt-value">'x1_'</span>);</span><br>
     In this example, only PHP global variables prefixed by <span class="opt-value">'x1_'</span> are allowed in the template. Other automatic fields will produce an explicit error message when merged.<br>
     &nbsp;&nbsp;[<span class="opt-name">onload</span>.x1_title] will be merged if the global variable <span class="opt-name">$x1_title</span> exists. <br>
     &nbsp;&nbsp;[<span class="opt-name">onload</span>.x2_title] will produce an explicit error message.<br>
     <br>
-    NB: the first parameter <span class="opt-value">''</span> of clsTinyButStrong() in the example above is used to define TBS tag delimiters. But this is not described in this manual. <br>
-  </div>
+    NB: the first parameter <span class="opt-value">''</span> of clsTinyButStrong() in the example above is used to define TBS tag delimiters. But this is not described in this manual. </div>
   <br>
-  <span class="title-1b">Prevent from processing automatic fields [onload] and [onshow]</span><br>
+  <span class="title-1b">Security: how to limit available custom PHP functions in the template?</span><br>
   <br>
-  Properties <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnLoad</span> and <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnShow</span> enable you to cancel the processing of [onload] and [onshow] fields, but not [var] fields. They accept only <span class="opt-value">true</span> of <span class="opt-value">false</span> values. This can be very useful especially, but not only, for some TBS plug-ins.<br>
-Example:<br>
+Parameters <a href="#html_field_prm_onformat" class="opt-name">onformat</a> and <a href="#html_block_prm_ondata" class="opt-name">ondata</a> can be used in the template, they  are supposed to call a custom user  function with a very specific syntax. Even if using other type of functions for those parameters cannot produce a valuable result, this can be a security problem in a work organization where the coder allows other people to edit the template. You have the possibility to limit the custom function usage by defining an allowed function prefix, this is done when  the TinyButStrong  instance is created.<br>
+<div class="decal">Example:<br>
+  <span class="txt-code"><span class="opt-name">&nbsp;&nbsp;$TBS</span> = new clsTinyButStrong(<span class="opt-value">''</span>, '', <span class="opt-value">'cf_'</span>);</span><br>
+  In this example, only PHP global variables prefixed by <span class="opt-value">'x1_'</span> are allowed in the template. Other automatic fields will produce an explicit error message when merged.<br>
+  &nbsp;&nbsp;[<span class="opt-name">onload</span>.x1_title] will be merged if the global variable <span class="opt-name">$x1_title</span> exists. <br>
+  &nbsp;&nbsp;[<span class="opt-name">onload</span>.x2_title] will produce an explicit error message.<br>
+  <br>
+  NB: the first parameter <span class="opt-value">''</span> of clsTinyButStrong() in the example above is used to define TBS tag delimiters. But this is not described in this manual. </div>
+<br>
+<span class="title-1b">Prevent from processing automatic fields [onload] and [onshow]</span><br>
+  <br>
+  Properties <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnLoad</span> and <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnShow</span> enable you to cancel the processing of [onload] and [onshow] fields. Those properties accept only <span class="opt-value">true</span> of <span class="opt-value">false</span> values. This can be very useful especially, but not only, for some TBS plug-ins. Note that [var] fields are automatically processed even if  <span class="txt-code">$TBS-&gt;OnShow = false</span>.<br>
+Example: <br>
 &nbsp;&nbsp;<span class="txt-code"><span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnShow</span> = </span><span class="opt-value">false</span><span class="txt-code">;</span><br>
   <span class="versioning">Properties 
   OnLoad and OnShow are supported since TBS version 3.6.0.</span><br>
@@ -2614,7 +2653,7 @@ Example:<br>
 <div class="norm"><span class="versioning">Automatic subblock are supported since TBS version 3.5.0.</span><br>
   <br>
   You can use automatic subblocks when the data of the parent block has a column which contains the ready-to-merge subdata for the subblock.  
-  Set parameter <span class="opt-name">sub1</span>=<span class="opt-value">colum</span> in the parent block to define the column which contain the data for the subblock. If you have several subblocks to merge in the same parent block then  use parameters <span class="opt-name">sub2</span>, <span class="opt-name">sub3</span>, ... The name of the subblock must be the same as the parent block followed by the suffix <span class="opt-name">_sub1</span>, (or <span class="opt-name">_sub2</span>, <span class="opt-name">_sub3</span>, ...)<br>
+  Set parameter <span class="opt-name">sub1</span>=<span class="opt-value">column</span> in the parent block to define the column which contain the data for the subblock. If you have several subblocks to merge in the same parent block then  use parameters <span class="opt-name">sub2</span>, <span class="opt-name">sub3</span>, ... The name of the subblock must be the same as the parent block followed by the suffix <span class="opt-name">_sub1</span>, (or <span class="opt-name">_sub2</span>, <span class="opt-name">_sub3</span>, ...)<br>
   <br>
   The data of the parent block must have a column which contains the data of the subblock. Supported data types are:<br>
   - a PHP array<br>
@@ -2674,6 +2713,23 @@ Example:<br>
           </table></td>
       </tr>
     </table>
+  </div>
+  <br>
+  <span class="title-1b">Have the  column optional:</span> If you want no error message when the column is omitted in the parent data, then you can set it optional by using parenthesis. This is working only if the parent data is a PHP array. <span class="versioning">Optional column is supported since TBS version 3.6.0.</span><br>
+  <br>
+  <div class="decal">Example:<br>
+    <br>
+    <table width="400" cellpadding="2" cellspacing="0" class="border-2">
+      <tr>
+        <td class="border-2"><font color="#336699">Name:</font> [body.name;block=tr;sub1=(spokenlg)]<br>
+          <table cellpadding="1" cellspacing="0" class="border-1">
+            <tr>
+              <td width="200" class="border-1">[body_sub1.val;block=tr]</td>
+            </tr>
+          </table></td>
+      </tr>
+    </table>
+    <br>
   </div>
 </div>
 <h3><a name="html_block_dynsb" id="html_block_dynsb"></a>Subblocks with dynamic queries:</h3>

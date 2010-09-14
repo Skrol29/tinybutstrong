@@ -150,6 +150,18 @@ f_test2_onformat : {[mf1;onformat=f_test2_onformat]}
 [var.x_list;ope=list;valsep=,]<br />
 [var.x_list;ope=list;valsep='&bull;']<br />
 [var.x_list2;ope=list;valsep='&bull;']<br />
-[var.x1;ope=list;valsep='&bull;'] <br />
+[var.x1;ope=list;valsep='&bull;'] 
+<h3>Test sub-block with null value</h3>
+<table border="1" cellpadding="1" cellspacing="0">
+  <tr>
+    <td bgcolor="#999999"><strong>Nom</strong></td>
+    <td bgcolor="#999999"><strong>Notes</strong></td>
+  </tr>
+  <tr>
+    <td>[sb.nom;block=tr;sub1=notes]</td>
+    <td><div>[sb_sub1.val;block=div]</div></td>
+  </tr>
+</table>
+<br />
 </body>
 </html>
