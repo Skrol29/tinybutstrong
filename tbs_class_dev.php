@@ -2259,7 +2259,7 @@ function meth_Merge_SectionNormal(&$BDef,&$Src) {
 				if (array_key_exists($col, $Src->CurrRec)) {
 					$data = &$Src->CurrRec[$col];
 				} else {
-					if (!$col_opt) $this->meth_Misc_Alert('for merging the automatic sub-block ['.$name.']','key \''.$col.'\' is not found in record #'.$Src->RecNum.' of block ['.$BDef->Name.']. This key can becomes optional if you designate it with parenthesis in the main block, i.e.: sub'.$i.'=('.$col.')');
+					if (!$col_opt) $this->meth_Misc_Alert('for merging the automatic sub-block ['.$name.']','key \''.$col.'\' is not found in record #'.$Src->RecNum.' of block ['.$BDef->Name.']. This key can become optional if you designate it with parenthesis in the main block, i.e.: sub'.$i.'=('.$col.')');
 					unset($data); $data = array();
 				}
 			}
