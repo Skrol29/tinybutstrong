@@ -3,7 +3,7 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.6.0 RC 2010-09-15 for PHP 4
+Version  : 3.6.0 RC 2010-09-17 for PHP 4
 Date     : 2010-09-14
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
@@ -493,7 +493,7 @@ var $ObjectRef = false;
 var $NoErr = false;
 var $Assigned = array();
 // Undocumented (can change at any version)
-var $Version = '3.6.0 RC 2010-09-15';
+var $Version = '3.6.0 RC 2010-09-17';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -2252,14 +2252,14 @@ function meth_Merge_SectionNormal(&$BDef,&$Src) {
 			$query = '';
 			$col = $BDef->Prm['sub'.$i];
 			$col_opt = (substr($col,0,1)==='(') && (substr($col,-1,1)===')');
-			if ($col_opt) $col = substr($col,2,strlen($col)-2);
+			if ($col_opt) $col = substr($col,1,strlen($col)-2);
 			if (is_object($Src->CurrRec)) {
 				$data = &$Src->CurrRec->$col;
 			} else {
 				if (array_key_exists($col, $Src->CurrRec)) {
 					$data = &$Src->CurrRec[$col];
 				} else {
-					if (!$col_opt) $this->meth_Misc_Alert('for merging the automatic sub-block ['.$name.']','key \''.$col.'\' is not found in record #'.$Src->RecNum.' of block ['.$BDef->Name.']. This key can becomes optional if you designate it with parenthesis in the main block, i.e.: sub'.$i.'=('.$col.')');
+					if (!$col_opt) $this->meth_Misc_Alert('for merging the automatic sub-block ['.$name.']','key \''.$col.'\' is not found in record #'.$Src->RecNum.' of block ['.$BDef->Name.']. This key can become optional if you designate it with parenthesis in the main block, i.e.: sub'.$i.'=('.$col.')');
 					unset($data); $data = array();
 				}
 			}
