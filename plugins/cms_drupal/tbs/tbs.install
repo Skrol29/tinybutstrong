@@ -1,0 +1,33 @@
+<?php
+// $Id$
+
+// Implements hook_install() http://api.drupal.org/api/function/hook_install
+// It is triggered when the module is enbaled for the first time.
+function tbs_install() {
+
+	// Create a ready-to-use Filter Format to be used in the node edition
+	$frm = array('name'=>"Dynamic content with TinyButStrong Template Engine", 'roles'=>'', 'cache'=>0);
+	drupal_write_record('filter_formats', $frm);
+	variable_set('tbs_install_format_id', $frm['format']);
+
+	$flt = array('format'=>$frm['format'], 'module'=>'tbs', 'delta'=>0);
+	drupal_write_record('filters', $flt);
+
+	
+}
+
+// Implements hook_uninstall() http://api.drupal.org/api/function/hook_uninstall
+// It is triggered when the module uninstalled at "Home›Administer›Site building›Modules›Uninstall"
+function tbs_uninstall() {
+
+	// Delete the ready-to-use Filter Format created at the installation
+	
+	$frm_id = variable_get('tbs_install_format_id', false);
+
+	if ($frm_id!==false) {
+		db_query('DELETE FROM {filters} WHERE (format='.$frm_id.')');
+		db_query('DELETE FROM {filter_formats} WHERE (format='.$frm_id.')');
+		variable_del('tbs_install_format_id');
+	}
+		
+}
