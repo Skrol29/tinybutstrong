@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<install version="1.5" type="plugin" group="content">
+  <name>Content - Dynamic Articles with TinyButStrong (TBS)</name>
+  <author>Skrol29</author>
+  <creationDate>December 2009</creationDate>
+  <copyright>(C) 2009 Skrol29. All rights reserved.</copyright>
+  <license>GNU/GPL</license>
+  <authorEmail>http://www.tinybutstrong.com/onlyyou.html</authorEmail>
+  <authorUrl>http://www.tinybutstrong.com</authorUrl>
+  <version>1.2.2</version>
+  <description>Allows to include dynamic content in Joomla articles using the TinyButStrong Template Engine.
+  	Site: http://www.tinybutstrong.com,
+  	<br /> help file: plugins/content/tinybutstrong_help.html</description>
+  <files>
+      <filename plugin="tinybutstrong">tinybutstrong.php</filename>
+      <filename plugin="tinybutstrong">tinybutstrong_comm.php</filename>
+      <filename plugin="tinybutstrong">tinybutstrong_spec.php</filename>
+      <filename plugin="tinybutstrong">tinybutstrong_class_php4.php</filename>
+      <filename plugin="tinybutstrong">tinybutstrong_class_php5.php</filename>
+      <filename plugin="tinybutstrong">tinybutstrong_help.html</filename>
+  </files>
+	<languages>
+	   <language tag="fr-FR">fr-FR.plg_content_tinybutstrong.ini</language>
+	   <language tag="en-GB">en-GB.plg_content_tinybutstrong.ini</language>
+	</languages>
+  <params>
+      <param name="ChrBeg" type="text" default="[" label="Beginning of TBS tags" description="Default value is '['. TBS tags are different from plugin tags which are defined with {tbs} and {/tbs}." />
+      <param name="ChrEnd" type="text" default="]" label="End of TBS tags" description="Default value is ']'. TBS tags are different from plugin tags which are defined with {tbs} and {/tbs}." />
+      <param name="VarPrefix" type="text" default="" label="Allowed prefix for PHP global variables" description="Default value is empty ('') which means all variables. You can limit the usage of PHP global variables in articles by setting a prefix for allowed variables." />
+      <param name="AllowedIds" type="text" default="" label="Allowed articles" description="Default value is empty ('') which mean none. Enter one or several id of articles allowed to use plugin tags, separated them with comas (,). An error is prompted if a non-allowed article contains a plugin tag such as {tbs}. Set this parameter to limit the articles that Joomla authors can use plugin tags with. You can use '*' to allow all articles, but use this value carefully because if option Direct MergeBlock is also allowed then any Joomla author will be able to display the Joomla database." />
+      <param name="MergeBlock" type="list" default="select" label="Direct MergeBlock" description="Allow plugin tags such as {tbs}mergeblock=...,sql=...,db=...{/tbs}.">
+      	<option value="no">Forbidden</option>
+      	<option value="select">Only SELECT queries</option>
+      	<option value="all">All query types and stored procedures</option>
+      </param>
+      <param name="Script" type="list" default="loc" label="External scripts" description="Allow plugin tags such as {tbs}script=...{/tbs}.">
+      	<option value="no">Forbidden</option>
+      	<option value="loc">Only from the Script location</option>
+      	<option value="all">All external scripts</option>
+      </param>
+      <param name="ScriptPath" type="text" default="" label="Script location" description="This is the path (relative or absolute) where scripts specified in plugin tags can be stored." />
+      <param name="Embedded" type="list" default="no" label="Embedded scripts" description="Allow plugin tags such as {tbs}embedded{/tbs}. Please note that those tags allow to run PHP scripts which is embedded inside an article.">
+      	<option value="no">Forbidden</option>
+      	<option value="all">Allowed</option>
+      </param>
+      <param name="FullRightsIds" type="text" default="" label="Full rights articles" description="Default value is empty. Ids of articles which are allowed to use all plugin tags with all permissions. You can seperate Ids with a coma (,). You can use '*' to allow all articles. You can use this parameter to let Admin users to use plugin tags for their own articles." />
+  </params>
+</install>

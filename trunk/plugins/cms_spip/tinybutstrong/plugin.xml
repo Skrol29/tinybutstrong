@@ -1,0 +1,18 @@
+<plugin>
+ <nom>Dynamic Articles with TinyButStrong (TBS)</nom>
+ <version>1.0.4</version>
+ <prefix>tbs</prefix>
+ <etat>stable</etat>
+ <auteur>Skrol29</auteur>
+ <description>This plugin allows to include dynamic content in SPIP articles using the TinyButStrong Template Engine<br />
+  &bull; [TBS website->http://www.tinybutstrong.com]<br />
+  &bull; [Online documentation->http://www.tinybutstrong.com/plugins/spip/tinybutstrong_help.html]<br />
+  &bull; Local documentation: [manual install->../plugins/tinybutstrong/tinybutstrong_help.html] or [auto install->../plugins/auto/tinybutstrong/tinybutstrong_help.html]<br />
+ </description>
+ <icon>tbs_logo.gif</icon>
+ <pipeline>
+  <nom>affichage_final</nom>
+  <inclure>tinybutstrong.php</inclure>
+  <action>plugin_run</action>
+ </pipeline>
+</plugin>
