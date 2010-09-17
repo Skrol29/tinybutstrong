@@ -1,0 +1,6 @@
+; $Id$
+name = TinyButStrong
+description = Dynamic Content
+package = TinyButStrong
+version = 0.01b
+core = 6.x

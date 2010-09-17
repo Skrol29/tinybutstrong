@@ -1,0 +1,185 @@
+<?php
+// $Id$
+
+/*
+1) Home›Administer›Site building›Modules => enable "Dynamic pages with TinyButStrong"
+2) Home›Administer›Site configuration›Input Formats => Add 
+
+*/
+
+function tbs_help($path, $arg) {
+// tahe care: this function is alos called for any other module help	
+  switch ($path) { 
+  case 'admin/help#tbs': // Called by the main inline help Home›Administer›Help.
+    return '<p>This is the inline help for TinyButStrong.</p><a href="http://www.tinybutstrong.com">TinyButStrong web site</a></br>';
+  case 'admin/help/tbs': // (also display in header of the main help)
+    return 'Other help for TinyButStrong';
+  }
+}
+
+// Implements hook_filter() http://api.drupal.org/api/function/hook_filter
+function tbs_filter($op, $delta = 0, $format = -1, $text = '', $cache_id  = 0) {
+  switch ($op) {
+  case 'list':
+  	return array(0=> t('Dynamic content with TinyButStrong')); // Title displayed in the "Add input format" screen
+  case 'no cache':
+  	return true; // the node must be dynamic, this is the main goal
+  case 'description':
+  	return "Activate TBS tags that produce dynamic content automatically or trought a custom script."; // displayed in "Home›Administer›Site configuration›Input Formats"
+  case 'prepare':
+  	return $text;
+  case 'process':
+  	//tbs_merge_node($text);
+  	return $text.' (filter-process '.date('Y-m-d H:i:s').' )'.var_export(array_keys($GLOBALS['conf']),true);
+  case 'settings':
+  	// displayed in "Home›Administer›Site configuration›Input formats›TBS›Configure"
+    $form['tbs_filter'] = array('#type' => 'fieldset', '#title' => t('Dynamic content with TinyButStrong'), '#value' => t('You can define a global list of smileys on the !page.', array('!page' => l(t('smileys settings page'), 'admin/settings/tbs'))));
+    return $form;
+
+	}
+}
+
+function tbs_merge_node(&$text, &$params, $limitstart ) {
+
+		// Search for plugin tags inside the article. There is a loop because the article can support several mergings.
+		$tag_beg = '{tbs}';
+		$tag_end = '{/tbs}';
+		$p1 = strpos($text, $tag_beg);
+		if ($p1===false) return; // If no TBS tag, then the article doesn't need the plugin.
+
+		include_once('tinybutstrong_comm.php');
+		include_once('tinybutstrong_spec.php');
+
+		$TBS = false;
+		
+		$ArtId = $article->id;
+		if (!tbs_plugin_CheckArticle($ArtId)) return ''; // Exit the plug if the article is not allowed
+		
+		tbs_plugin_InitTBS($TBS, $article->text);
+		tbs_plugin_SqlDbInit($TBS); // retrieve SQL information and them them as custom property of $TBS
+
+		// Wrappers for developpers
+		$TBS->JoomlaParams &= $params;
+		$TBS->JoomlaLimitstart &= $limitstart;
+		$TBS->JoomlaArticle &= $article;
+		
+		$tag_lst = tbs_plugin_Loop($TBS, $p1, $tag_beg, $tag_end); // Search for all TBS tags and process them.
+		
+		$article->text = tbs_plugin_EndTBS($TBS); // ends the merge.
+		
+		unset($TBS);
+		return '';
+}
+
+// ------------------------
+
+// Implements hook_menu() http://api.drupal.org/api/function/hook_menu
+// The menu is added in both "Home›Administer›Site configuration" and "Home›Administer›Site building›Administration by module"
+function tbs_menu() {
+  $items = array();
+  $items['admin/settings/tbs'] = array(
+    'title' => 'TinyButStrong filter setting',
+    'description' => 'Description of TinyButStrong filter',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('tbs_settings'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+   );
+  return $items;
+}
+
+// called defined by the hook onthisdate_menu().
+// we need to clear the cache to see the new configuration item
+// Administer >> Site Configuration >> Performance
+function tbs_settings() {
+	
+  $form = array();
+
+	// default values for the HTML form are set at the end of this function
+
+	global $db_url;
+
+  $form['tbs_option_ChrBeg'] = array(
+    '#title' => t('Beginning of TBS tags (active_db='.basename($db_url).')'),
+    '#description' => t("Default value is '['. TBS tags are different from plugin tags which are defined with {tbs} and {/tbs}."),
+    '#default_value' => '[',
+    '#type' => 'textfield',
+    '#size' => 2,
+    '#maxlength' => 10,
+    '#required' => true,
+  );
+  $form['tbs_option_ChrEnd'] = array(
+    '#title' => t('Beginning of TBS tags'),
+    '#description' => t("Default value is '['. TBS tags are different from plugin tags which are defined with {tbs} and {/tbs}."),
+    '#default_value' => ']',
+    '#type' => 'textfield',
+    '#size' => 2,
+    '#maxlength' => 10,
+    '#required' => true,
+  );
+  $form['tbs_option_VarPrefix'] = array(
+    '#title' => t('Allowed prefix for PHP global variables'),
+    '#description' => t("Default value is empty ('') which means all variables. You can limit the usage of PHP global variables in articles by setting a prefix for allowed variables."),
+    '#default_value' => '',
+    '#type' => 'textfield',
+    '#size' => 10,
+    '#required' => false,
+  );
+  $form['tbs_option_AllowedIds'] = array(
+    '#title' => t('Allowed nodes'),
+    '#description' => t("Default value is empty ('') which mean none. Enter one or several id of nodes allowed to use plugin tags, separated them with comas (,). An error is prompted if a non-allowed article contains a plugin tag such as {tbs}. Set this parameter to limit the articles that Drupal authors can use plugin tags with. You can use '*' to allow all articles, but use this value carefully because if option Direct MergeBlock is also allowed then any Drupal author will be able to display the Drupal database."),
+    '#default_value' => '',
+    '#type' => 'textfield',
+    '#size' => 30,
+    '#required' => false,
+  );
+  $form['tbs_option_MergeBlock'] = array(
+    '#title' => t('Direct MergeBlock'),
+    '#description' => t("Allow plugin tags such as {tbs}mergeblock=...,sql=...,db=...{/tbs}."),
+    '#default_value' => 'select',
+    '#type' => 'select',
+    '#options' => array('no'=>t('Forbidden'), 'select'=>t('Only SELECT queries'), 'all'=>t('All query types and stored procedures')),
+    '#required' => true,
+  );
+  $form['tbs_option_Script'] = array(
+    '#title' => t('External scripts'),
+    '#description' => t("Allow plugin tags such as {tbs}script=...{/tbs}."),
+    '#default_value' => 'loc',
+    '#type' => 'select',
+    '#options' => array('no'=>t('Forbidden'), 'loc'=>t('Only from the Script location'), 'all'=>t('All external scripts')),
+    '#required' => true,
+  );
+  $form['tbs_option_ScriptPath'] = array(
+    '#title' => t('Script location'),
+    '#description' => t("This is the path (relative or absolute) where scripts specified in plugin tags can be stored."),
+    '#default_value' => '',
+    '#type' => 'textfield',
+    '#size' => 60,
+    '#required' => false,
+  );
+  $form['tbs_option_Embedded'] = array(
+    '#title' => t('Embedded scripts'),
+    '#description' => t("Allow plugin tags such as {tbs}embedded{/tbs}. Please note that those tags allow to run PHP scripts which is embedded inside an article."),
+    '#default_value' => 'no',
+    '#type' => 'select',
+    '#options' => array('no'=>t('Forbidden'), 'all'=>t('Allowed')),
+    '#required' => true,
+  );
+  $form['tbs_option_FullRightsIds'] = array(
+    '#title' => t('Full rights nodes'),
+    '#description' => t("Default value is empty. Ids of nodes which are allowed to use all plugin tags with all permissions. You can seperate Ids with a coma (,). You can use '*' to allow all nodes. You can use this parameter to let Admin users to use plugin tags for their own nodes."),
+    '#default_value' => '',
+    '#type' => 'textfield',
+    '#size' => 30,
+    '#required' => false,
+  );
+
+	// retrieve saved values for the HTML form
+	$opt_lst = array_keys($form);
+	foreach ($opt_lst as $opt) {
+		$form[$opt]['#default_value'] = variable_get($opt, $form[$opt]['#default_value']);
+	}
+
+  return system_settings_form($form);
+  
+}
