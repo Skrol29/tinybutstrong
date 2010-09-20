@@ -819,8 +819,7 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 	}
 
 	function _Dbs_LastRowId($seq_name) {
-		return $this->GetVal('SELECT '.$seq_name.'.nextVal id FROM Dual'); // ça incrémente le compteur !! SELECT MASEQ.nextVal AS id FROM Dual
-		return $this->GetVal('SELECT '.$seq_name.'.currVal id FROM Dual'); // currVal works only if nextVal has been call in the same cession
+		return $this->GetVal('SELECT '.$seq_name.'.currVal id FROM Dual'); // nextVal chnages the sequeance! currVal works only if nextVal has been call in the same cession
 		
 	}
 
