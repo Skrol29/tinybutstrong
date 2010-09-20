@@ -4,6 +4,9 @@
 // Version 3.0, 2010-08-19, Skrol29
 // www.tinybutstrong.com
 
+// 2010-09-20: add optional argument $Exec for _Dbs_RsOpen() for the oracle support
+// 2010-09-20: add optional argument $Info to LastRowId() for the oracle support
+
 if ( (version_compare(PHP_VERSION,'5')<0) && (!function_exists('clone'))  ) {
 	eval('function clone($object) {return $object;}'); // eval is needed because the syntax function clone() is refused in PHP 5
 }
@@ -81,7 +84,7 @@ class clsTbsSql {
 		// we do not use cache here
 		$ArgLst = func_get_args();
 		$Sql = $this->_SqlProtect($ArgLst);
-		$RsId = $this->_Dbs_RsOpen($Sql);
+		$RsId = $this->_Dbs_RsOpen($Sql, true);
 		if ($RsId===false) return $this->_SqlError($this->Id);
 		$this->_Dbs_RsClose($RsId);
 		return true;
@@ -205,8 +208,8 @@ class clsTbsSql {
 		return $this->_Dbs_AffectedRows();
 	}
 
-	function LastRowId() {
-		return $this->_Dbs_LastRowId();
+	function LastRowId($Info=false) {
+		return $this->_Dbs_LastRowId($Info);
 	}
 
 	function SetTbsKey($Key='') {

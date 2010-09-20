@@ -81,7 +81,7 @@ class clsTbsSql {
 		// we do not use cache here
 		$ArgLst = func_get_args();
 		$Sql = $this->_SqlProtect($ArgLst);
-		$RsId = $this->_Dbs_RsOpen($Sql);
+		$RsId = $this->_Dbs_RsOpen($Sql, true);
 		if ($RsId===false) return $this->_SqlError($this->Id);
 		$this->_Dbs_RsClose($RsId);
 		return true;
@@ -737,7 +737,8 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 		// If no connexion parameters are given, try to link to the current MySQL connection
 		$this->Version .= '/1.03 for Oracle';
 		
-		$this->Php4 = ( version_compare(PHP_VERSION, '5') < 0 ) ;
+		$this->Php4 = ( version_compare(PHP_VERSION, '5') < 0 );
+		$this->_RsId = false; // for managing rowcount
 	}
 
 	function _Dbs_Connect($srv,$uid,$pwd,$db,$drv) {
@@ -749,11 +750,12 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 		if ($this->Mode==TBSSQL_DEBUG) $this->LastSql = 'Connection String='.$srv;
 		if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace Connection String: '.$srv,'#663399');
 
-		$this->Id = @oci_new_connect($uid,$pwd,$srv); // Force a new connection in order to manage connections to two different DB in the same script. Doesn't work if SQL Safe Mode is activated.
+		$this->Id = oci_connect($uid,$pwd,$srv); // Force a new connection in order to manage connections to two different DB in the same script. Doesn't work if SQL Safe Mode is activated.
 
 	}
 
 	function _Dbs_Close() {
+		if ($this->_RsId!==false) $this->_Dbs_RsCloseSpecial();
 		if ($this->Php4) {
 			return false;
 		} else {
@@ -769,14 +771,18 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 		}
 	}
 
-	function _Dbs_RsOpen($Sql) {
+	function _Dbs_RsOpen($Sql, $Exec=false) {
 		if ($this->Php4) {
 			$RsId = ociparse($this->Id, $Sql);
 		} else {
 			$RsId = oci_parse($this->Id, $Sql);
 		}
 		$ok = oci_execute($RsId);
+		
+		if ($this->_RsId!==false) $this->_Dbs_RsCloseSpecial();
+		if ($Exec) $this->_RsId = $RsId; // $RsId is stored in order to be callable for a _Dbs_AffectedRows()
 		return $RsId;
+		
 	}
 
 	function _Dbs_RsFetch(&$RsId) {
@@ -784,7 +790,11 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 	}
 
 	function _Dbs_RsClose(&$RsId) {
-		return @oci_free_statement($RsId);
+		if ($this->_RsId===false) {
+			return oci_free_statement($RsId);
+		} else {
+			return true;
+		}
 	}
 
 	function _Dbs_ProtectStr($Txt) {
@@ -808,16 +818,24 @@ TbsSqlConsole.document.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Tran
 		}
 	}
 
-	function _Dbs_LastRowId() {
-		return $this->GetVal('SELECT '.$seq_name.'nextVal id FROM Dual');
+	function _Dbs_LastRowId($seq_name) {
+		return $this->GetVal('SELECT '.$seq_name.'.nextVal id FROM Dual'); // ça incrémente le compteur !! SELECT MASEQ.nextVal AS id FROM Dual
+		return $this->GetVal('SELECT '.$seq_name.'.currVal id FROM Dual'); // currVal works only if nextVal has been call in the same cession
+		
 	}
 
 	function _Dbs_AffectedRows() {
-		if (is_resource($this->Id)) {
-			return mysql_affected_rows($this->Id);
+		if ($this->_RsId===false) {
+			return 0;
 		} else {
-			return mysql_affected_rows();
+			return oci_num_rows($this->_RsId);
 		}
+	}
+
+	function _Dbs_RsCloseSpecial() {
+		$ok = oci_free_statement($this->_RsId);
+		$this->_RsId = false;
+		return $ok;
 	}
 
 }
