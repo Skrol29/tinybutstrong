@@ -1,6 +1,6 @@
 <?php
 /* TBS Dynamic Articles, a content plugin for Joomla 1.5
-Version 2009-12-14
+Version 2010-09-22
 This plugin is under the GPL license version 3.
 */
 
@@ -44,9 +44,9 @@ class plgContentTinyButStrong extends JPlugin
 		tbs_plugin_SqlDbInit($TBS); // retrieve SQL information and them them as custom property of $TBS
 
 		// Wrappers for developpers
-		$TBS->JoomlaParams &= $params;
-		$TBS->JoomlaLimitstart &= $limitstart;
-		$TBS->JoomlaArticle &= $article;
+		$TBS->JoomlaParams = &$params;
+		$TBS->JoomlaLimitstart = &$limitstart;
+		$TBS->JoomlaArticle = &$article;
 		
 		$tag_lst = tbs_plugin_Loop($TBS, $p1, $tag_beg, $tag_end); // Search for all TBS tags and process them.
 		
