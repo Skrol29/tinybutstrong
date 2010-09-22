@@ -1,5 +1,9 @@
 Content plug-in for Joomla - Dynamic Articles with TinyButStrong
 
+version 1.2.3 (2010-09-22)
+
+- Fixed bug: PHP error message "Notice: Object of class JParameter could not be converted to int"
+
 version 1.2.2 (2009-12-14)
 
 - Fixed bug: several plug-in tags are defined, but only the first one is merged.

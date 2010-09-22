@@ -1,14 +1,14 @@
 <?php
 
 /* Specific functions for the TinyButStrong plugin, can feet to the Joomla CMS.
-Version 2009-08-17
+Version 2010-09-22
 */
 
 function tbs_plugin_SqlDbInit(&$TBS) {
 
-	$TBS->_CmsDbSrc =& JFactory::getDBO();
+	$TBS->_CmsDbSrc = &JFactory::getDBO();
 
-	$conf =& JFactory::getConfig();
+	$conf = &JFactory::getConfig();
 	$TBS->_CmsDbConfigName = $conf->getValue('db');
 
 	$TBS->_CmsDbActiveName = $TBS->_CmsDbConfigName;
@@ -30,7 +30,7 @@ function tbs_plugin_SqlGetRows($SQL,$ErrMsg='') {
 
 function tbs_plugin_SqlExecute($SQL,$ErrMsg='',$getRows=false) {
 // Not used in the plugin, this is a wrapper for developpers
-	$DBO =& JFactory::getDBO();
+	$DBO = &JFactory::getDBO();
 	$DBO->setQuery($SQL);
 	$DBO->query();
 	if ($DBO->getErrorMsg()=='') {
@@ -49,7 +49,7 @@ function tbs_plugin_SqlExecute($SQL,$ErrMsg='',$getRows=false) {
 function tbs_plugin_GetOption($OptName, $DefaultValue) {
 	static $pluginParams = false;
 	if ($pluginParams===false) {
-		$plugin = & JPluginHelper::getPlugin('content', 'tinybutstrong');
+		$plugin = &JPluginHelper::getPlugin('content', 'tinybutstrong');
 		$pluginParams = new JParameter($plugin->params);
 	}
 	$OptValue = $pluginParams->def($OptName,$DefaultValue);
