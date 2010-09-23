@@ -468,7 +468,7 @@ Exemple 1 : <br>
   </tr>
 </table>
 <a name="php_side"></a><h2>Coté PHP :</h2>
-Le pilotage de la fusion d'un modèle se fait dans un programme PHP en utilisant une variable objet déclaré à partir de la classe <span class="opt-html">clsTinyButStrong</span>.<br>
+Le pilotage de la fusion d'un modèle se fait dans un programme PHP en utilisant une variable objet déclarée à partir de la classe <span class="opt-html">clsTinyButStrong</span>.<br>
 Exemple de déclaration : <span class="txt-code"><span class="opt-name">$TBS</span> = <strong>new</strong> clsTinyButStrong;</span> <br>
 Cet objet vous permet de charger un modèle, piloter sa fusion avec des données, puis afficher le résultat.<br>
 <br>
@@ -484,7 +484,7 @@ Voici la description d'un objet TinyButStrong :
 <h3><a name="php_instanciate" id="php_instanciate"></a>cr&eacute;er un nouvel objet TBS :</h3>
 <div class="norm"> Un objet TBS est cr&eacute;&eacute; en tant qu'instance de la classe clsTinyButStrong. Un objet  TBS vous permet de travailler avec un ou plusieurs mod&egrave;les &agrave; l'aide des m&eacute;thodes et propri&eacute;t&eacute;s de l'objet.<br>
   <br>
-  Syntaxe pour cr&eacute;er un nouvel objet  TBS : <span class="txt-code"><span class="opt-name">$TBS</span> = new clsTinyButStrong({<span class="opt-type">string</span> <span class="opt-name">BaliseDelim</span> {, <span class="opt-type">string</span><span class="opt-name"> PrefixeVar</span> {, <span class="opt-type">string </span><span class="opt-name">PrefixFct</span>}}});</span><br>
+  Syntaxe pour cr&eacute;er un nouvel objet  TBS : <span class="txt-code"><span class="opt-name">$TBS</span> = new clsTinyButStrong({<span class="opt-type">string</span> <span class="opt-name">BaliseDelim</span> {, <span class="opt-type">string</span><span class="opt-name"> PrefixeVar</span> {, <span class="opt-type">string </span><span class="opt-name">PrefixFct</span>}}})</span><br>
   <br>
   <table border="0" cellpadding="5" cellspacing="0">
     <tr class="title-1b">
@@ -3347,11 +3347,11 @@ Dans le deux cas, un  plug-in se pr&eacute;sente sous la forme d'un jeu de fonct
       <td align="left" valign="top">D&eacute;place le champ dans un attribut de balise XML/HTML.</td>
     </tr>
     <tr>
-      <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">attadd</a></td>
+      <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;attadd</a></td>
       <td align="left" valign="top">S'utilise avec <span class="opt-name">att</span>. Indique que la valeur fusionn&eacute;e doit &ecirc;tre ajout&eacute;e &agrave; la valeur de l'attribut.</td>
     </tr>
     <tr>
-      <td align="left" valign="top"><a href="#html_field_prm_atttrue" class="opt-name">atttrue</a></td>
+      <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_field_prm_atttrue" class="opt-name">atttrue</a></td>
       <td align="left" valign="top">S'utilise  with <span class="opt-name">att</span>. Indique que l'attribut cible doit &ecirc;tre g&eacute;r&eacute; comme un attribut bool&eacute;en.</td>
     </tr>
     <tr>
@@ -3359,7 +3359,7 @@ Dans le deux cas, un  plug-in se pr&eacute;sente sous la forme d'un jeu de fonct
       <td align="left" valign="top">Si la valeur du champ est vide, supprime des balises proches.</td>
     </tr>
     <tr>
-      <td align="left" valign="top"><a href="#html_field_prm_mtype" class="opt-name">mtype</a></td>
+      <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_field_prm_mtype" class="opt-name">mtype</a></td>
       <td align="left" valign="top">S'utilise avec<a href="#html_field_prm_magnet" class="opt-name"> magnet</a>.</td>
     </tr>
     <tr>
@@ -3367,11 +3367,11 @@ Dans le deux cas, un  plug-in se pr&eacute;sente sous la forme d'un jeu de fonct
       <td align="left" valign="top">Si la condition est vérifiée, change la valeur affichée.</td>
     </tr>
     <tr>
-      <td align="left" valign="top"><a href="#html_field_prm_then" class="opt-name">then</a></td>
+      <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_field_prm_then" class="opt-name">then</a></td>
       <td align="left" valign="top">S'utilise avec <span class="opt-name">if</span>.</td>
     </tr>
     <tr>
-      <td align="left" valign="top"><a href="#html_field_prm_else" class="opt-name">else</a></td>
+      <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_field_prm_else" class="opt-name">else</a></td>
       <td align="left" valign="top">S'utilise avec <span class="opt-name">if</span>.</td>
     </tr>
     <tr>
@@ -3411,15 +3411,15 @@ Dans le deux cas, un  plug-in se pr&eacute;sente sous la forme d'un jeu de fonct
       <td align="left" valign="top">Exécute le script Php.</td>
     </tr>
     <tr>
-      <td align="left" valign="top"><a href="#html_field_prm_getbody" class="opt-name">getbody</a></td>
+      <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_field_prm_getbody" class="opt-name">getbody</a></td>
       <td align="left" valign="top">S'utilise  avec <span class="opt-name">file</span> ou <span class="opt-name">script</span>. Insert seulement une partie du sous-mod&egrave;le. </td>
     </tr>
     <tr>
-      <td align="left" valign="top"><a href="#html_field_prm_rename" class="opt-name">rename</a></td>
+      <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_field_prm_rename" class="opt-name">rename</a></td>
       <td align="left" valign="top">S'utilise  avec <span class="opt-name">file</span> ou <span class="opt-name">script</span>. Renome des blocs et des champs TBS dans un sous-mod&egrave;le. </td>
     </tr>
     <tr>
-      <td align="left" valign="top"><a href="#html_field_prm_subtpl" class="opt-name">subtpl</a></td>
+      <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_field_prm_subtpl" class="opt-name">subtpl</a></td>
       <td align="left" valign="top">S'utilise  avec <span class="opt-name">script</span> ou <span class="opt-name">onformat</span>. Passe l'instance TBS en mode Sous-mod&egrave;le. </td>
     </tr>
   </table>
@@ -3481,11 +3481,11 @@ Dans le deux cas, un  plug-in se pr&eacute;sente sous la forme d'un jeu de fonct
       <td align="left" valign="top">S'utilise avec <span class="opt-name"></span><span class="opt-name">onload </span>ou <span class="opt-name">onshow</span>. Affiche la section quand la condition est vérifiée.</td>
     </tr>
     <tr>
-      <td align="left" valign="top"><a href="#html_block_prm_default" class="opt-name">default</a></td>
+      <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_block_prm_default" class="opt-name">default</a></td>
       <td align="left" valign="top">S'utilise avec <span class="opt-name"></span><span class="opt-name">onload </span>ou <span class="opt-name">onshow</span>. Affiche la section quand aucune condition n'est vérifiée.</td>
     </tr>
     <tr>
-      <td align="left" valign="top"><a href="#html_block_prm_several" class="opt-name">several</a></td>
+      <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_block_prm_several" class="opt-name">several</a></td>
       <td align="left" valign="top">S'utilise avec <span class="opt-name"></span><span class="opt-name">when</span>. Indique que plusieurs sections du groupe peuvent être affichées.</td>
     </tr>
   </table>
