@@ -158,7 +158,7 @@ a.opt-name:hover {
         </tr>
         <tr class="txt-tiny">
           <td>Date :</td>
-          <td>2010-09-14</td>
+          <td>2010-09-23</td>
         </tr>
       </table></td>
     <td width="34%" align="center"><div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div>
@@ -212,7 +212,7 @@ a.opt-name:hover {
       <td>&nbsp;</td>
     </tr>
     <tr>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_instanciate">cr&eacute;e un nouvel object TBS</a></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_instanciate">cr&eacute;e un nouvel objet TBS</a></td>
       <td> pour travailler avec des mod&egrave;les</td>
     </tr>
     <tr>
@@ -481,10 +481,10 @@ Exemple de code PHP :<br>
   <span class="opt-name">$TBS</span>-&gt;Show(); </div>
 <br>
 Voici la description d'un objet TinyButStrong :
-<h3><a name="php_instanciate" id="php_instanciate"></a>cr&eacute;er un nouvel object TBS :</h3>
-<div class="norm"> A TBS object is created as a new instance of the clsTinyButStrong class. A TBS object enables you to work with one or several templates using its methods and properties.<br>
+<h3><a name="php_instanciate" id="php_instanciate"></a>cr&eacute;er un nouvel objet TBS :</h3>
+<div class="norm"> Un objet TBS est cr&eacute;&eacute; en tant qu'instance de la classe clsTinyButStrong. Un objet  TBS vous permet de travailler avec un ou plusieurs mod&egrave;les &agrave; l'aide des m&eacute;thodes et propri&eacute;t&eacute;s de l'objet.<br>
   <br>
-  Syntax to create a new TBS object: <span class="txt-code"><span class="opt-name">$TBS</span> = new clsTinyButStrong({<span class="opt-type">string</span> <span class="opt-name">TagDelim</span> {, <span class="opt-type">string</span><span class="opt-name"> VarPrefix</span> {, <span class="opt-type">string </span><span class="opt-name">FctPrefix</span>}}});</span><br>
+  Syntaxe pour cr&eacute;er un nouvel objet  TBS : <span class="txt-code"><span class="opt-name">$TBS</span> = new clsTinyButStrong({<span class="opt-type">string</span> <span class="opt-name">BaliseDelim</span> {, <span class="opt-type">string</span><span class="opt-name"> PrefixeVar</span> {, <span class="opt-type">string </span><span class="opt-name">PrefixFct</span>}}});</span><br>
   <br>
   <table border="0" cellpadding="5" cellspacing="0">
     <tr class="title-1b">
@@ -492,27 +492,27 @@ Voici la description d'un objet TinyButStrong :
       <td align="left" valign="top">Description</td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="opt-name">TagDelim</td>
-      <td align="left" valign="top">Define the couple of delimiters for TBS tags in templates. The default value is <span class="opt-value">''</span> (empty string) which means the default TBS delimiters.<br>
-        It's recommended to let the default TBS delimiters, while changing them is working well. Default TBS delimiters are <span class="opt-value">[</span> and <span class="opt-value">]</span> because they are available quite anywhere in  XML/HTML documents and they are found faster than  delimiters <span class="opt-value">{</span> / <span class="opt-value">}</span> or <span class="opt-value">(</span> / <span class="opt-value">)</span> since they are  rarer, especially in HTML.<br>
-        Example: if you want to have the delimiters to be <span class="opt-value">{{</span> and <span class="opt-value">}}</span> for TBS fields, then set <span class="opt-name">TagDelim</span> to the value <span class="opt-value">'{{,}}'</span>. Such a TBS field could be <span class="opt-html">{{var.x}}</span> instead of <span class="opt-html">[var.x]</span>.</td>
+      <td align="left" valign="top" class="opt-name">BaliseDelim</td>
+      <td align="left" valign="top">D&eacute;finie le couple de d&eacute;limiteurs des balises TBS reconnues  dans les mod&egrave;les. La valeur par d&eacute;faut est  <span class="opt-value">''</span> (chaine vide) qui signifie que les d&eacute;limiteurs par d&eacute;faut. Il s'agit de '[' et ']'.<br>
+        Exemple : si vous souhaitez que els d&eacute;limiteurs soient  <span class="opt-value">{{</span> et <span class="opt-value">}}</span> pour les balises TBS, alors d&eacute;finissez  <span class="opt-name">BaliseDelim</span> &agrave; la valeur  <span class="opt-value">'{{,}}'</span>. Ainsi les champs TBS seront du type  <span class="opt-html">{{var.x}}</span> au lieu de <span class="opt-html">[var.x]</span>.<br>
+        Il est recommand&eacute; de laisser les d&eacute;limiteurs par d&eacute;faut, m&ecirc;me si vous pouvez les changer sans probl&egrave;me. Les d&eacute;limiteurs par d&eacute;faut sont <span class="opt-value">[</span> et <span class="opt-value">]</span> parce que ces caract&egrave;res sont utilisables pratiquement partout dans des documents XML/HTML, et ils sont rep&eacute;r&eacute;s plus rapidement que les d&eacute;limiteurs  <span class="opt-value">{</span> / <span class="opt-value">}</span> ou <span class="opt-value">(</span> / <span class="opt-value">)</span> car ils sont plus rares surtout en HTML.</td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="opt-name">VarPrefix</td>
-      <td align="left" valign="top">Limit the usage of <a href="#html_field_auto">automatic fields</a> ([onload] [onshow] and [var])  in templates. TBS  will display  global PHP variables only if they have the <span class="opt-name">VarPrefix</span> prefix. Otherwise it will display an error message. The default value is <span class="opt-value">''</span> (empty string) which means no limitation.</td>
+      <td align="left" valign="top" class="opt-name">PrefixeVar</td>
+      <td align="left" valign="top">Limite l'utilisation des <a href="#html_field_auto">champs automatiques</a> ([onload] [onshow] et [var])  dans les mod&egrave;les. TBS  n'affichera que les variables globales PHP pr&eacute;fix&eacute;es par <span class="opt-name">PrefixeVar</span>. Les autres variables produiront un message d'erreur. La valeur par d&eacute;faut pour <span class="opt-name">PrefixeVar</span> est <span class="opt-value">''</span> (chaine vide) ce qui signifie aucune limitation.</td>
     </tr>
     <tr>
-      <td align="left" valign="top" class="opt-name">FctPrefix</td>
-      <td align="left" valign="top">Limit the usage of custom PHP functions (relative to parameters <a href="#html_field_prm_onformat" class="opt-name">onformat</a> and <a href="#html_block_prm_ondata" class="opt-name">ondata</a>) in templates. TBS  will call   PHP function only if they have the <span class="opt-name">FctPrefix </span>prefix. Otherwise it will display an error message. The default value is <span class="opt-value">''</span> (empty string) which means no limitation.<br>
-        <span class="versioning">This argument is supported since TBS version 3.6.0.</span></td>
+      <td align="left" valign="top" class="opt-name">PrefixeFct</td>
+      <td align="left" valign="top">Limite l'utilisation des fonctions PHP utilisateur  (relatives aux param&egrave;tres <a href="#html_field_prm_onformat" class="opt-name">onformat</a> et <a href="#html_block_prm_ondata" class="opt-name">ondata</a>) dans les mod&egrave;les. TBS  n'appellera que les fonctions    PHP pr&eacute;fix&eacute;e par <span class="opt-name">PrefixeFct</span>. Les autres fonctions produiront un message d'erreur. La valeur par d&eacute;faut pour <span class="opt-name">PrefixeFct </span>est <span class="opt-value">''</span> (chaine vide) ce qui signifie aucune limitation.<br>
+        <span class="versioning">Cet argument est support&eacute; depuis TBS version 3.6.0.</span></td>
     </tr>
   </table>
   <br>
-  Examples:
-  <div class="decal txt-code"><span class="opt-name">$TBS1</span> = new clsTinyButStrong; <span class="opt-html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// default behavior</span><br>
-    <span class="opt-name">$TBS2</span> = new clsTinyButStrong(<span class="opt-value">'{{,}}'</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="opt-html">// TBS tags will be like {{var.x}} instead of [var.x]</span><br>
-    <span class="opt-name">$TBS3</span> = new clsTinyButStrong(<span class="opt-value">''</span>, <span class="opt-value">'tbs_var_'</span>);<span class="opt-html"> &nbsp;&nbsp;&nbsp;// TBS will display only PHP global variables beginning with tbs_var_</span><br>
-    <span class="opt-name">$TBS4</span> = new clsTinyButStrong(<span class="opt-value">''</span>, <span class="opt-value">''</span>, <span class="opt-value">'tbs_fct_'</span>);<span class="opt-html">// TBS will call only PHP function beginning with tbs_fct_</span></div>
+  Exemples :
+  <div class="decal txt-code"><span class="opt-name">$TBS1</span> = new clsTinyButStrong; <span class="opt-html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// comportement par d&eacute;faut</span><br>
+    <span class="opt-name">$TBS2</span> = new clsTinyButStrong(<span class="opt-value">'{{,}}'</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="opt-html">// les balises TBS seront du type {{var.x}} au lieu de [var.x]</span><br>
+    <span class="opt-name">$TBS3</span> = new clsTinyButStrong(<span class="opt-value">''</span>, <span class="opt-value">'tbs_var_'</span>);<span class="opt-html"> &nbsp;&nbsp;&nbsp;// TBS n'affichera que les variables globale PHP commen&ccedil;ant par 'tbs_var_</span>'<br>
+    <span class="opt-name">$TBS4</span> = new clsTinyButStrong(<span class="opt-value">''</span>, <span class="opt-value">''</span>, <span class="opt-value">'tbs_fct_'</span>);<span class="opt-html">// TBS n'appellera que les fonctions PHP commen&ccedil;ant par 'tbs_fct_</span>'</div>
 </div>
 <h3><a name="php_loadtemplate" id="php_loadtemplate"></a>Méthode LoadTemplate() :</h3>
 <div class="norm">Charge un modèle en vue de son traitement pour la fusion.<br>
