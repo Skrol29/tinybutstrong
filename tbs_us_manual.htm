@@ -1398,9 +1398,9 @@ Most often, it is the row of an HTML table. The syntax for TBS Blocks is describ
         The value <span class="opt-value">path</span> must indicate the place of the attribute relatively to the current field.<br>
         If the attribute doesn't exist in the specified tag, then it is created.<br>
         If the attribute already exists in the specified tag and it has already a value, then the field replaces all the current value.<br>
-        You can chose to place the field as an added value using parameter <a href="html_field_prm_attadd" class="opt-name">attadd</a>.<br>
-        You can complete the attribute's value by applying a mask to it using parameter  <a href="html_field_prm_ope" class="opt-name">ope</a>=<span class="opt-value">msk</span>.<br>
-        You can delete the attribute in case of empty value using parameter <a href="html_field_prm_magnet" class="opt-name">magnet</a>=<span class="opt-value">#</span>.<br>
+        You can chose to place the field as an added value using parameter <a href="#html_field_prm_attadd" class="opt-name">attadd</a>.<br>
+        You can complete the attribute's value by applying a mask to it using parameter  <a href="#html_field_prm_ope" class="opt-name">ope</a>=<span class="opt-value">msk</span>.<br>
+        You can delete the attribute in case of empty value using parameter <a href="#html_field_prm_magnet" class="opt-name">magnet</a>=<span class="opt-value">#</span>.<br>
         <br>
         Syntax for value <span class="opt-value">path</span>:      [<span class="opt-value">+</span>][<span class="opt-value">tag1+tag2+tag3+...#</span>]<span class="opt-value">attribute</span><br>
         By default the attribute is searched before the current field. But if '<span class="opt-value">+</span>' is the first character of the path, then it is searched after. If no tag list is specified, then the attribute is looked at in the first tag met in the search direction. If a tag list is used, <span class="opt-value">tag1</span> is search first, then <span class="opt-value">tag2</span>, ... regardless of the direction of the search (before/after). You can put a tag name between one or several bracket levels in order to specify that the searched tag must embed the current field.<br>
