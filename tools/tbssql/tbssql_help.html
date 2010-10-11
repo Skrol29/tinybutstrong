@@ -57,8 +57,8 @@ h3 {
 <body>
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
   <tr>
-    <td width="200"><a href="http://www.tinybutstrong.com">Skrol29</a>, 2010-08-19 </td>
-    <td><h1 align="center">TbsSQL 3.0</h1></td>
+    <td width="200"><a href="http://www.tinybutstrong.com">Skrol29</a>, 2010-10-11 </td>
+    <td><h1 align="center">TbsSQL 3.1</h1></td>
     <td width="200">&nbsp;</td>
   </tr>
 </table>
@@ -71,12 +71,12 @@ h3 {
     <li><a href="#synopsis">Synopsis</a>
       <ol>
         <li><a href="#connecting">Connecting to the database</a></li>
+        <li></li>
         <li><a href="#sql">Working with SQL</a></li>
         <li><a href="#cache">Using the cache feature</a></li>
-        <li><a href="#tbs">Working with TinyButStrong template engine</a></li>
+        <li><a href="#tbs">Working with TinyButStrong template engine</a>    </li>
       </ol>
     </li>
-    <li><a href="#hook">Hook for TinyButStrong template engine</a></li>
     <li><a href="#deprecated">Deprecated</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#changelog">Change log</a></li>
@@ -103,7 +103,8 @@ h3 {
     - MySQLi<br />
     - SQL-Server (via Ms ODBC or UnixODBC)<br />
     - PostgreSQL (version 7.2 or higher) <br />
-    - ODBC Generic (<span class="versioning">available since TbsSQL version 2.6</span>) </div>
+    - ODBC Generic (<span class="versioning">available since TbsSQL version 2.6</span>)<br />
+  - Oracle (<span class="versioning">available since TbsSQL version 3.1</span>) </div>
 </div>
 <h2><a name="placeholders" id="placeholders" />2. SQL statements with placeholders</h2>
 <div class="decal"> The main asset of TbsSQL is that SQL statement  writing  is really simplified because you can use placeholders in the SQL for placing item data coming from PHP. And item data are always protected against <a href="http://en.wikipedia.org/wiki/Sql_injection">SQL injection</a>.<br />
@@ -196,10 +197,17 @@ h3 {
     </tr>
     <tr id="id">
       <td valign="top" class="split">$Db-&gt;<strong>Id</strong></td>
-      <td valign="top" class="split">(read/write) The resource  Id of your connection. </td>
+      <td valign="top" class="split">(read/write) The resource  Id of the database connection. It is automatically updated by the methods Connect() and Close().<br />        
+      This property can be useful:<br />
+      1) 
+When you want to use TbsSQL with a connection which is already opened. Thus you just have to set $Db-&gt;Id = $MyCurrentConnection instead of using method Connect().<br />
+2) When you'd like to retrieve the connection id for an operation that TbsSQL cannot do. Example: $x = mysql_thread_id($Db-&gt;Id);<br /></td>
     </tr>
-    <tr id="mode">
-      <td valign="top" class="split"><a name="mode" id="mode" />$Db-&gt;<strong>Mode</strong></td>
+  </table>
+  <h3><a name="connecting" id="connecting2" /></a></a>3.2 Connecting to the database</h3>
+  <table width="100%" border="0" cellpadding="4" cellspacing="0" class="decal">
+    <tr id="mode2">
+      <td width="260" valign="top" class="split"><a name="mode" id="mode2" /></a>$Db-&gt;<strong>Mode</strong></td>
       <td valign="top" class="split">(read/write) default value is TBSSQL_NORMAL.<br />
         You can choose a value among the following: <br />
         <table border="0" cellspacing="2" cellpadding="0">
@@ -207,7 +215,7 @@ h3 {
             <td width="10" valign="top">&bull;</td>
             <td width="120" valign="top" class="sql">TBSSQL_SILENT</td>
             <td width="10">&nbsp;</td>
-            <td>TbsSql never display messages. </td>
+            <td>TbsSQL never display messages. </td>
           </tr>
           <tr>
             <td valign="top">&bull;</td>
@@ -234,7 +242,7 @@ h3 {
             <td width="10" valign="top">&bull;</td>
             <td width="120" valign="top" class="sql">TBSSQL_CONSOLE</td>
             <td width="10">&nbsp;</td>
-            <td>TbsSql messages are displayed in a Html popup window.</td>
+            <td>TbsSQL messages are displayed in a Html popup window.</td>
           </tr>
           <tr>
             <td valign="top">&bull;</td>
@@ -251,7 +259,7 @@ h3 {
           TBSSQL_GRID are supported since version 3.0<br />
         </div></td>
     </tr>
-    <tr id="defaultrowtype">
+    <tr id="defaultrowtype2">
       <td valign="top" class="split">$Db-&gt;<strong>DefaultRowType</strong></td>
       <td valign="top" class="split">(read/write) The type of row returned by default by methods GetRow() and GetRows().<br />
         The default value is TBSSQL_ARRAY.<br />
@@ -288,8 +296,14 @@ h3 {
         </table>
         Please note that methods GetRow() and GetRows() have an optional argument which allow to choose the type of returned row.</td>
     </tr>
+    <tr id="defaultrowtype2">
+      <td valign="top" class="split">$Db-&gt;<strong>ConfInfo</strong>()</td>
+      <td valign="top" class="split">Display information about the current configuration of TbsSQL.
+        <div class="versioning">Versioning:  method ConfInfo() is supported since TbsSQL version 3.1.<br />
+      </div></td>
+    </tr>
   </table>
-  <h3><a name="sql" id="sql" /></a>3.2 Working with SQL</h3>
+  <h3><a name="sql" id="sql" /></a>3.3 Working with SQL</h3>
   <table width="100%" border="0" cellpadding="4" cellspacing="0" class="decal">
     <tr id="execute">
       <td width="260" valign="top" class="split split0">$Db-&gt;<strong>Execute</strong>($sql <span class="optional">[,$val1, $val2, ...]</span>)</td>
@@ -337,7 +351,7 @@ h3 {
         <u>Note:</u> This method is not available for ODBC Generic.</td>
     </tr>
   </table>
-  <h3><a name="cache" id="cache" /></a>3.3 Using the cache feature</h3>
+  <h3><a name="cache" id="cache" /></a>3.4 Using the cache feature</h3>
   <p class="decal">What is the TbsSQL cache feature? SQL queries results can be saved in cache files in order to save time execution when they are recalled. Cache files are available for a limited duration (timeout) in order to ensure the actualization of the data. <br />
     The TbsSQL cache feature is disabled by default. You can enable it simply by setting a positive value to property $Db-&gt;CacheTimeout.<br />
     Interesting technical notes: <br />
@@ -350,22 +364,27 @@ h3 {
   <table width="100%" border="0" cellpadding="4" cellspacing="0" class="decal">
     <tr id="cachetimeout">
       <td width="260" valign="top" class="split0 split">$Db-&gt;<strong>CacheTimeout</strong></td>
-      <td valign="top" class="split0 split">Defines the cache timeout in minutes for all SQL queries called by methods GetVal(), GetRow(), GetRows() and GetList().        The default value is false, which means the cache feature is disabled. Method Execute() is not concerned by the cache feature.<br />
-        You can use constants TBSSQL_1HOUR, 
-        TBSSQL_1DAY or TBSSQL_1WEEK in order to easier define the timeout.<br />
+      <td valign="top" class="split0 split">Defines the cache timeout in minutes for all SQL queries called by methods GetVal(), GetRow(), GetRows() and GetList().        The default value is TBSSQL_DISABLED (or value false for TbsSQL prior to 3.1), which means the cache feature is disabled. Note that method Execute() is not concerned by the cache feature.<br />
+        The simplest way to define the timeout is to  use constants:<br />
+        <div class="decal">
+        TBSSQL_DISABLED  <span class="versioning">(since TbsSQL version 3.1)</span>, this constant is the value false, it makes TbsSQL no neither read or write the cache.<br />
+        TBSSQL_ALWAYS <span class="versioning">(since TbsSQL version 3.1)</span>, this constant is the value 0, it forces TbsSQL to always save the cache for queries.</div>
+        or combine the following other constants:<br />        <div class="decal">TBSSQL_1WEEK<br />        TBSSQL_1DAY<br />
+        TBSSQL_1HOUR<br />        
+        TBSSQL_1MINUTE <span class="versioning">(since TbsSQL version 3.1)</span></div>
         Use property TempCacheTimeout to force the cache for<span id="result_box"><span title=""> only one query, whether default cache is enabled or not.</span></span>
-        <div class="decal"><u>Example:</u> $Db-&gt;CacheTimeout = 2 * TBSSQL_1DAY;<br />
-          this  does enable the cache for all queries with a cache duration of one day.</div></td>
+        <div class="decal"><u>Example:</u> $Db-&gt;CacheTimeout = TBSSQL_1WEEK + 2 * TBSSQL_1DAY;<br />
+        this  does enable the cache for all queries with a cache duration of one week and two days.</div></td>
     </tr>
     <tr id="tempcachetimeout">
       <td valign="top" class="split">$Db-&gt;<strong>TempCacheTimeout</strong></td>
-      <td valign="top" class="split">Define the cache timeout in minutes but only for the next query. You can use this property to active the cache for only one query, or to change the cache timeout for a only one query.<br />
-        Default value is false, which means there is no special timeout for the next query.<br />
-        If the cache is enabled (i.e. CacheTimeout &gt; 0), you can disable the cache only for the next query by setting TempCacheTimeout to TBSSQL_NOCACHE.
+      <td valign="top" class="split">Define the cache timeout in minutes but only for the next query. You can use this property to enable, disable or change change the cache timeout for a only one very query.<br />
+        Default value is TBSSQL_DISABLED (or value false for TbsSQL prior to 3.1), which means there is no different  timeout for the next query.
         <div class="decal"><u>Example:</u><br />
           <span class="sql">$Db-&gt;TempCacheTimeout = TBSSQL_1DAY;<br />
           $x = $Db-&gt;GetRows('SELECT id, name FROM table1 ORDER BY id');</span><br />
-        </div></td>
+        </div>
+        If the cache is enabled (i.e. CacheTimeout &gt; 0), you can disable the cache only for the next query by setting TempCacheTimeout to TBSSQL_NOCACHE</td>
     </tr>
     <tr id="cacheautoclear">
       <td valign="top" class="split">$Db-&gt;<strong>CacheAutoClear</strong></td>
@@ -394,7 +413,7 @@ h3 {
       <td valign="top" class="split">Try to delete the cache file corresponding to $sql. Returns <span class="sql">true</span> if succeed, otherwise returns <span class="sql">false</span>.</td>
     </tr>
   </table>
-  <h3><a name="tbs" id="tbs" /></a>3.4 Working with TinyButStrong template engine</h3>
+  <h3><a name="tbs" id="tbs" /></a>3.5 Working with TinyButStrong template engine</h3>
   <table width="100%" border="0" cellpadding="4" cellspacing="0" class="decal">
     <tr id="tbskey">
       <td width="260" valign="top" class="split0 split">$Db-&gt;<strong>TbsKey</strong></td>
@@ -406,7 +425,7 @@ h3 {
     </tr>
     <tr id="settbskey">
       <td valign="top" class="split">$Db-&gt;<strong>SetTbsKey</strong>($key)</td>
-      <td valign="top" class="split">Change the value of property $Db-&gt;TbsKey. Most of the time, there is no need to use this method because property TbsKey has always a default value which is unique. Use this method only if your application do need a customized key value for the TinyButStrong merging.<br />
+      <td valign="top" class="split">Change the value of property $Db-&gt;TbsKey. Most of the time, there is no need to use this method because property TbsKey has always a default value which is unique. Use this method only if your application does need a customized key value for the TinyButStrong merging.<br />
         Example:<br />
         <div class="sql decal">$Db-&gt;SetTbsKey('myconnection');<br />
           $TBS-&gt;MergeBlock('b', 'myconnection', 'SELECT * FROM table1');</div>
@@ -414,13 +433,7 @@ h3 {
     </tr>
   </table>
 </div>
-<h2><a name="hook" id="hook" /></a>4. Hook for TinyButStrong template engine</h2>
-<div class="decal"> TbsSQL is compatible with the <a href="http://www.tinybutstrong.com">TinyButStrong</a> Template Engine.<br />
-  Use the property $Db-&gt;TbsKey in order to have the MergeBlock() method using your TbsSQL instance.<br />
-  Example : <span class="sql">$TBS-&gt;MergeBlock('b',$Db-&gt;TbsKey,'SELECT * FROM table1');</span><br />
-  <div class="versioning">Versioning: before version 2.5, property $Db-&gt;TbsKey doesn't exist and the TBS key is the same for all TbsSQL instance. You must use the keyword 'tbssql' instead of $Db-&gt;TbsKey.</div>
-</div>
-<h2><a name="deprecated" id="deprecated" />5. Deprecated</h2>
+<h2><a name="deprecated" id="deprecated" />4. Deprecated</h2>
 <div class="decal">
   <p>Those methods are deprecated in TbsSQL version 2.x, and unsupported since version 3.x</p>
   <table width="100%" border="0" cellspacing="0" cellpadding="3">
@@ -438,10 +451,17 @@ h3 {
     </tr>
   </table>
 </div>
-<h2><a name="license" id="license" /></a></a>6. License</h2>
+<h2><a name="license" id="license" /></a></a>5. License</h2>
 <div class="decal"> TbsSQL is a free and open source. It is published under the LGPL license. </div>
-<h2><a name="changelog" id="changelog" />7. Change log</h2>
+<h2><a name="changelog" id="changelog" />6. Change log</h2>
 <div class="decal">
+  <p>Version 3.1, 2010-10-11</p>
+  <p>- Support Oracle databases.<br />
+    - New methode ConfInfo() displays configuration information at any time.<br />
+    - Fixed bug: clear and restore the console window when the parent window is actualized.<br />
+- Fixed bug: function _SqlDateFrmDb() may causes a PHP error &quot;Notice: Undefined variable: x in ...tbssql_sqlserver_odbc.php on line 461&quot;.<br />
+    - Enhanced configuration information displayed in trace mode.<br />
+- New constants: TBSSQL_1MINUTE, TBSSQL_DISABLED, TBSSQL_ALWAYS.</p>
   <p>Version 3.0, 2010-08-19</p>
   <p>- New cache feature<br />
     - Can return records as objects (as stdClass instances, or as your own class instances or as clones of any instances)<br />
@@ -459,7 +479,7 @@ h3 {
     - Use canonical formats for date and time with ODBC Generic and ODBC for SQL Server.<br />
     - Support ODBC connection string with ODBC and ODBC Generic for SQL Server.<br />
     - Do not use @ with odbc_connect() because some error of connection can make a PHP critical error.<br />
-    In this case @ avoid any error and warning messages which is uncomfortable.</p>
+    In this case @ avoid any error and warning messages which are uncomfortable.</p>
   <p>Version 2.5, 2009-09-16</p>
   <p>- New set of jokers that supports NULL values for SQL.<br />
     - constants that can be used for property $Db-&gt;Mode :<br />
