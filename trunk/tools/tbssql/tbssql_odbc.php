@@ -1,15 +1,8 @@
 <?php
 
 // TbsSql Engine
-// Version 3.1-beta, 2010-10-06, Skrol29
+// Version 3.1, 2010-10-11, Skrol29
 // www.tinybutstrong.com
-
-// 2010-09-20: Oracle support
-// 2010-09-20: add optional argument $Info to LastRowId() for the Oracle support
-// 2010-09-20: add optional argument $Info to LastRowId() for the Oracle support
-// 2010-10-06: clear and restore the console window when the parent windows is actualized
-// 2010-10-06: add ConfInfo() and enhanced configuration information
-// 2010-10-06: BUG: function _SqlDateFrmDb(), $x used in return() may naver be defined => "Notice: Undefined variable: x in ...tbssql_sqlserver_odbc.php on line 461"
 
 if ( (version_compare(PHP_VERSION,'5')<0) && (!function_exists('clone'))  ) {
 	eval('function clone($object) {return $object;}'); // eval is needed because the syntax function clone() is refused in PHP 5
@@ -26,6 +19,8 @@ define('TBSSQL_1HOUR', 60);
 define('TBSSQL_1DAY', 24*60);
 define('TBSSQL_1WEEK', 7*24*60);
 define('TBSSQL_NOCACHE', -1);
+define('TBSSQL_DISABLED', false);
+define('TBSSQL_ALWAYS', 0);
 define('TBSSQL_ARRAY', 'array');
 define('TBSSQL_OBJECT', 'object');
 
@@ -33,7 +28,7 @@ class clsTbsSql {
 
 	function __construct($srv='',$uid='',$pwd='',$db='',$drv='',$Mode=TBSSQL_NORMAL) {
 		// Default values (defined here to be compatible with both PHP 4 & 5)
-		$this->Version = '3.1-beta';
+		$this->Version = '3.1';
 		$this->Id = false;
 		$this->SqlNull = 'NULL'; // can be modified by user
 		$this->DefaultRowType = TBSSQL_ARRAY;
@@ -280,27 +275,27 @@ class clsTbsSql {
 		
 		// mode
 		$x = $this->_ModeDecompose($this->Mode, array(TBSSQL_SILENT=>'TBSSQL_SILENT', TBSSQL_NORMAL=>'TBSSQL_NORMAL', TBSSQL_DEBUG=>'TBSSQL_DEBUG', TBSSQL_TRACE=>'TBSSQL_TRACE', TBSSQL_GRID=>'TBSSQL_GRID', TBSSQL_CONSOLE=>'TBSSQL_CONSOLE'));
-		$this->_Message('[Configuration]: ->Mode = '.$x, '#060');
+		$this->_Message('[Configuration]: property Mode = '.$x, '#060');
 		
 		// DefaultRowType
 		$x = $this->_ModeDecompose($this->DefaultRowType, array(TBSSQL_ARRAY=>'TBSSQL_ARRAY', TBSSQL_OBJECT=>'TBSSQL_OBJECT'));
-		$this->_Message('[Configuration]: ->DefaultRowType = '.$x, '#060');
-
-		// TempCacheTimeout
-		$x = $this->_ModeDecompose($this->TempCacheTimeout, false);
-		$this->_Message('[Configuration]: ->TempCacheTimeout = '.$x, '#060');
+		$this->_Message('[Configuration]: property DefaultRowType = '.$x, '#060');
 
 		// CacheTimeout
 		$x = $this->_ModeDecompose($this->CacheTimeout, false);
-		$this->_Message('[Configuration]: ->CacheTimeout = '.$x, '#060');
+		$this->_Message('[Configuration]: property CacheTimeout = '.$x, '#060');
+
+		// TempCacheTimeout
+		$x = $this->_ModeDecompose($this->TempCacheTimeout, false);
+		$this->_Message('[Configuration]: property TempCacheTimeout = '.$x, '#060');
 
 		// CacheAutoClear
 		$x = $this->_ModeDecompose($this->CacheAutoClear, false);
-		$this->_Message('[Configuration]: ->CacheAutoClear = '.$x, '#060');
+		$this->_Message('[Configuration]: property CacheAutoClear = '.$x, '#060');
 
 		// CacheDir and CacheSuffix
-		$this->_Message('[Configuration]: ->CacheDir = '.var_export($this->CacheDir,true), '#060');
-		$this->_Message('[Configuration]: ->CacheSuffix = '.var_export($this->CacheSuffix,true), '#060');
+		$this->_Message('[Configuration]: property CacheDir = '.var_export($this->CacheDir,true), '#060');
+		$this->_Message('[Configuration]: property CacheSuffix = '.var_export($this->CacheSuffix,true), '#060');
 		
 	}
 
@@ -430,7 +425,7 @@ TbsSqlConsole.focus();
 		
 		// duration
 		if ($Options===false) {
-			$Options = array('TBSSQL_1WEEK'=>TBSSQL_1WEEK, 'TBSSQL_1DAY'=>TBSSQL_1DAY, 'TBSSQL_1HOUR'=>TBSSQL_1HOUR, 'TBSSQL_1MINUTE'=>TBSSQL_1MINUTE ,'TBSSQL_NOCACHE'=>TBSSQL_NOCACHE, 'false (disabled)'=>false); // order must be respected
+			$Options = array('TBSSQL_1WEEK'=>TBSSQL_1WEEK, 'TBSSQL_1DAY'=>TBSSQL_1DAY, 'TBSSQL_1HOUR'=>TBSSQL_1HOUR, 'TBSSQL_1MINUTE'=>TBSSQL_1MINUTE, 'TBSSQL_ALWAYS'=>TBSSQL_ALWAYS, 'TBSSQL_NOCACHE'=>TBSSQL_NOCACHE, 'TBSSQL_DISABLED'=>TBSSQL_DISABLED); // order must be respected
 			if (in_array($Mode, $Options, true)) return array_search($Mode, $Options, true);
 			$x = array();
 			$remain = $Mode;
@@ -829,7 +824,7 @@ TbsSqlConsole.focus();
 // Version 1.03, 2010-06-10, Skrol29
 	
 	function _Dbs_Prepare() {
-		$this->Version .= '/1.03 for OBDC (Windows or Linux)';
+		$this->Version .= ' for OBDC (Windows or Linux)';
 	}
 
 	function _Dbs_Connect($srv,$uid,$pwd,$db,$drv) {
