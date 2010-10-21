@@ -1,7 +1,7 @@
 <?php
 
 // TbsSql Engine
-// Version 3.1, 2010-10-11, Skrol29
+// Version 3.2, 2010-10-21, Skrol29
 // www.tinybutstrong.com
 
 if ( (version_compare(PHP_VERSION,'5')<0) && (!function_exists('clone'))  ) {
@@ -28,7 +28,7 @@ class clsTbsSql {
 
 	function __construct($srv='',$uid='',$pwd='',$db='',$drv='',$Mode=TBSSQL_NORMAL) {
 		// Default values (defined here to be compatible with both PHP 4 & 5)
-		$this->Version = '3.1';
+		$this->Version = '3.2';
 		$this->Id = false;
 		$this->SqlNull = 'NULL'; // can be modified by user
 		$this->DefaultRowType = TBSSQL_ARRAY;
@@ -62,7 +62,7 @@ class clsTbsSql {
 		if ($auto) {
 			// Connection by a global variable
 			$var = $srv;
-			if (!isset($GLOBALS[$var])) return $this->_Message('[Error] Automatic Connection failed because the global variable \''.$var.'\' is not found.');
+			if (!isset($GLOBALS[$var])) return $this->_Message('error', 'Automatic Connection failed because the global variable \''.$var.'\' is not found.');
 			if (!$this->_TakeVar($var,'srv',$srv)) return false;
 			if (!$this->_TakeVar($var,'uid',$uid)) return false;
 			if (!$this->_TakeVar($var,'pwd',$pwd)) return false;
@@ -245,13 +245,13 @@ class clsTbsSql {
 		if (file_exists($x)) {
 			$ok = unlink($x);
 			if ($ok) {
-				if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('[Cache]: CacheDelete() has deleted the cache file: '.$x, '#060');
+				if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('cache', 'CacheDelete() has deleted the cache file: '.$x);
 			} else {
-				$this->_Message('[Error]: CacheDelete() unexpected failure. Check permissions for deleting cache file '.$x);
+				$this->_Message('error', 'CacheDelete() unexpected failure. Check permissions for deleting cache file '.$x);
 			}
 			return $ok;
 		} else {
-			if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('[Cache]: CacheDelete() has not found the cache file '.$x, '#060');
+			if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('cache', 'CacheDelete() has not found the cache file '.$x);
 			return false;
 		}
 	}
@@ -271,31 +271,31 @@ class clsTbsSql {
 		$this->InitMsg = false; // prevent from displaying the info twice
 		
 		// version
-		$this->_Message('[Configuration]: TbsSql version '.$this->Version, '#060');
+		$this->_Message('conf', 'TbsSql version '.$this->Version);
 		
 		// mode
 		$x = $this->_ModeDecompose($this->Mode, array(TBSSQL_SILENT=>'TBSSQL_SILENT', TBSSQL_NORMAL=>'TBSSQL_NORMAL', TBSSQL_DEBUG=>'TBSSQL_DEBUG', TBSSQL_TRACE=>'TBSSQL_TRACE', TBSSQL_GRID=>'TBSSQL_GRID', TBSSQL_CONSOLE=>'TBSSQL_CONSOLE'));
-		$this->_Message('[Configuration]: property Mode = '.$x, '#060');
+		$this->_Message('conf', 'property Mode = '.$x);
 		
 		// DefaultRowType
 		$x = $this->_ModeDecompose($this->DefaultRowType, array(TBSSQL_ARRAY=>'TBSSQL_ARRAY', TBSSQL_OBJECT=>'TBSSQL_OBJECT'));
-		$this->_Message('[Configuration]: property DefaultRowType = '.$x, '#060');
+		$this->_Message('conf', 'property DefaultRowType = '.$x);
 
 		// CacheTimeout
 		$x = $this->_ModeDecompose($this->CacheTimeout, false);
-		$this->_Message('[Configuration]: property CacheTimeout = '.$x, '#060');
+		$this->_Message('conf', 'property CacheTimeout = '.$x);
 
 		// TempCacheTimeout
 		$x = $this->_ModeDecompose($this->TempCacheTimeout, false);
-		$this->_Message('[Configuration]: property TempCacheTimeout = '.$x, '#060');
+		$this->_Message('conf', 'property TempCacheTimeout = '.$x);
 
 		// CacheAutoClear
 		$x = $this->_ModeDecompose($this->CacheAutoClear, false);
-		$this->_Message('[Configuration]: property CacheAutoClear = '.$x, '#060');
+		$this->_Message('conf', 'property CacheAutoClear = '.$x);
 
 		// CacheDir and CacheSuffix
-		$this->_Message('[Configuration]: property CacheDir = '.var_export($this->CacheDir,true), '#060');
-		$this->_Message('[Configuration]: property CacheSuffix = '.var_export($this->CacheSuffix,true), '#060');
+		$this->_Message('conf', 'property CacheDir = '.var_export($this->CacheDir,true));
+		$this->_Message('conf', 'property CacheSuffix = '.var_export($this->CacheSuffix,true));
 		
 	}
 
@@ -362,16 +362,33 @@ class clsTbsSql {
 		if ($this->Mode===TBSSQL_SILENT) return;
 		$x =  'Database error message: '.$this->_Dbs_Error($ObjId);
 		if ($this->_ModeHas(TBSSQL_DEBUG)) $x .= "\r\nSQL = ".$this->LastSql;
-		$this->_Message($x);
+		$this->_Message('error', $x);
 		return false;
 	}
 
-	function _Message($Txt, $Color='#FF0000') {
+	function _Message($Type, $Txt) {
 	// display a message right now in the Html page or in the console. Must return false. Default color is red, which means error.
 
 		if ($this->Mode===TBSSQL_SILENT) return false;
 
-		if ($this->InitMsg) {
+		if ($Type==='error') {
+			$Color = '#FF0000';
+			$Prefix = '[Error]: ';
+		} elseif ($Type==='sql') {
+			$Color = '#663399';
+			$Prefix = '[SQL]: ';
+		} elseif ($Type==='connection') {
+			$Color = '#663399';
+			$Prefix = '[Connection]: ';
+		} elseif ($Type==='cache') {
+			$Color = '#060';
+			$Prefix = '[Cache]: ';
+		} elseif ($Type==='conf') {
+			$Color = '#060';
+			$Prefix = '[Configuration]: ';
+		}
+
+		if ( ($Type!=='error') && $this->InitMsg ) {
 			// display the TbsSql version the very first time and continue
 			$this->ConfInfo();
 		}
@@ -379,7 +396,7 @@ class clsTbsSql {
 		if (is_array($Txt)) {
 			$Html =  $this->_HtmlGrid($Txt);
 		} else {
-			$Html = '<div style="color: '.$Color.';">[TbsSql]'.nl2br(htmlentities($Txt)).'</div>'."\r\n";
+			$Html = '<div style="color: '.$Color.';">[TbsSql]'.nl2br(htmlentities($Prefix.$Txt)).'</div>'."\r\n";
 		}
 
 		if ($this->_ModeHas(TBSSQL_CONSOLE)) {
@@ -468,7 +485,7 @@ TbsSqlConsole.focus();
 		if (isset($GLOBALS[$VarName][$Key])) {
 			$Target = $GLOBALS[$VarName][$Key];
 		} elseif ($MustBe) {
-			$this->_Message('[Error]: Automatic Connection failed because the item \''.$Key.'\' is not found in the global variable \''.$VarName.'\'.');
+			$this->_Message('error', 'Automatic Connection failed because the item \''.$Key.'\' is not found in the global variable \''.$VarName.'\'.');
 			return false;
 		}
 		return true;
@@ -512,7 +529,7 @@ TbsSqlConsole.focus();
 			if ($this->_SqlDateParseOk) {
 				$x = date_parse($Date);
 				if (($x===false) || ($x['warning_count']>0) || ($x['error_count']>0)) {
-					$this->_Message('[Error]: the date argument (string) \''.$Date.'\' is not recognized as a valide date. It will be merged as is in the SQL query.');
+					$this->_Message('error', 'the date argument (string) \''.$Date.'\' is not recognized as a valide date. It will be merged as is in the SQL query.');
 					$Mode = 0; // The date will be passed as is to the SQL
 					$x = $Date;
 				} else {
@@ -521,7 +538,7 @@ TbsSqlConsole.focus();
 			} else {
 				$x = strtotime($Date);
 				if (($x===-1) || ($x===false)) {
-					$this->_Message('[Error]: the date argument (string) \''.$Date.'\' is not recognized as a valide date. This can happens on 32bit systems for dates over 2038-01-19. TbsSQL can workaround this date limit if you use PHP>=5.2');
+					$this->_Message('error', 'the date argument (string) \''.$Date.'\' is not recognized as a valide date. This can happens on 32bit systems for dates over 2038-01-19. TbsSQL can workaround this date limit if you use PHP>=5.2');
 					$Mode = 0; // The date will be passed as is to the SQL
 					$x = $Date;
 				} else {
@@ -535,7 +552,7 @@ TbsSqlConsole.focus();
 			// It's an array supported by TbsSQL
 			$x = $Date;
 			if (!isset($x['y'])) {
-				$this->_Message('[Error]: the date argument is an array but has no key \'y\'. The value will be replaced with the current date-time.');
+				$this->_Message('eror', 'the date argument is an array but has no key \'y\'. The value will be replaced with the current date-time.');
 				$x = $this->_SqlDateInfo(time());
 			}
 			if (!isset($x['m'])) $x['m'] = 1;
@@ -545,7 +562,7 @@ TbsSqlConsole.focus();
 			if (!isset($x['s'])) $x['s'] = 0;
 		} else {
 			$x = ''; // avoid a PHP error notice
-			$this->_Message('[Error]: the date argument can not be recognized as date: '.var_export($Date,true));
+			$this->_Message('error', 'the date argument can not be recognized as date: '.var_export($Date,true));
 		}
 
 		return $this->_Dbs_Date($x,$FrmMode);
@@ -608,7 +625,7 @@ TbsSqlConsole.focus();
 			if ($this->_ModeHas(TBSSQL_DEBUG)) {
 				$this->LastSql = $Sql;
 			} elseif ($this->_ModeHas(TBSSQL_TRACE)) {
-				$this->_Message('[SQL]: '.$Sql,'#663399');
+				$this->_Message('sql', $Sql);
 			}
 		}
 		return $Sql;
@@ -631,7 +648,7 @@ TbsSqlConsole.focus();
 
 		$this->_Dbs_RsClose($RsId);
 		
-		if ($this->_ModeHas(TBSSQL_GRID)) $this->_Message($Data);
+		if ($this->_ModeHas(TBSSQL_GRID)) $this->_Message('data', $Data);
 
 		return true;
 	}
@@ -734,12 +751,12 @@ TbsSqlConsole.focus();
 			// echo 'debug CacheTryRetrieve : cache still current'."<br>\r\n";
 			include($this->_CacheCurrFile); // set $CacheSql and $Data
 			if ($Sql===$CacheSql) {
-				if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('[Cache]: Data retrieved from cache file '.$this->_CacheCurrFile,'#060');
-				if ($this->_ModeHas(TBSSQL_GRID))  $this->_Message($Data);
+				if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('cache', 'Data retrieved from cache file '.$this->_CacheCurrFile);
+				if ($this->_ModeHas(TBSSQL_GRID))  $this->_Message('data', $Data);
 				return true;
 			} else {
 				// It can happens very rarely that two different SQL queries have the same md5, with this chech we are sure to have to good result
-				if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('[Cache]: Data not retrieved from cache file '.$this->_CacheCurrFile.' because SQL is different.','#060');
+				if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('cache', 'Data not retrieved from cache file '.$this->_CacheCurrFile.' because SQL is different.');
 				return false;
 			}
 		}
@@ -755,7 +772,7 @@ TbsSqlConsole.focus();
 
 		$fid = @fopen($this->_CacheCurrFile, 'w');
 		if ($fid===false) {
-			$this->_Message('[Error]: The cache file '.$this->_CacheCurrFile.' cannot be saved.');
+			$this->_Message('error', 'The cache file '.$this->_CacheCurrFile.' cannot be saved.');
 			$ok = false;
 		} else {
 			flock($fid,2); // acquire an exlusive lock
@@ -764,7 +781,7 @@ TbsSqlConsole.focus();
 			flock($fid,3); // release the lock
 			fclose($fid);
 			//echo 'debug CacheTryUpdate : cache file='.date('Y-m-d h:i:s',filemtime($this->_CacheCurrFile)).' end='.date('Y-m-d h:i:s',$cache_end).' , now='.date('Y-m-d h:i:s',time()).' , ok='.var_export($ok,true)."<br>\r\n";
-			if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('[Cache]: Data saved in cache file '.$this->_CacheCurrFile,'#060');
+			if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('cache', 'Data saved in cache file '.$this->_CacheCurrFile);
 			$ok = true;
 		}
 		$this->_CacheCurrSql = false;
@@ -812,7 +829,7 @@ TbsSqlConsole.focus();
 
 		touch($check_file);
 
-		if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('[Cache]: CacheAutoClear has deleted '.count($lst).' old cache files from directory '.$this->CacheDir,'#060');
+		if ($this->_ModeHas(TBSSQL_TRACE)) $this->_Message('cache', 'CacheAutoClear has deleted '.count($lst).' old cache files from directory '.$this->CacheDir);
 
 	}
 
@@ -869,7 +886,7 @@ TbsSqlConsole.focus();
 		
 		// Information, must be the same for any database type	
 		if ($this->Mode==TBSSQL_DEBUG) $this->LastSql = 'Connection String='.$str;
-		if ($this->Mode==TBSSQL_TRACE) $this->_Message('Trace Connection String: '.$str,'#663399');
+		if ($this->Mode==TBSSQL_TRACE) $this->_Message('connection', 'Connection String: '.$srv);
 		
 		$this->Id = odbc_connect($str,$uid,$pwd); // do not use @ before the function because the non installation of the extension on Linux makes a fatal error.
 		
