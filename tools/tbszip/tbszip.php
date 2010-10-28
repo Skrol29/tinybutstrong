@@ -1,7 +1,7 @@
 <?php
 
 /*
-TbsZip version 2.1 (2010-07-01)
+TbsZip version 2.2 (2010-10-28)
 Author  : Skrol29 (email: http://www.tinybutstrong.com/onlyyou.html)
 Licence : LGPL
 This class is independent from any other classes and has been originally created for the OpenTbs plug-in
@@ -651,7 +651,7 @@ class clsTbsZip {
 				$z = 0;
 			} else {
 				$z = intval($val % 256);
-				if ($val<0) {
+				if (($val<0) && ($z!=0)) { // ($z!=0) is very important, example: val=-420085702
 					// special opration for negative value. If the number id too big, PHP stores it into a signed integer. For example: crc32('coucou') => -256185401 instead of  4038781895. NegVal = BigVal - (MaxVal+1) = BigVal - 256^4
 					$val = ($val - $z)/256 -1;
 					$z = 256 + $z;
