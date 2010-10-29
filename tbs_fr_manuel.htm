@@ -158,7 +158,7 @@ a.opt-name:hover {
         </tr>
         <tr class="txt-tiny">
           <td>Date :</td>
-          <td>2010-09-25</td>
+          <td>2010-10-29</td>
         </tr>
       </table></td>
     <td width="34%" align="center"><div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div>
@@ -2776,6 +2776,36 @@ Exemple :<br>
           <table cellpadding="1" cellspacing="0" class="border-1">
             <tr>
               <td width="200" class="border-1">[pers_sub1.val;block=tr]</td>
+            </tr>
+          </table></td>
+      </tr>
+    </table>
+  </div>
+  <br>
+  <span class="title-1b">Sous-blocs directs (qui ne sont pas enregistr&eacute;s sous une colonne) :</span> Si vous utilisez le param&egrave;tre <span class="opt-name">sub1</span> en omettant le nom de colonne, alors TBS va consid&eacute;rer que les donn&eacute;es du sous-bloc sont directement accessibles sur l'enregistrement   en cours plut&ocirc;t que dans une colonne de cet enregistrement. <span class="versioning">Les sous-blocs directs sont support&eacute;s depuis TBS version 3.6.1.</span><br>
+  <br>
+  <div class="decal">Exemple de donn&eacute;es qui peuvent &ecirc;tre fusionn&eacute;es avec un sous-bloc direct :<br>
+    <span class="txt-code">$data = array();<br>
+    $data['groupe1'] = 
+    array();<br>
+    $data['groupe1'][] = 
+    array('id'=&gt;1, 'nom'=&gt;'pierre');<br>
+    $data['groupe1'][] = 
+    array('id'=&gt;2, 'nom'=&gt;'paul');<br>
+$data['groupe2'] = 
+    array();<br>
+$data['groupe2'][] = 
+    array('id'=&gt;3, 'nom'=&gt;'jules');<br>
+$data['groupe2'][] = 
+    array('id'=&gt;4, 'nom'=&gt;'jim');</span><br>
+    <br>
+    Exemple de sous-bloc direct qui peut &ecirc;tre fusionn&eacute; avec ces donn&eacute;es :<br>
+    <table width="400" cellpadding="2" cellspacing="0" class="border-2">
+      <tr>
+        <td class="border-2"><font color="#336699">Groupe :</font> [pers.$;block=tr;sub1]<br>
+          <table cellpadding="1" cellspacing="0" class="border-1">
+            <tr>
+              <td width="200" class="border-1">[pers_sub1.nom;block=tr]</td>
             </tr>
           </table></td>
       </tr>

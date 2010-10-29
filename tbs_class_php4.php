@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.6.0 for PHP 4
-Date     : 2010-09-23
+Version  : 3.6.1 for PHP 4
+Date     : 2010-10-14
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -493,7 +493,7 @@ var $ObjectRef = false;
 var $NoErr = false;
 var $Assigned = array();
 // Undocumented (can change at any version)
-var $Version = '3.6.0';
+var $Version = '3.6.1';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -1493,9 +1493,9 @@ function meth_Locator_Rename(&$Txt, $Replace) {
 					$this->meth_Merge_Block($Txt, $old, $s, $q, false, false);
 				} else {
 					$old = $this->_ChrOpen.$old;
-					$old = array($old.'.', $old.' ', $old.';');
+					$old = array($old.'.', $old.' ', $old.';', $old.$this->_ChrClose);
 					$new = $this->_ChrOpen.$new;
-					$new = array($new.'.', $new.' ', $new.';');
+					$new = array($new.'.', $new.' ', $new.';', $new.$this->_ChrClose);
 					$Txt = str_replace($old,$new,$Txt);
 				}
 			}
@@ -1805,9 +1805,10 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum) {
 		if ($QueryOk) {
 			if ($Src->Type===2) { // Special for Text merge
 				if ($LocR->BlockFound) {
+					$Txt = substr_replace($Txt,$Src->RecSet,$LocR->PosBeg,$LocR->PosEnd-$LocR->PosBeg+1);
+					$Src->DataFetch(); // store data, may be needed for multiple blocks
 					$Src->RecNum = 1;
 					$Src->CurrRec = false;
-					$Txt = substr_replace($Txt,$Src->RecSet,$LocR->PosBeg,$LocR->PosEnd-$LocR->PosBeg+1);
 				} else {
 					$Src->DataAlert('can\'t merge the block with a text value because the block definition is not found.');
 				}
@@ -2251,9 +2252,13 @@ function meth_Merge_SectionNormal(&$BDef,&$Src) {
 			$name = $BDef->Name.'_sub'.$i;
 			$query = '';
 			$col = $BDef->Prm['sub'.$i];
+			if ($col===true) $col = '';
 			$col_opt = (substr($col,0,1)==='(') && (substr($col,-1,1)===')');
 			if ($col_opt) $col = substr($col,1,strlen($col)-2);
-			if (is_object($Src->CurrRec)) {
+			if ($col==='') {
+				// $col_opt cannot be used here because values which are not array nore object are reformated by $Src into an array with keys 'key' and 'val'
+				$data = &$Src->CurrRec;
+			} elseif (is_object($Src->CurrRec)) {
 				$data = &$Src->CurrRec->$col;
 			} else {
 				if (array_key_exists($col, $Src->CurrRec)) {

@@ -2252,9 +2252,13 @@ function meth_Merge_SectionNormal(&$BDef,&$Src) {
 			$name = $BDef->Name.'_sub'.$i;
 			$query = '';
 			$col = $BDef->Prm['sub'.$i];
+			if ($col===true) $col = '';
 			$col_opt = (substr($col,0,1)==='(') && (substr($col,-1,1)===')');
 			if ($col_opt) $col = substr($col,1,strlen($col)-2);
-			if (is_object($Src->CurrRec)) {
+			if ($col==='') {
+				// $col_opt cannot be used here because values which are not array nore object are reformated by $Src into an array with keys 'key' and 'val'
+				$data = &$Src->CurrRec;
+			} elseif (is_object($Src->CurrRec)) {
 				$data = &$Src->CurrRec->$col;
 			} else {
 				if (array_key_exists($col, $Src->CurrRec)) {
