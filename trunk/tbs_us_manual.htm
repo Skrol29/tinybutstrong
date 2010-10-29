@@ -158,7 +158,7 @@ a.opt-name:hover {
         </tr>
         <tr class="txt-tiny">
           <td>Date:</td>
-          <td>2010-09-25</td>
+          <td>2010-10-29</td>
         </tr>
       </table></td>
     <td width="34%" align="center">
@@ -2731,6 +2731,36 @@ Example: <br>
       </tr>
     </table>
     <br>
+  </div>
+  <span class="title-1b"><br>
+  Direct subblocks (which are not saved under a column):</span> If you use parameter <span class="opt-name">sub1</span> by omitting the column name, then TBS will assume that the data for the subblock are available directly on the current record instead of under a column of this record. <span class="versioning">Direct subblocks are supported since TBS version 3.6.1.</span><br>
+  <br>
+  <div class="decal">Example of data that can be merged with a direct subblock:<br>
+    <span class="txt-code">$data = array();<br>
+      $data['group1'] = 
+      array();<br>
+      $data['group1'][] = 
+      array('id'=&gt;1, 'name'=&gt;'peter');<br>
+      $data['group1'][] = 
+      array('id'=&gt;2, 'name'=&gt;'paul');<br>
+      $data['group2'] = 
+      array();<br>
+      $data['group2'][] = 
+      array('id'=&gt;3, 'name'=&gt;'jules');<br>
+      $data['group2'][] = 
+      array('id'=&gt;4, 'name'=&gt;'jim');</span><br>
+    <br>
+    Example of direct subblock that can be merged with those data:<br>
+  <table width="400" cellpadding="2" cellspacing="0" class="border-2">
+    <tr>
+      <td class="border-2"><font color="#336699">Group :</font> [body.$;block=tr;sub1]<br>
+        <table cellpadding="1" cellspacing="0" class="border-1">
+          <tr>
+            <td width="200" class="border-1">[body_sub1.name;block=tr]</td>
+          </tr>
+        </table></td>
+    </tr>
+  </table>
   </div>
 </div>
 <h3><a name="html_block_dynsb" id="html_block_dynsb"></a>Subblocks with dynamic queries:</h3>
