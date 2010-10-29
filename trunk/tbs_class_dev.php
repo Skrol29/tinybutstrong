@@ -4,7 +4,7 @@
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
 Version  : 3.6.1 for PHP 4
-Date     : 2010-10-14
+Date     : 2010-10-29
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
