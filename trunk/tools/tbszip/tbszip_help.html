@@ -153,7 +153,9 @@ See other <a href="http://www.tinybutstrong.com/plugins.php">TinyButStrong plugi
   </tr>
 </table>
 <h2><a name="change" id="intro6"></a>5. Change log</h2>
-<p>Version 2.1, 2010-07-01<br />
+<p>Version 2.2, 2010-10-28<br />
+  - major bug fixed: some added or modified files can be saved in the archive with a wrong CRC control code. This could make  softwares to consider the file or the archive as corrupted. Only few CRC codes are wrongly saved, thus the bug is rare and can seem to appear randomly.</p>
+<p> Version 2.1, 2010-07-01<br />
   - bug fixed: when adding a new file in the archive, the time of the file was wrong (date was ok)<br />
   - TbsZip now changes the date and time of a file in the archive when the file content is replaced<br />
   - new method CreateNew()</p>
