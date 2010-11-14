@@ -16,6 +16,11 @@ h1 {
 h2 {
 	font-weight: bold;
 }
+h3 {
+	font-weight: bold;
+	text-decoration: underline;
+	font-size: 12px;
+}
 .option {
 	color: #FF3300;
 }
@@ -118,7 +123,7 @@ The script should drive the merging assuming that the current article is already
       If you want  to connect to a database with another account and password, then your script  must open this connection by itself, and you should specify explicitly the new  open connected for any use of MergeBlock().</td>
   </tr>
 </table>
-<p> Example:
+<h3> Example:</h3>
 <div class="decal"><u>Joomla article:</u><br />
   <div class="source">{tbs}script=myappli.php{/tbs}<br />
     <table border="1" cellspacing="0" cellpadding="2">
@@ -148,9 +153,10 @@ The script should drive the merging assuming that the current article is already
     ?&gt;</div>
 </div>
 </p>
+<h3>Coding help:</h3>
 <p>Moreover, the plug-in gives to you other coding facilities:<br />
-<br />
-    Three properties are available to retrieve information about the current Joomla context:<br />
+  <br />
+  Three properties are given by the TinyButStrong plug-in to retrieve information about the current Joomla context:<br />
 </p>
 <ul>
   <li> $TBS-&gt;<span class="option">JoomlaArticle</span>: A reference to the article that is being rendered by the view. For example: <span class="source">$TBS-&gt;JoomlaParams-&gt;title</span> and <span class="source">$TBS-&gt;JoomlaParams-&gt;id
@@ -158,12 +164,66 @@ The script should drive the merging assuming that the current article is already
   <li>$TBS-&gt;<span class="option">JoomlaParams</span>: A reference to an associative array of relevant parameters.</li>
   <li>$TBS-&gt;<span class="option">JoomlaLimitstart</span>: An integer that determines the &quot;page&quot; of the content that is to be generated. </li>
 </ul>
-<p> Two functions are available to work directly with the Joomla database using the  Joomla Database Object (DBO).</p>
+<p> Two functions are given by the TinyButStrong plug-in to work with  the Joomla Database Object which is a  database connectivity tool. It helps to query and execute SQL statements in the Joomla database and other databases available with the same MySQL connection as Joomla.</p>
 <ul>
   <li> <span class="option">tbs_plugin_SqlGetRows</span>($sql, $err_prefix=''):    Return the result of a query, first row is index 0, and each row is an associative PHP array.
   Return an empty array if the query gives no data. In case of error, the function return false and a message is displayed. You can prefix the error message using argument $err_prefix. </li>
   <li><span class="option">tbs_plugin_SqlExecute</span>($sql, $err_prefix=''):  Execute the query and return true if there is no error, otherwise return false and display an error message.</li>
 </ul>
+<p>Tips and trics using the Joomla framework:</p>
+<table border="0" cellpadding="3" cellspacing="0">
+  <tr>
+    <td align="left" valign="top"><u><strong>How to get</strong></u></td>
+    <td width="10" align="left" valign="top"><u></u></td>
+    <td align="left" valign="top"><u><strong>Code</strong></u></td>
+    <td width="10" align="left" valign="top"><u></u></td>
+    <td align="left" valign="top"><u><strong>Comments</strong></u></td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" nowrap="nowrap">Current Article's id:</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">$id = $TBS-&gt;JoomlaArticle-&gt;id;</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" nowrap="nowrap">Current Article's title:</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">$title = $TBS-&gt;JoomlaArticle-&gt;title;</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">read/write</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" nowrap="nowrap">URL of the current article:</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">$url = JRoute::_(ContentHelperRoute::getArticleRoute($art_id));</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">$art_id must be the current article id.<br />
+      This expression give the good URL coresponding to the current URL mode configured in the Joomla instance (long, short, with html extension or not)</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">Current user object</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">$user =&amp; JFactory::getUser();</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">If ($user-&gt;id==0) then the current user is not logged.</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">$user-&gt;username</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">Prefix of Joomla tables</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">$conf = new JConfig();<br />
+$jpref = $conf-&gt;dbprefix;</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">&nbsp;</td>
+  </tr>
+</table>
 <p>You can found more coding ressource at the <a href="http://api.joomla.org/Joomla-Framework/Application/JView.html">Joomla API Documentation</a></p>
 <h2>Type #3:  Internal script</h2>
 Syntax:
@@ -178,7 +238,7 @@ This type of plugin tag is the same as the previous one but instead of  an exter
       If you want  to connect to a database with another account and password, then your script  must open this connection by itself, and you should specify explicitly the new  open connected for any use of MergeBlock().</td>
   </tr>
 </table>
-<p> Example:
+<h3> Example:</h3>
 <div class="decal"><u>Joomla article:</u><br />
   <div class="source">{tbs}embedded{/tbs}<br />
     <table border="1" cellspacing="0" cellpadding="2">
