@@ -1,7 +1,7 @@
 <?php
 
 /*
-TbsZip version 2.2 (2010-10-28)
+TbsZip version 2.3 (2010-11-29)
 Author  : Skrol29 (email: http://www.tinybutstrong.com/onlyyou.html)
 Licence : LGPL
 This class is independent from any other classes and has been originally created for the OpenTbs plug-in
@@ -30,6 +30,7 @@ class clsTbsZip {
 		$this->Close(); // note that $this->ArchHnd is set to false here
 		$this->Error = false;
 		$this->ArchFile = $ArchName;
+		$this->ArchIsNew = true;
 		$bin = 'PK'.chr(05).chr(06).str_repeat(chr(0), 18);
 		$this->CdEndPos = strlen($bin) - 4;
 		$this->CdInfo = array('disk_num_curr'=>0, 'disk_num_cd'=>0, 'file_nbr_curr'=>0, 'file_nbr_tot'=>0, 'l_cd'=>0, 'p_cd'=>0, 'l_comm'=>0, 'v_comm'=>'', 'bin'=>$bin);
@@ -41,6 +42,7 @@ class clsTbsZip {
 		$this->Close(); // close handle and init info
 		$this->Error = false;
 		$this->ArchFile = $ArchFile;
+		$this->ArchIsNew = false;
 		// open the file
 		$this->ArchHnd = fopen($ArchFile, 'rb');
 		$ok = !($this->ArchHnd===false);
@@ -816,7 +818,11 @@ class clsTbsZip {
 	function _EstimateNewArchSize($Optim=true) {
 	// Return the size of the new archive, or false if it cannot be calculated (because of external file that must be compressed before to be insered)
 
-		$Len = filesize($this->ArchFile);
+		if ($this->ArchIsNew) {
+			$Len = strlen($this->CdInfo['bin']);
+		} else {
+			$Len = filesize($this->ArchFile);
+		}
 
 		// files to replace or delete
 		foreach ($this->ReplByPos as $i) {
