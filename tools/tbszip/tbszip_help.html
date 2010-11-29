@@ -36,7 +36,7 @@ body,td,th {
 
 <body>
 <h1>ZipTBS</h1>
-<div>version 2.1, 2010-07-01, by Skrol29<br />
+<div>version 2.3, 2010-11-29, by Skrol29<br />
 </div>
 <ol>
   <li><a href="#intro">Introduction</a></li>
@@ -97,7 +97,8 @@ See other <a href="http://www.tinybutstrong.com/plugins.php">TinyButStrong plugi
         Return -1 if the file could not be compressed and has been stored uncompressed.<br />
         Return 0 if the file has been stored uncompressed as expected.<br />
         Return 1 if the file has been stored compressed has expected.<br />
-      Return 2 if the file has been stored as is with pre-compression as defined in the array $Compress.</p></td>
+      Return 2 if the file has been stored as is with pre-compression as defined in the array $Compress.</p>
+      <p>It's very interesting to know that when you add or replace a file in the archive with an external file (i.e. using option TBSZIP_FILE), then the contents of the file is not loaded immediately in PHP memory. It will be loaded, compressed and output on the fly and one by one when method Flush() is called. Thus, you can add lot of files in an archive without occupying the PHP memory.</p></td>
   </tr>
   <tr>
     <td valign="top" class="code">FileAdd($Name, $Data, $DataType=TBSZIP_STRING, $Compress=true)</td>
@@ -110,13 +111,13 @@ See other <a href="http://www.tinybutstrong.com/plugins.php">TinyButStrong plugi
   </tr>
   <tr>
     <td valign="top" class="code">Flush($Render=TBSZIP_DOWNLOAD, $File='', $ContentType='')</td>
-    <td valign="top">Create the new archive with all modifications.<br />
+    <td valign="top">Actually create the new archive with all modifications. External files to be inserted are loaded, compressed and output on the fly and one by one without staying in the  PHP memory.<br />
 <ul>
   <li>        $Render=TBSZIP_DOWNLOAD will provide the new archive as a  download with HTTP headers. Use $File to customize the name of the downloaded file. Use $ContentType to customize the ContentType header.</li>
       <li>        $Render=TBSZIP_DOWNLOAD + TBSZIP_NOHEADER will provide the new archive as a  download without HTTP.</li>
       <li>$Render=TBSZIP_FILE will provide the new archive as a  physical file on the server. Use $File to define the path of the physical file.</li>
-      <li>$Render=TBSZIP_STRING will make method Flush() to return the new archive as a binary string.</li>
-  </ul></td>
+      <li>$Render=TBSZIP_STRING will make method Flush() to return the new archive as a binary string</li>
+</ul></td>
   </tr>
   <tr>
     <td valign="top" class="code">Debug()</td>
@@ -153,8 +154,10 @@ See other <a href="http://www.tinybutstrong.com/plugins.php">TinyButStrong plugi
   </tr>
 </table>
 <h2><a name="change" id="intro6"></a>5. Change log</h2>
-<p>Version 2.2, 2010-10-28<br />
-  - major bug fixed: some added or modified files can be saved in the archive with a wrong CRC control code. This could make  softwares to consider the file or the archive as corrupted. Only few CRC codes are wrongly saved, thus the bug is rare and can seem to appear randomly.</p>
+<p>Version 2.3, 2010-11-29<br />
+- minor  bug fixed:  an archive created with both methods CreateNew() and Flush(TBSZIP_DOWNLOAD) could be truncated because the final size of the archive was badly estimated.</p>
+<p> Version 2.2, 2010-10-28<br />
+- major bug fixed: some added or modified files can be saved in the archive with a wrong CRC control code. This could make  softwares to consider the file or the archive as corrupted. Only few CRC codes are wrongly saved, thus the bug is rare and can seem to appear randomly.</p>
 <p> Version 2.1, 2010-07-01<br />
   - bug fixed: when adding a new file in the archive, the time of the file was wrong (date was ok)<br />
   - TbsZip now changes the date and time of a file in the archive when the file content is replaced<br />
