@@ -1,3 +1,0 @@
-aaabbbbcccdd
-ddddddddddeee
-eeeee
