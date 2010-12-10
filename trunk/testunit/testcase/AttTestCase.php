@@ -117,6 +117,7 @@ class AttTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("<div id=\"\" class=\"test1\"[move;att=class]>hello</div>", array('move'=>'test2'), "<div id=\"\" class=\"test2\">hello</div>", "test bug #4");
 
 		// space bug: merging attribute must add quote because some attribute like 'class' could have several values separate by a space
+		// http://sourceforge.net/tracker/?func=detail&aid=3134436&group_id=324877&atid=1364379
 		$this->assertEqualMergeFieldStrings("<div class=test1>hello[move;att=class]</div>", array('move'=>'test2 test3'), "<div class=\"test2 test3\">hello</div>", "test bug #5");
 
 		// encaps tags bug: TBS merge close the closing SPAN tag instead of merge the parent DOM node
