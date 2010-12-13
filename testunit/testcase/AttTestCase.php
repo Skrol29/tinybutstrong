@@ -1,5 +1,9 @@
 <?php
 
+/* Versionning
+Skrol29, 2010-12-13: add option TBS_TEST_NEVERFIXEDBUG
+*/
+
 class AttTestCase extends TBSUnitTestCase {
 
 	function AttTestCase() {
@@ -114,23 +118,23 @@ class AttTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("<div id=\"\" class=\"test1[move;att=class]\">hello</div>", array('move'=>'test2'), "<div id=\"\" class=\"test2\">hello</div>", "test bug #1");
 		$this->assertEqualMergeFieldStrings("<div id=\"[move;att=class]\" class=\"test1\">hello</div>", array('move'=>'test2'), "<div id=\"\" class=\"test2\">hello</div>", "test bug #2");
 		$this->assertEqualMergeFieldStrings("<div[move;att=class] id=\"\" class=\"test1\">hello</div>", array('move'=>'test2'), "<div id=\"\" class=\"test2\">hello</div>", "test bug #3");
-		$this->assertEqualMergeFieldStrings("<div id=\"\" class=\"test1\"[move;att=class]>hello</div>", array('move'=>'test2'), "<div id=\"\" class=\"test2\">hello</div>", "test bug #4");
+		$this->assertEqualMergeFieldStrings("<div id=\"\" class=\"test1\"[move;att=class]>hello</div>", array('move'=>'test2'), "<div id=\"\" class=\"test2\">hello</div>", "test bug #4", TBS_TEST_NEVERFIXEDBUG);
 
 		// space bug: merging attribute must add quote because some attribute like 'class' could have several values separate by a space
 		// http://sourceforge.net/tracker/?func=detail&aid=3134436&group_id=324877&atid=1364379
-		$this->assertEqualMergeFieldStrings("<div class=test1>hello[move;att=class]</div>", array('move'=>'test2 test3'), "<div class=\"test2 test3\">hello</div>", "test bug #5");
+		$this->assertEqualMergeFieldStrings("<div class=test1>hello[move;att=class]</div>", array('move'=>'test2 test3'), "<div class=\"test2 test3\">hello</div>", "test bug #5", TBS_TEST_NEVERFIXEDBUG);
 
 		// encaps tags bug: TBS merge close the closing SPAN tag instead of merge the parent DOM node
-		$this->assertEqualMergeFieldStrings("<div class=\"test1\"><span class=\"hello\">hello</span>[move;att=class] <span class=\"mr\">Mr.</span> <span class=\"patatoe\">Patatoe</span></div>", array('move'=>'test2'), "<div class=\"test2\"><span class=\"hello\">hello</span> <span class=\"mr\">Mr.</span> <span class=\"patatoe\">Patatoe</span></div>", "test bug #6");
+		$this->assertEqualMergeFieldStrings("<div class=\"test1\"><span class=\"hello\">hello</span>[move;att=class] <span class=\"mr\">Mr.</span> <span class=\"patatoe\">Patatoe</span></div>", array('move'=>'test2'), "<div class=\"test2\"><span class=\"hello\">hello</span> <span class=\"mr\">Mr.</span> <span class=\"patatoe\">Patatoe</span></div>", "test bug #6", TBS_TEST_NEVERFIXEDBUG);
 	
 		// quote bug: merging attribute could have value with quote, then tbs must display an error
-		$this->assertEqualMergeFieldStrings("<a href='#'>hello[move;att=href]</a>", array('move'=>'javascript:alert(\'test\')'), "TinyButStrong Error: can't mixed quote in attribute value", "test bug #7");
-		$this->assertEqualMergeFieldStrings("<a href=\"#\">hello[move;att=href]</a>", array('move'=>'javascript:alert("test")'), "TinyButStrong Error: can't mixed quote in attribute value", "test bug #8");
+		$this->assertEqualMergeFieldStrings("<a href='#'>hello[move;att=href]</a>", array('move'=>'javascript:alert(\'test\')'), "TinyButStrong Error: can't mixed quote in attribute value", "test bug #7", TBS_TEST_NEVERFIXEDBUG);
+		$this->assertEqualMergeFieldStrings("<a href=\"#\">hello[move;att=href]</a>", array('move'=>'javascript:alert("test")'), "TinyButStrong Error: can't mixed quote in attribute value", "test bug #8", TBS_TEST_NEVERFIXEDBUG);
 		$this->assertEqualMergeFieldStrings("<a>hello[move;att=href]</a>", array('move'=>'javascript:alert(\'test\')'), "<a href=\"javascript:alert('test')\">hello</a>", "test bug #9");
 
 		// close tag bug: TBS must merge attribute in autoclose tags
 		$this->assertEqualMergeFieldStrings("<hr[move;att=width] />", array('move'=>'50%'), "<hr width=\"50%\" />", "test bug #10");
-		$this->assertEqualMergeFieldStrings("<[move;att=width]hr />", array('move'=>'50%'), "<hr width=\"50%\" />", "test bug #11");
+		$this->assertEqualMergeFieldStrings("<[move;att=width]hr />", array('move'=>'50%'), "<hr width=\"50%\" />", "test bug #11", TBS_TEST_NEVERFIXEDBUG);
 		$this->assertEqualMergeFieldStrings("<h[move;att=width]r />", array('move'=>'50%'), "<hr width=\"50%\" />", "test bug #12"); // vicious
 		$this->assertEqualMergeFieldStrings("<hr [move;att=width]/>", array('move'=>'50%'), "<hr width=\"50%\" />", "test bug #13");
 	}
