@@ -1,4 +1,9 @@
 <?php
+
+/* Versionning
+Skrol29, 2010-12-13: rename 'Tiny But Strong' with 'TinyButStrong'
+*/
+
 error_reporting(E_ALL & ~E_USER_NOTICE);
 
 // include classes required for unit tests
@@ -27,7 +32,7 @@ include(dirname(__FILE__).'/testcase/QuoteTestCase.php');
 // launch tests
 ini_set("display_errors", "On");
 $tbs = new clsTinyButStrong();
-$test = new GroupTest('Tiny But Strong v'.$tbs->Version.' (with PHP '.PHP_VERSION.')');
+$test = new GroupTest('TinyButStrong v'.$tbs->Version.' (with PHP '.PHP_VERSION.')');
 $test->addTestCase(new AttTestCase());
 $test->addTestCase(new QuoteTestCase());
 $test->run(new HtmlReporter());
