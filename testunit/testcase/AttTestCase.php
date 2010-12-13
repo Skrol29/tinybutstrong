@@ -2,6 +2,7 @@
 
 /* Versionning
 Skrol29, 2010-12-13: add option TBS_TEST_NEVERFIXEDBUG
+Skrol29, 2010-12-13: add bugs about the case of attribute's name
 */
 
 class AttTestCase extends TBSUnitTestCase {
@@ -114,6 +115,7 @@ class AttTestCase extends TBSUnitTestCase {
 	}
 
 	function testBugs() {
+	
 		// merge error when tbs directive is inside the html tag
 		$this->assertEqualMergeFieldStrings("<div id=\"\" class=\"test1[move;att=class]\">hello</div>", array('move'=>'test2'), "<div id=\"\" class=\"test2\">hello</div>", "test bug #1");
 		$this->assertEqualMergeFieldStrings("<div id=\"[move;att=class]\" class=\"test1\">hello</div>", array('move'=>'test2'), "<div id=\"\" class=\"test2\">hello</div>", "test bug #2");
@@ -137,6 +139,11 @@ class AttTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("<[move;att=width]hr />", array('move'=>'50%'), "<hr width=\"50%\" />", "test bug #11", TBS_TEST_NEVERFIXEDBUG);
 		$this->assertEqualMergeFieldStrings("<h[move;att=width]r />", array('move'=>'50%'), "<hr width=\"50%\" />", "test bug #12"); // vicious
 		$this->assertEqualMergeFieldStrings("<hr [move;att=width]/>", array('move'=>'50%'), "<hr width=\"50%\" />", "test bug #13");
+
+		// bugs with case of attribute's name
+		$this->assertEqualMergeFieldStrings('<div Width="250px">[move;att=width]hello</div>', array('move'=>'50%'), '<div Width="50%">hello</div>', "test bug #14"); // note that the att parameter works if it's value is lower case
+		$this->assertEqualMergeFieldStrings('<div Width="250px">[move;att=Width]hello</div>', array('move'=>'50%'), '<div Width="50%">hello</div>', "test bug #15", TBS_TEST_NEVERFIXEDBUG); // bug: the existing attribut is not found because the intrenal list of parameters is set to lowercase by TBS
+		
 	}
 }
 
