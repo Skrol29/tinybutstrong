@@ -1,8 +1,8 @@
 <?php
 
 /* Versionning
-Skrol29, 2010-12-13: add option TBS_TEST_NEVERFIXEDBUG
-Skrol29, 2010-12-13: add bugs about the case of attribute's name
+Skrol29, 2010-12-13: add option TBS_TEST_NotYetFixedBug
+Skrol29, 2010-12-14: add bugs about the case of attribute's name + add CacheField tests + rename constants
 */
 
 class AttTestCase extends TBSUnitTestCase {
@@ -75,6 +75,7 @@ class AttTestCase extends TBSUnitTestCase {
 	}
 
 	function testMergeBlocks() {
+
 		$blk = array();
 		$blk[] = array('id'=>'AttCache x12', 'val'=>'effect1');
 		$blk[] = array('id'=>'AttCache x13', 'val'=>'effect2');
@@ -88,7 +89,23 @@ class AttTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeBlockFiles('att_test2.html', array('blk'=>$blk), 'att_test2_result.html', "test blocks #2");
 
 		// test normal with parent tag specification
-		$this->assertEqualMergeBlockFiles('att_test3.html', array('blk'=>$blk), 'att_test3_result.html', "test blocks #2");
+		$this->assertEqualMergeBlockFiles('att_test3.html', array('blk'=>$blk), 'att_test3_result.html', "test blocks #3");
+
+		$data = array();
+		$data[] = array('id'=>'x', 'val'=>'1');
+		$data[] = array('id'=>'y', 'val'=>'2');
+		$data[] = array('id'=>'z', 'val'=>'3');
+		
+		// parameter att with block => test the CacheField feature
+		$this->assertEqualMergeBlockStrings('<div>[b.val;att=width][b.id;block=div]/[b.id]/[b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #1");
+		$this->assertEqualMergeBlockStrings('<div width="0">[b.val;att=width][b.id;block=div]/[b.id]/[b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #2");
+		$this->assertEqualMergeBlockStrings('<div>[b.id;block=div]/[b.val;att=width][b.id]/[b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #1");
+		$this->assertEqualMergeBlockStrings('<div width="0">[b.id;block=div]/[b.val;att=width][b.id]/[b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #2");
+		$this->assertEqualMergeBlockStrings('<div>[b.id;block=div]/[b.id]/[b.val;att=width][b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #1");
+		$this->assertEqualMergeBlockStrings('<div width="0">[b.id;block=div]/[b.id]/[b.val;att=width][b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #2");
+		$this->assertEqualMergeBlockStrings('<div>[b.id;block=div]/[b.id]/[b.id][b.val;att=width]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #1");
+		$this->assertEqualMergeBlockStrings('<div width="0">[b.id;block=div]/[b.id]/[b.id][b.val;att=width]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #2");
+
 	}
 
 	function testOnShowMagnet() {
@@ -117,32 +134,32 @@ class AttTestCase extends TBSUnitTestCase {
 	function testBugs() {
 	
 		// merge error when tbs directive is inside the html tag
-		$this->assertEqualMergeFieldStrings("<div id=\"\" class=\"test1[move;att=class]\">hello</div>", array('move'=>'test2'), "<div id=\"\" class=\"test2\">hello</div>", "test bug #1");
-		$this->assertEqualMergeFieldStrings("<div id=\"[move;att=class]\" class=\"test1\">hello</div>", array('move'=>'test2'), "<div id=\"\" class=\"test2\">hello</div>", "test bug #2");
-		$this->assertEqualMergeFieldStrings("<div[move;att=class] id=\"\" class=\"test1\">hello</div>", array('move'=>'test2'), "<div id=\"\" class=\"test2\">hello</div>", "test bug #3");
-		$this->assertEqualMergeFieldStrings("<div id=\"\" class=\"test1\"[move;att=class]>hello</div>", array('move'=>'test2'), "<div id=\"\" class=\"test2\">hello</div>", "test bug #4", TBS_TEST_NEVERFIXEDBUG);
+		$this->assertEqualMergeFieldStrings('<div id="" class="test1[move;att=class]">hello</div>', array('move'=>'test2'), '<div id="" class="test2">hello</div>', "test bug #1");
+		$this->assertEqualMergeFieldStrings('<div id="[move;att=class]" class="test1">hello</div>', array('move'=>'test2'), '<div id="" class="test2">hello</div>', "test bug #2");
+		$this->assertEqualMergeFieldStrings('<div[move;att=class] id="" class="test1">hello</div>', array('move'=>'test2'), '<div id="" class="test2">hello</div>', "test bug #3");
+		$this->assertEqualMergeFieldStrings('<div id="" class="test1"[move;att=class]>hello</div>', array('move'=>'test2'), '<div id="" class="test2">hello</div>', "test bug #4", TBS_TEST_NotYetFixedBug); // return '<div id="" class="test2'
 
 		// space bug: merging attribute must add quote because some attribute like 'class' could have several values separate by a space
 		// http://sourceforge.net/tracker/?func=detail&aid=3134436&group_id=324877&atid=1364379
-		$this->assertEqualMergeFieldStrings("<div class=test1>hello[move;att=class]</div>", array('move'=>'test2 test3'), "<div class=\"test2 test3\">hello</div>", "test bug #5", TBS_TEST_NEVERFIXEDBUG);
+		$this->assertEqualMergeFieldStrings("<div class=test1>hello[move;att=class]</div>", array('move'=>'test2 test3'), '<div class="test2 test3">hello</div>', "test bug #5", TBS_TEST_StatusToDiscuss); // is this really a bug? TBS is not suppposed to check data for HTML compatibility.
 
-		// encaps tags bug: TBS merge close the closing SPAN tag instead of merge the parent DOM node
-		$this->assertEqualMergeFieldStrings("<div class=\"test1\"><span class=\"hello\">hello</span>[move;att=class] <span class=\"mr\">Mr.</span> <span class=\"patatoe\">Patatoe</span></div>", array('move'=>'test2'), "<div class=\"test2\"><span class=\"hello\">hello</span> <span class=\"mr\">Mr.</span> <span class=\"patatoe\">Patatoe</span></div>", "test bug #6", TBS_TEST_NEVERFIXEDBUG);
+		// encaps tags bug: TBS merge close the closing SPAN tag instead of merge the parent DOM node ('hello</span class="test2">')
+		$this->assertEqualMergeFieldStrings('<div class="test1"><span class="hello">hello</span>[move;att=class] <span class="mr">Mr.</span> <span class="patatoe">Patatoe</span></div>', array('move'=>'test2'), '<div class="test2"><span class="hello">hello</span> <span class="mr">Mr.</span> <span class="patatoe">Patatoe</span></div>', "test bug #6", TBS_TEST_NotYetFixedBug);
 	
 		// quote bug: merging attribute could have value with quote, then tbs must display an error
-		$this->assertEqualMergeFieldStrings("<a href='#'>hello[move;att=href]</a>", array('move'=>'javascript:alert(\'test\')'), "TinyButStrong Error: can't mixed quote in attribute value", "test bug #7", TBS_TEST_NEVERFIXEDBUG);
-		$this->assertEqualMergeFieldStrings("<a href=\"#\">hello[move;att=href]</a>", array('move'=>'javascript:alert("test")'), "TinyButStrong Error: can't mixed quote in attribute value", "test bug #8", TBS_TEST_NEVERFIXEDBUG);
+		$this->assertEqualMergeFieldStrings("<a href='#'>hello[move;att=href]</a>", array('move'=>"javascript:alert('test')"), "TinyButStrong Error: can't mixed quote in attribute value", "test bug #7", TBS_TEST_NotABug); // not really a bug, TBS is not suppposed to check data for HTML compatibility. Return <a href='javascript:alert('test')'>hello</a>
+		$this->assertEqualMergeFieldStrings('<a href="#">hello[move;att=href]</a>', array('move'=>'javascript:alert("test")'), "TinyButStrong Error: can't mixed quote in attribute value", "test bug #8", TBS_TEST_NotABug); // same as above
 		$this->assertEqualMergeFieldStrings("<a>hello[move;att=href]</a>", array('move'=>'javascript:alert(\'test\')'), "<a href=\"javascript:alert('test')\">hello</a>", "test bug #9");
 
 		// close tag bug: TBS must merge attribute in autoclose tags
-		$this->assertEqualMergeFieldStrings("<hr[move;att=width] />", array('move'=>'50%'), "<hr width=\"50%\" />", "test bug #10");
-		$this->assertEqualMergeFieldStrings("<[move;att=width]hr />", array('move'=>'50%'), "<hr width=\"50%\" />", "test bug #11", TBS_TEST_NEVERFIXEDBUG);
-		$this->assertEqualMergeFieldStrings("<h[move;att=width]r />", array('move'=>'50%'), "<hr width=\"50%\" />", "test bug #12"); // vicious
-		$this->assertEqualMergeFieldStrings("<hr [move;att=width]/>", array('move'=>'50%'), "<hr width=\"50%\" />", "test bug #13");
+		$this->assertEqualMergeFieldStrings('<hr[move;att=width] />', array('move'=>'50%'), '<hr width="50%" />', "test bug #10");
+		$this->assertEqualMergeFieldStrings('<[move;att=width]hr />', array('move'=>'50%'), '<hr width="50%" />', "test bug #11", TBS_TEST_StatusToDiscuss); // is this really a bug? it's quite a bad usage of parameter att. Return '<50%hr />'
+		$this->assertEqualMergeFieldStrings('<h[move;att=width]r />', array('move'=>'50%'), '<hr width="50%" />', "test bug #12"); // vicious
+		$this->assertEqualMergeFieldStrings('<hr [move;att=width]/>', array('move'=>'50%'), '<hr width="50%" />', "test bug #13");
 
 		// bugs with case of attribute's name
 		$this->assertEqualMergeFieldStrings('<div Width="250px">[move;att=width]hello</div>', array('move'=>'50%'), '<div Width="50%">hello</div>', "test bug #14"); // note that the att parameter works if it's value is lower case
-		$this->assertEqualMergeFieldStrings('<div Width="250px">[move;att=Width]hello</div>', array('move'=>'50%'), '<div Width="50%">hello</div>', "test bug #15", TBS_TEST_NEVERFIXEDBUG); // bug: the existing attribut is not found because the intrenal list of parameters is set to lowercase by TBS
+		$this->assertEqualMergeFieldStrings('<div Width="250px">[move;att=Width]hello</div>', array('move'=>'50%'), '<div Width="50%">hello</div>', "test bug #15", TBS_TEST_NotYetFixedBug); // return '<div Width="250px" Width="50%">hello</div>' => the existing attribut is not found because the internal list of parameters is set to lowercase by TBS
 		
 	}
 }
