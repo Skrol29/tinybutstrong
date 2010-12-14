@@ -3,14 +3,21 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.6.1 for PHP 5
-Date     : 2010-10-29
+Version  : 3.6.2-dev for PHP 5
+Date     : 2010-12-14
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
 This library is free software.
 You can redistribute and modify it even for commercial usage,
 but you must accept and respect the LPGL License version 3.
+[ok] OPT: better management of CachedFields with parameter att
+[ok] BUG: f_Xml_AttFind() do not find attributes that have uppercase characters, that's because f_Loc_PrmRead() save attributes lowercase
+[  ] FCT: htmlconv=js1 and js2 does javascript conversion for ' and " delimiters (current version replaces ' " / and null)
+[  ] FCT: direct commands for plug-ins
+[  ] OPT: f_Misc_GetFile() with file_exists() instead of caching error
+[  ] FCT: split f_Xml_FindTag() with a new f_Xml_FindTagStart() which can be usefull for external tools
+[  ] FCT: rename htmlconv with strconv ?
 */
 // Check PHP version
 if (version_compare(PHP_VERSION,'5.0')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 5.0 or higher. You should try with TinyButStrong Edition for PHP 4.';
@@ -487,7 +494,7 @@ public $ObjectRef = false;
 public $NoErr = false;
 public $Assigned = array();
 // Undocumented (can change at any version)
-public $Version = '3.6.1';
+public $Version = '3.6.2-dev';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -871,6 +878,8 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst) {
 		while ($Loc = $this->meth_Locator_FindTbs($Txt,$BlockName,$Pos,'.')) {
 			
 			$IsAMF = false;
+			$IsAtt = false;
+			$NewIdx = false;
 			
 			if ($pi) {
 				$ArgLst[1] = &$Loc;
@@ -893,14 +902,21 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst) {
 						$Loc->PrmLst['magnet'] = '#';
 						$Loc->PrmLst['ope'] = (isset($Loc->PrmLst['ope'])) ? $Loc->PrmLst['ope'].',attbool' : 'attbool';
 					}
+					$IsAtt = true;
 					if ($Loc->AttForward) {
 						$IsAMF = true;
 					} else {
-						for ($i=$LocNbr;$i>0;$i--) {
-							if ($LocLst[$i]->PosEnd>=$Loc->PosBeg) {
-								$LocNbr--;
-							} else {
-								$i = 0;
+						if ($Loc->AttInsLen>0) {
+							for ($i=$LocNbr;$i>0;$i--) {
+								if ($LocLst[$i]->PosEnd>=$Loc->PosBeg) {
+									$NewIdx = $i;
+									$li = $LocLst[$i];
+									$li->PosBeg += $Loc->AttInsLen;
+									$li->PosEnd += $Loc->AttInsLen;
+									$LocLst[$i+1] = $li;
+								} else {
+									$i = 0;
+								}
 							}
 						}
 					}
@@ -916,11 +932,10 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst) {
 				}
 			}
 
-			$PrevEnd = $Loc->PosEnd;
 			$PrevIsAMF = false;
-			if ($IsAMF) {
+			if ($IsAtt) {
 				$Pos = $Loc->PrevPosBeg;
-				$PrevIsAMF = true;
+				if ($IsAMF) $PrevIsAMF = true;
 			} elseif ($Loc->Enlarged) { // Parameter 'comm'
 				$Pos = $Loc->PosBeg0+1;
 				$Loc->Enlarged = false;
@@ -928,7 +943,13 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst) {
 				$Pos = $Loc->PosBeg+1;
 			}
 
-			$LocLst[$LocNbr] = $Loc;
+			if ($NewIdx===false) {
+				$LocLst[$LocNbr] = $Loc;
+				$PrevEnd = $Loc->PosEnd;
+			} else {
+				$LocLst[$NewIdx] = $Loc;
+				$PrevEnd = $LocLst[$LocNbr]->PosEnd;
+			}
 
 		}
 
@@ -3515,9 +3536,10 @@ static function f_Xml_AttFind(&$Txt,&$Loc,$Move=false,$AttDelim=false) {
 	$Loc->AttTagBeg = $LocO->PosBeg;
 	$Loc->AttTagEnd = $LocO->PosEnd;
 	$Loc->AttDelimChr = false;
-	if (isset($LocO->PrmLst[$Att])) {
+	$AttLC = strtolower($Att);
+	if (isset($LocO->PrmLst[$AttLC])) {
 		// The attribute is existing
-		$p = $LocO->PrmPos[$Att];
+		$p = $LocO->PrmPos[$AttLC];
 		$Loc->AttBeg = $p[0];
 		$p[3]--; while ($Txt[$p[3]]===' ') $p[3]--; // external end of the attribute, may has an extra spaces
 		$Loc->AttEnd = $p[3];
@@ -3556,7 +3578,7 @@ static function f_Xml_AttMove(&$Txt, &$Loc, $AttDelim=false) {
   if ($AttDelim===false) $AttDelim = '"';
 
 	$sz = $Loc->PosEnd - $Loc->PosBeg + 1;
-	$Txt = substr_replace($Txt,'',$Loc->PosBeg,$sz);
+	$Txt = substr_replace($Txt,'',$Loc->PosBeg,$sz); // delete the current locator
 	if ($Loc->AttForward) {
 		$Loc->AttTagBeg += -$sz;
 		$Loc->AttTagEnd += -$sz;
@@ -3594,7 +3616,9 @@ static function f_Xml_AttMove(&$Txt, &$Loc, $AttDelim=false) {
 		}
 	}
 
-	if ($InsPos!==false) {
+	if ($InsPos===false) {
+		$InsLen = 0;
+	} else {
 		$InsTxt = $Ins1.'[]'.$Ins2;
 		$InsLen = strlen($InsTxt);
 		$PosBeg = $InsPos + strlen($Ins1);
@@ -3609,6 +3633,7 @@ static function f_Xml_AttMove(&$Txt, &$Loc, $AttDelim=false) {
 	$Loc->PosBeg = $PosBeg;
 	$Loc->PosEnd = $PosEnd;
 	$Loc->AttBegM = ($Txt[$Loc->AttBeg-1]===' ') ? $Loc->AttBeg-1 : $Loc->AttBeg; // for magnet=#
+	$Loc->AttInsLen = $InsLen; // for CacheField
 
 	return min($Loc->PrevPosEnd,$Loc->PosEnd); // New position to continue the search.
 
