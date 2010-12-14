@@ -8,8 +8,9 @@ echo "This test compares the usage of 4 information storage:
  <tr><td>specific object: </td><td><pre>class clsTest {var \$name = 'James'; var \$subname = 'Dean'; var \$id = 33;}</pre></td></tr>
  <tr><td>standard object: </td><td><pre>(object) array('name' => 'James', 'subname' => 'Dean', 'id' => 33);</pre></td></tr>
  <tr><td>named variables: </td><td><pre>\$name = 'James'; \$subname = 'Dean'; \$id = 33;</pre></td></tr>
-</table>
-<br />";
+</table>";
+
+f_EchoLine();
 
 // memory tests
 // ------------
@@ -170,7 +171,7 @@ function f_Compare($a_name, $a_val, $b_name, $b_val) {
 		$a_name = $b_name;
 		$b_name = $x_name;
 	} 
-	f_EchoLine( '['.$a_name.'] is '.number_format($b_val/$a_val,2).' time faster than ['.$b_name.'] , that is a reduction of -'.number_format(100*($b_val-$a_val)/$b_val,2).'% compared to ['.$b_name.'].' );
+	f_EchoLine( '['.$a_name.'] is '.number_format($b_val/$a_val,2).' time faster than ['.$b_name.'] , that is a reduction of '.number_format(100*($b_val-$a_val)/$b_val,2).'% compared to ['.$b_name.'].' );
 }
 
 function f_InfoStart($Title) {
