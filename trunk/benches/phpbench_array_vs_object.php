@@ -2,6 +2,15 @@
 
 f_InfoStart('Arrays vs Objects');
 
+echo "This test compares the usage of 4 information storage:
+<table border='0' padding='3'>
+ <tr><td>array:           </td><td><pre>array('name' => 'James', 'subname' => 'Dean', 'id' => 33);</pre></td></tr>
+ <tr><td>specific object: </td><td><pre>class clsTest {var \$name = 'James'; var \$subname = 'Dean'; var \$id = 33;}</pre></td></tr>
+ <tr><td>standard object: </td><td><pre>(object) array('name' => 'James', 'subname' => 'Dean', 'id' => 33);</pre></td></tr>
+ <tr><td>named variables: </td><td><pre>\$name = 'James'; \$subname = 'Dean'; \$id = 33;</pre></td></tr>
+</table>
+<br />";
+
 // memory tests
 // ------------
 
