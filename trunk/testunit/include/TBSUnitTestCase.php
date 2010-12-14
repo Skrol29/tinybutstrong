@@ -83,14 +83,19 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * @param string $message         message to display (optional)
 	 * @return boolean                True on pass
 	 */
-	function assertEqualMergeFieldFiles($sourceFilename, $vars = null, $resultFilename, $message='%s') {
+	function assertEqualMergeFieldFiles($sourceFilename, $vars = null, $resultFilename, $message='%s', $bugOnVersion=false) {
 		$tbs = new clsTinyButStrong;
 		$tbs->LoadTemplate($this->getTemplateDir().$sourceFilename);
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$tbs->MergeField($name, $value);
 		$tbs->Show(TBS_NOTHING);
-		return $this->assertEqual($tbs->Source, file_get_contents($this->getTemplateDir().$resultFilename), $message);
+		if ($bugOnVersion===TBS_TEST_DebugMode) exit($tbs->Source);
+		if ($this->isBug($tbs->Version,$bugOnVersion)) {
+			return $this->assertNotEqual($tbs->Source, file_get_contents($this->getTemplateDir().$resultFilename), $message);
+		} else {
+			return $this->assertEqual($tbs->Source, file_get_contents($this->getTemplateDir().$resultFilename), $message);
+		}
 	}
 
 	/**
@@ -101,14 +106,19 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * @param string $message         message to display (optional)
 	 * @return boolean                True on pass
 	 */
-	function assertEqualMergeBlockFiles($sourceFilename, $vars = null, $resultFilename, $message='%s') {
+	function assertEqualMergeBlockFiles($sourceFilename, $vars = null, $resultFilename, $message='%s', $bugOnVersion=false) {
 		$tbs = new clsTinyButStrong;
 		$tbs->LoadTemplate($this->getTemplateDir().$sourceFilename);
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$tbs->MergeBlock($name, $value);
 		$tbs->Show(TBS_NOTHING);
-		return $this->assertEqual($tbs->Source, file_get_contents($this->getTemplateDir().$resultFilename), $message);
+		if ($bugOnVersion===TBS_TEST_DebugMode) exit($tbs->Source);
+		if ($this->isBug($tbs->Version,$bugOnVersion)) {
+			return $this->assertNotEqual($tbs->Source, file_get_contents($this->getTemplateDir().$resultFilename), $message);
+		} else {
+			return $this->assertEqual($tbs->Source, file_get_contents($this->getTemplateDir().$resultFilename), $message);
+		}
 	}
 	
 	/**
