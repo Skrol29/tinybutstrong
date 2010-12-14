@@ -871,6 +871,7 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst) {
 		while ($Loc = $this->meth_Locator_FindTbs($Txt,$BlockName,$Pos,'.')) {
 			
 			$IsAMF = false;
+			$IsAtt = false;
 			
 			if ($pi) {
 				$ArgLst[1] = &$Loc;
@@ -893,14 +894,18 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst) {
 						$Loc->PrmLst['magnet'] = '#';
 						$Loc->PrmLst['ope'] = (isset($Loc->PrmLst['ope'])) ? $Loc->PrmLst['ope'].',attbool' : 'attbool';
 					}
+					$IsAtt = true;
 					if ($Loc->AttForward) {
 						$IsAMF = true;
 					} else {
-						for ($i=$LocNbr;$i>0;$i--) {
-							if ($LocLst[$i]->PosEnd>=$Loc->PosBeg) {
-								$LocNbr--;
-							} else {
-								$i = 0;
+						if ($Loc->AttInsLen>0) {
+							for ($i=$LocNbr;$i>0;$i--) {
+								if ($LocLst[$i]->PosEnd>=$Loc->PosBeg) {
+									$LocLst[$i]->PosBeg += $Loc->AttInsLen;
+									$LocLst[$i]->PosEnd += $Loc->AttInsLen;
+								} else {
+									$i = 0;
+								}
 							}
 						}
 					}
@@ -918,9 +923,9 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst) {
 
 			$PrevEnd = $Loc->PosEnd;
 			$PrevIsAMF = false;
-			if ($IsAMF) {
+			if ($IsAtt) {
 				$Pos = $Loc->PrevPosBeg;
-				$PrevIsAMF = true;
+				if ($IsAMF) $PrevIsAMF = true;
 			} elseif ($Loc->Enlarged) { // Parameter 'comm'
 				$Pos = $Loc->PosBeg0+1;
 				$Loc->Enlarged = false;
@@ -3557,7 +3562,7 @@ static function f_Xml_AttMove(&$Txt, &$Loc, $AttDelim=false) {
   if ($AttDelim===false) $AttDelim = '"';
 
 	$sz = $Loc->PosEnd - $Loc->PosBeg + 1;
-	$Txt = substr_replace($Txt,'',$Loc->PosBeg,$sz);
+	$Txt = substr_replace($Txt,'',$Loc->PosBeg,$sz); // deleted the current locator
 	if ($Loc->AttForward) {
 		$Loc->AttTagBeg += -$sz;
 		$Loc->AttTagEnd += -$sz;
@@ -3595,7 +3600,9 @@ static function f_Xml_AttMove(&$Txt, &$Loc, $AttDelim=false) {
 		}
 	}
 
-	if ($InsPos!==false) {
+	if ($InsPos===false) {
+		$InsLen = 0;
+	} else {
 		$InsTxt = $Ins1.'[]'.$Ins2;
 		$InsLen = strlen($InsTxt);
 		$PosBeg = $InsPos + strlen($Ins1);
@@ -3610,6 +3617,7 @@ static function f_Xml_AttMove(&$Txt, &$Loc, $AttDelim=false) {
 	$Loc->PosBeg = $PosBeg;
 	$Loc->PosEnd = $PosEnd;
 	$Loc->AttBegM = ($Txt[$Loc->AttBeg-1]===' ') ? $Loc->AttBeg-1 : $Loc->AttBeg; // for magnet=#
+	$Loc->AttInsLen = $InsLen; // for CacheField
 
 	return min($Loc->PrevPosEnd,$Loc->PosEnd); // New position to continue the search.
 

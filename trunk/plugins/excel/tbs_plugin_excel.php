@@ -50,16 +50,16 @@ class clsTbsExcel {
 	}
 
 	function OnCacheField($BlockName,&$Loc,&$Txt,$PrmProc) {
-
+/*
 		if (isset($this->zzz)) {
 			$this->zzz++;
 		} else {
 			$this->zzz = 1;
 		}
-		echo "* $BlockName . ".$Loc->SubName ." <br>\r\n";
+		echo "* [".$BlockName.".".$Loc->SubName."] pos=".$Loc->PosBeg." <br>\r\n";
 		echo "* src=\r\n".$Txt."\r\n";
 		if ($this->zzz>=100) exit;
-		
+*/		
 		if (isset($Loc->PrmLst['ope'])) {
 		  // in this event, ope is not exploded yet
 			$ope_lst = explode(',', $Loc->PrmLst['ope']);
