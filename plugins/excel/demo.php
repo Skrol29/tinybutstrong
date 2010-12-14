@@ -29,8 +29,8 @@ $TBS->LoadTemplate('demo_template.xml');
 $TBS->MergeBlock('book',$books);
 
 // Merge Example 2 (in sheet #2)
-//$TBS->MergeBlock('tsk1,tsk2',$tasks);
-//$TBS->MergeBlock('emp',$employees);
+$TBS->MergeBlock('tsk1,tsk2',$tasks);
+$TBS->MergeBlock('emp',$employees);
 
 // Options
 //$TBS->PlugIn(TBS_EXCEL,TBS_EXCEL_INLINE);
