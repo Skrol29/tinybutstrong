@@ -10,7 +10,7 @@
   <LastAuthor>Qwerty</LastAuthor>
   <Created>1996-10-21T11:03:58Z</Created>
   <LastSaved>2006-05-30T22:05:56Z</LastSaved>
-  <Version>12.00</Version>
+  <Version>14.00</Version>
  </DocumentProperties>
  <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
   <DownloadComponents/>
@@ -29,41 +29,41 @@
   <Style ss:ID="Default" ss:Name="Normal">
    <Alignment ss:Vertical="Bottom"/>
    <Borders/>
-   <Font ss:FontName="Arial"/>
+   <Font ss:FontName="Arial" x:Family="Swiss"/>
    <Interior/>
    <NumberFormat/>
    <Protection/>
   </Style>
-  <Style ss:ID="s64" ss:Name="Euro">
+  <Style ss:ID="s62" ss:Name="Euro">
    <NumberFormat
     ss:Format="_-* #,##0.00\ &quot;€&quot;_-;\-* #,##0.00\ &quot;€&quot;_-;_-* &quot;-&quot;??\ &quot;€&quot;_-;_-@_-"/>
   </Style>
-  <Style ss:ID="s65">
+  <Style ss:ID="s63">
    <Font ss:FontName="Times New Roman" x:Family="Roman" ss:Size="16" ss:Bold="1"/>
   </Style>
+  <Style ss:ID="s64">
+   <Font ss:FontName="Arial" x:Family="Swiss" ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s65">
+   <Font ss:FontName="Arial" x:Family="Swiss"/>
+   <NumberFormat ss:Format="yyyy\-mm\-dd"/>
+  </Style>
   <Style ss:ID="s66">
-   <Font ss:FontName="Arial" x:Family="Swiss" ss:Color="#008000" ss:Bold="1"/>
-   <Interior ss:Color="#CCFFCC" ss:Pattern="Solid"/>
+   <NumberFormat ss:Format="yyyy\-mm\-dd"/>
   </Style>
   <Style ss:ID="s67">
    <Font ss:FontName="Arial" x:Family="Swiss" ss:Color="#008000" ss:Bold="1"/>
    <Interior ss:Color="#CCFFCC" ss:Pattern="Solid"/>
-   <NumberFormat ss:Format="#,##0_ ;\-#,##0\ "/>
   </Style>
   <Style ss:ID="s68">
    <Font ss:FontName="Arial" x:Family="Swiss" ss:Color="#008000" ss:Bold="1"/>
    <Interior ss:Color="#CCFFCC" ss:Pattern="Solid"/>
-   <NumberFormat ss:Format="#,##0.00\ &quot;€&quot;;\-#,##0.00\ &quot;€&quot;"/>
+   <NumberFormat ss:Format="#,##0_ ;\-#,##0\ "/>
   </Style>
   <Style ss:ID="s69">
-   <Borders>
-    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
-    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
-    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
-    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
-   </Borders>
-   <Font ss:FontName="Arial" x:Family="Swiss" ss:Bold="1"/>
-   <Interior ss:Color="#99CCFF" ss:Pattern="Solid"/>
+   <Font ss:FontName="Arial" x:Family="Swiss" ss:Color="#008000" ss:Bold="1"/>
+   <Interior ss:Color="#CCFFCC" ss:Pattern="Solid"/>
+   <NumberFormat ss:Format="#,##0.00\ &quot;€&quot;;\-#,##0.00\ &quot;€&quot;"/>
   </Style>
   <Style ss:ID="s70">
    <Borders>
@@ -72,8 +72,18 @@
     <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
     <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
    </Borders>
+   <Font ss:FontName="Arial" x:Family="Swiss" ss:Bold="1"/>
+   <Interior ss:Color="#99CCFF" ss:Pattern="Solid"/>
   </Style>
-  <Style ss:ID="s72" ss:Parent="s64">
+  <Style ss:ID="s71">
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s73" ss:Parent="s62">
    <Borders>
     <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
     <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
@@ -82,7 +92,7 @@
    </Borders>
    <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
   </Style>
-  <Style ss:ID="s73">
+  <Style ss:ID="s74">
    <Borders>
     <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
     <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
@@ -91,7 +101,7 @@
    </Borders>
    <NumberFormat ss:Format="0;\ \-0;\ &quot;-&quot;"/>
   </Style>
-  <Style ss:ID="s74" ss:Parent="s64">
+  <Style ss:ID="s75" ss:Parent="s62">
    <Borders>
     <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
     <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
@@ -99,28 +109,28 @@
     <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
    </Borders>
   </Style>
-  <Style ss:ID="s75">
+  <Style ss:ID="s77">
    <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
    <Font ss:FontName="Arial" x:Family="Swiss" ss:Bold="1"/>
    <Interior ss:Color="#CCFFFF" ss:Pattern="Solid"/>
   </Style>
-  <Style ss:ID="s76">
+  <Style ss:ID="s78">
    <Alignment ss:Vertical="Bottom" ss:Rotate="90"/>
    <Interior ss:Color="#CCFFCC" ss:Pattern="Solid"/>
   </Style>
-  <Style ss:ID="s77">
+  <Style ss:ID="s79">
    <Alignment ss:Vertical="Bottom" ss:Rotate="90"/>
   </Style>
-  <Style ss:ID="s78">
+  <Style ss:ID="s80">
    <Interior ss:Color="#99CCFF" ss:Pattern="Solid"/>
   </Style>
-  <Style ss:ID="s79">
+  <Style ss:ID="s81">
    <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
    <Font ss:FontName="Arial" x:Family="Swiss" ss:Bold="1"/>
    <Interior ss:Color="#CCFFFF" ss:Pattern="Solid"/>
    <NumberFormat ss:Format="0.0"/>
   </Style>
-  <Style ss:ID="s80">
+  <Style ss:ID="s82">
    <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
    <NumberFormat ss:Format="0.0;\-0.0;&quot;-&quot;"/>
   </Style>
@@ -129,40 +139,52 @@
   <NamedRange ss:Name="bonjour" ss:RefersTo="=#REF!"/>
  </Names>
  <Worksheet ss:Name="Example1">
-  <Table ss:ExpandedColumnCount="5" ss:ExpandedRowCount="5" x:FullColumns="1"
+  <Table ss:ExpandedColumnCount="5" ss:ExpandedRowCount="9" x:FullColumns="1"
    x:FullRows="1" ss:DefaultColumnWidth="60">
    <Column ss:AutoFitWidth="0" ss:Width="20.25"/>
    <Column ss:AutoFitWidth="0" ss:Width="189"/>
-   <Column ss:AutoFitWidth="0" ss:Width="59.25"/>
+   <Column ss:AutoFitWidth="0" ss:Width="63.75"/>
    <Column ss:AutoFitWidth="0" ss:Width="55.5"/>
    <Row ss:AutoFitHeight="0" ss:Height="20.25">
-    <Cell ss:Index="2" ss:StyleID="s65"><Data ss:Type="String">Books in stock</Data></Cell>
+    <Cell ss:Index="2" ss:StyleID="s63"><Data ss:Type="String">Books in stock</Data></Cell>
    </Row>
    <Row>
-    <Cell ss:Index="3" ss:StyleID="s66"><Data ss:Type="String">Total:</Data></Cell>
-    <Cell ss:StyleID="s67"
+    <Cell ss:Index="3" ss:StyleID="s64"><Data ss:Type="String">PHP version:</Data></Cell>
+    <Cell ss:StyleID="s65"><Data ss:Type="String">[onshow..cst.PHP_VERSION]</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:Index="3" ss:StyleID="s64"><Data ss:Type="String">TBS version:</Data></Cell>
+    <Cell ss:StyleID="s65"><Data ss:Type="String">[onshow..version]</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:Index="3" ss:StyleID="s64"><Data ss:Type="String">Current date:</Data></Cell>
+    <Cell ss:StyleID="s66"><Data ss:Type="String">[onload..now;ope=xlDT]</Data></Cell>
+   </Row>
+   <Row ss:Index="6">
+    <Cell ss:Index="3" ss:StyleID="s67"><Data ss:Type="String">Total:</Data></Cell>
+    <Cell ss:StyleID="s68"
      ss:Formula="=SUM(R[2]C:R[2]C)+N(&quot;[book.#;ope=xlPushRef]&quot;)"><Data
       ss:Type="Number">0</Data></Cell>
-    <Cell ss:StyleID="s68"
+    <Cell ss:StyleID="s69"
      ss:Formula="=SUM(R[2]C:R[2]C)+N(&quot;[book.#;ope=xlPushRef]&quot;)"><Data
       ss:Type="Error">#VALUE!</Data></Cell>
    </Row>
    <Row>
-    <Cell ss:Index="2" ss:StyleID="s69"><Data ss:Type="String">Title</Data></Cell>
-    <Cell ss:StyleID="s69"><Data ss:Type="String">Price</Data></Cell>
-    <Cell ss:StyleID="s69"><Data ss:Type="String">Stock</Data></Cell>
-    <Cell ss:StyleID="s69"><Data ss:Type="String">Amount</Data></Cell>
+    <Cell ss:Index="2" ss:StyleID="s70"><Data ss:Type="String">Title</Data></Cell>
+    <Cell ss:StyleID="s70"><Data ss:Type="String">Price</Data></Cell>
+    <Cell ss:StyleID="s70"><Data ss:Type="String">Stock</Data></Cell>
+    <Cell ss:StyleID="s70"><Data ss:Type="String">Amount</Data></Cell>
    </Row>
-   <Row ss:Height="15">
-    <Cell ss:Index="2" ss:StyleID="s70"><Data ss:Type="String">[book.title;block=Row]</Data></Cell>
-    <Cell ss:StyleID="s72"><Data ss:Type="String">[book.price;ope=xlNum]</Data></Cell>
-    <Cell ss:StyleID="s73"><Data ss:Type="String">[book.stock;ope=xlNum]</Data></Cell>
-    <Cell ss:StyleID="s74" ss:Formula="=RC[-1]*RC[-2]"><Data ss:Type="Error">#VALUE!</Data></Cell>
+   <Row ss:AutoFitHeight="0" ss:Height="15">
+    <Cell ss:Index="2" ss:StyleID="s71"><Data ss:Type="String">[book.title;block=Row]</Data></Cell>
+    <Cell ss:StyleID="s73"><Data ss:Type="String">[book.price;ope=xlNum]</Data></Cell>
+    <Cell ss:StyleID="s74"><Data ss:Type="String">[book.stock;ope=xlNum]</Data></Cell>
+    <Cell ss:StyleID="s75" ss:Formula="=RC[-1]*RC[-2]"><Data ss:Type="Error">#VALUE!</Data></Cell>
    </Row>
    <Row>
-    <Cell ss:Index="3" ss:StyleID="s66"><Data ss:Type="String">Total:</Data></Cell>
-    <Cell ss:StyleID="s67" ss:Formula="=SUM(R4C:R[-1]C)"><Data ss:Type="Number">0</Data></Cell>
-    <Cell ss:StyleID="s68" ss:Formula="=SUM(R4C:R[-1]C)"><Data ss:Type="Error">#VALUE!</Data></Cell>
+    <Cell ss:Index="3" ss:StyleID="s67"><Data ss:Type="String">Total:</Data></Cell>
+    <Cell ss:StyleID="s68" ss:Formula="=SUM(R8C:R[-1]C)"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="s69" ss:Formula="=SUM(R8C:R[-1]C)"><Data ss:Type="Error">#VALUE!</Data></Cell>
    </Row>
   </Table>
   <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
@@ -182,7 +204,8 @@
    <Panes>
     <Pane>
      <Number>3</Number>
-     <ActiveCol>1</ActiveCol>
+     <ActiveRow>14</ActiveRow>
+     <ActiveCol>2</ActiveCol>
     </Pane>
    </Panes>
    <ProtectObjects>False</ProtectObjects>
@@ -197,38 +220,38 @@
    <Column ss:AutoFitWidth="0" ss:Width="22.5" ss:Span="1"/>
    <Column ss:Index="5" ss:AutoFitWidth="0" ss:Width="20.25" ss:Span="19"/>
    <Row ss:AutoFitHeight="0" ss:Height="20.25">
-    <Cell ss:Index="2" ss:StyleID="s65"><Data ss:Type="String">Time spent by task</Data></Cell>
+    <Cell ss:Index="2" ss:StyleID="s63"><Data ss:Type="String">Time spent by task</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0" ss:Height="101.25">
-    <Cell ss:Index="3" ss:StyleID="s75"><Data ss:Type="String">Tot</Data></Cell>
-    <Cell ss:StyleID="s76"><Data ss:Type="String">[tsk1.title;block=Cell]</Data></Cell>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
-    <Cell ss:StyleID="s77"/>
+    <Cell ss:Index="3" ss:StyleID="s77"><Data ss:Type="String">Tot</Data></Cell>
+    <Cell ss:StyleID="s78"><Data ss:Type="String">[tsk1.title;block=Cell]</Data></Cell>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
    </Row>
    <Row>
-    <Cell ss:Index="2" ss:StyleID="s78"><Data ss:Type="String">[emp.fname;block=Row] [emp.lname]</Data></Cell>
-    <Cell ss:StyleID="s79"
+    <Cell ss:Index="2" ss:StyleID="s80"><Data ss:Type="String">[emp.fname;block=Row] [emp.lname]</Data></Cell>
+    <Cell ss:StyleID="s81"
      ss:Formula="=SUM(RC[1]:RC[1])+N(&quot;[tsk1.#;ope=xlPushRef]&quot;)"><Data
       ss:Type="Number">0</Data></Cell>
-    <Cell ss:StyleID="s80"><Data ss:Type="String">[var.times2.[tsk2.t_id;block=Cell].[emp.e_id];ope=xlNum;noerr]</Data></Cell>
+    <Cell ss:StyleID="s82"><Data ss:Type="String">[var.times2.[tsk2.t_id;block=Cell].[emp.e_id];ope=xlNum;noerr]</Data></Cell>
    </Row>
   </Table>
   <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
