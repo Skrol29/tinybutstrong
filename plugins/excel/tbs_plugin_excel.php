@@ -4,11 +4,13 @@
 ********************************************************
 TinyButStrong plug-in: Excel Worksheets
 Version 1.0.3, on 2006-07-11, by Skrol29
-Version 1.0.4, on 2010-12-12, by Skrol29
+Version 1.1.0, on 2010-12-12, by Skrol29, for TBS version >= 3.6.2 
 ********************************************************
 fixes:
-Warning:  Parameter 4 to clsTbsExcel::BeforeMergeBlock() expected to be a reference, value given [...]
-
+[ok] Warning:  Parameter 4 to clsTbsExcel::BeforeMergeBlock() expected to be a reference, value given [...]
+[  ] add possibility to save the contents in a local file
+[  ] check cell types with fields not in a block (onload+onshow)
+[  ] avoid the download if a PHP is displayed (otherwise the contents is cut)
 */
 
 // Name of the class is a keyword used for Plug-In authentication. So i'ts better to save it into a constant.
@@ -22,6 +24,7 @@ class clsTbsExcel {
 	// TBS events -----------------------------
 
 	function OnInstall() {
+		$this->Version = '1.1.0-dev'; // Version can be displayed using [onshow..tbs_info] since TBS 3.2.0
 		// Constants for the plug-in
 		$this->TypeLst = array('xlNum'=>'Number', 'xlDT'=>'DateTime', 'xlStr'=>'String', 'xlErr'=>'Error', 'xlBoo'=>'Boolean');
 		// Usefulle properies
@@ -50,41 +53,27 @@ class clsTbsExcel {
 	}
 
 	function OnCacheField($BlockName,&$Loc,&$Txt,$PrmProc) {
-/*
-		if (isset($this->zzz)) {
-			$this->zzz++;
-		} else {
-			$this->zzz = 1;
-		}
-		echo "* [".$BlockName.".".$Loc->SubName."] pos=".$Loc->PosBeg." <br>\r\n";
-		echo "* src=\r\n".$Txt."\r\n";
-		if ($this->zzz>=100) exit;
-*/		
+
 		if (isset($Loc->PrmLst['ope'])) {
-		  // in this event, ope is not exploded yet
+			// in this event, ope parameter is not exploded yet
 			$ope_lst = explode(',', $Loc->PrmLst['ope']);
-			$attval = false;
+			$ope_ok = false;
 			foreach ($ope_lst as $ope) {
-				if (isset($this->TypeLst[$ope])) $attval = $this->TypeLst[$ope];
+				$ope=trim($ope,' ');
+				if (isset($this->TypeLst[$ope])) $ope_ok = $ope;
 			}
 			// if a the cell type must be modified, then we add a new TBS field for changing the attribute value
-			if ($attval!==false) {
-				$frm = ($attval==='DateTime') ? ";frm='yyyy-mm-ddThh:nn:ss'" : '';
-				$newfield = '['.$BlockName.'.#;att=Data#ss:Type;if 1=1;then '.$attval.$frm.']';
-				$Txt = substr_replace($Txt, $newfield, $Loc->PosEnd+1,0);
-				//echo $Txt; exit;
-				$Loc->xlType = true; // avoid a double process of such ope values
-			}
+			if ($ope_ok!==false) $this->tag_ChangeCellType($Txt, $Loc, $ope_ok, $BlockName.'.#');
 		}
 
 	}
 
 	function BeforeMergeBlock(&$TplSource,&$BlockBeg,&$BlockEnd,$PrmLst,&$DataSrc,&$LocR) {
-
-		// Manage attribute ssIndex.
-		// Attribute ssIndex can be put by Excel on the first <Row> and <Cell> item of a <Table> element.
-		// But this attribute must be put only once per series, it must not be repeated on next items when it is merged for a block.
-		// So if we have it (it must be on the first item) we save it, delete it, and then and add it only for the first item merged (see AfterMergeBlock).
+	/* Manage attribute ssIndex.
+	   Attribute ssIndex can be put by Excel on the first <Row> and <Cell> item of a <Table> element.
+	   But this attribute must be put only once per series, it must not be repeated on next items when it is merged for a block.
+	   So if we have it (it must be on the first item) we save it, delete it, and then and add it only for the first item merged (see AfterMergeBlock).
+	*/
 		$this->ssIndex = false;
 		if ($LocR->SectionNbr>0) {
 			$Src1 =& $LocR->SectionLst[1]->Src ;
@@ -138,7 +127,7 @@ class clsTbsExcel {
 		$this->tag_DelOptionalTableAtt();
 
 		if ( ($TBS->ErrCount>0) && (!$TBS->NoErr) ) {
-			$TBS->meth_Misc_Alert('Show() Method', 'The output is cancelled by the Excel plugin because at least one error has occured.');
+			$TBS->meth_Misc_Alert('Show() Method', 'The output is cancelled by the Excel plugin because at least one TBS error has occured.');
 			exit;
 		}
 		
@@ -154,7 +143,7 @@ class clsTbsExcel {
 
 	function OnOperation($FieldName,&$Value,&$PrmLst,&$Source,$PosBeg,$PosEnd,$Loc) {
 		if (isset($this->TypeLst[$PrmLst['ope']])) {
-			if (!isset($Loc->xlType)) $this->tag_ChangeCellType($Source,$Loc,$this->TypeLst[$PrmLst['ope']]);
+			if (!isset($Loc->xlType)) $this->tag_ChangeCellType($Source,$Loc,$PrmLst['ope'],'onshow');
 		} elseif ($PrmLst['ope']==='xlPushRef') {
 			$this->tag_ChangeFormula($Source,$Loc,$Value,true);
 		}
@@ -178,11 +167,6 @@ class clsTbsExcel {
 	  return $x;
 	}
 	
-	function f_XmlConv($x) {
-	// Convertion of data items
-		 return htmlspecialchars(utf8_encode($x));
-	}
-
 	function f_Display($FileName,$Download) {
 
 		if ($Download) {
@@ -228,6 +212,20 @@ class clsTbsExcel {
 		}
 	}
 
+	function tag_ChangeCellType(&$Txt,&$Loc,$Ope,$Block) {
+		$attval = $this->TypeLst[$Ope];
+		if ($attval==='DateTime') {
+			$Loc->PrmLst['frm'] = 'yyyy-mm-ddThh:nn:ss';
+			// activate the FRM mode
+			$Loc->ConvMode = 0;
+			$Loc->ConvProtect = false;
+		}
+		if ( ($Block==='onshow') && ((substr($Loc->FullName,0,4)=='var.') || ($Loc->FullName==='var')) ) $Block='var..version'; // var fields ar processed after onshow, and they must have a subname
+		$newfield = '['.$Block.';att=Data#ss:Type;if 1=1;then '.$attval.']';
+		$Txt = substr_replace($Txt, $newfield, $Loc->PosEnd+1,0);
+		$Loc->xlType = true; // avoid a double process of such ope values
+	}
+	
 	function tag_ChangeFormula(&$Txt,&$Loc,&$Value,$First) {
 		// The process assumes that the TBS is embeded into a N("") function
 
@@ -313,65 +311,6 @@ class clsTbsExcel {
 		// Replace the index value
 		$Value = strval($x).$Loc->xlExtraStr;
 	  
-	}
-
-	function tag_ChangeCellType(&$Txt,&$Loc,$NewType) {
-	// Assuming that $Pos is the position of a value embedded into a <Data> tag with attribute ss:Type="String",
-	// this function changes this attribute into ss:Type="Number".
-
-		// Search the attribute's value delimited by (")
-		$p = $Loc->PosBeg - 1; // We go backward
-		$close = false;
-		$cont = true;
-		$val_beg = false;
-		$val_end = false;
-		do {
-			$x = $Txt[$p];
-			if ($x==='<') {
-				$cont = false;
-			} elseif ($x==='>') {
-				$close = true;
-			} elseif ($close and ($x==='"')) {
-				if ($val_end===false) {
-					$val_end = $p;
-				} elseif (substr($Txt,$p-8,8)==='ss:Type=') {
-					$val_beg = $p;
-					$cont = false;
-				}
-			} elseif ($p<=8) {
-				$cont = false;
-			}
-			if ($cont) $p--;
-		} while ($cont);
-
-		if ($val_beg===false) return false;
-		
-		// Replace old attribute's value by the new one
-		$len1 = $val_end - $val_beg + 1;
-		$x = '"'.$NewType.'"';
-		$lenx = strlen($x);
-		$delta = $lenx-$len1;
-		if ($delta<0) {
-			// And blancks in order to not move the TBS tag
-			$x .= str_repeat(' ',-$delta);
-		} elseif ($delta>0) {
-			// Move the begining of the TBS tag, but not the end in order to let the following as is.
-			// This works only if there is no more TBS tag between the Type attribute and the begining of the current TBS tag.
-			$x .= substr($Txt,$val_end+1,$Loc->PosBeg-$val_end-1);
-			$len1 = $Loc->PosBeg - $val_beg + $delta;
-			$Loc->PosBeg += $delta;
-		}
-		$Txt = substr_replace($Txt,$x,$val_beg,$len1);
-
-		// If DateTime => apply format
-		if ( ($NewType==='DateTime') and (!isset($Loc->PrmLst['frm'])) ) {
-			// We have to use parameter "frm" instead of chnaging the value because this function can be called for cached TBS tags.
-			$Loc->PrmLst['frm'] = 'yyyy-mm-ddThh:nn:ss'; // Excel-XML datetime format
-			// Below is for TBS tags currently being merged (like [var] fields).
-			$Loc->ConvMode = 0; // Frm
-			$Loc->ConvProtect = false;
-		}
-		return true;
 	}
 
 	function tag_DelOptionalTableAtt() {
