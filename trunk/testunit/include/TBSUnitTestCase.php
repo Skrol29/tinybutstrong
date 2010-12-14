@@ -1,10 +1,14 @@
 <?php
 
 /* Versionning
-Skrol29, 2010-12-13: add the isBug() feature
+Skrol29, 2010-12-13: add the isBug() feature on assertEqualMergeFieldStrings()
+Skrol29, 2010-12-14: add the isBug() feature on assertEqualMergeBlockStrings() + TBS_TEST_DebugMode
 */
 
-define('TBS_TEST_NEVERFIXEDBUG','<99');
+define('TBS_TEST_NotYetFixedBug','<99');   // a bug which is not yet fixed
+define('TBS_TEST_StatusToDiscuss','<99');  // a bug which
+define('TBS_TEST_NotABug','<99');          // a bug which is finally not a bug
+define('TBS_TEST_DebugMode','DEBUGMODE');  // display the actual result and exit all tests
 
 // override unit test case class to simplify tinyButStrong test cases
 class TBSUnitTestCase extends UnitTestCase {
@@ -25,6 +29,7 @@ class TBSUnitTestCase extends UnitTestCase {
 			foreach ($vars as $name => $value)
 				$tbs->MergeField($name, $value);
 		$tbs->Show(TBS_NOTHING);
+		if ($bugOnVersion===TBS_TEST_DebugMode) exit($tbs->Source);
 		if ($this->isBug($tbs->Version,$bugOnVersion)) {
 			return $this->assertNotEqual($tbs->Source, $result, $message);
 		} else {
@@ -34,20 +39,32 @@ class TBSUnitTestCase extends UnitTestCase {
 
 	/**
 	 * Test TBS class with one function.
-	 * @param string $source       source of template
-	 * @param array $vars          associative array of name/value to pass to MergeBlock
-	 * @param string $result       merge result to compare
-	 * @param string $message      message to display (optional)
-	 * @return boolean             True on pass
+	 * @param string $source         source of template
+	 * @param array $vars            associative array of name/value to pass to MergeBlock
+	 * @param string $result         merge result to compare
+	 * @param string $message        message to display (optional)
+	 * @param string $bugOnVersion   false, or the range where the feature is supposed to fail. Example: '<3.5.6'
+	 * @return boolean               True on pass
 	 */
-	function assertEqualMergeBlockStrings($source, $vars = null, $result, $message='%s') {
+	function assertEqualMergeBlockStrings($source, $vars = null, $result, $message='%s', $bugOnVersion=false) {
 		$tbs = new clsTinyButStrong;
 		$tbs->Source = $source;
-		if (is_array($vars))
-			foreach ($vars as $name => $value)
-				$tbs->MergeBlock($name, $value);
+		if (is_array($vars)) {
+			foreach ($vars as $name => $value) {
+				if (is_int($value)) {
+					$tbs->MergeBlock($name, 'num', $value);
+				} else {
+					$tbs->MergeBlock($name, $value); // works only with 'clear' and arrays, otherwise a third argument is needed
+				}
+			}
+		}
 		$tbs->Show(TBS_NOTHING);
-		return $this->assertEqual($tbs->Source, $result, $message);
+		if ($bugOnVersion===TBS_TEST_DebugMode) exit($tbs->Source);
+		if ($this->isBug($tbs->Version,$bugOnVersion)) {
+			return $this->assertNotEqual($tbs->Source, $result, $message);
+		} else {
+			return $this->assertEqual($tbs->Source, $result, $message);
+		}
 	}
 
 
