@@ -14,6 +14,17 @@ define('TBS_TEST_DebugMode','DEBUGMODE');  // display the actual result and exit
 class TBSUnitTestCase extends UnitTestCase {
 
 	/**
+	 * Skip tests case if the tbs version is not at least the specified version.
+	 * @param string $versionString  a tbs version
+	 * @param string $message        message to display (optional)
+	 */
+	function skipIfNotAtLeastVersion($versionString, $message='%s') {
+		$tbs = new clsTinyButStrong;
+		$shouldSkip = version_compare($tbs->Version, $versionString, '<');
+		$this->skipIf($shouldSkip, $message);
+	}
+
+	/**
 	 * Test TBS class with one function.
 	 * @param string $source         source of template
 	 * @param array $vars            associative array of name/value to pass to MergeField

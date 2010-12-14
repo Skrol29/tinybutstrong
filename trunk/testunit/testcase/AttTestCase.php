@@ -17,6 +17,11 @@ class AttTestCase extends TBSUnitTestCase {
 	function tearDown() {
 	}
 
+	function skip() {
+		// run tests only if tbs version >= 4.5.0
+		$this->skipIfNotAtLeastVersion('4.5.0', 'skip att option unit tests because it was not implemented in this TinyButStrong version');
+	}
+
 	function testFields() {
 		// tests with existing attribute with double quotes
 		$this->assertEqualMergeFieldStrings("<div class=\"test1\" att1 att2=v2 att3>hello[move;att=class]</div>", array('move'=>'test2'), "<div class=\"test2\" att1 att2=v2 att3>hello</div>", "test fields #1");
