@@ -2,13 +2,11 @@
 
 /* Versionning
 Skrol29, 2010-12-13: add the isBug() feature on assertEqualMergeFieldStrings()
-Skrol29, 2010-12-14: add the isBug() feature on assertEqualMergeBlockStrings() + TBS_TEST_DebugMode
+Skrol29, 2010-12-14: add the isBug() feature on assertEqualMergeBlockStrings() + TBS_TEST_DEBUGMODE
+Skrol29, 2010-12-15: replace the bug swtich with a condition on PHP/TBS version
 */
 
-define('TBS_TEST_NotYetFixedBug','<99');   // a bug which is not yet fixed
-define('TBS_TEST_StatusToDiscuss','<99');  // a bug which
-define('TBS_TEST_NotABug','<99');          // a bug which is finally not a bug
-define('TBS_TEST_DebugMode','DEBUGMODE');  // display the actual result and exit all tests
+define('TBS_TEST_DEBUGMODE','DEBUGMODE');  // display the actual result and exit all tests
 
 // override unit test case class to simplify tinyButStrong test cases
 class TBSUnitTestCase extends UnitTestCase {
@@ -30,22 +28,18 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * @param array $vars            associative array of name/value to pass to MergeField
 	 * @param string $result         merge result to compare
 	 * @param string $message        message to display (optional)
-	 * @param string $bugOnVersion   false, or the range where the feature is supposed to fail. Example: '<3.5.6'
+	 * @param string $condition      false, or an expression about TBS or PHP version. Example: 'TBS<=3.5.1' or 'PHP>3.0.0'
 	 * @return boolean               True on pass
 	 */
-	function assertEqualMergeFieldStrings($source, $vars = null, $result, $message='%s', $bugOnVersion=false) {
+	function assertEqualMergeFieldStrings($source, $vars = null, $result, $message='%s', $condition=false) {
 		$tbs = new clsTinyButStrong;
 		$tbs->Source = $source;
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$tbs->MergeField($name, $value);
 		$tbs->Show(TBS_NOTHING);
-		if ($bugOnVersion===TBS_TEST_DebugMode) exit($tbs->Source);
-		if ($this->isBug($tbs->Version,$bugOnVersion)) {
-			return $this->assertNotEqual($tbs->Source, $result, $message);
-		} else {
-			return $this->assertEqual($tbs->Source, $result, $message);
-		}
+		if ($condition===TBS_TEST_DEBUGMODE) exit($tbs->Source);
+		if ($this->isAppropriate($tbs,$condition)) return $this->assertEqual($tbs->Source, $result, $message);
 	}
 
 	/**
@@ -54,10 +48,10 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * @param array $vars            associative array of name/value to pass to MergeBlock
 	 * @param string $result         merge result to compare
 	 * @param string $message        message to display (optional)
-	 * @param string $bugOnVersion   false, or the range where the feature is supposed to fail. Example: '<3.5.6'
+	 * @param string $condition      false, or an expression about TBS or PHP version. Example: 'TBS<=3.5.1' or 'PHP>3.0.0'
 	 * @return boolean               True on pass
 	 */
-	function assertEqualMergeBlockStrings($source, $vars = null, $result, $message='%s', $bugOnVersion=false) {
+	function assertEqualMergeBlockStrings($source, $vars = null, $result, $message='%s', $condition=false) {
 		$tbs = new clsTinyButStrong;
 		$tbs->Source = $source;
 		if (is_array($vars)) {
@@ -70,12 +64,8 @@ class TBSUnitTestCase extends UnitTestCase {
 			}
 		}
 		$tbs->Show(TBS_NOTHING);
-		if ($bugOnVersion===TBS_TEST_DebugMode) exit($tbs->Source);
-		if ($this->isBug($tbs->Version,$bugOnVersion)) {
-			return $this->assertNotEqual($tbs->Source, $result, $message);
-		} else {
-			return $this->assertEqual($tbs->Source, $result, $message);
-		}
+		if ($condition===TBS_TEST_DEBUGMODE) exit($tbs->Source);
+		if ($this->isAppropriate($tbs,$condition)) return $this->assertEqual($tbs->Source, $result, $message);
 	}
 
 
@@ -92,60 +82,58 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * @param array $vars             associative array of name/value to pass to MergeBlock
 	 * @param string $resultFilename  file name of merge result to compare
 	 * @param string $message         message to display (optional)
+	 * @param string $condition      false, or an expression about TBS or PHP version. Example: 'TBS<=3.5.1' or 'PHP>3.0.0'
 	 * @return boolean                True on pass
 	 */
-	function assertEqualMergeFieldFiles($sourceFilename, $vars = null, $resultFilename, $message='%s', $bugOnVersion=false) {
+	function assertEqualMergeFieldFiles($sourceFilename, $vars = null, $resultFilename, $message='%s', $condition=false) {
 		$tbs = new clsTinyButStrong;
 		$tbs->LoadTemplate($this->getTemplateDir().$sourceFilename);
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$tbs->MergeField($name, $value);
 		$tbs->Show(TBS_NOTHING);
-		if ($bugOnVersion===TBS_TEST_DebugMode) exit($tbs->Source);
-		if ($this->isBug($tbs->Version,$bugOnVersion)) {
-			return $this->assertNotEqual($tbs->Source, file_get_contents($this->getTemplateDir().$resultFilename), $message);
-		} else {
-			return $this->assertEqual($tbs->Source, file_get_contents($this->getTemplateDir().$resultFilename), $message);
-		}
+		if ($condition===TBS_TEST_DEBUGMODE) exit($tbs->Source);
+		if ($this->isAppropriate($tbs,$condition)) return $this->assertEqual($tbs->Source, file_get_contents($this->getTemplateDir().$resultFilename), $message);
 	}
 
 	/**
 	 * Test TBS class with one function.
-	 * @param string $sourceFilename  fine name of template source
-	 * @param array $vars             associative array of name/value to pass to MergeBlock
-	 * @param string $resultFilename  file name of merge result to compare
-	 * @param string $message         message to display (optional)
-	 * @return boolean                True on pass
+	 * @param string $sourceFilename fine name of template source
+	 * @param array $vars            associative array of name/value to pass to MergeBlock
+	 * @param string $resultFilename file name of merge result to compare
+	 * @param string $message        message to display (optional)
+	 * @param string $condition      false, or an expression about TBS or PHP version. Example: 'TBS<=3.5.1' or 'PHP>3.0.0'
+	 * @return boolean               True on pass
 	 */
-	function assertEqualMergeBlockFiles($sourceFilename, $vars = null, $resultFilename, $message='%s', $bugOnVersion=false) {
+	function assertEqualMergeBlockFiles($sourceFilename, $vars = null, $resultFilename, $message='%s', $condition=false) {
 		$tbs = new clsTinyButStrong;
 		$tbs->LoadTemplate($this->getTemplateDir().$sourceFilename);
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$tbs->MergeBlock($name, $value);
 		$tbs->Show(TBS_NOTHING);
-		if ($bugOnVersion===TBS_TEST_DebugMode) exit($tbs->Source);
-		if ($this->isBug($tbs->Version,$bugOnVersion)) {
-			return $this->assertNotEqual($tbs->Source, file_get_contents($this->getTemplateDir().$resultFilename), $message);
-		} else {
-			return $this->assertEqual($tbs->Source, file_get_contents($this->getTemplateDir().$resultFilename), $message);
-		}
+		if ($condition===TBS_TEST_DEBUGMODE) exit($tbs->Source);
+		if ($this->isAppropriate($tbs,$condition)) return $this->assertEqual($tbs->Source, file_get_contents($this->getTemplateDir().$resultFilename), $message);
 	}
 	
 	/**
 	 * return true if the feature is supposed to fail for the current TBS version .
-	 * @param string $currVersion  the current version of TBS
-	 * @param string $bugOnVersion false, or the range where the feature is supposed to fail. Example: '<3.5.6'
-	 * @return boolean             True if it's a bug for the current TBS version
+	 * @param object $tbs       the current version of TBS
+	 * @param string $condition false, or an expression about TBS or PHP version. Example: 'TBS<=3.5.1' or 'PHP>3.0.0'
+	 * @return boolean          True if it's a bug for the current TBS version
 	 */
-	function isBug($currVersion, $bugOnVersion) {
-		if ($bugOnVersion===false) {
-			return false;
+	function isAppropriate(&$tbs, $condition) {
+		if ($condition===false) {
+			return true;
 		} else {
-			$p = ( ($bugOnVersion[1]=='=') || ($bugOnVersion[1]=='>') ) ? 2 : 1;
-			$ope = substr($bugOnVersion, 0, $p);
-			$version = substr($bugOnVersion, $p);
-			return version_compare($currVersion,$version,$ope);
+			$what = strtoupper(substr($condition, 0,3)); // TBS or PHP expected
+			$currVersion = ($what=='PHP') ? PHP_VERSION : $tbs->Version; 
+			$x = $condition[4];
+			$l = ( ($x=='=') || ($x=='>') ) ? 2 : 1;
+			$ope = substr($condition, 3, $l);
+			$compVersion = substr($condition, 3+$l);
+			// exit("what=$what , currVersion=$currVersion , ope=$ope , compVersion=$compVersion"); // debug
+			return version_compare($currVersion,$compVersion,$ope);
 		}
 	}
 	
