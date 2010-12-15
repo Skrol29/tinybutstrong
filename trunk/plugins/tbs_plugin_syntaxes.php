@@ -11,6 +11,10 @@ Version 1.5 , on 2010-02-16, by Skrol29: rename argument $HtmlCharSet into $Char
 // Name of the class is a keyword used for Plug-In authentication. So it's better to save it into a constant.
 define('TBS_THIS_PLUGIN','clsTbsThisPlugIn');
 
+// Commands (direct commands are supported since TBS version 3.7.0)
+define('TBS_THIS_COMMAND1','clsTbsThisPlugIn_c1');
+define('TBS_THIS_COMMAND2','clsTbsThisPlugIn_c2');
+
 // Put the name of the class into global variable array $_TBS_AutoInstallPlugIns to have it automatically installed for any new TBS instance.
 // Example :
 // $GLOBALS['_TBS_AutoInstallPlugIns'][] = TBS_THIS_PLUGIN;
@@ -18,7 +22,8 @@ define('TBS_THIS_PLUGIN','clsTbsThisPlugIn');
 class clsTbsThisPlugIn {
 
 	// Property $this->TBS is automatically set by TinyButStrong when the Plug-In is installed.
-	// You can use it inside the following methods.
+	// More preciselly, it's added after the instanciation of the plug-in's class, and before the call to method OnInstall().
+	// You can use this property inside all the following methods.
 
 	function OnInstall() {
 		// Executed when the current plug-in is installed automatically or manually.
@@ -28,7 +33,8 @@ class clsTbsThisPlugIn {
 		// $TBS->PlugIn(TBS_INSTALL,TBS_THIS_PLUGIN);
 		//  or the first call of:
 		// $TBS->PlugIn(TBS_THIS_PLUGIN);
-		$this->Version = '1.00'; // Version can be displayed using [var..tbs_info] since TBS 3.2.0
+		$this->Version = '1.00'; // Versions of installed plug-ins can be displayed using [var..tbs_info] since TBS 3.2.0
+		$this->DirectCommands = array(TBS_THIS_COMMAND1, TBS_THIS_COMMAND2); // optional, supported since TBS version 3.7.0. Direct Command's ids must be strings.
 		return array('OnCommand','BeforeLoadTemplate','AfterLoadTemplate','BeforeShow','AfterShow','OnData','OnFormat','OnOperation','BeforeMergeBlock','OnMergeSection','OnMergeGroup','AfterMergeBlock','OnSpecialVar','OnMergeField');
 	}
 

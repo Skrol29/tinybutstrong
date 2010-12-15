@@ -523,6 +523,7 @@ var $_ChrClose = ']';
 var $_ChrVal = '[val]';
 var $_ChrProtect = '&#91;';
 var $_PlugIns = array();
+var $_PlugInsCmd = array();
 var $_PlugIns_Ok = false;
 var $_piOnFrm_Ok = false;
 
@@ -772,9 +773,9 @@ public function PlugIn($Prm1,$Prm2=0) {
 			return true;
 		}
 
-  } elseif (is_string($Prm1)) {
-  	// Plug-in's command
-  	$PlugInId = $Prm1;
+	} elseif (is_string($Prm1)) {
+		// Plug-in's command
+		$PlugInId = $Prm1;
 		if (!isset($this->_PlugIns[$PlugInId])) {
 			if (!$this->meth_PlugIn_Install($PlugInId,array(),true)) return false;
 		}
@@ -784,7 +785,7 @@ public function PlugIn($Prm1,$Prm2=0) {
 		$Ok = call_user_func_array($this->_piOnCommand[$PlugInId],$ArgLst);
 		if (is_null($Ok)) $Ok = true;
 		return $Ok;
-  }
+	}
 	return $this->meth_Misc_Alert('with PlugIn() method','\''.$Prm1.'\' is an invalid plug-in key, the type of the value is \''.gettype($Prm1).'\'.');
 
 }
@@ -2771,6 +2772,7 @@ function meth_PlugIn_Install($PlugInId,$ArgLst,$Auto) {
 	}
 
 	$this->_PlugIns[$PlugInId] = &$PiRef;
+	if (isset($PiRef->DirectCommands)) foreach ($PiRef->DirectCommands as $cmd) $this->_PlugInsCmd[$cmd] = $PlugInId;
 	return true;
 
 }
