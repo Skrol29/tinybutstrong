@@ -43,7 +43,8 @@ f_Compare("file_exists() with non existing file" , $b_fe_err, "@fopen() with non
 
 f_EchoLine();
 f_EchoLine('End of tests','u');
-f_InfoEnd('<a href="http://www.tinybutstrong.com">http://www.tinybutstrong.com</a>',false);
+$file = 'phpbench_fileexists_vs_fopen.php';
+f_InfoEnd('<a href="http://tinybutstrong.svn.sourceforge.net/viewvc/tinybutstrong/trunk/benches/'.$file.'?revision=145&view=markup">Source code of this bench</a>. Created for the <a href="http://www.tinybutstrong.com">TinyButStrong</a> project.',false);
 exit;
 
 /* --------------------------------------------

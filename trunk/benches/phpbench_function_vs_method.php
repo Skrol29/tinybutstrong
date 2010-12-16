@@ -9,8 +9,11 @@ f_InfoStart('Function vs Method');
 
 f_EchoLine('Presentation','u');
 echo "
-This test compares the time execution between a function, a method of an instanciated object, and a static method.<br />
-";
+This test compares the time execution between:<br />
+- a function<br />
+- a normal method of an instanciated object<br />
+- a static method of a class<br />
+- a static method called as a normal method<br />";
 
 /* --------------
    Speed measures
@@ -22,13 +25,13 @@ f_EchoLine('Speed measures','u');
 $obj = new clsTest();
 
 $x = 29;
-$prm = array($x);
-$prm_obj = array(&$obj, $x);
+$prm = array(&$obj, $x);
 
 $b0             = f_BechThisFct('f_Nothing');
-$b_Function     = f_BechThisFct('f_function_std', $prm);
-$b_Method       = f_BechThisFct('f_method_std', $prm_obj);
+$b_Function     = f_BechThisFct('f_function_normal', $prm);
+$b_NormalMethod       = f_BechThisFct('f_method_normal', $prm);
 $b_StaticMethod = f_BechThisFct('f_method_static', $prm);
+$b_StaticMethodAsNormal = f_BechThisFct('f_method_static_as_normal', $prm);
 /* ---------------
    compare results
    --------------- */
@@ -36,9 +39,12 @@ $b_StaticMethod = f_BechThisFct('f_method_static', $prm);
 f_EchoLine();
 f_EchoLine('Compare results','u');
 
-f_Compare("Function", $b_Function, "Method", $b_Method);
+f_Compare("Function", $b_Function, "NormalMethod", $b_NormalMethod);
 f_Compare("Function", $b_Function, "StaticMethod", $b_StaticMethod);
-f_Compare("Method", $b_Method, "StaticMethod", $b_StaticMethod);
+f_Compare("Function", $b_Function, "StaticMethodAsNormal", $b_StaticMethodAsNormal);
+f_Compare("Method", $b_NormalMethod, "StaticMethod", $b_StaticMethod);
+f_Compare("StaticMethodAsNormal", $b_StaticMethodAsNormal, "StaticMethod", $b_StaticMethod);
+
 
 /* ------------
    end
@@ -46,25 +52,31 @@ f_Compare("Method", $b_Method, "StaticMethod", $b_StaticMethod);
 
 f_EchoLine();
 f_EchoLine('End of tests','u');
-f_InfoEnd('<a href="http://www.tinybutstrong.com">http://www.tinybutstrong.com</a>',false);
+$file = 'phpbench_function_vs_method.php';
+f_InfoEnd('<a href="http://tinybutstrong.svn.sourceforge.net/viewvc/tinybutstrong/trunk/benches/'.$file.'?revision=145&view=markup">Source code of this bench</a>. Created for the <a href="http://www.tinybutstrong.com">TinyButStrong</a> project.',false);
 exit;
 
 /* --------------------------------------------
    FUNCTIONS AND CLASSES SPECIFIC TO THIS BENCH
    -------------------------------------------- */
 
-function f_function_std($x) {
+function f_function_normal(&$obj, $x) {
 	$y = f_function($x);
 	return $y;
 }   
 
-function f_method_std(&$obj, $x) {
+function f_method_normal(&$obj, $x) {
 	$y = $obj->method($x);
 	return $y;
 }
 
-function f_method_static($x) {
+function f_method_static(&$obj, $x) {
 	$y = clsTest::static_method($x);
+	return $y;
+}
+
+function f_method_static_as_normal(&$obj, $x) {
+	$y = $obj->static_method($x);
 	return $y;
 }
 
