@@ -1,111 +1,143 @@
 <?php
 
-f_InfoStart('Reverse seach in a String');
+/*
+Skrol29, 2010-12-16
+http://www.tinybutstrong.com/onlyyou.html
+*/
 
-// speed tests
+f_InfoStart('Reverse string search (backwards)');
 
-// initilize data and check the result of functions
-$txt = f_GetHtml();
-$zz = '<div';
-$p_beg = strpos($txt, 'super_conforming_strrpos');
-$res_php_stop = f_strrpos_php_stop($txt, $zz, $p_beg);
-$res_php_stopcut = f_strrpos_php_stopcut($txt, $zz, $p_beg);
-$res_manual_stop = f_strrpos_manual_stop($txt, $zz, $p_beg);
-$res_direct_stop = f_strrpos_direct_stop($txt, $zz, $p_beg);
-$res_direct_stop2 = f_strrpos_direct_stop2($txt, $zz, $p_beg);
+f_EchoLine('Presentation','u');
+echo "
+This test compares several ways for a reverse search in a string, starting at a given offset.<br />
+Reverse search is not easy in PHP for two reasons: <br />
+- the native function strrpos(\$haystack,\$needle,\$offset) does not start a reverse search from the offset, but gives the last needle in the hastack starting from the offset.<br />
+- in PHP 4, the needle can be only one character.<br />
+<br />
+Methods tested:
+<table border='0' padding='3'>
+ <tr><td>StrrposCut:            </td><td>cut the string and use strrpos()</td></tr>
+ <tr><td>StrposUntilOffset:     </td><td>use strpos() to found all locations from the start until the offset, return the last one</td></tr>
+ <tr><td>ReverseFullStr:        </td><td>reverse both strings and use strpos()</td></tr>
+ <tr><td>ReverseCutStr:         </td><td>cut the haystack string, revserse strings and use strpos()</td></tr>
+ <tr><td>ByChar_CharAsArray:    </td><td>read characters one by one backwards from the offset, use \$chr=\$txt[\$i]</td></tr>
+ <tr><td>ByChar_CharAsSubstr:   </td><td>read characters one by one backwards from the offset, use \$chr=substr(\$txt,\$i,1)</td></tr>
+ <tr><td>ByChar_NoCharPrecheck: </td><td>read characters one by one backwards from the offset, use \$chr=substr(\$txt,\$i,1), but do not check first character. </td></tr>
+</table>";
 
-f_EchoLine("len(txt) = ".strlen($txt)); 
-f_EchoLine("p_beg = ".$p_beg." , extract: ".f_GiveExample($txt,$p_beg)); 
-f_EchoLine("res_php_stop = ".$res_php_stop." , extract: ".f_GiveExample($txt,$res_php_stop)); 
-f_EchoLine("res_php_stopcut = ".$res_php_stopcut." , extract: ".f_GiveExample($txt,$res_php_stopcut)); 
-f_EchoLine("res_manual_stop = ".$res_manual_stop." , extract: ".f_GiveExample($txt,$res_manual_stop)); 
-f_EchoLine("res_direct_stop = ".$res_direct_stop." , extract: ".f_GiveExample($txt,$res_direct_stop)); 
-f_EchoLine("res_direct_stop2 = ".$res_direct_stop2." , extract: ".f_GiveExample($txt,$res_direct_stop2)); 
-
-
-// run benches 
+/* ------------
+   initilize data and check the result of functions
+   ------------ */
 
 f_EchoLine();
+f_EchoLine('Initialize data','u');
+
+$txt = f_GetHtml();
+$what = '<div';
+$offset = strpos($txt, 'super_conforming_strrpos');
+$res_good = 43338;
+
+f_EchoLine("Length of string: ".strlen($txt)); 
+f_EchoLine("Item seached: '".$what."'"); 
+f_EchoLine("Offset for the search = ".$offset." , extract: '".f_GiveExample($txt,$offset,50)."'..."); 
+f_EchoLine("Expected result: ".$res_good." , extract: '".f_GiveExample($txt,$res_good,50)."'..."); 
+
+f_EchoLine();
+f_EchoLine('Check results of functions','u');
+
+$res_StrrposCut            = f_revsrch_StrrposCut($txt, $what, $offset);
+$res_StrposUntilOffset     = f_revsrch_StrposUntilOffset($txt, $what, $offset);
+$res_ReverseFullStr        = f_revsrch_ReverseFullStr($txt, $what, $offset);
+$res_ReverseCutStr         = f_revsrch_ReverseCutStr($txt, $what, $offset);
+$res_ByChar_CharAsArray    = f_revsrch_ByChar_CharAsArray($txt, $what, $offset);
+$res_ByChar_CharAsSubstr   = f_revsrch_ByChar_CharAsSubstr($txt, $what, $offset);
+$res_ByChar_NoCharPrecheck = f_revsrch_ByChar_NoCharPrecheck($txt, $what, $offset);
+
+f_EchoLine("StrrposCut: pos=".$res_StrrposCut.f_ChechResr($res_good, $res_StrrposCut)); 
+f_EchoLine("StrposUntilOffset: pos=".$res_StrposUntilOffset.f_ChechResr($res_good, $res_StrposUntilOffset)); 
+f_EchoLine("ReverseCutStr: pos=".$res_ReverseCutStr.f_ChechResr($res_good, $res_ReverseCutStr)); 
+f_EchoLine("ReverseFullStr: pos=".$res_ReverseFullStr.f_ChechResr($res_good, $res_ReverseFullStr)); 
+f_EchoLine("ByChar_CharAsArray: pos=".$res_ByChar_CharAsArray.f_ChechResr($res_good, $res_ByChar_CharAsArray)); 
+f_EchoLine("ByChar_CharAsSubstr: pos=".$res_ByChar_CharAsSubstr.f_ChechResr($res_good, $res_ByChar_CharAsSubstr)); 
+f_EchoLine("ByChar_NoCharPrecheck: pos=".$res_ByChar_NoCharPrecheck.f_ChechResr($res_good, $res_ByChar_NoCharPrecheck)); 
+
+
+/* --------------
+   Speed measures
+   -------------- */
+
+f_EchoLine();
+f_EchoLine('Speed measures','u');
 
 $nbr = 1000;
-$prm_1 =array(&$txt, $zz);
-$prm_2 =array(&$txt, $zz, $p_beg);
+$prm = array(&$txt, $what, $offset);
 
-$b0 = f_BechThisFct('f_Nothing');
+$b0                      = f_BechThisFct('f_Nothing');
+$b_StrrposCut            = f_BechThisFct('f_revsrch_StrrposCut', $prm, $nbr);
+$b_StrposUntilOffset     = f_BechThisFct('f_revsrch_StrposUntilOffset', $prm, $nbr);
+$b_ReverseCutStr         = f_BechThisFct('f_revsrch_ReverseCutStr', $prm, $nbr);
+$b_ReverseFullStr        = f_BechThisFct('f_revsrch_ReverseFullStr', $prm, $nbr);
+$b_ByChar_CharAsArray    = f_BechThisFct('f_revsrch_ByChar_CharAsArray', $prm, $nbr);
+$b_ByChar_CharAsSubstr   = f_BechThisFct('f_revsrch_ByChar_CharAsSubstr', $prm, $nbr);
+$b_ByChar_NoCharPrecheck = f_BechThisFct('f_revsrch_ByChar_NoCharPrecheck', $prm, $nbr);
+/* ---------------
+   compare results
+   --------------- */
 
-$b_strrpos_php = f_BechThisFct('f_strrpos_php', $prm_1, $nbr) ;
-$b_strrpos_manual = f_BechThisFct('f_strrpos_manual', $prm_1, $nbr);
-f_Compare("php", $b_strrpos_php, "manual", $b_strrpos_manual);
+f_EchoLine();
+f_EchoLine('Compare results','u');
 
-$b_strrpos_direct_stop = f_BechThisFct('f_strrpos_direct_stop', $prm_2, $nbr);
-$b_strrpos_direct_stop2 = f_BechThisFct('f_strrpos_direct_stop2', $prm_2, $nbr);
-$b_strrpos_php_stop = f_BechThisFct('f_strrpos_php_stop', $prm_2, $nbr);
-$b_strrpos_php_stopcut = f_BechThisFct('f_strrpos_php_stopcut', $prm_2, $nbr);
-$b_strrpos_manual_stop = f_BechThisFct('f_strrpos_manual_stop', $prm_2, $nbr);
+f_Compare("StrrposCut", $b_StrrposCut, "StrposUntilOffset", $b_StrposUntilOffset);
+f_Compare("StrrposCut", $b_StrrposCut, "ReverseCutStr", $b_ReverseCutStr);
+f_Compare("StrrposCut", $b_StrrposCut, "ReverseFullStr", $b_ReverseFullStr);
+f_Compare("StrrposCut", $b_StrrposCut, "ByChar_CharAsArray", $b_ByChar_CharAsArray);
+f_Compare("StrrposCut", $b_StrrposCut, "ByChar_CharAsSubstr", $b_ByChar_CharAsSubstr);
+f_Compare("StrrposCut", $b_StrrposCut, "ByChar_NoCharPrecheck", $b_ByChar_NoCharPrecheck);
 
-f_Compare("php_stop", $b_strrpos_php_stop, "php_stopcut", $b_strrpos_php_stopcut);
-f_Compare("php_stop", $b_strrpos_php_stop, "manual_stop", $b_strrpos_manual_stop);
-f_Compare("php_stopcut", $b_strrpos_php_stopcut, "direct_stop", $b_strrpos_direct_stop);
-f_Compare("direct_stop", $b_strrpos_direct_stop, "direct_stop2", $b_strrpos_direct_stop2);
+/* ------------
+   end
+   ------------ */
 
-// end
-f_InfoEnd();
+f_EchoLine();
+f_EchoLine('End of tests','u');
+f_InfoEnd('<a href="http://www.tinybutstrong.com">http://www.tinybutstrong.com</a>',false);
 exit;
 
-/* ---------------------------------
-   SPECIFIC FUNCTIONS AND CLASSES
-   ---------------------------------*/
-   
-function f_strrpos_php($txt, $x) {
-	$p = strrpos($txt, $x);
+/* --------------------------------------------
+   FUNCTIONS AND CLASSES SPECIFIC TO THIS BENCH
+   -------------------------------------------- */
+
+function f_revsrch_StrrposCut($txt, $what, $offset) {
+// Reverse search based on strrpos() by cuting the haystack.
+	$p = strrpos(substr($txt,0,$offset+1), $what);
 	return $p;
 }
 
-function f_strrpos_php_stop($txt, $x, $stop) {
-	$p = strrpos($txt, $x, $stop-strlen($txt));
-	return $p;
-}
-
-function f_strrpos_php_stopcut($txt, $x, $stop) {
-	$p = strrpos(substr($txt,0,$stop+1), $x);
-	return $p;
-}
-
-function f_strrpos_manual($txt, $x) {
+function f_revsrch_StrposUntilOffset($txt, $what, $offset) {
+// Reverse search by search forwards until the offset.
+	$p = $offset;
 	$b = -1;
-	while (($p=strpos($txt, $x,$b+1))!==false) {
+	while ( (($p=strpos($txt, $what,$b+1))!==false) && ($p<$offset) ) {
 		$b = $p; // continue to search
 	}
 	if ($b<0) {
 		return false;
+	} elseif ($p===$offset) {
+		return $offset;
 	} else {
 		return $b;
 	}
 }
 
-function f_strrpos_manual_stop($txt, $x, $stop) {
-	$p = $stop;
-	$b = -1;
-	while ( (($p=strpos($txt, $x,$b+1))!==false) && ($p<$stop) ) {
-		$b = $p; // continue to search
-	}
-	if ($b<0) {
-		return false;
-	} elseif ($p===$stop) {
-		return $stop;
-	} else {
-		return $b;
-	}
-}
-
-function f_strrpos_direct_stop($txt, $x, $stop) {
-	$x0 = $x[0];
-	$x_len = strlen($x);
-	$p = $stop;
+function f_revsrch_ByChar_CharAsArray($txt, $what, $offset) {
+// Reverse search by checking char by char backwards. Char by array syntax.
+	$what0 = $what[0];
+	$what_len = strlen($what);
+	$p = $offset;
 	$ok = false;
 	$cont = true;
 	do {
-		if (($txt[$p]===$x0) && (substr($txt,$p,$x_len)===$x)) {
+		if (($txt[$p]===$what0) && (substr($txt,$p,$what_len)===$what)) {
 			$ok = true;
 			$cont = false;
 		} elseif ($p===0) {
@@ -121,14 +153,15 @@ function f_strrpos_direct_stop($txt, $x, $stop) {
 	}
 }
 
-function f_strrpos_direct_stop2($txt, $x, $stop) {
-	$x0 = $x[0];
-	$x_len = strlen($x);
-	$p = $stop;
+function f_revsrch_ByChar_CharAsSubstr($txt, $what, $offset) {
+// Reverse search by checking char by char backwards. Char by array substring.
+	$what0 = $what[0];
+	$what_len = strlen($what);
+	$p = $offset;
 	$ok = false;
 	$cont = true;
 	do {
-		if ((substr($txt,$p,1)===$x0) && (substr($txt,$p,$x_len)===$x)) {
+		if ((substr($txt,$p,1)===$what0) && (substr($txt,$p,$what_len)===$what)) {
 			$ok = true;
 			$cont = false;
 		} elseif ($p===0) {
@@ -144,14 +177,64 @@ function f_strrpos_direct_stop2($txt, $x, $stop) {
 	}
 }
 
-function f_GiveExample($txt,$p,$len=50) {
+function f_revsrch_ByChar_NoCharPrecheck($txt, $what, $offset) {
+// Reverse search by checking char by char backwards. No pre-check by char.
+	$what_len = strlen($what);
+	$p = $offset;
+	$ok = false;
+	$cont = true;
+	do {
+		if (substr($txt,$p,$what_len)===$what) {
+			$ok = true;
+			$cont = false;
+		} elseif ($p===0) {
+			$cont = false;
+		} else {
+			$p--;
+		}
+	} while ($cont);
+	if ($ok) {
+		return $p;
+	} else {
+		return false;
+	}
+}
+
+function f_revsrch_ReverseFullStr($txt, $what, $offset) {
+// Reverse search by inverting the full strings.
+	$txt2=strrev($txt);
+	$z = strlen($txt)-1;
+	$what2=strrev($what);
+	$p = strpos($txt2, $what2, $z-$offset);
+	if ($p===false) {
+		return false;
+	} else {
+		return ($z-$p-strlen($what)+1);
+	}
+}
+
+function f_revsrch_ReverseCutStr($txt, $what, $offset) {
+// Reverse search by inverting the sub string.
+	$txt2=strrev(substr($txt,0,$offset+1));
+	$z = strlen($txt2)-1;
+	$what2=strrev($what);
+	$p = strpos($txt2, $what2);
+	if ($p===false) {
+		return false;
+	} else {
+		return ($z-$p-strlen($what)+1);
+	}
+}
+
+function f_GiveExample($txt,$p,$len) {
 	return substr($txt, $p, $len);
 }
-
-
+function f_ChechResr($p1,$p2) {
+	return ($p1==$p2) ? ' (ok)' : ' (err)';
+}
 
 /* ---------------------------------
-   COMMON FUNCTIONS
+   COMMON FUNCTIONS (version 1.0)
    ---------------------------------*/
 
 function f_Nothing() {
@@ -169,7 +252,19 @@ function f_BechThisFct($fct, $prm=false, $nbr = 10000) {
 		$x = call_user_func_array($fct, $prm);
 	}
 	$t2 = f_Timer();
-	return ($t2-$t1);
+	$d = ($t2-$t1);
+	$av = $d/$nbr;
+	if ($av>=0.1) {
+		$av_txt = number_format($av,3,'.',',').' secconds';
+	} elseif ($av>=0.001) {
+		$av_txt = number_format(1000*$av,3,'.',',').' milli-secconds';
+	} elseif ($av>=0.000001) {
+		$av_txt = number_format(1000000*$av,3,'.',',').' micro-secconds';
+	} else {
+		$av_txt = number_format(1000000*$av,12,'.',',').' micro-secconds';
+	}
+	f_EchoLine("Bench of function '".$fct."': run ".number_format($nbr,0,'.',',')." times, average duration: ".$av_txt.".");
+	return $d;
 }
 
 function f_Timer() {
@@ -184,9 +279,14 @@ function f_Timer() {
 	return (float)$x ;
 }
 
-function f_EchoLine($x='') {
+function f_EchoLine($txt='',$conv=true) {
 // display a line of information
-	echo htmlentities($x)."<br />\r";
+	if ($conv===true) {
+		$txt = htmlentities($txt);
+	} elseif (is_string($conv)) {
+		$txt = '<'.$conv.'>'.htmlentities($txt).'</'.$conv.'>';
+	}
+	echo $txt."<br />\r";
 }
 
 function f_Compare($a_name, $a_val, $b_name, $b_val) {
@@ -199,27 +299,29 @@ function f_Compare($a_name, $a_val, $b_name, $b_val) {
 		$a_name = $b_name;
 		$b_name = $x_name;
 	} 
-	f_EchoLine( '['.$a_name.'] is '.number_format($b_val/$a_val,2).' time faster than ['.$b_name.'] , that is a reduction of -'.number_format(100*($b_val-$a_val)/$b_val,2).'% compared to ['.$b_name.'].' );
+	f_EchoLine( '['.$a_name.'] is '.number_format($b_val/$a_val,2).' time faster than ['.$b_name.'] , that is a reduction of '.number_format(100*($b_val-$a_val)/$b_val,2).'% compared to ['.$b_name.'].' );
 }
 
-function f_InfoStart($Title) {
+function f_InfoStart($title) {
 // display information at the start of the test	
 	global $t_start;
 	$t_start = f_Timer();
 	
-	f_EchoLine('PHP Benches: '.$Title);
-	f_EchoLine('PHP version: '.PHP_VERSION);
-	f_EchoLine('OS type: '.PHP_OS.' ('.php_uname('s').')');
+	echo '<!DOCTYPE HTML><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>PHP Benches - '.$title.'</title></head><body>';
+	f_EchoLine('<b>PHP Benches:</b> '.htmlentities($title), false);
+	f_EchoLine('<b>PHP version:</b> '.PHP_VERSION,false);
+	f_EchoLine('<b>OS type:</b> '.PHP_OS.' ('.php_uname('s').')',false);
 	f_EchoLine();
 	
 }
 
-function f_InfoEnd() {
+function f_InfoEnd($signature=false,$conv=true) {
 // display information at the end of the test	
 	global $t_start;
 	$t_end = f_Timer();
-	f_EchoLine();
-	f_EchoLine("End of the test. Duration: ".number_format($t_end-$t_start,2)." sec.");
+	f_EchoLine("Total duration: ".number_format($t_end-$t_start,2)." sec.");
+	if ($signature!==false) f_EchoLine($signature,$conv);
+	echo '</body></html>';
 }
 
 /* ---------------------------------

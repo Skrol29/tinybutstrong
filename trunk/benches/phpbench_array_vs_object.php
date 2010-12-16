@@ -1,20 +1,27 @@
 <?php
 
+/*
+Skrol29, 2010-12-16
+http://www.tinybutstrong.com/onlyyou.html
+*/
+
 f_InfoStart('Arrays vs Objects');
 
+f_EchoLine('Presentation','u');
 echo "This test compares the usage of 4 information storage:
 <table border='0' padding='3'>
- <tr><td>array:           </td><td><pre>array('name' => 'James', 'subname' => 'Dean', 'id' => 33);</pre></td></tr>
- <tr><td>specific object: </td><td><pre>class clsTest {var \$name = 'James'; var \$subname = 'Dean'; var \$id = 33;}</pre></td></tr>
- <tr><td>standard object: </td><td><pre>(object) array('name' => 'James', 'subname' => 'Dean', 'id' => 33);</pre></td></tr>
- <tr><td>named variables: </td><td><pre>\$name = 'James'; \$subname = 'Dean'; \$id = 33;</pre></td></tr>
+ <tr><td>array:           </td><td>&nbsp;</td><td>\$x = array('name' => 'James', 'subname' => 'Dean', 'id' => 33);</td></tr>
+ <tr><td>specific object: </td><td>&nbsp;</td><td>\$x = new clsTest; class clsTest {var \$name = 'James'; var \$subname = 'Dean'; var \$id = 33;}</td></tr>
+ <tr><td>standard object: </td><td>&nbsp;</td><td>\$x = (object) array('name' => 'James', 'subname' => 'Dean', 'id' => 33);</td></tr>
+ <tr><td>named variables: </td><td>&nbsp;</td><td>\$name = 'James'; \$subname = 'Dean'; \$id = 33;</td></tr>
 </table>";
 
+/* ------------
+   memory measures
+   ------------ */
 f_EchoLine();
-
-// memory tests
-// ------------
-
+f_EchoLine('Memory measures','u');
+   
 $mem0 = (int) 0;
 $mem1 = (int) 0;
 
@@ -46,13 +53,12 @@ $mem1 = memory_get_usage();
 f_EchoLine("Memory size for the named variables: ".($mem0-$mem1)." bytes");
 
 
-// speed tests
-// 
+/* --------------
+   Speed measures
+   -------------- */
 
 f_EchoLine();
-
-/* ---------------------------------
-*/
+f_EchoLine('Speed measures','u');
 
 $b0 = f_BechThisFct('f_Nothing');
 
@@ -74,18 +80,30 @@ $x = f_test_create_object_spec();
 $prm = array(&$x); 
 $b_read_object_spec = f_BechThisFct('f_test_read_object_any', $prm);
 
+/* ---------------
+   compare results
+   --------------- */
+
+f_EchoLine();
+f_EchoLine('Compare results','u');
+
 f_Compare("create standard objet", $b_create_object_std, "create array", $b_create_array);
 f_Compare("read standard object",$b_read_object_std, "read array", $b_read_array);
 f_Compare("create specific object", $b_create_object_spec, "create standard object", $b_create_object_std);
 f_Compare("read specific object", $b_read_object_spec, "read standard object", $b_read_object_std);
 
-// end
-f_InfoEnd();
+/* ------------
+   end
+   ------------ */
+
+f_EchoLine();
+f_EchoLine('End of tests','u');
+f_InfoEnd('<a href="http://www.tinybutstrong.com">http://www.tinybutstrong.com</a>',false);
 exit;
 
-/* ---------------------------------
-   SPECIFIC FUNCTIONS AND CLASSES
-   ---------------------------------*/
+/* --------------------------------------------
+   FUNCTIONS AND CLASSES SPECIFIC TO THIS BENCH
+   -------------------------------------------- */
 
 class clsTest {
 	var $name = 'James';
@@ -123,7 +141,7 @@ function f_test_read_array($x) {
 }
 
 /* ---------------------------------
-   COMMON FUNCTIONS
+   COMMON FUNCTIONS (version 1.0)
    ---------------------------------*/
 
 function f_Nothing() {
@@ -141,7 +159,19 @@ function f_BechThisFct($fct, $prm=false, $nbr = 10000) {
 		$x = call_user_func_array($fct, $prm);
 	}
 	$t2 = f_Timer();
-	return ($t2-$t1);
+	$d = ($t2-$t1);
+	$av = $d/$nbr;
+	if ($av>=0.1) {
+		$av_txt = number_format($av,3,'.',',').' secconds';
+	} elseif ($av>=0.001) {
+		$av_txt = number_format(1000*$av,3,'.',',').' milli-secconds';
+	} elseif ($av>=0.000001) {
+		$av_txt = number_format(1000000*$av,3,'.',',').' micro-secconds';
+	} else {
+		$av_txt = number_format(1000000*$av,12,'.',',').' micro-secconds';
+	}
+	f_EchoLine("Bench of function '".$fct."': run ".number_format($nbr,0,'.',',')." times, average duration: ".$av_txt.".");
+	return $d;
 }
 
 function f_Timer() {
@@ -156,9 +186,14 @@ function f_Timer() {
 	return (float)$x ;
 }
 
-function f_EchoLine($x='') {
+function f_EchoLine($txt='',$conv=true) {
 // display a line of information
-	echo htmlentities($x)."<br />\r";
+	if ($conv===true) {
+		$txt = htmlentities($txt);
+	} elseif (is_string($conv)) {
+		$txt = '<'.$conv.'>'.htmlentities($txt).'</'.$conv.'>';
+	}
+	echo $txt."<br />\r";
 }
 
 function f_Compare($a_name, $a_val, $b_name, $b_val) {
@@ -174,22 +209,24 @@ function f_Compare($a_name, $a_val, $b_name, $b_val) {
 	f_EchoLine( '['.$a_name.'] is '.number_format($b_val/$a_val,2).' time faster than ['.$b_name.'] , that is a reduction of '.number_format(100*($b_val-$a_val)/$b_val,2).'% compared to ['.$b_name.'].' );
 }
 
-function f_InfoStart($Title) {
+function f_InfoStart($title) {
 // display information at the start of the test	
 	global $t_start;
 	$t_start = f_Timer();
 	
-	f_EchoLine('PHP Benches: '.$Title);
-	f_EchoLine('PHP version: '.PHP_VERSION);
-	f_EchoLine('OS type: '.PHP_OS.' ('.php_uname('s').')');
+	echo '<!DOCTYPE HTML><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>PHP Benches - '.$title.'</title></head><body>';
+	f_EchoLine('<b>PHP Benches:</b> '.htmlentities($title), false);
+	f_EchoLine('<b>PHP version:</b> '.PHP_VERSION,false);
+	f_EchoLine('<b>OS type:</b> '.PHP_OS.' ('.php_uname('s').')',false);
 	f_EchoLine();
 	
 }
 
-function f_InfoEnd() {
+function f_InfoEnd($signature=false,$conv=true) {
 // display information at the end of the test	
 	global $t_start;
 	$t_end = f_Timer();
-	f_EchoLine();
-	f_EchoLine("End of the test. Duration: ".number_format($t_end-$t_start,2)." sec.");
+	f_EchoLine("Total duration: ".number_format($t_end-$t_start,2)." sec.");
+	if ($signature!==false) f_EchoLine($signature,$conv);
+	echo '</body></html>';
 }
