@@ -9,7 +9,7 @@ f_InfoStart('Function vs Method');
 
 f_EchoLine('Presentation','u');
 echo "
-This test compares the time execution between a function, a method od an instaciated object, and a static method.<br />
+This test compares the time execution between a function, a method of an instanciated object, and a static method.<br />
 ";
 
 /* --------------
