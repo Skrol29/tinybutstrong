@@ -98,7 +98,8 @@ f_Compare("read specific object", $b_read_object_spec, "read standard object", $
 
 f_EchoLine();
 f_EchoLine('End of tests','u');
-f_InfoEnd('<a href="http://www.tinybutstrong.com">http://www.tinybutstrong.com</a>',false);
+$file = 'phpbench_array_vs_object.php';
+f_InfoEnd('<a href="http://tinybutstrong.svn.sourceforge.net/viewvc/tinybutstrong/trunk/benches/'.$file.'?revision=145&view=markup">Source code of this bench</a>. Created for the <a href="http://www.tinybutstrong.com">TinyButStrong</a> project.',false);
 exit;
 
 /* --------------------------------------------
