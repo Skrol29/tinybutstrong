@@ -4,6 +4,7 @@
 Skrol29, 2010-12-16
 http://www.tinybutstrong.com/onlyyou.html
 */
+set_time_limit(0);
 
 f_InfoStart('Arrays vs Objects');
 
