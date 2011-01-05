@@ -29,8 +29,8 @@ function tbs_filter($op, $delta = 0, $format = -1, $text = '', $cache_id  = 0) {
   case 'prepare':
   	return $text;
   case 'process':
-  	//tbs_merge_node($text);
-  	return $text.' (filter-process '.date('Y-m-d H:i:s').' )'.var_export(array_keys($GLOBALS['conf']),true);
+  	tbs_merge_node($text);
+  	// return $text.' (filter-process '.date('Y-m-d H:i:s').' )'.var_export(array_keys($GLOBALS['conf']),true); // debug, search node id
   case 'settings':
   	// displayed in "Home›Administer›Site configuration›Input formats›TBS›Configure"
     $form['tbs_filter'] = array('#type' => 'fieldset', '#title' => t('Dynamic content with TinyButStrong'), '#value' => t('You can define a global list of smileys on the !page.', array('!page' => l(t('smileys settings page'), 'admin/settings/tbs'))));

@@ -2,7 +2,7 @@
 // $Id$
 
 // Implements hook_install() http://api.drupal.org/api/function/hook_install
-// It is triggered when the module is enbaled for the first time.
+// It is triggered when the module is enabled for the first time.
 function tbs_install() {
 
 	// Create a ready-to-use Filter Format to be used in the node edition
