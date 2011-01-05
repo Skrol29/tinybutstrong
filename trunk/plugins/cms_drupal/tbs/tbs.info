@@ -2,5 +2,5 @@
 name = TinyButStrong
 description = Dynamic Content
 package = TinyButStrong
-version = 0.01b
+version = 1.0-beta-20110105
 core = 6.x
