@@ -4,6 +4,7 @@
 Skrol29, 2010-12-16
 http://www.tinybutstrong.com/onlyyou.html
 */
+
 set_time_limit(0);
 
 f_InfoStart('Arrays vs Objects');
@@ -12,8 +13,8 @@ f_EchoLine('Presentation','u');
 echo "This test compares the usage of 4 information storage:
 <table border='0' padding='3'>
  <tr><td>array:           </td><td>&nbsp;</td><td>\$x = array('name' => 'James', 'subname' => 'Dean', 'id' => 33);</td></tr>
- <tr><td>specific object: </td><td>&nbsp;</td><td>\$x = new clsTest; class clsTest {var \$name = 'James'; var \$subname = 'Dean'; var \$id = 33;}</td></tr>
- <tr><td>standard object: </td><td>&nbsp;</td><td>\$x = (object) array('name' => 'James', 'subname' => 'Dean', 'id' => 33);</td></tr>
+ <tr><td>new instance of object: </td><td>&nbsp;</td><td>\$x = new clsTest; class clsTest {var \$name = 'James'; var \$subname = 'Dean'; var \$id = 33;}</td></tr>
+ <tr><td>array converted in object (stdClass): </td><td>&nbsp;</td><td>\$x = (object) array('name' => 'James', 'subname' => 'Dean', 'id' => 33);</td></tr>
  <tr><td>named variables: </td><td>&nbsp;</td><td>\$name = 'James'; \$subname = 'Dean'; \$id = 33;</td></tr>
 </table>";
 
@@ -61,25 +62,22 @@ f_EchoLine("Memory size for the named variables: ".($mem0-$mem1)." bytes");
 f_EchoLine();
 f_EchoLine('Speed measures','u');
 
-$b0 = f_BechThisFct('f_Nothing');
+$b0 = f_BenchThisFct('f_Nothing');
 
-$b_create_array = f_BechThisFct('f_test_create_array');
+$b_create_array = f_BenchThisFct('f_test_create_array');
 
-$b_create_object_std = f_BechThisFct('f_test_create_object_std');
+$b_create_object_std = f_BenchThisFct('f_test_create_object_byconv');
 
-$b_create_object_spec = f_BechThisFct('f_test_create_object_spec');
+$b_create_object_spec = f_BenchThisFct('f_test_create_object_bynew');
 
 $x = f_test_create_array();
-$prm = array(&$x); 
-$b_read_array = f_BechThisFct('f_test_read_array', $prm);
+$b_read_array = f_BenchThisFct('f_test_read_array', array($x));
 
-$x = f_test_create_object_std();
-$prm = array(&$x); 
-$b_read_object_std = f_BechThisFct('f_test_read_object_any', $prm);
+$x = f_test_create_object_byconv();
+$b_read_object_std = f_BenchThisFct('f_test_read_object_any', array($x));
 
-$x = f_test_create_object_spec();
-$prm = array(&$x); 
-$b_read_object_spec = f_BechThisFct('f_test_read_object_any', $prm);
+$x = f_test_create_object_bynew();
+$b_read_object_spec = f_BenchThisFct('f_test_read_object_any', array($x));
 
 /* ---------------
    compare results
@@ -88,10 +86,11 @@ $b_read_object_spec = f_BechThisFct('f_test_read_object_any', $prm);
 f_EchoLine();
 f_EchoLine('Compare results','u');
 
-f_Compare("create standard objet", $b_create_object_std, "create array", $b_create_array);
-f_Compare("read standard object",$b_read_object_std, "read array", $b_read_array);
-f_Compare("create specific object", $b_create_object_spec, "create standard object", $b_create_object_std);
-f_Compare("read specific object", $b_read_object_spec, "read standard object", $b_read_object_std);
+f_Compare("create new instance of object", $b_create_object_std, "create array", $b_create_array);
+f_Compare("create new instance of object", $b_create_object_spec, "create array converted in object", $b_create_object_std);
+f_Compare("read array converted in object",$b_read_object_std, "read array", $b_read_array);
+f_Compare("read new instance of object", $b_read_object_spec, "read array", $b_read_array);
+f_Compare("read new instance of object", $b_read_object_spec, "read array converted in object", $b_read_object_std);
 
 /* ------------
    end
@@ -113,12 +112,12 @@ class clsTest {
 	var $id = 33;
 }
 
-function f_test_create_object_std() {
+function f_test_create_object_byconv() {
 	$x = (object) array('name' => 'James', 'subname' => 'Dean', 'id' => 33);
 	return $x;
 }
 
-function f_test_create_object_spec() {
+function f_test_create_object_bynew() {
 	$x = new clsTest();
 	return $x;
 }
@@ -143,7 +142,7 @@ function f_test_read_array($x) {
 }
 
 /* ---------------------------------
-   COMMON FUNCTIONS (version 1.0)
+   COMMON FUNCTIONS (version 1.1)
    ---------------------------------*/
 
 function f_Nothing() {
@@ -152,13 +151,20 @@ function f_Nothing() {
 	return $x;
 }
 
-function f_BechThisFct($fct, $prm=false, $nbr = 10000) {
-// bench a function
+function f_BenchThisFct($fct, $arg=null, $nbr = 10000) {
+// bench a function that takes zero to 5 arguments.
 	$x = false;
-	if ($prm===false) $prm = array();
+	if (is_null($arg)) $arg = array();
+	$arg_nbr = count($arg);
 	$t1 = f_Timer();
-	for ($i=0;$i<$nbr;$i++) {
-		$x = call_user_func_array($fct, $prm);
+	switch ($arg_nbr) {
+		case 0: for ($i=0;$i<$nbr;$i++) $x = $fct(); break; // do not use call_user_func_array() or call_user_func() because they get time proportionally to the length of the function's name.
+		case 1: for ($i=0;$i<$nbr;$i++) $x = $fct($arg[0]); break;
+		case 2: for ($i=0;$i<$nbr;$i++) $x = $fct($arg[0], $arg[1]); break;
+		case 3: for ($i=0;$i<$nbr;$i++) $x = $fct($arg[0], $arg[1], $arg[2]); break;
+		case 4: for ($i=0;$i<$nbr;$i++) $x = $fct($arg[0], $arg[1], $arg[2], $arg[3]); break;
+		case 5: for ($i=0;$i<$nbr;$i++) $x = $fct($arg[0], $arg[1], $arg[2], $arg[3], $arg[4]); break;
+		default: exit('ERROR: more that 5 arguments are given to bench function '.$fct.'().');
 	}
 	$t2 = f_Timer();
 	$d = ($t2-$t1);

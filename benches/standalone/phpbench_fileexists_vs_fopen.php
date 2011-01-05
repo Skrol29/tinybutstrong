@@ -17,15 +17,15 @@ echo "This test compares two ways of opening a file that may or may not exist.<b
 f_EchoLine();
 f_EchoLine('Speed measures','u');
 
-$b0 = f_BechThisFct('f_Nothing');
+$b0 = f_BenchThisFct('f_Nothing');
 
 $prm_ok  = array(basename(__FILE__)); 
 $prm_err = array('this_file_do_not_exists.txt'); 
 
-$b_fe_ok  = f_BechThisFct('f_test_file_exists',$prm_ok);
-$b_fe_err = f_BechThisFct('f_test_file_exists',$prm_err);
-$b_of_ok  = f_BechThisFct('f_test_ofile',$prm_ok);
-$b_of_err = f_BechThisFct('f_test_ofile',$prm_err);
+$b_fe_ok  = f_BenchThisFct('f_test_file_exists',$prm_ok);
+$b_fe_err = f_BenchThisFct('f_test_file_exists',$prm_err);
+$b_of_ok  = f_BenchThisFct('f_test_ofile',$prm_ok);
+$b_of_err = f_BenchThisFct('f_test_ofile',$prm_err);
 
 /* ---------------
    compare results
@@ -72,7 +72,7 @@ function f_test_ofile($file) {
 }
 
 /* ---------------------------------
-   COMMON FUNCTIONS (version 1.0)
+   COMMON FUNCTIONS (version 1.1)
    ---------------------------------*/
 
 function f_Nothing() {
@@ -81,13 +81,20 @@ function f_Nothing() {
 	return $x;
 }
 
-function f_BechThisFct($fct, $prm=false, $nbr = 10000) {
-// bench a function
+function f_BenchThisFct($fct, $arg=null, $nbr = 10000) {
+// bench a function that takes zero to 5 arguments.
 	$x = false;
-	if ($prm===false) $prm = array();
+	if (is_null($arg)) $arg = array();
+	$arg_nbr = count($arg);
 	$t1 = f_Timer();
-	for ($i=0;$i<$nbr;$i++) {
-		$x = call_user_func_array($fct, $prm);
+	switch ($arg_nbr) {
+		case 0: for ($i=0;$i<$nbr;$i++) $x = $fct(); break; // do not use call_user_func_array() or call_user_func() because they get time proportionally to the length of the function's name.
+		case 1: for ($i=0;$i<$nbr;$i++) $x = $fct($arg[0]); break;
+		case 2: for ($i=0;$i<$nbr;$i++) $x = $fct($arg[0], $arg[1]); break;
+		case 3: for ($i=0;$i<$nbr;$i++) $x = $fct($arg[0], $arg[1], $arg[2]); break;
+		case 4: for ($i=0;$i<$nbr;$i++) $x = $fct($arg[0], $arg[1], $arg[2], $arg[3]); break;
+		case 5: for ($i=0;$i<$nbr;$i++) $x = $fct($arg[0], $arg[1], $arg[2], $arg[3], $arg[4]); break;
+		default: exit('ERROR: more that 5 arguments are given to bench function '.$fct.'().');
 	}
 	$t2 = f_Timer();
 	$d = ($t2-$t1);
