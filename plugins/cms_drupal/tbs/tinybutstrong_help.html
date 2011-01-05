@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Joomla plugin: Dynamic Articles with TBS</title>
+<style type="text/css">
+<!--
+body, td, th {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+}
+h1 {
+	font-size: 14px;
+	font-weight: bold;
+}
+h2 {
+	font-weight: bold;
+}
+h3 {
+	font-weight: bold;
+	text-decoration: underline;
+	font-size: 12px;
+}
+.option {
+	color: #FF3300;
+}
+.decal {
+	margin-left: 20px;
+}
+.source {
+	margin-left: 20px;
+	background-color: #EEEEEE;
+	padding: 2px;
+	margin-top: 4px;
+}
+-->
+</style>
+</head>
+
+<body>
+<div align="center">
+  <h1>Dynamic Content with TinyButStrong</h1>
+  version 1.0-beta<br />
+  <strong>a content plugin for Drupal 6</strong> <br />
+  (help file updated on 2011-01-05)</div>
+<p> This plug-in allows to include dynamic content  in Drupal nodes (Pages, Stories, ...) using the <a href="http://www.tinybutstrong.com">TinyButStrong</a> Template Engine. 
+  The possibilities of dynamic content are very rich. For example, it can be listing data from MySQL tables, or it can complete user interface asking and processing data given by the user.<br />
+  TinyButStrong is very well adapted for CMS because, unlike other Template Engines, it allows to have templates build with visual or WYSIWYG editors. It means that a template can be a Joomla article build with the inline Html editor provide by default (TinyMCE).<br />
+</p>
+<h2>Requirement:</h2>
+Drupal 6.x. Does not work with Drupal 7 yet.<br />
+<h2>Installation:</h2>
+<p>Extract the files of the module  to your Drupal installation (normally into sites/all/modules).<br />
+Then enable the module in <em>Administer &gt; Site building &gt; Modules</em>.</p>
+<p>&nbsp;</p>
+<h2>How it works:</h2>
+<p>Since the plug-in is installed and activated in the Drupal website, a new Filter named &quot;Dynamic content with TinyButStrong Template Engine&quot; is available when you are editing a node. Filters are listed in the section Input Format when the node is in edit mode.</p>
+<p>  you can use 3 types of plugin tags (Direct MergeBlock, External Script and Internal Script) that you can put anywhere in your nodes.<br />
+  Because adding active content in articles can be powerfull, the plug-in has also several parameters to manage security levels that can be tuned for all articles or for specific articles.</p>
+<u> Please note:</u>
+<ul>
+  <li>You can have several  plugin tags (defined by {tbs} and {/tbs}) in the same node. They will be processed in order.</li>
+  <li>All plugin tags can be placed anywhere, they will be deleted before the display.</li>
+  <li>You can tune several security parameters at the Joomla Administration interface.</li>
+  <li>The default Joomla  PDF  button won't work correctly with dynamic articles, unless you make <a href="#pdf">some changes</a>.<br />
+  </li>
+</ul>
+<p>This help file assumes that you understand the basic concepts of Template Engines and more specifically  the TinyButStrong Template Engine.</p>
+<h2>Type #1: Direct MergeBlock</h2>
+<p>Syntax:
+  {tbs}mergeblock=<span class="option">blockname</span>;db=<span class="option">dbname</span>;sql=<span class="option">sqlstatement</span>{/tbs}<br />
+  <br />
+  This type of plugin tag takes the current article as current template and performs a TBS-&gt;MergeBlock() over it.<br />
+  The result of the merging is displayed instead of the original article.<br />
+  There is no need to code any PHP to use this type of plugin tag.<br />
+</p>
+<table border="0" cellspacing="0" cellpadding="4">
+  <tr>
+    <td width="90" valign="top"><span class="option">blockname</span>:</td>
+    <td>Name of the TBS block to merge. Assuming that such a block exists in the current article.</td>
+  </tr>
+  <tr>
+    <td width="90" valign="top"><span class="option">dbname</span>:</td>
+    <td>Optional. Name of the database where to use the SQL statement. The database must be available with the current Joomla connection.  You can specify the keyword <span class="option">%current%</span> for the Joomla database. (keyword <span class="option">%joomla%</span> is also supported for compatibility with version 1.0 of this plugin)<br />
+      If you want to connect to a database with another account and password, you must use another type of plugin tag because this one cannot do it.</td>
+  </tr>
+  <tr>
+    <td width="90" valign="top"><span class="option">sqlstatement</span>:</td>
+    <td>The SQL statement that should return the data to display.<br />
+      Since version 1.02 of this plugin: In order to facilitate the usage of operators '&lt;' and '&gt;' in the SQL statement, the plugin automatically replaces strings '-+' and '+-' with those operators. You can prevent this behavior by adding the parameter <span class="option">sql_preserve</span> in the  plugin tag.<br />
+      Example:<br />
+      <span class="source">{tbs}mergeblock=u;sql=SELECT name FROM t_user WHERE id+-0{/tbs}</span><br />
+      is the same as<br />
+      <span class="source">{tbs}mergeblock=u;sql=SELECT name FROM t_user WHERE id&gt;0;sql_preserve{/tbs}</span></td>
+  </tr>
+</table>
+<br />
+Example: <br />
+<div class="decal"><u>Joomla article:</u><br />
+  <div class="source">{tbs}mergeblock=u;sql=SELECT name, email FROM jos_users ORDER BY name{/tbs}<br />
+    <table border="1" cellspacing="0" cellpadding="2">
+      <tr>
+        <td bgcolor="#CCCCCC" class="decal">Name</td>
+        <td bgcolor="#CCCCCC" class="decal">Email</td>
+      </tr>
+      <tr>
+        <td class="decal">[u.name;block=tr]</td>
+        <td class="decal">[u.email]</td>
+      </tr>
+    </table>
+  </div>
+</div>
+<h2> Type #2:  External script</h2>
+Syntax:
+{tbs}script=<span class="option">scriptname.php</span>;db=<span class="option">dbname</span>{/tbs}<br />
+<br />
+This type of plugin tag is the same as the previous one but instead of a simple TBS-&gt;MergeBlock(), it run the specified PHP script.<br />
+The script should drive the merging assuming that the current article is already loaded as  the current template. There is no need to call TBS-&gt;Show() because the plugin will do it. Please note that your PHP script is run in the same context as a function and that the local variable <span class="option">$TBS</span> contains the ready to use TBS instance. The local variable <span class="option">$PrmLst</span> contains the parameters of the plugin tag if you need it. You can leave the current script and return to the Joomla process using command<span class="option"> return;</span> in your main script (it hasn't the same behavior inside a function of course). They are other coding facilities given somewhere below.<br />
+<br />
+<table border="0" cellspacing="0" cellpadding="4">
+  <tr>
+    <td width="100" valign="top"><span class="option">scriptname.php</span>:</td>
+    <td>The PHP script to run. You can specify a path. The default path for all scripts can also be specified in the plug-in parameters.</td>
+  </tr>
+  <tr>
+    <td width="90" valign="top"><span class="option">dbname</span>:</td>
+    <td>Optional. Name of the database to select before the script is run. The database must be available with the current Joomla connection.  You can specify the keyword <span class="option">%joomla%</span> for the Joomla database.<br />
+      If you want  to connect to a database with another account and password, then your script  must open this connection by itself, and you should specify explicitly the new  open connected for any use of MergeBlock().</td>
+  </tr>
+</table>
+<h3> Example:</h3>
+<div class="decal"><u>Joomla article:</u><br />
+  <div class="source">{tbs}script=myappli.php{/tbs}<br />
+    <table border="1" cellspacing="0" cellpadding="2">
+      <tr>
+        <td bgcolor="#CCCCCC" class="decal">Name</td>
+        <td bgcolor="#CCCCCC" class="decal">Email</td>
+      </tr>
+      <tr>
+        <td class="decal">[u.name;block=tr]</td>
+        <td class="decal">[u.email]</td>
+      </tr>
+    </table>
+  </div>
+  <br />
+  <u>myappli.php:</u> (external script using the same MySQL connection and database) <br />
+  <div class="source">&lt;?php<br />
+    $key = (isset($_GET['key'])) ? intval($_GET['key']) : 0;<br />
+    $TBS-&gt;MergeBlock('u','mysql','SELECT name, email FROM jos_users WHERE id='.$key);<br />
+    ?&gt;</div>
+  <br />
+  <u>myappli.php:</u> (external script using a different MySQL connection) <br />
+  <div class="source">&lt;?php<br />
+    $key = (isset($_GET['key'])) ? intval($_GET['key']) : 0;<br />
+    $cid2 = mysql_connect('localhost', 'user', 'password');<br />
+    $TBS-&gt;MergeBlock('u','mysql','SELECT name, email FROM association_users WHERE id='.$key);<br />
+    mysql_close($cid2);<br />
+    ?&gt;</div>
+</div>
+</p>
+<h3>Coding help:</h3>
+<p>Moreover, the plug-in gives to you other coding facilities:<br />
+  <br />
+  Three properties are given by the TinyButStrong plug-in to retrieve information about the current Joomla context:<br />
+</p>
+<ul>
+  <li> $TBS-&gt;<span class="option">JoomlaArticle</span>: A reference to the article that is being rendered by the view. For example: <span class="source">$TBS-&gt;JoomlaParams-&gt;title</span> and <span class="source">$TBS-&gt;JoomlaParams-&gt;id
+  </span></li>
+  <li>$TBS-&gt;<span class="option">JoomlaParams</span>: A reference to an associative array of relevant parameters.</li>
+  <li>$TBS-&gt;<span class="option">JoomlaLimitstart</span>: An integer that determines the &quot;page&quot; of the content that is to be generated. </li>
+</ul>
+<p> Two functions are given by the TinyButStrong plug-in to work with  the Joomla Database Object which is a  database connectivity tool. It helps to query and execute SQL statements in the Joomla database and other databases available with the same MySQL connection as Joomla.</p>
+<ul>
+  <li> <span class="option">tbs_plugin_SqlGetRows</span>($sql, $err_prefix=''):    Return the result of a query, first row is index 0, and each row is an associative PHP array.
+  Return an empty array if the query gives no data. In case of error, the function return false and a message is displayed. You can prefix the error message using argument $err_prefix. </li>
+  <li><span class="option">tbs_plugin_SqlExecute</span>($sql, $err_prefix=''):  Execute the query and return true if there is no error, otherwise return false and display an error message.</li>
+</ul>
+<p>Tips and trics using the Joomla framework:</p>
+<table border="0" cellpadding="3" cellspacing="0">
+  <tr>
+    <td align="left" valign="top"><u><strong>How to get</strong></u></td>
+    <td width="10" align="left" valign="top"><u></u></td>
+    <td align="left" valign="top"><u><strong>Code</strong></u></td>
+    <td width="10" align="left" valign="top"><u></u></td>
+    <td align="left" valign="top"><u><strong>Comments</strong></u></td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" nowrap="nowrap">Current Article's id:</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">$id = $TBS-&gt;JoomlaArticle-&gt;id;</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" nowrap="nowrap">Current Article's title:</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">$title = $TBS-&gt;JoomlaArticle-&gt;title;</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">read/write</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" nowrap="nowrap">URL of the current article:</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">$url = JRoute::_(ContentHelperRoute::getArticleRoute($art_id));</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">$art_id must be the current article id.<br />
+      This expression give the good URL coresponding to the current URL mode configured in the Joomla instance (long, short, with html extension or not)</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">Current user object</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">$user =&amp; JFactory::getUser();</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">If ($user-&gt;id==0) then the current user is not logged.</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">$user-&gt;username</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">Prefix of Joomla tables</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">$conf = new JConfig();<br />
+$jpref = $conf-&gt;dbprefix;</td>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">&nbsp;</td>
+  </tr>
+</table>
+<p>You can found more coding ressource at the <a href="http://api.joomla.org/Joomla-Framework/Application/JView.html">Joomla API Documentation</a></p>
+<h2>Type #3:  Internal script</h2>
+Syntax:
+{tbs}embedded<span class="option"></span>;db=<span class="option">dbname</span>{/tbs}<br />
+<br />
+This type of plugin tag is the same as the previous one but instead of  an external script, it run the parts of PHP code which are embedded in the current article. This can be very dangerous because all PHP commands are available. The parts of PHP code must be placed between tags <span class="option">&lt;!--TBS</span> and <span class="option">--&gt;</span>. Those tags are compatible with HTML comment tags, which means that they won't destroy the article looking, but they cannot be seen is visual mode. You must edit them by editing the HTML source. The PHP code is deleted before the article is displayed.<br />
+<br />
+<table border="0" cellspacing="0" cellpadding="4">
+  <tr>
+    <td width="100" valign="top"><span class="option">dbname</span>:</td>
+    <td>Optional. Name of the database to select before the script is run. The database must be available with the current Joomla connection.  You can specify the keyword <span class="option">%joomla%</span> for the Joomla database.<br />
+      If you want  to connect to a database with another account and password, then your script  must open this connection by itself, and you should specify explicitly the new  open connected for any use of MergeBlock().</td>
+  </tr>
+</table>
+<h3> Example:</h3>
+<div class="decal"><u>Joomla article:</u><br />
+  <div class="source">{tbs}embedded{/tbs}<br />
+    <table border="1" cellspacing="0" cellpadding="2">
+      <tr>
+        <td bgcolor="#CCCCCC" class="decal">Name</td>
+        <td bgcolor="#CCCCCC" class="decal">Email</td>
+      </tr>
+      <tr>
+        <td class="decal">[u.name;block=tr]</td>
+        <td class="decal">[u.email]</td>
+      </tr>
+    </table>
+  </div>
+  <br />
+  <u>Tag embedded in the Joomla article:</u> (viewable using button [html])<br />
+  <div class="source">&lt;!--TBS<br />
+    <br />
+    $key = (isset($_GET['key'])) ? intval($_GET['key']) : 0;<br />
+    $TBS-&gt;MergeBlock('u','mysql','SELECT name, email FROM jos_users WHERE id='.$key);<br />
+    <br />
+    --&gt;</div>
+</div>
+</p>
+<h2><a name="pdf" id="pdf"></a>TBS Dynamic articles and   PDF documents:</h2>
+In the original Joomla 1.5.x installation, the generation of PDF document (using the PDF button available  on any article by default) does not run any Joomla plug-ins. Therefore your TBS Dynamic Article will not be converted as we can expect when a user will click on the PDF button. Instead he will see the article like the Admin can see it.<br />
+In order to avoid this behaviour, you can try two solutions:<br />
+&bull; Deactivate the PDF generation for all articles or for the current article only. This can be done by tuning  the global property or only the property of the article.<br />
+<div class="decal">Content &gt;&gt; Article Manager &gt;&gt; Parameters : &quot;PDF Icon&quot;<br />
+  Content &gt;&gt; Article Manager &gt;&gt; (your article) &gt;&gt; Parameters - Advanced : &quot;PDF Icon&quot;<br />
+  Sometimes you may also need to change  menu settings: <br />
+  Menus &gt;&gt; Main Menu &gt;&gt; Home &gt;&gt;Parameters - Component : &quot;PDF Icon&quot;<br />
+</div>
+or<br />
+&bull; 
+Edit the PDF Generator script provided  by Joomla in order to make it run all content plug-ins. To do so, just perform the following:<br />
+<div class="decal">Edit the file <span class="option">&lt;Joomla root folder&gt;/components/com_content/views/article/view.pdf.php</span><br />
+  And  after the lines:<br />
+  <div class="decal option">// process the new plugins<br />
+    JPluginHelper::importPlugin('content', 'image');<br />
+    $dispatcher-&gt;trigger('onPrepareContent', array (&amp; $article, &amp; $params, 0)); </div>
+  Add the two lines: <br />
+  <div class="decal option">JPluginHelper::importPlugin('content');<br />
+    $results = $dispatcher-&gt;trigger('onPrepareContent', array (&amp; $article, &amp; $params, 0)); </div>
+  <br />
+</div>
+<br />
+</body>
+</html>
