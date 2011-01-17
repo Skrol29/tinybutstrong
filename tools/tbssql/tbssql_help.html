@@ -57,7 +57,7 @@ h3 {
 <body>
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
   <tr>
-    <td width="200"><a href="http://www.tinybutstrong.com">Skrol29</a>, 2010-10-22 </td>
+    <td width="200"><a href="http://www.tinybutstrong.com">Skrol29</a>, 2011-01-12 </td>
     <td><h1 align="center">TbsSQL 3.1</h1></td>
     <td width="200">&nbsp;</td>
   </tr>
@@ -146,7 +146,7 @@ h3 {
   Example:<br />
   <div class="decal"><span class="sql">$id = 29;<br />
     $date = false; <br />
-    $Db-&gt;Execute('UPDATE table1 SET fd=[#2#] WHERE (id=%1%)', $id, $date);</span><br />
+    $Db-&gt;Execute('UPDATE table1 SET fd=#[2]# WHERE (id=%1%)', $id, $date);</span><br />
     In this example, the SQL statement sent to the database will be: <span class="sql">UPDATE table1 SET fd=NULL WHERE (id=29)</span></div>
   <div class="versioning">Versioning: Jokers for nullable values are supported since TbsSQL version 2.5.</div>
 </div>
