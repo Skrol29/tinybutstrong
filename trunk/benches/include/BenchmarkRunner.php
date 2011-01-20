@@ -32,7 +32,7 @@ class BenchmarkRunner {
 		if ($params === null) $params = array();
 		$runningCount = $this->getRunningCount();
 		for ($i=0; $i<$runningCount; $i++)
-			$data = call_user_func_array($functionName, $params);
+			call_user_func_array($functionName, $params);
 	}
 
 	function getMicrotime() {
