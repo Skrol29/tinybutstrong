@@ -19,6 +19,7 @@ require_once(dirname(__FILE__).'/include/TBSUnitTestCase.php');
 // include unit test classes
 include(dirname(__FILE__).'/testcase/AttTestCase.php');
 include(dirname(__FILE__).'/testcase/QuoteTestCase.php');
+include(dirname(__FILE__).'/testcase/FrmTestCase.php');
 
 // launch tests
 ini_set("display_errors", "On");
@@ -26,6 +27,7 @@ $tbs = new clsTinyButStrong();
 $test = new GroupTest('TinyButStrong v'.$tbs->Version.' (with PHP '.PHP_VERSION.')');
 $test->addTestCase(new AttTestCase());
 $test->addTestCase(new QuoteTestCase());
+$test->addTestCase(new FrmTestCase());
 $test->run(new HtmlReporter());
 
 ?>
