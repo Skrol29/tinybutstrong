@@ -1,10 +1,5 @@
 <?php
 
-/* Versionning
-Skrol29, 2010-12-13: add option TBS_TEST_NotYetFixedBug
-Skrol29, 2010-12-14: add bugs about the case of attribute's name + add CacheField tests + rename constants
-*/
-
 class AttTestCase extends TBSUnitTestCase {
 
 	function AttTestCase() {
@@ -19,7 +14,7 @@ class AttTestCase extends TBSUnitTestCase {
 
 	function skip() {
 		// run tests only if tbs version >= 3.5.0
-		$this->skipIfNotAtLeastVersion('3.5.0', 'skip att option unit tests because it was not implemented in this TinyButStrong version');
+		$this->skipIfNotAtLeastTBSVersion('3.5.0', 'skip att option unit tests because it was not implemented in this TinyButStrong version');
 	}
 
 	function testFields() {
@@ -80,7 +75,6 @@ class AttTestCase extends TBSUnitTestCase {
 	}
 
 	function testMergeBlocks() {
-
 		$blk = array();
 		$blk[] = array('id'=>'AttCache x12', 'val'=>'effect1');
 		$blk[] = array('id'=>'AttCache x13', 'val'=>'effect2');
@@ -95,7 +89,9 @@ class AttTestCase extends TBSUnitTestCase {
 
 		// test normal with parent tag specification
 		$this->assertEqualMergeBlockFiles('att_test3.html', array('blk'=>$blk), 'att_test3_result.html', "test blocks #3");
+	}
 
+	function testMergeBlocksWithCachedFields() {
 		$data = array();
 		$data[] = array('id'=>'x', 'val'=>'1');
 		$data[] = array('id'=>'y', 'val'=>'2');
@@ -104,13 +100,12 @@ class AttTestCase extends TBSUnitTestCase {
 		// parameter att with block => test the CacheField feature
 		$this->assertEqualMergeBlockStrings('<div>[b.val;att=width][b.id;block=div]/[b.id]/[b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #1");
 		$this->assertEqualMergeBlockStrings('<div width="0">[b.val;att=width][b.id;block=div]/[b.id]/[b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #2");
-		$this->assertEqualMergeBlockStrings('<div>[b.id;block=div]/[b.val;att=width][b.id]/[b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #1");
-		$this->assertEqualMergeBlockStrings('<div width="0">[b.id;block=div]/[b.val;att=width][b.id]/[b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #2");
-		$this->assertEqualMergeBlockStrings('<div>[b.id;block=div]/[b.id]/[b.val;att=width][b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #1");
-		$this->assertEqualMergeBlockStrings('<div width="0">[b.id;block=div]/[b.id]/[b.val;att=width][b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #2");
-		$this->assertEqualMergeBlockStrings('<div>[b.id;block=div]/[b.id]/[b.id][b.val;att=width]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #1");
-		$this->assertEqualMergeBlockStrings('<div width="0">[b.id;block=div]/[b.id]/[b.id][b.val;att=width]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #2");
-
+		$this->assertEqualMergeBlockStrings('<div>[b.id;block=div]/[b.val;att=width][b.id]/[b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #3");
+		$this->assertEqualMergeBlockStrings('<div width="0">[b.id;block=div]/[b.val;att=width][b.id]/[b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #4");
+		$this->assertEqualMergeBlockStrings('<div>[b.id;block=div]/[b.id]/[b.val;att=width][b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #5");
+		$this->assertEqualMergeBlockStrings('<div width="0">[b.id;block=div]/[b.id]/[b.val;att=width][b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #6");
+		$this->assertEqualMergeBlockStrings('<div>[b.id;block=div]/[b.id]/[b.id][b.val;att=width]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #7");
+		$this->assertEqualMergeBlockStrings('<div width="0">[b.id;block=div]/[b.id]/[b.id][b.val;att=width]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #8");
 	}
 
 	function testOnShowMagnet() {
@@ -164,7 +159,8 @@ class AttTestCase extends TBSUnitTestCase {
 
 		// bugs with case of attribute's name
 		$this->assertEqualMergeFieldStrings('<div Width="250px">[move;att=width]hello</div>', array('move'=>'50%'), '<div Width="50%">hello</div>', "test bug #14"); // note that the att parameter works if it's value is lower case
-		$this->assertEqualMergeFieldStrings('<div Width="250px">[move;att=Width]hello</div>', array('move'=>'50%'), '<div Width="50%">hello</div>', "test bug #15", 'TBS>3.6.1'); // return '<div Width="250px" Width="50%">hello</div>' => the existing attribut is not found because the internal list of parameters is set to lowercase by TBS
+		if ($this->atLeastTBSVersion('3.6.2'))
+			$this->assertEqualMergeFieldStrings('<div Width="250px">[move;att=Width]hello</div>', array('move'=>'50%'), '<div Width="50%">hello</div>', "test bug #15"); // return '<div Width="250px" Width="50%">hello</div>' => the existing attribut is not found because the internal list of parameters is set to lowercase by TBS
 		
 	}
 		

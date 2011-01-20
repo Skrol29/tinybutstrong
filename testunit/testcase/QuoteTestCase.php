@@ -1,10 +1,5 @@
 <?php
 
-/* Versionning
-Skrol29, 2010-12-13: add option TBS_TEST_NEVERFIXEDBUG
-Skrol29, 2010-12-13: rename TBS_TEST_NotYetFixedBug
-*/
-
 class QuoteTestCase extends TBSUnitTestCase {
 
 	function QuoteTestCase() {
@@ -63,7 +58,7 @@ class QuoteTestCase extends TBSUnitTestCase {
 	function testBugs() {
 		// vicious: with an ';' as value
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when [a]!=';';block=b]</b>", array('a'=>';'),  "", "test bug #1");
-		//$this->assertEqualMergeFieldStrings("<b>[onshow;when [a]=';';block=b]</b>", array('a'=>';'),  "<b></b>", "test bug #2"); // bug
+		// $this->assertEqualMergeFieldStrings("<b>[onshow;when [a]=';';block=b]</b>", array('a'=>';'),  "<b></b>", "test bug #2"); // bug
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when '[a]'!=';';block=b]</b>", array('a'=>';'),  "", "test bug #3");
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when '[a]'=';';block=b]</b>", array('a'=>';'),  "<b></b>", "test bug #4");
 		
