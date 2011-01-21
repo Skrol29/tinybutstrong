@@ -13,10 +13,10 @@ You can redistribute and modify it even for commercial usage,
 but you must accept and respect the LPGL License version 3.
 [ok] OPT: better management of CachedFields with parameter att
 [ok] BUG: f_Xml_AttFind() do not find attributes that have uppercase characters, that's because f_Loc_PrmRead() save attributes lowercase
+[--] FCT: split f_Xml_FindTag() with a new f_Xml_FindTagStart() which can be usefull for external tools
 [  ] FCT: htmlconv=js1 and js2 does javascript conversion for ' and " delimiters (current version replaces ' " / and null)
 [  ] FCT: direct commands for plug-ins
 [  ] OPT: f_Misc_GetFile() with file_exists() instead of caching error
-[  ] FCT: split f_Xml_FindTag() with a new f_Xml_FindTagStart() which can be usefull for external tools
 [  ] FCT: rename htmlconv with strconv ?
 */
 // Check PHP version
@@ -3754,6 +3754,40 @@ static function f_Xml_GetPart(&$Txt,$TagLst,$AllIfNothing=false) {
 	
 	if ($AllIfNothing and $nothing) return $Txt;
 	return $x;
+
+}
+
+static function f_Xml_FindTagStart(&$Txt,$Tag,$Opening,$PosBeg,$Forward,$Case=true) {
+/* Find the start of an XML tag.
+$Case=false can be useful for HTML.
+$Tag='' should work and found the start of the first tag.
+$Tag='/' should work and found the start of the first closing tag.
+*/
+
+	$x = '<'.(($Opening) ? '' : '/').$Tag;
+	$xl = strlen($x);
+
+	$p = $PosBeg - (($Forward) ? 1 : -1);
+	do {
+		if ($Forward) {
+			if ($Case) {
+				$p = strpos($Txt,$x,$p-1);
+			} else {
+				$p = stripos($Txt,$x,$p-1);
+			}
+		} else {
+			if ($Case) {
+				$p = strrpos(substr($Txt,0,$p-1),$x); // warning: PHP4 takes acound only of the first char of $x, i.e. '<'
+			} else {
+				$p = strripos(substr($Txt,0,$p-1),$x);
+			}
+		}
+		if ($p===false) return false;
+		$z = substr($Txt,$p+$xl,1);
+		// for PHP4 add: if (substr(Txt,$p,$xl)!==$x) continue; // to be completed for $Case=false
+	} while ( ($z!==' ') && ($z!=="\r") && ($z!=="\n") && ($z!=='>') && ($Tag!=='/') && ($Tag!=='') );
+
+	return $p;
 
 }
 
