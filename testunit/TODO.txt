@@ -1,0 +1,11 @@
+Write unit tests for :
+- htmlconv
+- chrOpen/close
+- LoadTemplate $charset parameter
+- if/then/else/ifempty
+- 'var'
+- magnet/mtype
+- onformat/ondata
+- onshow/onload
+- sub blocks
+- database calls
