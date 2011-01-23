@@ -137,7 +137,7 @@ class AttTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings('<div id="" class="test1[move;att=class]">hello</div>', array('move'=>'test2'), '<div id="" class="test2">hello</div>', "test bug #1");
 		$this->assertEqualMergeFieldStrings('<div id="[move;att=class]" class="test1">hello</div>', array('move'=>'test2'), '<div id="" class="test2">hello</div>', "test bug #2");
 		$this->assertEqualMergeFieldStrings('<div[move;att=class] id="" class="test1">hello</div>', array('move'=>'test2'), '<div id="" class="test2">hello</div>', "test bug #3");
-		//$this->assertEqualMergeFieldStrings('<div id="" class="test1"[move;att=class]>hello</div>', array('move'=>'test2'), '<div id="" class="test2">hello</div>', "test bug #4"); // bug return '<div id="" class="test2'
+		// $this->assertEqualMergeFieldStrings('<div id="" class="test1"[move;att=class]>hello</div>', array('move'=>'test2'), '<div id="" class="test2">hello</div>', "test bug #4"); // bug return '<div id="" class="test2'
 
 		// space bug: merging attribute must add quote because some attribute like 'class' could have several values separate by a space
 		// http://sourceforge.net/tracker/?func=detail&aid=3134436&group_id=324877&atid=1364379
@@ -159,11 +159,10 @@ class AttTestCase extends TBSUnitTestCase {
 
 		// bugs with case of attribute's name
 		$this->assertEqualMergeFieldStrings('<div Width="250px">[move;att=width]hello</div>', array('move'=>'50%'), '<div Width="50%">hello</div>', "test bug #14"); // note that the att parameter works if it's value is lower case
-		if ($this->atLeastTBSVersion('3.6.2'))
+		if ($this->atLeastTBSVersion('3.6.2-dev'))
 			$this->assertEqualMergeFieldStrings('<div Width="250px">[move;att=Width]hello</div>', array('move'=>'50%'), '<div Width="50%">hello</div>', "test bug #15"); // return '<div Width="250px" Width="50%">hello</div>' => the existing attribut is not found because the internal list of parameters is set to lowercase by TBS
-		
+
 	}
-		
 }
 
 ?>

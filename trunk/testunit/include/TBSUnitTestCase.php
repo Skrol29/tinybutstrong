@@ -18,6 +18,15 @@ class TBSUnitTestCase extends UnitTestCase {
 	}
 
 	/**
+	 * Assert last merge result produce no error.
+	 * @param string $message        message to display (optional)
+	 */
+	function assertNoTbsError($message='%s') {
+		if (!is_null($this->tbs))
+			$this->assertEqual($this->tbs->ErrCount, 0, $message);
+	}
+
+	/**
 	 * Is tbs version at least the specified version ?
 	 * @param string $versionString  a tbs version
 	 * @return bool
@@ -72,6 +81,29 @@ class TBSUnitTestCase extends UnitTestCase {
 				$this->tbs->MergeField($name, $value);
 		$this->tbs->Show(TBS_NOTHING);
 		return $this->assertEqual($this->tbs->Source, $result, $message);
+	}
+
+	function assertEqualMergeString($result, $message='%s') {
+		$this->tbs->Show(TBS_NOTHING);
+		return $this->assertEqual($this->tbs->Source, $result, $message);
+	}
+
+	/**
+	 * Test TBS class with one function.
+	 * @param string $source         source of template
+	 * @param array $vars            associative array of name/value to pass to MergeField
+	 * @param string $message        message to display (optional)
+	 * @return boolean               True on pass
+	 */
+	function assertErrorMergeFieldString($source, $vars, $message='%s') {
+		$this->tbs = new clsTinyButStrong;
+		$this->tbs->Source = $source;
+		$this->tbs->NoErr = TRUE;
+		if (is_array($vars))
+			foreach ($vars as $name => $value)
+				$this->tbs->MergeField($name, $value);
+		$this->tbs->Show(TBS_NOTHING);
+		return $this->assertTrue($this->tbs->ErrCount > 0, $message);
 	}
 
 	/**
