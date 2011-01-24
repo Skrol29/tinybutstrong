@@ -13,10 +13,10 @@ You can redistribute and modify it even for commercial usage,
 but you must accept and respect the LPGL License version 3.
 [ok] OPT: better management of CachedFields with parameter att
 [ok] BUG: f_Xml_AttFind() do not find attributes that have uppercase characters, that's because f_Loc_PrmRead() save attributes lowercase
+[--] FCT: split f_Xml_FindTag() with a new f_Xml_FindTagStart() which can be usefull for external tools
 [  ] FCT: htmlconv=js1 and js2 does javascript conversion for ' and " delimiters (current version replaces ' " / and null)
 [  ] FCT: direct commands for plug-ins
 [  ] OPT: f_Misc_GetFile() with file_exists() instead of caching error
-[  ] FCT: split f_Xml_FindTag() with a new f_Xml_FindTagStart() which can be usefull for external tools
 [  ] FCT: rename htmlconv with strconv ?
 */
 // Check PHP version
@@ -523,6 +523,7 @@ var $_ChrClose = ']';
 var $_ChrVal = '[val]';
 var $_ChrProtect = '&#91;';
 var $_PlugIns = array();
+var $_PlugInsCmd = array();
 var $_PlugIns_Ok = false;
 var $_piOnFrm_Ok = false;
 
@@ -772,9 +773,9 @@ function PlugIn($Prm1,$Prm2=0) {
 			return true;
 		}
 
-  } elseif (is_string($Prm1)) {
-  	// Plug-in's command
-  	$PlugInId = $Prm1;
+	} elseif (is_string($Prm1)) {
+		// Plug-in's command
+		$PlugInId = $Prm1;
 		if (!isset($this->_PlugIns[$PlugInId])) {
 			if (!$this->meth_PlugIn_Install($PlugInId,array(),true)) return false;
 		}
@@ -784,7 +785,7 @@ function PlugIn($Prm1,$Prm2=0) {
 		$Ok = call_user_func_array($this->_piOnCommand[$PlugInId],$ArgLst);
 		if (is_null($Ok)) $Ok = true;
 		return $Ok;
-  }
+	}
 	return $this->meth_Misc_Alert('with PlugIn() method','\''.$Prm1.'\' is an invalid plug-in key, the type of the value is \''.gettype($Prm1).'\'.');
 
 }
@@ -2771,6 +2772,7 @@ function meth_PlugIn_Install($PlugInId,$ArgLst,$Auto) {
 	}
 
 	$this->_PlugIns[$PlugInId] = &$PiRef;
+	if (isset($PiRef->DirectCommands)) foreach ($PiRef->DirectCommands as $cmd) $this->_PlugInsCmd[$cmd] = $PlugInId;
 	return true;
 
 }
@@ -3755,11 +3757,57 @@ function f_Xml_GetPart(&$Txt,$TagLst,$AllIfNothing=false) {
 
 }
 
+function f_Xml_FindTagStart(&$Txt,$Tag,$Opening,$PosBeg,$Forward,$Case=true) {
+/* Find the start of an XML tag.
+$Case=false can be useful for HTML.
+$Tag='' should work and found the start of the first tag.
+$Tag='/' should work and found the start of the first closing tag.
+*/
+
+	if ($Txt==='') return false;
+
+	$x = '<'.(($Opening) ? '' : '/').$Tag;
+	$xl = strlen($x);
+
+	$p = $PosBeg - (($Forward) ? 1 : -1);
+
+	if ($Case) {
+		do {
+			if ($Forward) $p = strpos($Txt,$x,$p+1);  else $p = strrpos(substr($Txt,0,$p+1),$x);
+			if ($p===false) return false;
+			if (substr($Txt,$p,$xl)!==$x) continue; // For PHP 4 only
+			$z = substr($Txt,$p+$xl,1);
+		} while ( ($z!==' ') && ($z!=="\r") && ($z!=="\n") && ($z!=='>') && ($z!=='/') && ($Tag!=='/') && ($Tag!=='') );
+	} else {
+		do {
+			if ($Forward) $p = stripos($Txt,$x,$p+1);  else $p = strripos(substr($Txt,0,$p+1),$x);
+			if ($p===false) return false;
+			if (strcasecmp($x,substr($Txt,$p,$xl))!=0) continue; // For PHP 4 only
+			$z = substr($Txt,$p+$xl,1);
+		} while ( ($z!==' ') && ($z!=="\r") && ($z!=="\n") && ($z!=='>') && ($z!=='/') && ($Tag!=='/') && ($Tag!=='') );
+	}
+/*	
+	$li = ($Opening) ? 1 : -1; 
+	if ($Foward) {
+		$t = substr($Txt, $p0, $p-$p0);
+	} else {
+		$t = substr($Txt, $p, $p0-$p);
+	}
+	$q = 0;
+	$la = $li;
+	while ( ($q=clsTinyButStrong::f_Xml_FindTagStart($t, $Tag,!$Opening,$q,true,$Case)) !==false ) $la = $la - $li; // count the number of oposit tag between the PosBeg and 
+	
+*/	
+	return $p;
+
+}
+
 function f_Xml_FindTag(&$Txt,$Tag,$Opening,$PosBeg,$Forward,$LevelStop,$WithPrm,$WithPos=false) {
 /* This function is a smart solution to find an XML tag.
 It allows to ignore full opening/closing couple of tags that could be inserted before the searched tag.
 It allows also to pass a number of encapsulations.
 To ignore encapsulation and opengin/closing just set $LevelStop=false.
+$Opening is used only when $LevelStop=false.
 */
 
 	if ($Tag==='_') { // New line

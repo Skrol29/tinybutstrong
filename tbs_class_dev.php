@@ -3764,29 +3764,40 @@ $Tag='' should work and found the start of the first tag.
 $Tag='/' should work and found the start of the first closing tag.
 */
 
+	if ($Txt==='') return false;
+
 	$x = '<'.(($Opening) ? '' : '/').$Tag;
 	$xl = strlen($x);
 
 	$p = $PosBeg - (($Forward) ? 1 : -1);
-	do {
-		if ($Forward) {
-			if ($Case) {
-				$p = strpos($Txt,$x,$p-1);
-			} else {
-				$p = stripos($Txt,$x,$p-1);
-			}
-		} else {
-			if ($Case) {
-				$p = strrpos(substr($Txt,0,$p-1),$x); // warning: PHP4 takes acound only of the first char of $x, i.e. '<'
-			} else {
-				$p = strripos(substr($Txt,0,$p-1),$x);
-			}
-		}
-		if ($p===false) return false;
-		$z = substr($Txt,$p+$xl,1);
-		// for PHP4 add: if (substr(Txt,$p,$xl)!==$x) continue; // to be completed for $Case=false
-	} while ( ($z!==' ') && ($z!=="\r") && ($z!=="\n") && ($z!=='>') && ($Tag!=='/') && ($Tag!=='') );
 
+	if ($Case) {
+		do {
+			if ($Forward) $p = strpos($Txt,$x,$p+1);  else $p = strrpos(substr($Txt,0,$p+1),$x);
+			if ($p===false) return false;
+			if (substr($Txt,$p,$xl)!==$x) continue; // For PHP 4 only
+			$z = substr($Txt,$p+$xl,1);
+		} while ( ($z!==' ') && ($z!=="\r") && ($z!=="\n") && ($z!=='>') && ($z!=='/') && ($Tag!=='/') && ($Tag!=='') );
+	} else {
+		do {
+			if ($Forward) $p = stripos($Txt,$x,$p+1);  else $p = strripos(substr($Txt,0,$p+1),$x);
+			if ($p===false) return false;
+			if (strcasecmp($x,substr($Txt,$p,$xl))!=0) continue; // For PHP 4 only
+			$z = substr($Txt,$p+$xl,1);
+		} while ( ($z!==' ') && ($z!=="\r") && ($z!=="\n") && ($z!=='>') && ($z!=='/') && ($Tag!=='/') && ($Tag!=='') );
+	}
+/*	
+	$li = ($Opening) ? 1 : -1; 
+	if ($Foward) {
+		$t = substr($Txt, $p0, $p-$p0);
+	} else {
+		$t = substr($Txt, $p, $p0-$p);
+	}
+	$q = 0;
+	$la = $li;
+	while ( ($q=clsTinyButStrong::f_Xml_FindTagStart($t, $Tag,!$Opening,$q,true,$Case)) !==false ) $la = $la - $li; // count the number of oposit tag between the PosBeg and 
+	
+*/	
 	return $p;
 
 }
@@ -3796,6 +3807,7 @@ static function f_Xml_FindTag(&$Txt,$Tag,$Opening,$PosBeg,$Forward,$LevelStop,$W
 It allows to ignore full opening/closing couple of tags that could be inserted before the searched tag.
 It allows also to pass a number of encapsulations.
 To ignore encapsulation and opengin/closing just set $LevelStop=false.
+$Opening is used only when $LevelStop=false.
 */
 
 	if ($Tag==='_') { // New line
