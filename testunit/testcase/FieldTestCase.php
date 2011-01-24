@@ -1,5 +1,9 @@
 <?php
 
+function FieldTestCaseUserFunction($param1, $param2) {
+	return "<param1>".serialize($param1)."</param1><param2>".serialize($param2)."</param2>";
+}
+
 class FieldTestCase extends TBSUnitTestCase {
 
 	var $empty = '';
@@ -7,6 +11,10 @@ class FieldTestCase extends TBSUnitTestCase {
 
 	function FieldTestCase() {
 		$this->UnitTestCase('Basic Merge Field Unit Tests');
+	}
+
+	function FieldTestCaseUserMethod($param1) {
+		return "<param1>".serialize($param1)."</param1>";
 	}
 
 	function setUp() {
@@ -61,16 +69,32 @@ class FieldTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("<b>[A]</b>", array('a'=>'b'), "<b>[A]</b>", "merge field sensitive case #2");
 		$this->assertEqualMergeFieldStrings("<b>[A]</b>", array('a'=>'b', 'A'=>'c'), "<b>c</b>", "merge field sensitive case #3");
 		$this->assertEqualMergeFieldStrings("<b>[Abc][ABC][ABc][AbC][abc][aBc]</b>", array('abc'=>1, 'Abc'=>2, 'aBc'=>3, 'abC'=>4, 'ABc'=>5, 'AbC'=>6, 'aBC'=>7, 'ABC'=>8), "<b>285613</b>", "merge field sensitive case #4");
-		$this->assertErrorMergeFieldString("<b>[a.tEst]</b>", array('a'=>$this), "merge field sensitive case #5");
-		$this->assertErrorMergeFieldString("<b>[a.TEST]</b>", array('a'=>$this), "merge field sensitive case #6");
+		if ($this->atLeastPhpVersion('5.0')) {
+			$this->assertErrorMergeFieldString("<b>[a.tEst]</b>", array('a'=>$this), "merge field sensitive case #5");
+			$this->assertErrorMergeFieldString("<b>[a.TEST]</b>", array('a'=>$this), "merge field sensitive case #6");
+		}
 	}
 
 	function testUserFunction() {
-		// $this->assertEqualMergeFieldStrings("<b>[a]</b>", array(), "<b>[a]</b>", "merge field default parameters #1a");
-		// $this->tbs->MergeField('a', 'strToUpper', TRUE);
-		// $this->assertEqualMergeString("<b>A</b>", "merge field default parameters #1b");
-		// $this->dumpLastSource();
-		// $this->dump($this->tbs);
+		// call user method with no subname
+		$this->assertEqualMergeFieldStrings("<b>[a;noerr;htmlconv=no;test=toto]</b>", array(), "<b>[a;noerr;htmlconv=no;test=toto]</b>", "merge field by calling user function #1a");
+		$this->tbs->MergeField('a', 'FieldTestCaseUserFunction', TRUE);
+		$this->assertEqualMergeString('<b><param1>s:0:"";</param1><param2>a:3:{s:5:"noerr";b:1;s:8:"htmlconv";s:2:"no";s:4:"test";s:4:"toto";}</param2></b>', "merge field by calling user function #1b");
+
+		// same using default parameters
+		$this->assertEqualMergeFieldStrings("<b>[a;noerr;htmlconv=no;test=toto]</b>", array(), "<b>[a;noerr;htmlconv=no;test=toto]</b>", "merge field by calling user function #2a");
+		$this->tbs->MergeField('a', 'FieldTestCaseUserFunction', TRUE, array('noerr'=>'hack me !', 'titi'=>';', 'ondata'=>'die'));
+		$this->assertEqualMergeString('<b><param1>s:0:"";</param1><param2>a:5:{s:5:"noerr";b:1;s:4:"titi";s:1:";";s:6:"ondata";s:3:"die";s:8:"htmlconv";s:2:"no";s:4:"test";s:4:"toto";}</param2></b>', "merge field by calling user function #2b");
+
+		// call user method with a subname
+		$this->assertEqualMergeFieldStrings("<b>[a.test;test=toto]</b>", array(), "<b>[a.test;test=toto]</b>", "merge field by calling user function #3a");
+		$this->tbs->MergeField('a', 'array_key_exists', TRUE);
+		$this->assertEqualMergeString('<b>1</b>', "merge field by calling user function #3b");
+
+		// call user method with a subname and default parameters
+		$this->assertEqualMergeFieldStrings("<b>[a.test]</b>", array(), "<b>[a.test]</b>", "merge field by calling user function #4a");
+		$this->tbs->MergeField('a', 'array_key_exists', TRUE, array('test'=>null));
+		$this->assertEqualMergeString('<b>1</b>', "merge field by calling user function #4b");
 	}
 
 	function testBugs() {
@@ -81,6 +105,11 @@ class FieldTestCase extends TBSUnitTestCase {
 		// should work too if remplacing array value by object value !
 		// $this->assertErrorMergeFieldString("<b>[a]</b>", array('a'=>$this), "merge object value with bad syntax #1"); // should display an error
 		// $this->assertEqualMergeFieldStrings("<b>[a;noerr]</b>", array('a'=>$this), "<b></b>", "merge object value with bad syntax #2"); // should not display an error and skip field content ?
+
+		// use object method should work !
+		// $this->assertEqualMergeFieldStrings("<b>[a.test]</b>", array(), "<b>[a.test]</b>", "merge field with object method #1");
+		// $this->tbs->MergeField('a', array(&$this, 'FieldTestCaseUserMethod'), TRUE);
+		// $this->assertEqualMergeString('<b><param1>s:0:"test";</param1></b>', "merge field with object method#2");
 	}
 }
 
