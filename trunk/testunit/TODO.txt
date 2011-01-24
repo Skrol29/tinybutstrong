@@ -10,3 +10,4 @@ Write unit tests for :
 - sub blocks
 - database calls
 - extended blocks (http://www.tinybutstrong.com/manual.php#html_block_prm_extblk)
+- each plugin
