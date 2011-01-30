@@ -79,17 +79,22 @@ class TBSUnitTestCase extends UnitTestCase {
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$this->tbs->MergeField($name, $value);
-		$this->tbs->Show(TBS_NOTHING);
-		return $this->assertEqual($this->tbs->Source, $result, $message);
-	}
-
-	function assertEqualMergeString($result, $message='%s') {
-		$this->tbs->Show(TBS_NOTHING);
-		return $this->assertEqual($this->tbs->Source, $result, $message);
+		return $this->assertEqualMergeString($result, $message);
 	}
 
 	/**
-	 * Test TBS class with one function.
+	 * Test TBS merge result with expected result.
+	 * @param string $expected       expected merge result
+	 * @param string $message        message to display (optional)
+	 * @return boolean               True on pass
+	 */
+	function assertEqualMergeString($expected, $message='%s') {
+		$this->tbs->Show(TBS_NOTHING);
+		return $this->assertEqual($this->tbs->Source, $expected, $message);
+	}
+
+	/**
+	 * Test TBS class errors with one function.
 	 * @param string $source         source of template
 	 * @param array $vars            associative array of name/value to pass to MergeField
 	 * @param string $message        message to display (optional)
@@ -120,8 +125,25 @@ class TBSUnitTestCase extends UnitTestCase {
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$this->tbs->MergeBlock($name, $value);
+		return $this->assertEqualMergeString($result, $message);
+	}
+
+	/**
+	 * Test TBS class errors with one function.
+	 * @param string $source         source of template
+	 * @param array $vars            associative array of name/value to pass to MergeBlock
+	 * @param string $message        message to display (optional)
+	 * @return boolean               True on pass
+	 */
+	function assertErrorMergeBlockString($source, $vars, $message='%s') {
+		$this->tbs = new clsTinyButStrong;
+		$this->tbs->Source = $source;
+		$this->tbs->NoErr = TRUE;
+		if (is_array($vars))
+			foreach ($vars as $name => $value)
+				$this->tbs->MergeBlock($name, $value);
 		$this->tbs->Show(TBS_NOTHING);
-		return $this->assertEqual($this->tbs->Source, $result, $message);
+		return $this->assertTrue($this->tbs->ErrCount > 0, $message);
 	}
 
 	/**
@@ -138,8 +160,7 @@ class TBSUnitTestCase extends UnitTestCase {
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$this->tbs->MergeBlock($name, 'num', $value);
-		$this->tbs->Show(TBS_NOTHING);
-		return $this->assertEqual($this->tbs->Source, $result, $message);
+		return $this->assertEqualMergeString($result, $message);
 	}
 
 	/**
@@ -163,8 +184,7 @@ class TBSUnitTestCase extends UnitTestCase {
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$this->tbs->MergeField($name, $value);
-		$this->tbs->Show(TBS_NOTHING);
-		return $this->assertEqual($this->tbs->Source, file_get_contents($this->getTemplateDir().$resultFilename), $message);
+		return $this->assertEqualMergeString(file_get_contents($this->getTemplateDir().$resultFilename), $message);
 	}
 
 	/**
@@ -181,8 +201,7 @@ class TBSUnitTestCase extends UnitTestCase {
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$this->tbs->MergeBlock($name, $value);
-		$this->tbs->Show(TBS_NOTHING);
-		return $this->assertEqual($this->tbs->Source, file_get_contents($this->getTemplateDir().$resultFilename), $message);
+		return $this->assertEqualMergeString(file_get_contents($this->getTemplateDir().$resultFilename), $message);
 	}
 }
 

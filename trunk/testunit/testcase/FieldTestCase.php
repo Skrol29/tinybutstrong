@@ -10,7 +10,7 @@ class FieldTestCase extends TBSUnitTestCase {
 	var $test = 'toto';
 
 	function FieldTestCase() {
-		$this->UnitTestCase('Basic Merge Field Unit Tests');
+		$this->UnitTestCase('Basic MergeField Unit Tests');
 	}
 
 	function FieldTestCaseUserMethod($param1) {
@@ -95,6 +95,17 @@ class FieldTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("<b>[a.test]</b>", array(), "<b>[a.test]</b>", "merge field by calling user function #4a");
 		$this->tbs->MergeField('a', 'array_key_exists', TRUE, array('test'=>null));
 		$this->assertEqualMergeString('<b>1</b>', "merge field by calling user function #4b");
+	}
+
+	function testChainCallFunction() {
+		$data = array('a'=>array('aa'=>array('aaa'=>array('aaaa'=>array('aaaaa'=>'1'))), 'ab'=>array('aba'=>'2', 'abb'=>array('abba'=>'3')), 'ac'=>'4', 'ad'=>$this), 'b'=>'5');
+		$this->assertEqualMergeFieldStrings("<b>[b]</b>", $data, "<b>5</b>", "merge field with chain call #1");
+		$this->assertEqualMergeFieldStrings("<b>[a.ac]</b>", $data, "<b>4</b>", "merge field with chain call #2");
+		$this->assertEqualMergeFieldStrings("<b>[a.ab.aba]</b>", $data, "<b>2</b>", "merge field with chain call #3");
+		$this->assertEqualMergeFieldStrings("<b>[a.ab.abb.abba]</b>", $data, "<b>3</b>", "merge field with chain call #4");
+		$this->assertEqualMergeFieldStrings("<b>[a.aa.aaa.aaaa.aaaaa]</b>", $data, "<b>1</b>", "merge field with chain call #5");
+		$this->assertEqualMergeFieldStrings("<b>[a.ad.test]</b>", $data, "<b>toto</b>", "merge field with chain call #6");
+		$this->assertEqualMergeFieldStrings("<b>[a.ad._reporter._character_set]</b>", $data, "<b>".$this->_reporter->_character_set."</b>", "merge field with chain call #7");
 	}
 
 	function testBugs() {
