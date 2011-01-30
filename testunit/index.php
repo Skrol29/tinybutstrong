@@ -21,12 +21,14 @@ include(dirname(__FILE__).'/testcase/AttTestCase.php');
 include(dirname(__FILE__).'/testcase/QuoteTestCase.php');
 include(dirname(__FILE__).'/testcase/FrmTestCase.php');
 include(dirname(__FILE__).'/testcase/FieldTestCase.php');
+include(dirname(__FILE__).'/testcase/BlockTestCase.php');
 
 // launch tests
 ini_set("display_errors", "On");
 $tbs = new clsTinyButStrong();
 $test = new GroupTest('TinyButStrong v'.$tbs->Version.' (with PHP '.PHP_VERSION.')');
 $test->addTestCase(new FieldTestCase());
+$test->addTestCase(new BlockTestCase());
 $test->addTestCase(new AttTestCase());
 $test->addTestCase(new QuoteTestCase());
 $test->addTestCase(new FrmTestCase());
