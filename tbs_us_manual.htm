@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>TBS Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <style type="text/css">
 <!--
 .pagebreak {
@@ -163,7 +163,7 @@ a.opt-name:hover {
       </table></td>
     <td width="34%" align="center">
 			<div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div>
-      <h1>TinyButStrong</h1>
+      <h1>TinyButStrong Documentation</h1>
       <div class="txt-tiny">version 3.6</div>
       <div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div></td>
     <td width="33%" align="right" valign="top" class="txt-small">&nbsp;</td>
@@ -381,7 +381,7 @@ The name TBS comes from the fact that this tool contains only 8 functions and ye
 <br>
 TBS has been engineered so that you can develop your templates with ease using any visual  editors (like Dreamweaver or FrontPage). But if you are used to designing your templates with a text editor, it is nice as well. TBS also enables you to create JavaScript dynamically.<br>
 <br>
-As the name of it tells, TBS is easy to use, strong and fast. It is completely <font color="#009900">&deg;~&deg;&nbsp;freeware&nbsp;&deg;~&deg;</font>.
+As the name of it tells, TBS is easy to use, strong and fast. It is completely <span style="color:#009900">°~° freeware °~°</span>.
 <h3><a name="principles" id="principles"></a>Basic principles:</h3>
 On the HTML side (or other file type):<br>
 You design a page which does not necessarily contain any PHP scripts, nor any programming. In this page you place TBS tags in the places where you want to display the dynamic data. This page is called a 'template'.<br>
@@ -520,7 +520,7 @@ Examples:
   The complete contents of the file is immediately stored in the <a href="#php_source">Source</a> property of the TBS object, then [onload] <a href="#html_field_auto">fields</a> and <a href="#html_block_auto">blocks</a> are merged.<br>
   If the file is not found, then it will also be searched in the folder of the last loaded template  (<span class="versioning">since TBS version 3.2.0</span>).<br>
   <br>
-  Syntax: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-type">string</span> <span class="opt-name">File</span><span class="opt-name"><font color="#333333">{</font></span>, <span class="opt-type">string</span><span class="opt-name"> Charset<font color="#333333">}</font></span>)<br>
+  Syntax: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-type">string</span> <span class="opt-name">File</span><span class="opt-name"><span style="color:#333333">{</span></span>, <span class="opt-type">string</span><span class="opt-name"> Charset<span style="color:#333333">}</span></span>)<br>
   <br>
   </span>
   <table border="0" cellpadding="5" cellspacing="0">
@@ -590,7 +590,7 @@ Examples:
   <span class="title-1b">Databases:</span> MySQL ; PostgreSQL ; SQLite.<br>
   You can also add a new one: '<a href="#plugins_db">database plug-ins</a>'.<br>
   <br>
-  Syntax: <span class="txt-code"><span class="opt-type">int</span><span class="opt-name"></span> <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-type">string</span><span class="opt-name"> BlockName</span>, <span class="opt-type">mixed</span> <span class="opt-name">Source<font color="#333333">{</font></span>, <span class="opt-type">string</span><span class="opt-name"> Query<font color="#333333">}</font></span>)</span>
+  Syntax: <span class="txt-code"><span class="opt-type">int</span><span class="opt-name"></span> <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-type">string</span><span class="opt-name"> BlockName</span>, <span class="opt-type">mixed</span> <span class="opt-name">Source<span style="color:#333333">{</span></span>, <span class="opt-type">string</span><span class="opt-name"> Query<span style="color:#333333">}</span></span>)</span>
   <table border="0" cellpadding="5" cellspacing="0">
     <tr class="title-1b">
       <td width="80" align="left" valign="top">Argument</td>
@@ -878,7 +878,7 @@ Examples:
 <h3><a name="php_show" id="php_show"></a>method Show():</h3>
 <div class="norm">Terminates the merge.<br>
   <br>
-  Syntax: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;Show(<span class="opt-name"><font color="#333333">{</font></span><span class="opt-type">int</span><span class="opt-name"> </span><span class="opt-name">Render</span><span class="opt-name"></span><span class="opt-name"><font color="#333333">}</font></span>)</span><br>
+  Syntax: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;Show(<span class="opt-name"><span style="color:#333333">{</span></span><span class="opt-type">int</span><span class="opt-name"> </span><span class="opt-name">Render</span><span class="opt-name"></span><span class="opt-name"><span style="color:#333333">}</span></span>)</span><br>
   <br>
   The Show() method  performs the following actions:<br>
   - Merge [var] <a href="#html_field_auto">fields</a> (for compatibility with  version prior to 3.2.0),<br>
@@ -889,7 +889,7 @@ Examples:
   The <a href="#php_render">Render</a> property/argument allows to adjust the behavior of the Show() method. See the <a href="#php_render">Render</a> property for more information.</div>
 <h3><a name="php_getblocksource" id="php_getblocksource"></a>method GetBlockSource():</h3>
 <div class="norm">Returns the source of a TBS Block from the template.<br>
-  If no block is found, the method returns <span class="txt-code"><em><font color="#0033CC">False</font></em></span>.<br>
+  If no block is found, the method returns <span class="txt-code"><em><span style="color:#0033CC">False</span></em></span>.<br>
   <br>
   Syntax: <span class="txt-code"><span class="opt-type">string</span> <span class="opt-name"></span><span class="opt-name">$TBS</span>-&gt;GetBlockSource(<span class="opt-type">string </span><span class="opt-name">BlockName </span>{,<span class="opt-type"> boolean</span> <span class="opt-name">AsArray</span>}{,<span class="opt-type"> boolean</span> <span class="opt-name">DefTags</span>}{,<span class="opt-type"> mix</span> <span class="opt-name">ReplaceWith</span>})</span> <br>
   <br>
@@ -904,16 +904,16 @@ Examples:
     </tr>
     <tr>
       <td align="left" valign="top" class="opt-name">AsArray</td>
-      <td align="left" valign="top">Optional. The default value is <span class="txt-code"><em><font color="#0033CC">False</font></em></span>.        If this parameter is <span class="txt-code"><em><font color="#0033CC">True</font></em></span> the method returns the source of the block as a PHP array instead of a  string. If the result is an array, then each sections of the block is saved as an item. First item is index 1.</td>
+      <td align="left" valign="top">Optional. The default value is <span class="txt-code"><em><span style="color:#0033CC">False</span></em></span>.        If this parameter is <span class="txt-code"><em><span style="color:#0033CC">True</span></em></span> the method returns the source of the block as a PHP array instead of a  string. If the result is an array, then each sections of the block is saved as an item. First item is index 1.</td>
     </tr>
     <tr>
       <td align="left" valign="top" class="opt-name">DefTags</td>
-      <td align="left" valign="top">Optional. The default value is<span class="txt-code"><em><font color="#0033CC"> True</font></em></span>. By default, the method  GetBlockSource() returns the source of the block including its definition tags. If you'd like those tags to be deleted, then force the argument <span class="opt-name">DefTags</span> to <em><font color="#0033CC">False</font></em>. If the block is defined with a <a href="#html_block">simplified syntax</a> then the definition tags will not be deleted anyway because they are also Field tags.<br>
+      <td align="left" valign="top">Optional. The default value is<span class="txt-code"><em><span style="color:#0033CC"> True</span></em></span>. By default, the method  GetBlockSource() returns the source of the block including its definition tags. If you'd like those tags to be deleted, then force the argument <span class="opt-name">DefTags</span> to <em><span style="color:#0033CC">False</span></em>. If the block is defined with a <a href="#html_block">simplified syntax</a> then the definition tags will not be deleted anyway because they are also Field tags.<br>
         <div class="versioning">Versioning: this argument is supported since TBS version 3.0.</div></td>
     </tr>
     <tr>
       <td align="left" valign="top" class="opt-name">ReplaceWith</td>
-      <td align="left" valign="top">Optional. Default value is <em><font color="#0033CC">False</font></em>.        If this argument is a string then 
+      <td align="left" valign="top">Optional. Default value is <em><span style="color:#0033CC">False</span></em>.        If this argument is a string then 
         the block source is replaced with it in the template. You can use <span class="opt-name">ReplaceWith</span> = <span class="opt-value">''</span> (empty string) in order to delete the block source from the template.<br>
         <div class="versioning">Versioning: this argument is supported since TBS version 3.05.</div></td>
     </tr>
@@ -1210,7 +1210,7 @@ Examples:
       &nbsp;&nbsp;&nbsp;You can use as many levels as you wish:<br>
       <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;ObjectRef[<span class="opt-value">'item3'</span>][<span class="opt-value">'a'</span>][<span class="opt-value">0</span>] =&amp; <span class="opt-name">$MyObject4</span>;</span></div>
     <span class="title-1b">Remarks:</span><br>
-    * Think to use the assignment by reference using  "=&amp;" instead of "=", otherwise a copy of the object will be created.<br>
+    * Think to use the assignment by reference using  &quot;=&amp;&quot; instead of &quot;=&quot;, otherwise a copy of the object will be created.<br>
     * Since an object is referenced under ObjectRef, its sub objects will also be accessible by the TBS syntax. <br>
     <br>
     <span class="title-1b">&bull; Using ObjectRef in automatic fields:</span> <br>
@@ -2268,7 +2268,7 @@ Example: <br>
               <td width="157" class="border-1">[b1.field2]</td>
             </tr>
             <tr>
-              <td colspan="2" class="border-1">[b1;<span class="opt-name">block</span>=<span class="opt-value">tr</span>;<span class="opt-name">nodata</span>]<font color="#FF3300">There is no data.</font></td>
+              <td colspan="2" class="border-1">[b1;<span class="opt-name">block</span>=<span class="opt-value">tr</span>;<span class="opt-name">nodata</span>]<span style="color:#FF3300">There is no data.</span></td>
             </tr>
           </table>
         </div>
@@ -2562,7 +2562,7 @@ Example: <br>
     </table>
     <br>
     <span class="txt-small">The corresponding PHP is:</span><br>
-    <span class="txt-code"> &nbsp;$TBS-&gt;MergeBlock('<font color="#000099">bx</font>',$cnx_id,'<font color="#000099">SELECT txt FROM t_info ORDER BY txt</font>')</span></div>
+    <span class="txt-code"> &nbsp;$TBS-&gt;MergeBlock('<span style="color:#000099">bx</span>',$cnx_id,'<span style="color:#000099">SELECT txt FROM t_info ORDER BY txt</span>')</span></div>
   <br>
   <div class="title-1b"> Empty secondary block:</div>
   You can specify a special secondary block that will be used to replace unused secondary blocks (without records). This &quot;Empty&quot; secondary block must have the index 0. It can either be placed inside the main block with the normal secondary block, or alone inside another <span class="opt-name">serial</span> block. The &quot;empty&quot; secondary block is optional.<br>
@@ -2665,7 +2665,7 @@ Example: <br>
     <br>
     <table width="400" cellpadding="2" cellspacing="0" class="border-2">
       <tr>
-        <td class="border-2"><font color="#336699">Name:</font> [body.name;block=tr;sub1=spokenlg]<br>
+        <td class="border-2"><span style="color:#336699">Name:</span> [body.name;block=tr;sub1=spokenlg]<br>
           <table cellpadding="1" cellspacing="0" class="border-1">
             <tr>
               <td width="200" class="border-1">[body_sub1.val;block=tr]</td>
@@ -2681,7 +2681,7 @@ Example: <br>
     <br>
     <table width="400" cellpadding="2" cellspacing="0" class="border-2">
       <tr>
-        <td class="border-2"><font color="#336699">Name:</font> Peter<br>
+        <td class="border-2"><span style="color:#336699">Name:</span> Peter<br>
           <table cellpadding="1" cellspacing="0" class="border-1">
             <tr>
               <td class="border-1">US</td>
@@ -2692,7 +2692,7 @@ Example: <br>
           </table></td>
       </tr>
       <tr>
-        <td class="border-2"><font color="#336699">Name:</font> Paul<br>
+        <td class="border-2"><span style="color:#336699">Name:</span> Paul<br>
           <table cellpadding="1" cellspacing="0" class="border-1">
             <tr>
               <td width="190" class="border-1">US</td>
@@ -2700,7 +2700,7 @@ Example: <br>
           </table></td>
       </tr>
       <tr>
-        <td class="border-2"><font color="#336699">Name: </font>Jack<br>
+        <td class="border-2"><span style="color:#336699">Name: </span>Jack<br>
           <table cellpadding="1" cellspacing="0" class="border-1">
             <tr>
               <td class="border-1">FR</td>
@@ -2722,7 +2722,7 @@ Example: <br>
     <br>
     <table width="400" cellpadding="2" cellspacing="0" class="border-2">
       <tr>
-        <td class="border-2"><font color="#336699">Name:</font> [body.name;block=tr;sub1=(spokenlg)]<br>
+        <td class="border-2"><span style="color:#336699">Name:</span> [body.name;block=tr;sub1=(spokenlg)]<br>
           <table cellpadding="1" cellspacing="0" class="border-1">
             <tr>
               <td width="200" class="border-1">[body_sub1.val;block=tr]</td>
@@ -2753,7 +2753,7 @@ Example: <br>
     Example of direct subblock that can be merged with those data:<br>
   <table width="400" cellpadding="2" cellspacing="0" class="border-2">
     <tr>
-      <td class="border-2"><font color="#336699">Group :</font> [body.$;block=tr;sub1]<br>
+      <td class="border-2"><span style="color:#336699">Group :</span> [body.$;block=tr;sub1]<br>
         <table cellpadding="1" cellspacing="0" class="border-1">
           <tr>
             <td width="200" class="border-1">[body_sub1.name;block=tr]</td>
@@ -2832,7 +2832,7 @@ Example: <br>
     <br>
     <table width="400" cellpadding="2" cellspacing="0" class="border-2">
       <tr>
-        <td class="border-2"><font color="#336699">Country:</font> [main.country;block=tr]<br>
+        <td class="border-2"><span style="color:#336699">Country:</span> [main.country;block=tr]<br>
           <table cellpadding="1" cellspacing="0" class="border-1">
             <tr>
               <td width="200" class="border-1">[sub.town;block=tr;p1=[main.cntr_id]]</td>
@@ -2849,7 +2849,7 @@ Example: <br>
     <br>
     <table width="400" cellpadding="2" cellspacing="0" class="border-2">
       <tr>
-        <td class="border-2"><font color="#336699">Country:</font> France<br>
+        <td class="border-2"><span style="color:#336699">Country:</span> France<br>
           <table cellpadding="1" cellspacing="0" class="border-1">
             <tr>
               <td class="border-1">Paris</td>
@@ -2860,7 +2860,7 @@ Example: <br>
           </table></td>
       </tr>
       <tr>
-        <td class="border-2"><font color="#336699">Country:</font> Germany<br>
+        <td class="border-2"><span style="color:#336699">Country:</span> Germany<br>
           <table cellpadding="1" cellspacing="0" class="border-1">
             <tr>
               <td class="border-1">Berlin</td>
@@ -2871,7 +2871,7 @@ Example: <br>
           </table></td>
       </tr>
       <tr>
-        <td class="border-2"><font color="#336699">Country: </font>Spain<br>
+        <td class="border-2"><span style="color:#336699">Country: </span>Spain<br>
           <table cellpadding="1" cellspacing="0" class="border-1">
             <tr>
               <td class="border-1">Madrid</td>
