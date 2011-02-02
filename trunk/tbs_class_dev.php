@@ -16,6 +16,7 @@ but you must accept and respect the LPGL License version 3.
 [--] FCT: split f_Xml_FindTag() with a new f_Xml_FindTagStart() which can be usefull for external tools
 [  ] FCT: htmlconv=js1 and js2 does javascript conversion for ' and " delimiters (current version replaces ' " / and null)
 [  ] FCT: direct commands for plug-ins
+[  ] FCT: an internal method for enable/disable a plugin event from the plug-in itselfs
 [  ] OPT: f_Misc_GetFile() with file_exists() instead of caching error
 [  ] FCT: rename htmlconv with strconv ?
 */
