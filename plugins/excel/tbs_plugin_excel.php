@@ -9,16 +9,18 @@ Version 1.1.0, on 2010-12-12, by Skrol29, for TBS version >= 3.6.2
 fixes:
 [ok] Warning:  Parameter 4 to clsTbsExcel::BeforeMergeBlock() expected to be a reference, value given [...]
 [ok] Strict Standards: call_user_func() expects parameter 1 to be a valid callback, non-static method clsTbsExcel::f_XmlConv() should not be called statically in ...\tbs_class.php on line 2411
-[  ] add possibility to save the contents in a local file
+[tt] add possibility to save the contents in a local file
+[tt] avoid the download if a PHP is displayed (otherwise the contents is cut)
 [  ] check cell types with fields not in a block (onload+onshow)
-[  ] avoid the download if a PHP is displayed (otherwise the contents is cut)
 */
 
 // Name of the class is a keyword used for Plug-In authentication. So i'ts better to save it into a constant.
 define('TBS_EXCEL','clsTbsExcel');
-define('TBS_EXCEL_FILENAME',1);
-define('TBS_EXCEL_DOWNLOAD',2);
-define('TBS_EXCEL_INLINE',3);
+define('TBS_EXCEL_FILENAME',-1); // deprecated command (=1)
+define('TBS_EXCEL_DOWNLOAD',1); // deprecated command (=2) & Render option (by default) = TBS_OUTPUT
+define('TBS_EXCEL_INLINE',4);   // deprecated command (=3) & Render option (do not use value 2 wich is reserved for TBS_EXIT)
+define('TBS_EXCEL_FILE',8);     // Render option
+define('TBS_EXCEL_STRING',16);   // Render option
 
 class clsTbsExcel {
 
@@ -120,7 +122,7 @@ class clsTbsExcel {
 		}
 	}
 
-	function AfterShow(&$Render) {
+	function AfterShow(&$Render, $File='') {
 
 		$TBS =& $this->TBS;
 	
@@ -132,14 +134,34 @@ class clsTbsExcel {
 			exit;
 		}
 		
+		if ($File==='') {
+			if ($this->FileName==='') {
+				$File = $this->f_DefaultFileName();
+			} else {
+				$File = $this->FileName;
+			}
+		}
+		
 		// Makes a download instead of displaying the result.
-		if (($Render & TBS_OUTPUT)==TBS_OUTPUT) {
-			$Render = $Render - TBS_OUTPUT;
-			$FileName = $this->FileName;
-			if ($FileName==='') $FileName = $this->f_DefaultFileName();
-			$this->f_Display($FileName,$this->ForceDownload); // Output with header
+		if (($Render & TBS_OUTPUT)==TBS_OUTPUT) { // TBS_OUTPUT = TBS_EXCEL_DOWNLOAD
+			// content downloaded
+			$this->f_HttpHeader_Download($FileName);
+		} elseif (($Render & TBS_EXCEL_INLINE)==TBS_EXCEL_INLINE) {
+			// content displayed in the browser
+			$this->f_HttpHeader_Inline($FileName);
+			$Render = $Render - TBS_EXCEL_INLINE;
+			if (($Render & TBS_OUTPUT)!=TBS_OUTPUT) $Render = $Render + TBS_OUTPUT; // needed for final output
+		} elseif (($Render & TBS_EXCEL_FILE)==TBS_EXCEL_FILE) {
+			// content saved in a file
+			$hndl = fopen($File, 'w');
+			fwrite($hndl, $this->TBS->Source);
+			fclose($hndl);
+		} elseif (($Render & TBS_EXCEL_STRING)==TBS_EXCEL_STRING) {
+			// content returned in the TBS->Source property (nothing to do)
 		}
 
+		// the TBS::Show() method will then recover the process and perform the TBS_OUTPUT and TBS_EXIT options, if any
+		
 	}
 
 	function OnOperation($FieldName,&$Value,&$PrmLst,&$Source,$PosBeg,$PosEnd,$Loc) {
@@ -168,30 +190,30 @@ class clsTbsExcel {
 	  return $x;
 	}
 	
-	function f_Display($FileName,$Download) {
+	function f_HttpHeader_Download($FileName) {
 
-		if ($Download) {
-		  header ('Pragma: no-cache');
+		header ('Pragma: no-cache');
 		//  header ('Content-type: application/x-msexcel');
-		  header ('Content-Type: application/vnd.ms-excel');
-		  header ('Content-Disposition: attachment; filename="'.$FileName.'"');
-		
-		  header('Expires: 0');
-		  header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		  header('Cache-Control: public');
-		  header('Content-Description: File Transfer'); 
-		
-		  header('Content-Transfer-Encoding: binary');
-		  header('Content-Length: '.strlen($this->TBS->Source)); 
-		} else {
-			header('Content-Type: application/x-msexcel; name="'.$FileName.'"');
-			header('Content-Disposition: inline; filename="'.$FileName.'"');
-		}
-		
-		echo($this->TBS->Source);
-		
+		header ('Content-Type: application/vnd.ms-excel');
+		header ('Content-Disposition: attachment; filename="'.$FileName.'"');
+
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		header('Cache-Control: public');
+		header('Content-Description: File Transfer'); 
+
+		header('Content-Transfer-Encoding: binary');
+		header('Content-Length: '.strlen($this->TBS->Source)); 
+
 	}
 
+	function f_HttpHeader_Inline($FileName) {
+
+		header('Content-Type: application/x-msexcel; name="'.$FileName.'"');
+		header('Content-Disposition: inline; filename="'.$FileName.'"');
+		
+	}
+	
 	function f_DefaultFileName() {
 		if ($this->TemplateFileName==='') {
 			return 'worksheet.xml';
