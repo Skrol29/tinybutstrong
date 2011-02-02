@@ -139,7 +139,10 @@ class FrmTestCase extends TBSUnitTestCase {
 
 		// we need methods that can simulate a LoadTemplate()
 		//$this->assertEqualMergeFieldStrings("[onload;tplfrms;money='0,000.00']{[a;frm=money]}", array('onload'=>false, 'a'=>3128.495),  "{3,128.50}", "test template formats");
-	
+
+		$this->getTBSInstance("<b>[onload;tplvars;template_version='1.12.27';template_date='2004-10-26']</b>");
+		$this->assertEqual($this->tbs->Source, "<b></b>", "test template vars");
+		$this->assertEqual($this->tbs->TplVars, array('template_version'=>'1.12.27', 'template_date'=>'2004-10-26'), "test template vars");
 	}
 
 }
