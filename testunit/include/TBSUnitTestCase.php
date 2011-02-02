@@ -66,6 +66,26 @@ class TBSUnitTestCase extends UnitTestCase {
 	}
 
 	/**
+	 * Instanciate TBS class with one function. Launch plugins and merge 'onload' directives.
+	 * @param string $source         source of template
+	 */
+	function getTBSInstance($source) {
+		$this->tbs = new clsTinyButStrong;
+		$this->tbs->Source = $source;
+		$this->tbs->LoadTemplate(null);
+	}
+
+	/**
+	 * Return TBS render result as string.
+	 * @return string
+	 */
+	function getTBSRender() {
+		if (is_null($this->tbs)) return FALSE;
+		$this->tbs->Show(TBS_NOTHING);
+		return $this->tbs->Source;
+	}
+
+	/**
 	 * Test TBS class with one function.
 	 * @param string $source         source of template
 	 * @param array $vars            associative array of name/value to pass to MergeField
@@ -74,8 +94,7 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * @return boolean               True on pass
 	 */
 	function assertEqualMergeFieldStrings($source, $vars, $result, $message='%s') {
-		$this->tbs = new clsTinyButStrong;
-		$this->tbs->Source = $source;
+		$this->getTBSInstance($source);
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$this->tbs->MergeField($name, $value);
@@ -89,8 +108,7 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * @return boolean               True on pass
 	 */
 	function assertEqualMergeString($expected, $message='%s') {
-		$this->tbs->Show(TBS_NOTHING);
-		return $this->assertEqual($this->tbs->Source, $expected, $message);
+		return $this->assertEqual($this->getTBSRender(), $expected, $message);
 	}
 
 	/**
@@ -101,13 +119,12 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * @return boolean               True on pass
 	 */
 	function assertErrorMergeFieldString($source, $vars, $message='%s') {
-		$this->tbs = new clsTinyButStrong;
-		$this->tbs->Source = $source;
+		$this->getTBSInstance($source);
 		$this->tbs->NoErr = TRUE;
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$this->tbs->MergeField($name, $value);
-		$this->tbs->Show(TBS_NOTHING);
+		$this->getTBSRender();
 		return $this->assertTrue($this->tbs->ErrCount > 0, $message);
 	}
 
@@ -120,8 +137,7 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * @return boolean               True on pass
 	 */
 	function assertEqualMergeBlockStrings($source, $vars, $result, $message='%s') {
-		$this->tbs = new clsTinyButStrong;
-		$this->tbs->Source = $source;
+		$this->getTBSInstance($source);
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$this->tbs->MergeBlock($name, $value);
@@ -136,13 +152,12 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * @return boolean               True on pass
 	 */
 	function assertErrorMergeBlockString($source, $vars, $message='%s') {
-		$this->tbs = new clsTinyButStrong;
-		$this->tbs->Source = $source;
+		$this->getTBSInstance($source);
 		$this->tbs->NoErr = TRUE;
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$this->tbs->MergeBlock($name, $value);
-		$this->tbs->Show(TBS_NOTHING);
+		$this->getTBSRender();
 		return $this->assertTrue($this->tbs->ErrCount > 0, $message);
 	}
 
@@ -155,8 +170,7 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * @return boolean               True on pass
 	 */
 	function assertEqualMergeNumBlockStrings($source, $vars, $result, $message='%s') {
-		$this->tbs = new clsTinyButStrong;
-		$this->tbs->Source = $source;
+		$this->getTBSInstance($source);
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$this->tbs->MergeBlock($name, 'num', $value);
@@ -179,8 +193,7 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * @return boolean                True on pass
 	 */
 	function assertEqualMergeFieldFiles($sourceFilename, $vars, $resultFilename, $message='%s') {
-		$this->tbs = new clsTinyButStrong;
-		$this->tbs->LoadTemplate($this->getTemplateDir().$sourceFilename);
+		$this->getTBSInstance(file_get_contents($this->getTemplateDir().$sourceFilename));
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$this->tbs->MergeField($name, $value);
@@ -196,8 +209,7 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * @return boolean               True on pass
 	 */
 	function assertEqualMergeBlockFiles($sourceFilename, $vars, $resultFilename, $message='%s') {
-		$this->tbs = new clsTinyButStrong;
-		$this->tbs->LoadTemplate($this->getTemplateDir().$sourceFilename);
+		$this->getTBSInstance(file_get_contents($this->getTemplateDir().$sourceFilename));
 		if (is_array($vars))
 			foreach ($vars as $name => $value)
 				$this->tbs->MergeBlock($name, $value);
