@@ -137,12 +137,19 @@ class FrmTestCase extends TBSUnitTestCase {
 
 	function testTemplateFormats() {
 
-		// we need methods that can simulate a LoadTemplate()
-		//$this->assertEqualMergeFieldStrings("[onload;tplfrms;money='0,000.00']{[a;frm=money]}", array('onload'=>false, 'a'=>3128.495),  "{3,128.50}", "test template formats");
+		/* CAUTION !
+		   The following test are working because all formats processed by TBS (parameter "frm" or "tplfrms") are cached into a global PHP variable.
+		   Thus, the formats defined by tplfrms are available for the current TBS instance and all merging after it, from the same instance or a different instance.
+		/*
+	
+		// one format
+		$this->getTBSInstance("{[onload;tplfrms;money=0 000,00€]}{[a;frm=money]}");
+		$this->assertEqualMergeFieldStrings($this->tbs->Source, array('a'=>3128.495), "{}{3 128,50€}", "test template formats (one)");
 
-		$this->getTBSInstance("<b>[onload;tplvars;template_version='1.12.27';template_date='2004-10-26']</b>");
-		$this->assertEqual($this->tbs->Source, "<b></b>", "test template vars");
-		$this->assertEqual($this->tbs->TplVars, array('template_version'=>'1.12.27', 'template_date'=>'2004-10-26'), "test template vars");
+		// several formats
+		$this->getTBSInstance("{[onload;tplfrms;money=0 000,00€;dt=dd/mm/yyyy;int=000000.]}{[a;frm=money]|[a;frm=int]|[d;frm=dt]}");
+		$this->assertEqualMergeFieldStrings($this->tbs->Source, array('a'=>3128.495, 'd'=>'2011-02-03' ), "{}{3 128,50€|003128|03/02/2011}", "test template formats (several)");
+		
 	}
 
 }
