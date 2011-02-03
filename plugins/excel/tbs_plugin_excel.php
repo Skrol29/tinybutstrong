@@ -2,14 +2,13 @@
 
 /*
 ********************************************************
-TinyButStrong plug-in: Excel Worksheets
-Version 1.0.3, on 2006-07-11, by Skrol29
-Version 1.1.0, on 2010-12-12, by Skrol29, for TBS version >= 3.6.2 
+TinyButStrong plug-in: Excel Spreadsheets
+Version 1.1.0, on 2011-02-03, by Skrol29, for TBS version >= 3.6.2
 ********************************************************
 fixes:
 [ok] Warning:  Parameter 4 to clsTbsExcel::BeforeMergeBlock() expected to be a reference, value given [...]
 [ok] Strict Standards: call_user_func() expects parameter 1 to be a valid callback, non-static method clsTbsExcel::f_XmlConv() should not be called statically in ...\tbs_class.php on line 2411
-[tt] add possibility to save the contents in a local file
+[ok] add possibility to save the contents in a local file
 [tt] avoid the download if a PHP is displayed (otherwise the contents is cut)
 [  ] check cell types with fields not in a block (onload+onshow)
 */
@@ -31,28 +30,35 @@ class clsTbsExcel {
 		// Constants for the plug-in
 		$this->TypeLst = array('xlNum'=>'Number', 'xlDT'=>'DateTime', 'xlStr'=>'String', 'xlErr'=>'Error', 'xlBoo'=>'Boolean');
 		// Usefulle properies
-		$this->FileName = '';
+		$this->Oldies_FileName = '';
 		$this->TemplateFileName = '';
-		$this->ForceDownload = true;
 		return array('OnCommand','BeforeLoadTemplate','AfterShow','OnOperation','BeforeMergeBlock','AfterMergeBlock','OnCacheField');
 	}
 
 	function OnCommand($Cmd,$Value='') {
-		if ($Cmd==TBS_EXCEL_FILENAME) {
+		if ($Cmd==TBS_EXCEL_FILENAME) { // deprecated, compatibility with version 1.0
 			// Change file name
-			$this->FileName = $Value;
-		} elseif ($Cmd==TBS_EXCEL_DOWNLOAD) {
+			$this->Oldies_FileName = $Value;
+		} elseif ($Cmd==TBS_EXCEL_DOWNLOAD) { // deprecated, compatibility with version 1.0
 			// Force output to download file
-			$this->ForceDownload = true;
-		} elseif ($Cmd==TBS_EXCEL_INLINE) {
+			$this->TBS->Render = TBS_EXCEL_DOWNLOAD;
+		} elseif ($Cmd==TBS_EXCEL_INLINE) { // deprecated, compatibility with version 1.0
 			// Enables output to display inline (Internet Exlorer only)
-			$this->ForceDownload = false;
+			$this->TBS->Render = TBS_EXCEL_INLINE;
 		}
 	}
 
 	function BeforeLoadTemplate(&$File,&$HtmlCharSet) {
 		if ($this->TemplateFileName==='') $this->TemplateFileName = $File;
 		if ($HtmlCharSet==='') $this->TBS->LoadTemplate('', array(&$this,'ConvXmlUtf8')); // Define the function for string conversion
+	}
+
+	function OnOperation($FieldName,&$Value,&$PrmLst,&$Source,$PosBeg,$PosEnd,$Loc) {
+		if (isset($this->TypeLst[$PrmLst['ope']])) {
+			if (!isset($Loc->xlType)) $this->tag_ChangeCellType($Source,$Loc,$PrmLst['ope'],'onshow');
+		} elseif ($PrmLst['ope']==='xlPushRef') {
+			$this->tag_ChangeFormula($Source,$Loc,$Value,true);
+		}
 	}
 
 	function OnCacheField($BlockName,&$Loc,&$Txt,$PrmProc) {
@@ -125,7 +131,7 @@ class clsTbsExcel {
 	function AfterShow(&$Render, $File='') {
 
 		$TBS =& $this->TBS;
-	
+
 		// Delete optional XML attributes that could become invalide after the merge
 		$this->tag_DelOptionalTableAtt();
 
@@ -133,22 +139,26 @@ class clsTbsExcel {
 			$TBS->meth_Misc_Alert('Show() Method', 'The output is cancelled by the Excel plugin because at least one TBS error has occured.');
 			exit;
 		}
-		
+
 		if ($File==='') {
-			if ($this->FileName==='') {
-				$File = $this->f_DefaultFileName();
+			if ($this->Oldies_FileName==='') {
+				if ($this->TemplateFileName==='') {
+					$File = 'result_'.date('Y-m-d').'.xml';
+				} else {
+					$File = basename($this->TemplateFileName);
+				}
 			} else {
-				$File = $this->FileName;
+				$File = $this->Oldies_FileName;
 			}
 		}
-		
+
 		// Makes a download instead of displaying the result.
 		if (($Render & TBS_OUTPUT)==TBS_OUTPUT) { // TBS_OUTPUT = TBS_EXCEL_DOWNLOAD
 			// content downloaded
-			$this->f_HttpHeader_Download($FileName);
+			$this->f_HttpHeader_Download($File);
 		} elseif (($Render & TBS_EXCEL_INLINE)==TBS_EXCEL_INLINE) {
 			// content displayed in the browser
-			$this->f_HttpHeader_Inline($FileName);
+			$this->f_HttpHeader_Inline($File);
 			$Render = $Render - TBS_EXCEL_INLINE;
 			if (($Render & TBS_OUTPUT)!=TBS_OUTPUT) $Render = $Render + TBS_OUTPUT; // needed for final output
 		} elseif (($Render & TBS_EXCEL_FILE)==TBS_EXCEL_FILE) {
@@ -161,15 +171,7 @@ class clsTbsExcel {
 		}
 
 		// the TBS::Show() method will then recover the process and perform the TBS_OUTPUT and TBS_EXIT options, if any
-		
-	}
 
-	function OnOperation($FieldName,&$Value,&$PrmLst,&$Source,$PosBeg,$PosEnd,$Loc) {
-		if (isset($this->TypeLst[$PrmLst['ope']])) {
-			if (!isset($Loc->xlType)) $this->tag_ChangeCellType($Source,$Loc,$PrmLst['ope'],'onshow');
-		} elseif ($PrmLst['ope']==='xlPushRef') {
-			$this->tag_ChangeFormula($Source,$Loc,$Value,true);
-		}
 	}
 
 	// --------------------------
@@ -189,7 +191,7 @@ class clsTbsExcel {
 	  if ($ConvBr) $this->ConvBr($x);
 	  return $x;
 	}
-	
+
 	function f_HttpHeader_Download($FileName) {
 
 		header ('Pragma: no-cache');
@@ -200,10 +202,10 @@ class clsTbsExcel {
 		header('Expires: 0');
 		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		header('Cache-Control: public');
-		header('Content-Description: File Transfer'); 
+		header('Content-Description: File Transfer');
 
 		header('Content-Transfer-Encoding: binary');
-		header('Content-Length: '.strlen($this->TBS->Source)); 
+		header('Content-Length: '.strlen($this->TBS->Source));
 
 	}
 
@@ -211,28 +213,7 @@ class clsTbsExcel {
 
 		header('Content-Type: application/x-msexcel; name="'.$FileName.'"');
 		header('Content-Disposition: inline; filename="'.$FileName.'"');
-		
-	}
-	
-	function f_DefaultFileName() {
-		if ($this->TemplateFileName==='') {
-			return 'worksheet.xml';
-		} else {
-			$File = $this->TemplateFileName;
-			// Keep only the file name
-			$Pos = strrpos($File,'/');
-			if ($Pos===false) $Pos = strrpos($File,'\\');
-			if ($Pos!==false) $File = substr($File,$Pos+1);
-			/*
-			// Change extention from .xml to .xls in order to have a proper opening file with Explorer. Useless with Office 2010.
-			$Len = strlen($File);
-			if ($Len>4) {
-				$Ext = substr($File,$Len-4,4);
-				if (strtolower($Ext)=='.xml') $File = substr($File,0,$Len-4).'.xls';
-			}
-			*/
-			return $File;
-		}
+
 	}
 
 	function tag_ChangeCellType(&$Txt,&$Loc,$Ope,$Block) {
@@ -248,18 +229,18 @@ class clsTbsExcel {
 		$Txt = substr_replace($Txt, $newfield, $Loc->PosEnd+1,0);
 		$Loc->xlType = true; // avoid a double process of such ope values
 	}
-	
+
 	function tag_ChangeFormula(&$Txt,&$Loc,&$Value,$First) {
 		// The process assumes that the TBS is embeded into a N("") function
 
 		if (isset($Loc->xlExend)) {
-			
+
 			if (!$Loc->xlExend) return false;
-			
+
 		} else {
-			
+
 			$Loc->xlExend = false;
-			
+
 			// So we first search for the begining of the TBS expression. Going backward.
 			$p = $Loc->PosBeg - 1;
 			$cont = true;
@@ -271,7 +252,7 @@ class clsTbsExcel {
 					$cont = false;
 				} elseif ($x==='"') {
 					$cont = false; // end of the formula
-				} elseif ($x==='(') { // begining of the function's arguments 
+				} elseif ($x==='(') { // begining of the function's arguments
 					$exp_n = true;
 				} elseif (($x==='+') or ($x==='&')) { // The expression can be added with + or & (wich is saved as &amp;)
 					if ($exp_n)	{
@@ -282,15 +263,15 @@ class clsTbsExcel {
 				if ($cont) $p--;
 			} while ($cont);
 			if ($exp_beg===false) return false;
-		
+
 			// Search for the end of the TBS expression.
 			$frm_end = strpos($Txt,'"',$Loc->PosEnd+1);
 			if ($frm_end===false) return false;
 			$exp_end = strpos($Txt,')',$Loc->PosEnd+1);
 			if ($exp_end===false) return false;
 			if ($exp_end>$frm_end) return false;
-		
-			// Now we searching backard, the relative cell	
+
+			// Now we searching backard, the relative cell
 			$cont = true;
 			$br_o = false;    // position of [
 			$br_c = false;    // position of ]
@@ -310,7 +291,7 @@ class clsTbsExcel {
 				if ($cont) $p--;
 			} while ($cont);
 			if ($br_o===false) return false;
-			
+
 			// Calculate the relative index
 			$x = intval(substr($Txt,$br_o+1,$br_c-$br_o-1));
 			if ($x==0) return false;
@@ -325,15 +306,15 @@ class clsTbsExcel {
 			$Loc->ConvMode = -1; // No contents conversion
 
 		}
-		
+
 		// Calculate the new index
 		$v = intval($Value);
 		$x = $Loc->xlVal;
 		if ($x!=0) $x = $x + $v - 1;
-		
+
 		// Replace the index value
 		$Value = strval($x).$Loc->xlExtraStr;
-	  
+
 	}
 
 	function tag_DelOptionalTableAtt() {
@@ -345,7 +326,7 @@ class clsTbsExcel {
 		while ( ($Loc=clsTinyButStrong::f_Xml_FindTag($Txt,'Table',true,$Pos,true,false,true,true))!==false ) {
 			foreach ($att_lst as $att) {
 				// delete the attributes by replacing them with spaces
-				$att = strtolower($att); // The TBS method does turn attributes anmes into lowercase. 
+				$att = strtolower($att); // The TBS method does turn attributes anmes into lowercase.
 				if (isset($Loc->PrmPos[$att])) {
 					$p = $Loc->PrmPos[$att];
 					$n = $p[3] - $p[0] + 1;

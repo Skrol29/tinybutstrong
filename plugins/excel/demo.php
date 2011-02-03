@@ -20,7 +20,7 @@ include('demo_data.php'); // Data stored in arrays
 $TBS = new clsTinyButStrong;
 
 // Install the Excel plug-in (must be before LoadTemplate)
-$TBS->PlugIn(TBS_INSTALL,TBS_EXCEL);
+$TBS->PlugIn(TBS_INSTALL, TBS_EXCEL);
 
 // Load the Excel template
 $TBS->LoadTemplate('demo_template.xml');
@@ -32,11 +32,8 @@ $TBS->MergeBlock('book',$books);
 $TBS->MergeBlock('tsk1,tsk2',$tasks);
 $TBS->MergeBlock('emp',$employees);
 
-// Options
-//$TBS->PlugIn(TBS_EXCEL,TBS_EXCEL_INLINE);
-$TBS->PlugIn(TBS_EXCEL,TBS_EXCEL_FILENAME,'result.xml');
-
 // Final merge and download file
-$TBS->Show();
+$TBS->Show(TBS_EXCEL_INLINE);
+
 
 ?>

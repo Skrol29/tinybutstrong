@@ -1,43 +1,22 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Excel plug-in for TinyButStrong - Help</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <style type="text/css">
 <!--
 body, td, th {
 	font-family: Arial, sans-serif;
 	font-size: 13px;
 }
-.norm {
-	margin-left: 30px;
-	padding: 5px;
-	border: 1px solid #999999;
-	margin-top: 12px;
-	margin-bottom: 12px;
-}
 .decal {
 	margin-left: 20px;
-}
-.title-1 {
-	font-size: 16px;
 }
 .title-1b {
 	text-decoration: underline;
 }
 .title-1c {
 	font-weight: bold;
-}
-.title-2 {
-	font-size: 16px;
-	text-decoration: underline;
-}
-.title-3 {
-	font-size: 16px;
-	text-decoration: underline;
-	background-color: #6699CC;
-	margin-top: 20px;
-	margin-bottom: 20px;
 }
 .txt-small {
 	font-size: 10px;
@@ -88,79 +67,93 @@ a.opt-name:hover {
 -->
 </style>
 </head>
-<body bgcolor="#FFFFFF">
-<div align="center">
+<body>
+<div style="text-align:center">
   <h1>Excel plug-in for TinyButStrong</h1>
-  <span class="txt-small">by Skrol29, 2010-12-12 </span><br>
-  version 1.1.0 <span class="txt-small">see changelog <a href="#changelog">here</a></span> </div>
-<br>
-With the Excel plug-in, you can use the <a href="http://www.tinybutstrong.com">TinyButStrong</a> Template Engine to drive the merge of Excel Worksheets based on a template that  you can build visually under Microsoft Excel.<br>
-This manual assumes that you know merging with TinyButStrong (TBS).<br>
-<br>
+  version 1.1.0 , <span class="txt-small">by Skrol29, 2011-02-03</span><br />
+</div>
+<p>Index</p>
+<ul>
+  <li>Introducing</li>
+  <li>1 <a href="#php">PHP side</a></li>
+  <li>1.1 <a href="#requirements">Requirements</a></li>
+  <li>1.2 <a href="#installation">Installation</a></li>
+  <li>1.3 <a href="#command">Commands</a></li>
+  <li>2 <a href="#template">Template side</a></li>
+  <li>2.1 <a href="#new_template">Create a new template</a></li>
+  <li>2.2 <a href="#merging_items">Merging data item in cells</a></li>
+  <li>2.3 <a href="#merging_blocks">Merging blocks</a></li>
+  <li>2.4 <a href="#formulas">Managing formulas</a></li>
+  <li>3. <a href="#result">Result of the merge</a></li>
+  <li>3.1 <a href="#debuging">Debugging the result of the merge</a></li>
+  <li>3.2 <a href="#extension">XML or XLS extension?</a></li>
+  <li>4 <a href="#changelog">Changelog</a></li>
+</ul>
+<h2>Introducing</h2>
+<p>With the Excel plug-in, you can use the <a href="http://www.tinybutstrong.com">TinyButStrong</a> Template Engine to drive the merge of Excel Worksheets based on a template that  you can build visually under Microsoft Excel.<br />
+  This manual assumes that you know merging with TinyButStrong (TBS).<br />
+</p>
+<p>
 Since Microsoft Excel version 2002 and higher, you can open and save   Excel documents in the &quot;XML Spreadsheet&quot; format. Those files are Excel documents saved with an XML source instead of a binary source. The default extension is <span class="opt-name">&quot;.xml&quot;</span>, but you can rename the file with  an <span class="opt-name">&quot;.xls&quot;</span> extension and they will open like any Excel document. 
-Such Excel documents saved in XML enable nearly all worksheets features (makeup, formats, formulas) but Graphics and Visual Basic Macros are not supported (all differences are documented <a href="http://office.microsoft.com/en-gb/assistance/HA010346391033.aspx">here</a>).<br>
-<br>
-OpenOffice.org Calc can open those files since version 2.0, but  only if the   extension is <span class="opt-name">&quot;.xml&quot;</span>.<br>
-<br>
-This Excel-XML format is a convenient way to do dynamic Excel files by the template technique.<br>
-<h2>PHP side</h2>
-Example:<br>
-<div class="decal txt-code">include(<span class="opt-value">'tbs_class.php'</span>);<br>
-  <span class="opt-name">$TBS</span> = new clsTinyButStrong; <span class="opt-html">// The TBS engine</span> <br>
-  <br>
-  include(<span class="opt-value">'tbs_plugin_excel.php'</span>); <br>
-  <span class="opt-name">$TBS</span>-&gt;PlugIn(<span class="opt-value">TBS_INSTALL</span>,<span class="opt-value">TBS_EXCEL</span>); <span class="opt-html">// Install the Excel plug-in </span><br>
-  <br>
-  <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'my_template.xml'</span>); <span class="opt-html">// Open the Excel-XML template </span><br>
-  <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'bz'</span>,<span class="opt-name">$my_data</span>); <span class="opt-html">// Merge the block </span><br>
+Such Excel documents saved in XML enable nearly all worksheets features (makeup, formats, formulas) but Graphics and Visual Basic Macros are not supported (all differences are documented <a href="http://office.microsoft.com/en-gb/assistance/HA010346391033.aspx">here</a>).</p>
+<p>OpenOffice.org Calc can open those files since version 2.0, but  only if the   extension is <span class="opt-name">&quot;.xml&quot;</span>.<br />
+</p>
+<p>This Excel-XML format is a convenient way to do dynamic Excel files by the template technique.</p>
+<h2><a name="php" id="php"></a>1 PHP side</h2>
+<p>Example:</p>
+<div class="decal txt-code">include(<span class="opt-value">'tbs_class.php'</span>);<br />
+  <span class="opt-name">$TBS</span> = new clsTinyButStrong; <span class="opt-html">// The TBS engine</span> <br />
+  <br />
+  include(<span class="opt-value">'tbs_plugin_excel.php'</span>); <br />
+  <span class="opt-name">$TBS</span>-&gt;PlugIn(<span class="opt-value">TBS_INSTALL</span>,<span class="opt-value">TBS_EXCEL</span>); <span class="opt-html">// Install the Excel plug-in </span><br />
+  <br />
+  <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'my_template.xml'</span>); <span class="opt-html">// Open the Excel-XML template </span><br />
+  <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'bz'</span>,<span class="opt-name">$my_data</span>); <span class="opt-html">// Merge the block </span><br />
   <span class="opt-name">$TBS</span>-&gt;Show() <span class="opt-html">// Force the result to bas donwload  as an Excel file. </span></div>
-<br>
-<span class="title-1b">Requirements:</span>
-<div class="decal">include the file <span class="tbsname">'tbs_plugin_excel.php'</span>. 
-  This can be after the TBS object variable is created.<br>
-  This plug-in version 1.0.x requires TBS version between 3.0.5 and 3.1.1.<br>
+<h3><a name="requirements" id="requirements"></a>1.1 Requirements</h3>
+<div class="decal">Include the file <span class="tbsname">'tbs_plugin_excel.php'</span>. 
+  This can be after the TBS object variable is created.<br />
+  This plug-in version 1.0.x requires TBS version between 3.0.5 and 3.1.1.<br />
   This plug-in version 1.1.x requires TBS version 3.6.2 or higher. </div>
-<br>
-<br>
-<span class="title-1b">Installation mode:</span> Manual. The plug-in should be installed before to call the LoadTemplate() method.<br>
-<div class="decal"> Example:<br>
-  <br>
-  <div class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;PlugIn(<span class="opt-value">TBS_INSTALL</span>,<span class="opt-value">TBS_EXCEL</span>);</div>
+<h3><a name="installation" id="installation"></a>1.2 Installation</h3>
+<div class="decal">
+  <p>You have to install the plugin in manual mode. The plug-in should be installed before to call the LoadTemplate() method.</p>
+    <p>Example:</p>
+    <div class="txt-code"><span class="opt-name">$TBS</span>-&gt;PlugIn(<span class="opt-value">TBS_INSTALL</span>,<span class="opt-value">TBS_EXCEL</span>);</div>
 </div>
-<br>
-<span class="title-1b">Command syntax:</span> <br>
-<br>
-<div class="decal"> &bull; Change the name of the file for download:<br>
-  <div class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;PlugIn(<span class="opt-value">TBS_EXCEL</span>,<span class="opt-value">TBS_EXCEL_FILENAME</span>,<span class="opt-value">'file.xls'</span>); </div>
-  <br>
-  &bull; Enables the file to be displayed within the browser (Internet Explorer only):<br>
-  <br>
-  <div class="decal txt-code"> <span class="opt-name">$TBS</span>-&gt;PlugIn(<span class="opt-value">TBS_EXCEL</span>,<span class="opt-value">TBS_EXCEL_INLINE</span>);</div>
+<h3><a name="command" id="command"></a>1.3 Commands</h3>
+<div class="decal">
+<p>The Excel plug-in enables you to retrieve the final result of the merge in several ways. It is done with the method $TBS-&gt;Show(). By default this method will produce an Http download with a default file name. Here are the available options:</p>
+<p>Output the result as an Http download:</p>
+<p class="decal txt-code"> <span class="opt-name">$TBS</span>-&gt;Show(<span class="opt-value">TBS_EXCEL_DOWNLOAD</span>, <span class="opt-name">$FileName</span>);</p>
+<p>Output the result as a file on the local server:</p>
+<p class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;Show(<span class="opt-value">TBS_EXCEL_FILE</span>, <span class="opt-name">$FilePath</span>);</p>
+<p>Retrieve the result as a PHP string file:
+</p>
+<p class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;Show(<span class="opt-value">TBS_EXCEL_STRING</span>);<br />
+  <span class="opt-name">$xml_result</span> = <span class="opt-name">$TBS</span>-&gt;Source;</p>
+<p><span class="title-1b">Deprecated since version 1.1.0:</span><br />
+  - Change the name of the file for download: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;PlugIn(<span class="opt-value">TBS_EXCEL</span>,<span class="opt-value">TBS_EXCEL_FILENAME</span>,<span class="opt-value">'file.xls'</span>);</span><br />
+  - Enables the file to be displayed within the browser (old Internet Explorer only): <span class="txt-code"> <span class="opt-name">$TBS</span>-&gt;PlugIn(<span class="opt-value">TBS_EXCEL</span>,<span class="opt-value">TBS_EXCEL_INLINE</span>);</span></p>
 </div>
-<br>
-Other information: <br>
-<div class="decal">- When the method Show() is called, then the merged template is output as a file for download. You can cancel the download by using the TBS property Render.<br>
-  - By default, the file to download has the same name as the template but with an &quot;.xls' extension. You can change the default file name using a command described above. </div>
-<h2>Template side </h2>
-<span class="title-1b"> Create a new template:</span><br>
-<br>
-<div class="decal">You can choose one of those two ways: <br>
-  &bull; Create a new document with Excel. Save it with choosing &quot;XML Spreadsheet (*.xml)&quot; for the File type in the dialog box.<br>
+
+<h2><a name="template" id="template"></a>2 Template side </h2>
+<h3> <a name="new_template" id="new_template"></a>2.1 Create a new template</h3>
+<div class="decal">You can choose one of those two ways: <br />
+  &bull; Create a new document with Excel. Save it with choosing &quot;XML Spreadsheet (*.xml)&quot; for the File type in the dialog box.<br />
   <div class="decal">I suggest you to change the extension of the file for &quot;.xls&quot; just in order to have your template opened with Excel normally from Windows Explorer. Otherwise, 
-    Windows Explorer may ask you to choose a program to open the XLS file when you double-click on it. What ever, Excel will makes no problem to open your file. </div>
-  or: <br>
-  &bull; Use the <span class="opt-html"><span class="opt-name">empty.xls</span></span> file which is provided with this plug-in distribution. <br>
-  <br>
+    Windows Explorer may ask you to choose a program to open the XLS file when you double-click on it. Whatever, Excel will makes no problem to open your file. </div>
+  or: <br />
+  &bull; Use the <span class="opt-html"><span class="opt-name">empty.xls</span></span> file which is provided with this plug-in distribution. <br />
+  <br />
   Your template can have several sheets, and you can use all Excel formats for displaying you data. </div>
-<br>
-<span class="title-1b">Merging data items in cells:</span><br>
-<br>
-<div class="decal">Microsoft Excel assigns a type for each value placed into a cell (it can be String, Numeric, BateTime, Boolean or Error). But when you put a TBS field into a cell, then the type of the cell's value is automatically set to String. If the value to be merged by the TBS field is not a string, you can force the type of the cell's value using parameter <span class="opt-name">ope</span>. This can be useful for calculating total, or using Excel formats for example. <br>
-  <br>
+<h3><a name="merging_items" id="merging_items"></a>2.2 Merging data items in cells</h3>
+<div class="decal">Microsoft Excel assigns a type for each value placed into a cell (it can be String, Numeric, DateTime, Boolean or Error). But when you put a TBS field into a cell, then the type of the cell's value is automatically set to String. If the value to be merged by the TBS field is not a string, you can force the type of the cell's value using parameter <span class="opt-name">ope</span>. This can be useful for calculating total, or using Excel formats for example. <br />
+  <br />
   <table border="0" cellspacing="0" cellpadding="3">
     <tr>
       <td class="title-1b">Parameter</td>
-      <td width="5" class="title-1b">&nbsp;</td>
+      <td class="title-1b">&nbsp;</td>
       <td class="title-1b">Value forced to </td>
     </tr>
     <tr>
@@ -174,8 +167,8 @@ Other information: <br>
       <td>DateTime </td>
     </tr>
   </table>
-  <br>
-  Examples:<br>
+  <br />
+  Examples:<br />
   <div class="decal">
     <table border="1" cellspacing="0" cellpadding="3">
       <tr>
@@ -188,17 +181,14 @@ Other information: <br>
       </tr>
     </table>
   </div>
-  <br>
-  Remark: If the merged value is not corresponding to its type then it will produce an error when the document is opened.<br>
+  <br />
+  Remark: If the merged value is not corresponding to its type then it will produce an error when the document is opened.<br />
   The String type can display any value.</div>
-<br>
-<br>
-<span class="title-1b">Merging blocks:</span><br>
-<br>
-<div class="decal"> Within an Excel-XML document, &lt;Table&gt; &lt;Row&gt; and &lt;Cell&gt; elements are use to dispose data into the Worksheets. It is quite similar to the HTML &lt;table&gt;&lt;tr&gt; and &lt;td&gt; elements. But a  &lt;Table&gt; is really tuchy to multiply (see section Debuggin below). <br>
-  <br>
-  Thus, the more commun TBS blocks you'll define will be <span class="opt-name">block</span>=<span class="opt-value">Row</span> when you want to exand rows, or <span class="opt-name">block</span>=<span class="opt-value">Cell</span> when you whant to expand columns. <br>
-  Examples:<br>
+<h3><a name="merging_blocks" id="merging_blocks"></a>2.3 Merging blocks</h3>
+<div class="decal">
+<p>Within an Excel-XML document, &lt;Table&gt; &lt;Row&gt; and &lt;Cell&gt; elements are used to dispose data into the Worksheets. It is quite similar to the HTML &lt;table&gt;&lt;tr&gt; and &lt;td&gt; elements. But a  &lt;Table&gt; is really touchy to multiply (see section Debuggin below). </p>
+<p>Thus, the more common TBS blocks you'll define will be <span class="opt-name">block</span>=<span class="opt-value">Row</span> when you want to expand rows, or <span class="opt-name">block</span>=<span class="opt-value">Cell</span> when you want to expand columns.</p>
+<p>Examples:</p>
   <div class="decal">
     <table border="1" cellspacing="0" cellpadding="3">
       <tr>
@@ -212,104 +202,112 @@ Other information: <br>
     </table>
   </div>
 </div>
-<br>
-<span class="title-1b">Managing formulas:</span><br>
-<br>
-<div class="decal"> After a block is merged, Excel formulas (like SUM) over this block may not be what you wanted because  cells or rows have been expanded by the block.<br>
-  <br>
-  &bull; If the formula is placed on the rigth or bottom of the merged block:<br>
-  <div class="decal">Use an Excel formula with   Absolute Reference to refer to the first cell of the block, and  Relative Reference to refer to  the last cell of the block. This way, the formula will stay valid after the block is expanded. This is working because Relative References are save relatively to the cell with the formula. <br>
-    <br>
-    Example:<br>
+<h3><a name="formulas" id="formulas"></a>2.4 Managing formulas</h3>
+<div class="decal">
+<p> After a block is merged, Excel formulas (like SUM) over this block may not be what you wanted because  cells or rows have been expanded by the block.</p>
+&bull; If the formula is placed on the right or bottom of the merged block:<br />
+  <div class="decal">Use an Excel formula with   Absolute Reference to refer to the first cell of the block, and  Relative Reference to refer to  the last cell of the block. This way, the formula will stay valid after the block is expanded. This is working because Relative References are saved relatively to the cell with the formula. <br />
+    <br />
+    Example:<br />
     <table border="1" cellspacing="0" cellpadding="3">
       <tr>
-        <td width="20" class="excelborder"><div align="center"></div></td>
-        <td class="excelborder"><div align="center">A</div></td>
-        <td class="excelborder"><div align="center">B</div></td>
+        <td class="excelborder" align="center">&nbsp;</td>
+        <td class="excelborder" align="center">A</td>
+        <td class="excelborder" align="center">B</td>
       </tr>
       <tr>
-        <td class="excelborder"><div align="center">1</div></td>
+        <td class="excelborder" align="center">1</td>
         <td>[b1.title;<span class="opt-name">block</span>=<span class="opt-value">Row</span>]</td>
         <td>[b1.price;<span class="opt-name">ope</span>=<span class="opt-value">xlNum</span>]</td>
       </tr>
       <tr>
-        <td class="excelborder"><div align="center">2</div></td>
+        <td class="excelborder" align="center">2</td>
         <td>&nbsp;</td>
         <td class="opt-html">=SUM(B$1:B1)</td>
       </tr>
     </table>
   </div>
-  <br>
-  &bull; If the formula is placed on the left or top of the merged block: <br>
-  <div class="decal">The tip above won't fit in this case because both relative ans absolute reference will refer to the first cell of the block. So this plug-in give another dedicated trick for this.<br>
-    <br>
-    TBS parameter <span class="opt-name">ope</span>=<span class="opt-value">xlPushref</span> placed in an Excel formula, makes the  previous Relative Reference to be pushed as much as the value of the TBS field's value. Only the first previous Relative Reference will be pushed. The TBS field with parameter must be placed inside a <span class="opt-html">+N(&quot;&quot;)</span> function, this enables the Excel formula to stay valid. If your formula deals with strings, you can use <span class="opt-html">&amp;N(&quot;&quot;)</span>.<br>
-    <br>
-    Example:<br>
+  <br />
+  &bull; If the formula is placed on the left or top of the merged block: <br />
+  <div class="decal">The tip above won't fit in this case because both relative and absolute references will refer to the first cell of the block. So this plug-in gives another dedicated trick for this.<br />
+    <br />
+    TBS parameter <span class="opt-name">ope</span>=<span class="opt-value">xlPushref</span> placed in an Excel formula, makes the  previous Relative Reference to be pushed as much as the value of the TBS field's value. Only the first previous Relative Reference will be pushed. The TBS field with parameter must be placed inside a <span class="opt-html">+N(&quot;&quot;)</span> function, this enables the Excel formula to stay valid. If your formula deals with strings, you can use <span class="opt-html">&amp;N(&quot;&quot;)</span>.<br />
+    <br />
+    Example:<br />
     <table border="1" cellspacing="0" cellpadding="3">
       <tr>
-        <td width="20" class="excelborder"><div align="center"></div></td>
-        <td class="excelborder"><div align="center">A</div></td>
-        <td class="excelborder"><div align="center">B</div></td>
+        <td class="excelborder" align="center">&nbsp;</td>
+        <td class="excelborder" align="center">A</td>
+        <td class="excelborder" align="center">B</td>
       </tr>
       <tr>
-        <td class="excelborder"><div align="center">1</div></td>
+        <td class="excelborder" align="center">1</td>
         <td>&nbsp;</td>
         <td class="opt-html">=SUM(B2:B2)+N(&quot;[b1.#;ope=xlPushRef]&quot;)</td>
       </tr>
       <tr>
-        <td class="excelborder"><div align="center">2</div></td>
+        <td class="excelborder" align="center">2</td>
         <td>[b1.title;<span class="opt-name">block</span>=<span class="opt-value">Row</span>]</td>
         <td>[b1.price;<span class="opt-name">ope</span>=<span class="opt-value">xlNum</span>]</td>
       </tr>
     </table>
   </div>
 </div>
-<br>
-<br>
-<span class="title-1b">Debuging the result of the merge: </span><br>
-<div class="decal">TBS error messages will cause the result to not be a downloadable file because  error messages are prompted before header information are sent.<br>
+<h2><a name="result" id="result"></a>3 Result of the merge</h2>
+<h3><a name="debugging" id="debugging"></a>3.1 Debugging the result of the merge</h3>
+<div class="decal">
+  <p>TBS error messages will cause the result to not be a downloadable file because  error messages are prompted before header informations are sent.<br />
   Nevertheless, your result may be an invalid
-  Excel-XML document.  XML syntax is less tolerating than  HTML. If your document is invalid then Excel will prompt an unhelpful error message when opened. Then you will probably need to look at the source of the merged document to understand what's wrong.<br>
-  <br>
-  Here is some interesting information about the Excel-XML syntax: <br>
-  <br>
-  -       One document contains one or several <span class="opt-html">&lt;Worksheets&gt;</span> elements.<br>
-  - One <span class="opt-html">&lt;Worsheet&gt;</span> contains one or several <span class="opt-html">&lt;Table&gt;</span> elements.<br>
-  - One <span class="opt-html">&lt;Table&gt;</span> contains one or more <span class="opt-html">&lt;Row&gt;</span> elements.<br>
-  - One <span class="opt-html">&lt;Row&gt;</span> contains one or more <span class="opt-html">&lt;Cell&gt;</span> elements. <br>
-  <br>
-  <span class="title-1b">Diagram:</span><br>
-  &lt;Worksheet ... &gt; <br>
-  &nbsp;&nbsp;&lt;Table ... &gt;<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;&lt;Row ...&gt;<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Cell ...&gt; &lt;/Cell&gt; &lt;Cell ...&gt; &lt;/Cell&gt; &lt;Cell ...&gt; &lt;/Cell&gt;<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;&lt;/Row ...&gt;<br>
-  &nbsp;&nbsp;&lt;/Table ... &gt;<br>
-  &lt;/Worksheet ... &gt; <br>
-  <br>
-  &bull; Microsoft  Excel decides how to split your data in &lt;Tables&gt; , &lt;Cell&gt; and &lt;Row&gt;. Or you can decide it by yourself by manually changing the source of the template. <br>
-  &bull; Take care that your items may be separated in several &lt;Table&gt; elements in a Worksheets, this  happens mostly when data items are separated by numerous empty cells.<br>
-  &bull; Take care that &lt;Row&gt; elements which are positionned after a merged block (or a conditional block) have no aboslute index for positionning (attribute ss:Index), other wise Excel will consider the file as badly formated..<br>
-  &bull; &lt;Tables&gt; elements should not be repeated by merging TBS block because their first &lt;Row&gt; and &lt;Cell&gt; elements may contain absolute indexes for positioning (attribute ss:Index). <br>
+  Excel-XML document.  XML syntax is less tolerating than  HTML. If your document is invalid then Excel will prompt an unhelpful error message when opened. Then you will probably need to look at the source of the merged document to understand what's wrong.</p>
+  <p>Here is some interesting information about the Excel-XML syntax:</p>
+  <p>
+  - One document contains one or several <span class="opt-html">&lt;Worksheets&gt;</span> elements.<br />
+  - One <span class="opt-html">&lt;Worksheet&gt;</span> contains one or several <span class="opt-html">&lt;Table&gt;</span> elements.<br />
+  - One <span class="opt-html">&lt;Table&gt;</span> contains one or more <span class="opt-html">&lt;Row&gt;</span> elements.<br />
+  - One <span class="opt-html">&lt;Row&gt;</span> contains one or more <span class="opt-html">&lt;Cell&gt;</span> elements. <br />
+  </p>
+  <span class="title-1b">Diagram:</span><br />
+  &lt;Worksheet ... &gt; <br />
+  &nbsp;&nbsp;&lt;Table ... &gt;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;Row ...&gt;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Cell ...&gt; &lt;/Cell&gt; &lt;Cell ...&gt; &lt;/Cell&gt; &lt;Cell ...&gt; &lt;/Cell&gt;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;/Row ...&gt;<br />
+  &nbsp;&nbsp;&lt;/Table ... &gt;<br />
+  &lt;/Worksheet ... &gt; <br />
+  <br />
+  &bull; Microsoft  Excel decides how to split your data in &lt;Tables&gt; , &lt;Cell&gt; and &lt;Row&gt;. Or you can decide it by yourself by manually changing the source of the template. <br />
+  &bull; Take care that your items may be separated in several &lt;Table&gt; elements in a Worksheets, this  happens mostly when data items are separated by numerous empty cells.<br />
+  &bull; Take care that &lt;Row&gt; elements which are positioned   after a merged block (or a conditional block) have no absolute index for positioning (attribute ss:Index), otherwise Excel will consider the file as badly formatted.<br />
+  &bull; &lt;Tables&gt; elements should not be repeated by merging TBS block because their first &lt;Row&gt; and &lt;Cell&gt; elements may contain absolute indexes for positioning (attribute ss:Index). <br />
   &bull;They are some other XML elements but not really interesting for merging TBS blocks. </div>
-<h2><a name="changelog"></a>Changelog:</h2>
+<h3>3.2 XML or XLS extension?</h3>
+<p>If you save an XML Spreadsheet with the XLS extension (for example: result.xls), then it can be opened with  all Excel versions. Nevertheless, if you open such a file with Excel 2007 and higher, you will have a message box: &quot;the file you are trying to open 'result.xls' is in a different format than specified by the file [...]&quot;. If you choose Yes, then the workbook will be opened normally.</p>
+<p>If you save an XML Spreadsheet with the XML extension (for example: result.xml), then Excel will open it normally. Nevertheless, the XML  extension is generic for Windows, and if you double-click on an XML Spreadsheet file  to open it directly, it may or may not open Excel depending to your configuration.
+</p>
+<ul>
+  <li>Windows XP: start Excel 2003 and 2007 but not 2010.  If Excel 2010 is installed, the result.xml file will be opened by the default browser, and the browser will probably propose you to open the file with Excel (sic).</li>
+  <li>Windows 7: will start Excel 2010 but not 2007.</li>
+</ul>
+<p>OpenOffice and LibreOffice can open XML Spreadsheet files only when they have the XML extension.</p>
+<h2><a name="changelog" id="changelog"></a>4 Changelog:</h2>
 <table border="0" cellspacing="2" cellpadding="4">
   <tr>
     <td valign="top"><span class="versioning">Version 1.1.0:</span>&nbsp;</td>
-    <td valign="top">- Works with TBS version 3.6.2 or higher.<br>
-      - Possibility to save the result as a file.<br>
-      - Avoid the output if a TBS error occurs.</td>
+    <td valign="top">- Works with TBS version 3.6.2 or higher and with PHP 5.<br />
+      - Possibility to save the result as a file.<br />
+      - Possibility to retrieve the result in a PHP string. <br />
+      - Avoid the output if a TBS error occurs.<br />
+      - Fixed bug: <em>Warning:  Parameter 4 to clsTbsExcel::BeforeMergeBlock() expected to be a reference, value given [...]</em><br />
+- Fixed bug: <em>Strict Standards: call_user_func() expects parameter 1 to be a valid callback, non-static method clsTbsExcel::f_XmlConv() should not be called statically in [...]</em></td>
   </tr>
   <tr>
     <td valign="top"><span class="versioning">Version 1.0.3:</span>&nbsp;</td>
-    <td valign="top">Monor fixes in the HTML header which force the file to download. </td>
+    <td valign="top">Minor fixes in the HTML header which force the file to download. </td>
   </tr>
   <tr>
-    <td width="90" valign="top"><span class="versioning">Version 1.0.2:</span>&nbsp;</td>
+    <td valign="top"><span class="versioning">Version 1.0.2:</span>&nbsp;</td>
     <td valign="top">Bug fixed about special sections (like <span class="opt-name">headergrp</span>, <span class="opt-name">when</span>, <span class="opt-name">nodata</span>, ...  ) that could  be bad placed after a MergeBlock().</td>
   </tr>
 </table>
-<br>
 </body>
 </html>
