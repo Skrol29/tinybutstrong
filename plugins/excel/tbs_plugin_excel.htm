@@ -281,14 +281,14 @@ Such Excel documents saved in XML enable nearly all worksheets features (makeup,
   &bull; &lt;Tables&gt; elements should not be repeated by merging TBS block because their first &lt;Row&gt; and &lt;Cell&gt; elements may contain absolute indexes for positioning (attribute ss:Index). <br />
   &bull;They are some other XML elements but not really interesting for merging TBS blocks. </div>
 <h3>3.2 XML or XLS extension?</h3>
-<p>If you save an XML Spreadsheet with the XLS extension (for example: result.xls), then it can be opened with  all Excel versions. Nevertheless, if you open such a file with Excel 2007 and higher, you will have a message box: &quot;the file you are trying to open 'result.xls' is in a different format than specified by the file [...]&quot;. If you choose Yes, then the workbook will be opened normally.</p>
-<p>If you save an XML Spreadsheet with the XML extension (for example: result.xml), then Excel will open it normally. Nevertheless, the XML  extension is generic for Windows, and if you double-click on an XML Spreadsheet file  to open it directly, it may or may not open Excel depending to your configuration.
-</p>
+<p>Microsoft Excel offers to save XML Spreadsheets as a file with an &quot;.xml&quot; extension (for example: result.xls). Nevertheless, other type of XML files may have the same extension. That's why if you double-click on an XML Spreadsheet file  to open it directly, it may or may not open Excel depending to your configuration.</p>
 <ul>
-  <li>Windows XP: start Excel 2003 and 2007 but not 2010.  If Excel 2010 is installed, the result.xml file will be opened by the default browser, and the browser will probably propose you to open the file with Excel (sic).</li>
-  <li>Windows 7: will start Excel 2010 but not 2007.</li>
+  <li>Windows XP: will open Excel 2003 and Excel 2007 but not Excel 2010.  If Excel 2010 is installed, the &quot;result.xml&quot; file will be opened by the default browser, and the browser will probably propose you to open the file with Excel (sic).</li>
+  <li>Windows 7: will open Excel 2010 but not Excel 2007.</li>
 </ul>
-<p>OpenOffice and LibreOffice can open XML Spreadsheet files only when they have the XML extension.</p>
+<p>OpenOffice and LibreOffice can open XML Spreadsheet files only if the file has the XML extension.</p>
+<p>In order to be sure that the user will be able to open your XML Spreadsheet, you may prefer to save the file with the XLS extension (for example: result.xls). With this extension, the file will be opened by Excel whatever the version of Windows of the version of Excel.  Nevertheless, if you open such a file with Excel 2007 and higher, you will have a message box: &quot;the file you are trying to open 'result.xls' is in a different format than specified by the file [...]&quot;. If you choose Yes, then the workbook will be opened normally.</p>
+<p>So we can say that there is no good solution.</p>
 <h2><a name="changelog" id="changelog"></a>4 Changelog:</h2>
 <table border="0" cellspacing="2" cellpadding="4">
   <tr>

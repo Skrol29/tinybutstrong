@@ -14,10 +14,11 @@ but you must accept and respect the LPGL License version 3.
 [ok] OPT: better management of CachedFields with parameter att
 [ok] BUG: f_Xml_AttFind() do not find attributes that have uppercase characters, that's because f_Loc_PrmRead() save attributes lowercase
 [--] FCT: split f_Xml_FindTag() with a new f_Xml_FindTagStart() which can be usefull for external tools
-[  ] FCT: htmlconv=js1 and js2 does javascript conversion for ' and " delimiters (current version replaces ' " / and null)
-[  ] FCT: direct commands for plug-ins
-[  ] OPT: f_Misc_GetFile() with file_exists() instead of caching error
-[  ] FCT: rename htmlconv with strconv ?
+[tt] FCT: new method meth_PlugIn_SetEvent()
+[tt] FCT: direct commands for plug-ins
+[tt] OPT: f_Misc_GetFile() with file_exists() instead of caching error
+[xx] FCT: htmlconv=js1 and js2 does javascript conversion for ' and " delimiters (current version replaces ' " / and null)
+[xx] FCT: rename htmlconv with strconv ?
 */
 // Check PHP version
 if (version_compare(PHP_VERSION,'4.0.6')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 4.0.6 or higher.';
@@ -523,7 +524,6 @@ var $_ChrClose = ']';
 var $_ChrVal = '[val]';
 var $_ChrProtect = '&#91;';
 var $_PlugIns = array();
-var $_PlugInsCmd = array();
 var $_PlugIns_Ok = false;
 var $_piOnFrm_Ok = false;
 
@@ -746,9 +746,8 @@ function PlugIn($Prm1,$Prm2=0) {
 
 	if (is_numeric($Prm1)) {
 		switch ($Prm1) {
-		case TBS_INSTALL:
+		case TBS_INSTALL: // Try to install the plug-in
 			$PlugInId = $Prm2;
-	  	// Try to install the plug-in
 			if (isset($this->_PlugIns[$PlugInId])) {
 				return $this->meth_Misc_Alert('with PlugIn() method','plug-in \''.$PlugInId.'\' is already installed.');
 			} else {
@@ -756,8 +755,7 @@ function PlugIn($Prm1,$Prm2=0) {
 				array_shift($ArgLst); array_shift($ArgLst);
 				return $this->meth_PlugIn_Install($PlugInId,$ArgLst,false);
 			}
-		case TBS_ISINSTALLED:
-	  	// Check if the plug-in is installed
+		case TBS_ISINSTALLED: // Check if the plug-in is installed
 			return isset($this->_PlugIns[$Prm2]);
 		case -4: // Deactivate special plug-ins
 			$this->_PlugIns_Ok_save = $this->_PlugIns_Ok;
@@ -775,13 +773,18 @@ function PlugIn($Prm1,$Prm2=0) {
 
 	} elseif (is_string($Prm1)) {
 		// Plug-in's command
-		$PlugInId = $Prm1;
+		$p = strpos($Prm1,'.');
+		if ($p===false) {
+			$PlugInId = $Prm1;
+		} else {
+			$PlugInId = substr($Prm1,$p);
+		}
 		if (!isset($this->_PlugIns[$PlugInId])) {
 			if (!$this->meth_PlugIn_Install($PlugInId,array(),true)) return false;
 		}
 		if (!isset($this->_piOnCommand[$PlugInId])) return $this->meth_Misc_Alert('with PlugIn() method','plug-in \''.$PlugInId.'\' can\'t run any command because the OnCommand event is not defined or activated.');
 		$ArgLst = func_get_args();
-		array_shift($ArgLst);
+		if ($p===false) array_shift($ArgLst);
 		$Ok = call_user_func_array($this->_piOnCommand[$PlugInId],$ArgLst);
 		if (is_null($Ok)) $Ok = true;
 		return $Ok;
@@ -2740,39 +2743,63 @@ function meth_PlugIn_Install($PlugInId,$ArgLst,$Auto) {
 		}
 	}
 
+	$this->_PlugIns[$PlugInId] = &$PiRef;
+
 	$EventLst = call_user_func_array($FctRef,$ArgLst);
 	if (is_string($EventLst)) $EventLst = explode(',',$EventLst);
 	if (!is_array($EventLst)) return $this->meth_Misc_Alert($ErrMsg,'OnInstall() method does not return an array.');
 
 	// Add activated methods
-	$EventRef = explode(',','OnCommand,BeforeLoadTemplate,AfterLoadTemplate,BeforeShow,AfterShow,OnData,OnFormat,OnOperation,BeforeMergeBlock,OnMergeSection,OnMergeGroup,AfterMergeBlock,OnSpecialVar,OnMergeField,OnCacheField');
 	foreach ($EventLst as $Event) {
 		$Event = trim($Event);
-		if (!in_array($Event,$EventRef)) return $this->meth_Misc_Alert($ErrMsg,'OnInstall() method return an unknowed plug-in event named \''.$Event.'\' (case-sensitive).');
-		if ($IsObj) {
-			if (!method_exists($PiRef,$Event)) return $this->meth_Misc_Alert($ErrMsg,'OnInstall() has returned a Plug-in event named \''.$Event.'\' which is not found.');
-			$FctRef = array(&$PiRef,$Event);
-		} else {
-			$FctRef = 'tbspi_'.$PlugInId.'_'.$Event;
-			if (!function_exists($FctRef)) return $this->meth_Misc_Alert($ErrMsg,'requiered function \''.$FctRef.'\' is not found.');
-		}
-		// Save information into the corresponding property
-		$PropName = '_pi'.$Event;
-		if (!isset($this->$PropName)) $this->$PropName = array();
-		$PropRef = &$this->$PropName;
-		$PropRef[$PlugInId] = $FctRef;
-		// Flags saying if a plugin is installed
-		switch ($Event) {
-		case 'OnCommand': break;
-		case 'OnSpecialVar': break;
-		case 'OnOperation': break;
-		case 'OnFormat': $this->_piOnFrm_Ok = true; break;
-		default: $this->_PlugIns_Ok = true; break;
-		}
+		if (!$this->meth_PlugIn_SetEvent($PlugInId, $Event)) return false;
 	}
 
-	$this->_PlugIns[$PlugInId] = &$PiRef;
-	if (isset($PiRef->DirectCommands)) foreach ($PiRef->DirectCommands as $cmd) $this->_PlugInsCmd[$cmd] = $PlugInId;
+	return true;
+
+}
+
+function meth_PlugIn_SetEvent($PlugInId, $Event, $NewRef='') {
+// Enable or disable a plug-in event. It can be called by a plug-in, even during the OnInstall event. $NewRef can be used to change the method associated to the event.
+
+	// Check the event's name
+	if (strpos(',OnCommand,BeforeLoadTemplate,AfterLoadTemplate,BeforeShow,AfterShow,OnData,OnFormat,OnOperation,BeforeMergeBlock,OnMergeSection,OnMergeGroup,AfterMergeBlock,OnSpecialVar,OnMergeField,OnCacheField,', ','.$Event.',')===false) return $this->meth_Misc_Alert('with plug-in \''.$PlugInId.'\'','The plug-in event named \''.$Event.'\' is not supported by TinyButStrong (case-sensitive). This event may come from the OnInstall() method.');
+
+	$PropName = '_pi'.$Event;
+
+	if ($NewRef===false) {
+		// Disable the event
+		if (!isset($this->$PropName)) return false;
+		$PropRef = &$this->$PropName;
+		unset($PropRef[$PlugInId]);
+		return true;
+	}
+	
+	// Prepare the reference to be called
+	$PiRef = &$this->_PlugIns[$PlugInId];
+	if (is_object($PiRef)) {
+		if ($NewRef==='') $NewRef = $Event;
+		if (!method_exists($PiRef, $NewRef)) return $this->meth_Misc_Alert('with plug-in \''.$PlugInId.'\'','The plug-in event named \''.$Event.'\' is declared but its corresponding method \''.$NewRef.'\' is found.');
+		$FctRef = array(&$PiRef, $NewRef);
+	} else {
+		$FctRef = ($NewRef==='') ? 'tbspi_'.$PlugInId.'_'.$Event : $NewRef;
+		if (!function_exists($FctRef)) return $this->meth_Misc_Alert('with plug-in \''.$PlugInId.'\'','The expected function \''.$FctRef.'\' is not found.');
+	}
+
+	// Save information into the corresponding property
+	if (!isset($this->$PropName)) $this->$PropName = array();
+	$PropRef = &$this->$PropName;
+	$PropRef[$PlugInId] = $FctRef;
+
+	// Flags saying if a plugin is installed
+	switch ($Event) {
+	case 'OnCommand': break;
+	case 'OnSpecialVar': break;
+	case 'OnOperation': break;
+	case 'OnFormat': $this->_piOnFrm_Ok = true; break;
+	default: $this->_PlugIns_Ok = true; break;
+	}
+		
 	return true;
 
 }
@@ -3139,14 +3166,12 @@ function f_Misc_DelDelimiter(&$Txt,$Delim) {
 function f_Misc_GetFile(&$Txt,&$File,$LastFile='') {
 // Load the content of a file into the text variable.
 	$Txt = '';
-	$fd = @fopen($File,'r',true); // 'rb' if binary for some OS
-	if ($fd===false) {
+	if (!file_exists($File)) {
 		if ($LastFile==='') return false;
-		$File2 = dirname($LastFile).'/'.$File;
-		$fd = @fopen($File2,'r',true);
-		if ($fd===false) return false;
-		$File = $File2;
+		$File = dirname($LastFile).'/'.$File;
+		if (!file_exists($File)) return false;
 	}
+	$fd = fopen($File,'r',true); // 'rb' if binary for some OS
 	if ($fd===false) return false;
 	$fs = @filesize($File); // return False for an URL
 	if ($fs===false) {

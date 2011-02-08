@@ -9,7 +9,7 @@ fixes:
 [ok] Warning:  Parameter 4 to clsTbsExcel::BeforeMergeBlock() expected to be a reference, value given [...]
 [ok] Strict Standards: call_user_func() expects parameter 1 to be a valid callback, non-static method clsTbsExcel::f_XmlConv() should not be called statically in ...\tbs_class.php on line 2411
 [ok] add possibility to save the contents in a local file
-[tt] avoid the download if a PHP is displayed (otherwise the contents is cut)
+[ok] avoid the download if a PHP is displayed (otherwise the contents is cut)
 [  ] check cell types with fields not in a block (onload+onshow)
 */
 
@@ -224,7 +224,13 @@ class clsTbsExcel {
 			$Loc->ConvMode = 0;
 			$Loc->ConvProtect = false;
 		}
-		if ( ($Block==='onshow') && ((substr($Loc->FullName,0,4)=='var.') || ($Loc->FullName==='var')) ) $Block='var..version'; // var fields ar processed after onshow, and they must have a subname
+		if ( ($Block==='onshow') || ($Block==='onload') ) {
+			if ( (substr($Loc->FullName,0,4)=='var.') || ($Loc->FullName==='var') ) {
+				$Block = 'var..version'; // var fields are processed after onshow, and they must have a subname
+			} else {
+				$Block = $Block.'..version';
+			}
+		}
 		$newfield = '['.$Block.';att=Data#ss:Type;if 1=1;then '.$attval.']';
 		$Txt = substr_replace($Txt, $newfield, $Loc->PosEnd+1,0);
 		$Loc->xlType = true; // avoid a double process of such ope values

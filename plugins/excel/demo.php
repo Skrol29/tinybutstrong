@@ -32,8 +32,9 @@ $TBS->MergeBlock('book',$books);
 $TBS->MergeBlock('tsk1,tsk2',$tasks);
 $TBS->MergeBlock('emp',$employees);
 
+$x = 33.69;
 // Final merge and download file
-$TBS->Show(TBS_EXCEL_INLINE);
+$TBS->Show(TBS_EXCEL_DOWNLOAD, 'result.xml');
 
 
 ?>

@@ -140,7 +140,7 @@ class FrmTestCase extends TBSUnitTestCase {
 		/* CAUTION !
 		   The following test are working because all formats processed by TBS (parameter "frm" or "tplfrms") are cached into a global PHP variable.
 		   Thus, the formats defined by tplfrms are available for the current TBS instance and all merging after it, from the same instance or a different instance.
-		/*
+		*/
 	
 		// one format
 		$this->getTBSInstance("{[onload;tplfrms;money=0 000,00€]}{[a;frm=money]}");
