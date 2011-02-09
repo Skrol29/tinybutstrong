@@ -3,22 +3,14 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.6.2-dev for PHP 4
-Date     : 2010-12-14
+Version  : 3.6.2-rc-2011-02-09 for PHP 4
+Date     : 2011-02-09
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
 This library is free software.
 You can redistribute and modify it even for commercial usage,
 but you must accept and respect the LPGL License version 3.
-[ok] OPT: better management of CachedFields with parameter att
-[ok] BUG: f_Xml_AttFind() do not find attributes that have uppercase characters, that's because f_Loc_PrmRead() save attributes lowercase
-[--] FCT: split f_Xml_FindTag() with a new f_Xml_FindTagStart() which can be usefull for external tools
-[tt] FCT: new method meth_PlugIn_SetEvent()
-[tt] FCT: direct commands for plug-ins
-[tt] OPT: f_Misc_GetFile() with file_exists() instead of caching error
-[xx] FCT: htmlconv=js1 and js2 does javascript conversion for ' and " delimiters (current version replaces ' " / and null)
-[xx] FCT: rename htmlconv with strconv ?
 */
 // Check PHP version
 if (version_compare(PHP_VERSION,'4.0.6')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 4.0.6 or higher.';
@@ -501,7 +493,7 @@ var $ObjectRef = false;
 var $NoErr = false;
 var $Assigned = array();
 // Undocumented (can change at any version)
-var $Version = '3.6.2-dev';
+var $Version = '3.6.2-rc-2011-02-09';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -777,7 +769,7 @@ function PlugIn($Prm1,$Prm2=0) {
 		if ($p===false) {
 			$PlugInId = $Prm1;
 		} else {
-			$PlugInId = substr($Prm1,$p);
+			$PlugInId = substr($Prm1,0,$p); // direct command
 		}
 		if (!isset($this->_PlugIns[$PlugInId])) {
 			if (!$this->meth_PlugIn_Install($PlugInId,array(),true)) return false;
@@ -2399,7 +2391,7 @@ function meth_Merge_AutoOn(&$Txt,$Name,$TplVar,$MergeVar) {
 				$Pos = $LocA->PosBeg;
 			}
 
-		} else { // Field
+		} else { // Field (has no subname at this point)
 
 			// Check for Template Var
 			if ($TplVar) {
@@ -2427,7 +2419,7 @@ function meth_Merge_AutoOn(&$Txt,$Name,$TplVar,$MergeVar) {
 
 	}
 
-	if ($MergeVar) $this->meth_Merge_AutoVar($this->Source,true,$Name);
+	if ($MergeVar) $this->meth_Merge_AutoVar($this->Source,true,$Name); // merge other fields (must have subnames)
 
 	foreach ($this->Assigned as $n=>$a) {
 		if (isset($a['auto']) and ($a['auto']===$Name)) {
@@ -3787,6 +3779,7 @@ function f_Xml_FindTagStart(&$Txt,$Tag,$Opening,$PosBeg,$Forward,$Case=true) {
 $Case=false can be useful for HTML.
 $Tag='' should work and found the start of the first tag.
 $Tag='/' should work and found the start of the first closing tag.
+Encapsulation levels are not feataured yet.
 */
 
 	if ($Txt==='') return false;
@@ -3811,18 +3804,7 @@ $Tag='/' should work and found the start of the first closing tag.
 			$z = substr($Txt,$p+$xl,1);
 		} while ( ($z!==' ') && ($z!=="\r") && ($z!=="\n") && ($z!=='>') && ($z!=='/') && ($Tag!=='/') && ($Tag!=='') );
 	}
-/*	
-	$li = ($Opening) ? 1 : -1; 
-	if ($Foward) {
-		$t = substr($Txt, $p0, $p-$p0);
-	} else {
-		$t = substr($Txt, $p, $p0-$p);
-	}
-	$q = 0;
-	$la = $li;
-	while ( ($q=clsTinyButStrong::f_Xml_FindTagStart($t, $Tag,!$Opening,$q,true,$Case)) !==false ) $la = $la - $li; // count the number of oposit tag between the PosBeg and 
-	
-*/	
+
 	return $p;
 
 }
