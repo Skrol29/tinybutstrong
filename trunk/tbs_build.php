@@ -61,6 +61,7 @@ $Ok = $Ok && f_Replace($Txt, ' = &new ', ' = new ', ' &new replaced with new');
 $Ok = $Ok && f_Replace($Txt, ' for PHP 4', ' for PHP 5', 'version: for PHP 5');
 $Ok = $Ok && f_Replace($Txt, 'if (version_compare(PHP_VERSION,\'4.0.6\')<0) echo \'<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is \'.PHP_VERSION.\' while TinyButStrong needs PHP version 4.0.6 or higher.\';'."\n".'if (!is_callable(\'array_key_exists\')) {'."\n".'	function array_key_exists (&$key,&$array) {return key_exists($key,$array);}'."\n".'}'."\n".'if (!is_callable(\'property_exists\')) {'."\n".'	function property_exists(&$obj,$prop) {return true;}'."\n".'}', 'if (version_compare(PHP_VERSION,\'5.0\')<0) echo \'<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is \'.PHP_VERSION.\' while TinyButStrong needs PHP version 5.0 or higher. You should try with TinyButStrong Edition for PHP 4.\';', 'check PHP version');
 $Ok = $Ok && f_Replace($Txt, 'function clsTinyButStrong','function __construct','Rename constructor');
+$Ok = $Ok && f_Replace($Txt, '			if (strcasecmp($x,substr($Txt,$p,$xl))!=0) continue; // For PHP 4 only'."\n", '', 'Avoid special check for strrpos()');
 f_Update($Ok, $Dst5, $Txt);
 
 exit;
