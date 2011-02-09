@@ -15,7 +15,7 @@ fixes:
 
 // Name of the class is a keyword used for Plug-In authentication. So i'ts better to save it into a constant.
 define('TBS_EXCEL','clsTbsExcel');
-define('TBS_EXCEL_FILENAME',-1); // deprecated command (=1)
+define('TBS_EXCEL_FILENAME', 'clsTbsExcel.FILENAME'); // deprecated command (=1)
 define('TBS_EXCEL_DOWNLOAD',1); // deprecated command (=2) & Render option (by default) = TBS_OUTPUT
 define('TBS_EXCEL_INLINE',4);   // deprecated command (=3) & Render option (do not use value 2 wich is reserved for TBS_EXIT)
 define('TBS_EXCEL_FILE',8);     // Render option
@@ -28,7 +28,8 @@ class clsTbsExcel {
 	function OnInstall() {
 		$this->Version = '1.1.0-dev'; // Version can be displayed using [onshow..tbs_info] since TBS 3.2.0
 		// Constants for the plug-in
-		$this->TypeLst = array('xlNum'=>'Number', 'xlDT'=>'DateTime', 'xlStr'=>'String', 'xlErr'=>'Error', 'xlBoo'=>'Boolean');
+		$this->TypeLst  = array('xlNum'=>'Number', 'xlDT'=>'DateTime', 'xlStr'=>'String', 'xlErr'=>'Error', 'xlBoo'=>'Boolean');
+		$this->TypeLst2 = array('number'=>'Number', 'date'=>'DateTime', 'string'=>'String', 'error'=>'Error', 'boolean'=>'Boolean');
 		// Usefulle properies
 		$this->Oldies_FileName = '';
 		$this->TemplateFileName = '';
@@ -48,14 +49,14 @@ class clsTbsExcel {
 		}
 	}
 
-	function BeforeLoadTemplate(&$File,&$HtmlCharSet) {
+	function BeforeLoadTemplate(&$File, &$Charset) {
 		if ($this->TemplateFileName==='') $this->TemplateFileName = $File;
-		if ($HtmlCharSet==='') $this->TBS->LoadTemplate('', array(&$this,'ConvXmlUtf8')); // Define the function for string conversion
+		if ($Charset==='') $this->TBS->LoadTemplate('', array(&$this,'ConvXmlUtf8')); // Define the function for string conversion
 	}
 
 	function OnOperation($FieldName,&$Value,&$PrmLst,&$Source,$PosBeg,$PosEnd,$Loc) {
 		if (isset($this->TypeLst[$PrmLst['ope']])) {
-			if (!isset($Loc->xlType)) $this->tag_ChangeCellType($Source,$Loc,$PrmLst['ope'],'onshow');
+			if (!isset($Loc->xlType)) $this->tag_ChangeCellType($Source,$Loc,$this->TypeLst[$PrmLst['ope']]);
 		} elseif ($PrmLst['ope']==='xlPushRef') {
 			$this->tag_ChangeFormula($Source,$Loc,$Value,true);
 		}
@@ -66,13 +67,18 @@ class clsTbsExcel {
 		if (isset($Loc->PrmLst['ope'])) {
 			// in this event, ope parameter is not exploded yet
 			$ope_lst = explode(',', $Loc->PrmLst['ope']);
-			$ope_ok = false;
+			$ope_att = false;
 			foreach ($ope_lst as $ope) {
 				$ope=trim($ope,' ');
-				if (isset($this->TypeLst[$ope])) $ope_ok = $ope;
+				if (isset($this->TypeLst[$ope])) $ope_att = $this->TypeLst[$ope];
 			}
 			// if a the cell type must be modified, then we add a new TBS field for changing the attribute value
-			if ($ope_ok!==false) $this->tag_ChangeCellType($Txt, $Loc, $ope_ok, $BlockName.'.#');
+			if ($ope_att!==false) {
+				$this->tag_ChangeCellFormat($Loc, $ope_att);
+				$newfield = '['.$BlockName.';att=Data#ss:Type;if 1=1;then '.$ope_att.']';
+				$Txt = substr_replace($Txt, $newfield, $Loc->PosEnd+1,0); // the new field is added after the current field so it will be scanned by TBS
+				$Loc->xlType = true; // avoid a double process of such ope values
+			}
 		}
 
 	}
@@ -216,24 +222,36 @@ class clsTbsExcel {
 
 	}
 
-	function tag_ChangeCellType(&$Txt,&$Loc,$Ope,$Block) {
-		$attval = $this->TypeLst[$Ope];
-		if ($attval==='DateTime') {
+	function tag_ChangeCellType(&$Txt, $Loc, $Type) {
+	// Change the cell type. This function assumes that the current cell has a type set to String. String type is expected since the cell contains a TBS tag.
+		if ($Type==='String') return true;
+		$t0 = clsTinyButStrong::f_Xml_FindTagStart($Txt,'Data',true,$Loc->PosBeg,false,true);
+		if ($t0===false) return false; // error in the XML structure
+		$te = strpos($Txt, '>', $t0);
+		if ( ($te===false) || ($te>$Loc->PosBeg) ) return false; // error in the XML structure
+		$len = $te - $t0 + 1;
+		$tag = substr($Txt, $t0, $len);
+		$len = strlen($tag);
+		$att = ' ss:Type="String"';
+		$att2 = ' ss:Type="'.$Type.'"';
+		$tag = str_replace($att, $att2, $tag);
+		$Txt = substr_replace($Txt, $tag, $t0, $len);
+		$diff = strlen($tag) - $len;
+		if ($diff!==0) {
+			$Loc->PosBeg += $diff;
+			$Loc->PosEnd += $diff;
+		}
+		$this->tag_ChangeCellFormat($Loc, $Type);
+		return true;
+	}
+
+	function tag_ChangeCellFormat(&$Loc, $Type) {
+		if ($Type==='DateTime') {
 			$Loc->PrmLst['frm'] = 'yyyy-mm-ddThh:nn:ss';
 			// activate the FRM mode
 			$Loc->ConvMode = 0;
 			$Loc->ConvProtect = false;
 		}
-		if ( ($Block==='onshow') || ($Block==='onload') ) {
-			if ( (substr($Loc->FullName,0,4)=='var.') || ($Loc->FullName==='var') ) {
-				$Block = 'var..version'; // var fields are processed after onshow, and they must have a subname
-			} else {
-				$Block = $Block.'..version';
-			}
-		}
-		$newfield = '['.$Block.';att=Data#ss:Type;if 1=1;then '.$attval.']';
-		$Txt = substr_replace($Txt, $newfield, $Loc->PosEnd+1,0);
-		$Loc->xlType = true; // avoid a double process of such ope values
 	}
 
 	function tag_ChangeFormula(&$Txt,&$Loc,&$Value,$First) {
