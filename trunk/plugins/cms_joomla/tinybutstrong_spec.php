@@ -1,7 +1,7 @@
 <?php
 
 /* Specific functions for the TinyButStrong plugin, can feet to the Joomla CMS.
-Version 2010-09-22
+Version 2011-02-10
 */
 
 function tbs_plugin_SqlDbInit(&$TBS) {
@@ -16,7 +16,12 @@ function tbs_plugin_SqlDbInit(&$TBS) {
 }
 
 function tbs_plugin_SqlDbId(&$DbSrc) {
-	return $DbSrc->_resource;
+	// tbs_plugin_SqlDbId($TBS->_CmsDbSrc) is called for Direct-MergeBlock in "tinybutstrong_comm.php"
+	if (version_compare(JVERSION,'1.6.0','<')) {
+		return $DbSrc->_resource; // Joomla 1.5
+	} else {
+		return $DbSrc->getConnection(); // Joomla >= 1.6
+	}
 }
 
 function tbs_plugin_SqlDbChange(&$DbSrc, $NewDbName) {
@@ -50,7 +55,11 @@ function tbs_plugin_GetOption($OptName, $DefaultValue) {
 	static $pluginParams = false;
 	if ($pluginParams===false) {
 		$plugin = &JPluginHelper::getPlugin('content', 'tinybutstrong');
-		$pluginParams = new JParameter($plugin->params);
+		if (version_compare(JVERSION,'1.6.0','<')) {
+			$pluginParams = new JParameter($plugin->params); // Joomla = 1.5
+		} else {
+			$pluginParams = new JRegistry($plugin->params); // Joomla >= 1.6
+		}
 	}
 	$OptValue = $pluginParams->def($OptName,$DefaultValue);
 	return $OptValue;

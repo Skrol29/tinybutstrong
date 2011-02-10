@@ -1,6 +1,6 @@
 <?php
-/* TBS Dynamic Articles, a content plugin for Joomla 1.5
-Version 2010-09-22
+/* TBS Dynamic Articles, a content plugin for Joomla 1.5 and 1.6
+Version 2011-02-10
 This plugin is under the GPL license version 3.
 */
 
@@ -23,6 +23,11 @@ class plgContentTinyButStrong extends JPlugin
   function plgContentTinyButStrong( &$subject ) {
     parent::__construct( $subject );
   }
+
+	function onContentPrepare($context, &$article ) {
+		// Joomla 1.6
+		$this->onPrepareContent($article, $context, false);
+	}
 
 	function onPrepareContent( &$article, &$params, $limitstart ) {
 
