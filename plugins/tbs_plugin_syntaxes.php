@@ -5,15 +5,17 @@
 TinyButStrong Plug-in: this is a template plug-in that shows syntaxes for all events
 Version 1.4 , on 2008-02-29, by Skrol29
 Version 1.5 , on 2010-02-16, by Skrol29: rename argument $HtmlCharSet into $Charset
+Version 1.6 , on 2011-02-10, by Skrol29: direct commands
 ********************************************************
 */
 
 // Name of the class is a keyword used for Plug-In authentication. So it's better to save it into a constant.
 define('TBS_THIS_PLUGIN','clsTbsThisPlugIn');
 
-// Commands (direct commands are supported since TBS version 3.7.0)
-define('TBS_THIS_COMMAND1','clsTbsThisPlugIn_c1');
-define('TBS_THIS_COMMAND2','clsTbsThisPlugIn_c2');
+// Constants for direct commands (direct commands are supported since TBS version 3.6.2)
+// Direct command must be a string wich is prefixed by the name of the class followed by a dot (.).
+define('TBS_THIS_COMMAND1','clsTbsThisPlugIn.command1');
+define('TBS_THIS_COMMAND2','clsTbsThisPlugIn.command1');
 
 // Put the name of the class into global variable array $_TBS_AutoInstallPlugIns to have it automatically installed for any new TBS instance.
 // Example :
@@ -41,7 +43,8 @@ class clsTbsThisPlugIn {
 	function OnCommand($x1,$x2) {
 		// Executed when TBS method PlugIn() is called. Arguments are for your own needs.
 		// You can use as many arguments as you want, but they have to be compatible with your PlugIn() calls.
-		// Example:  $TBS->PlugIn(TBS_THIS_PLUGIN,$x1,$x2);
+		// Example with a non-direct command:  $TBS->PlugIn(TBS_THIS_PLUGIN,$x1,$x2);
+		// Example with a direct command:  $TBS->PlugIn(TBS_THIS_COMMAND1, $x2);
 	}
 
 	function BeforeLoadTemplate(&$File,&$Charset) {
