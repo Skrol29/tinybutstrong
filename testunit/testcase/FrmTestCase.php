@@ -90,7 +90,8 @@ class FrmTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>'2001-12-05 15:12:03'),  "{2001-12-05 15:12:03}", "test string values (ISO with hour)");
 		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>'20011205'),  "{2001-12-05 00:00:00}", "test string values (compact without hour)");
 		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>'20011205 15:12:03'),  "{2001-12-05 15:12:03}", "test string values (compact with hour)");
-		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>'Tue, 1 Feb 2011 01:58:44 -0800 (PST)'),  "{2011-02-01 09:58:44}", "test string values (RFC 2822)");
+		$aDateTime = 'Tue, 1 Feb 2011 01:58:44 -0800 (PST)';
+		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>$aDateTime),  "{".date('Y-m-d H:i:s', strtotime($aDateTime))."}", "test string values (RFC 2822)");
 
 		// date format with text parts
 		$this->assertEqualMergeFieldStrings("{[a;frm='\"date(yyyy-mm-dd)=\"yyyy-mm-dd \"time=\"hh:nn:ss']}", array('a'=>$d),  "{date(yyyy-mm-dd)=2001-11-30 time=21:46:33}", "test date with text parts");
@@ -99,8 +100,7 @@ class FrmTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>false),  "{}", "test unexpected values: false");
 		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>true),  "{1}", "test unexpected values: true"); // TBS performs an implicite conversion from true to string
 		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>''),  "{}", "test unexpected values: empty string");
-		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>0),  "{1970-01-01 00:00:00}", "test unexpected values: 0"); // 0 is a timsetamp for the sart of unix dates
-		
+		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>0),  "{".date('Y-m-d H:i:s', 0)."}", "test unexpected values: 0"); // 0 is a timsetamp for the start of unix dates
 	}
 
 	function testConditionalFormats() {
@@ -143,11 +143,11 @@ class FrmTestCase extends TBSUnitTestCase {
 		*/
 	
 		// one format
-		$this->getTBSInstance("{[onload;tplfrms;money=0 000,00€]}{[a;frm=money]}");
+		$this->createTBSInstance("{[onload;tplfrms;money=0 000,00€]}{[a;frm=money]}");
 		$this->assertEqualMergeFieldStrings($this->tbs->Source, array('a'=>3128.495), "{}{3 128,50€}", "test template formats (one)");
 
 		// several formats
-		$this->getTBSInstance("{[onload;tplfrms;money=0 000,00€;dt=dd/mm/yyyy;int=000000.]}{[a;frm=money]|[a;frm=int]|[d;frm=dt]}");
+		$this->createTBSInstance("{[onload;tplfrms;money=0 000,00€;dt=dd/mm/yyyy;int=000000.]}{[a;frm=money]|[a;frm=int]|[d;frm=dt]}");
 		$this->assertEqualMergeFieldStrings($this->tbs->Source, array('a'=>3128.495, 'd'=>'2011-02-03' ), "{}{3 128,50€|003128|03/02/2011}", "test template formats (several)");
 		
 	}
