@@ -3,14 +3,20 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.6.2-rc-2011-02-09 for PHP 4
-Date     : 2011-02-09
+Version  : 3.6.2-rc-2011-02-22 for PHP 4
+Date     : 2011-02-22
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
 This library is free software.
 You can redistribute and modify it even for commercial usage,
 but you must accept and respect the LPGL License version 3.
+*/
+/*
+[ok] f_Misc_GetFile: no longer use file_exists() because file_exists() doesn't use include_path and the __FILE__ path.
+[ok] f_Misc_GetFile: found the correct size using fstat().
+[ok] [onshow..template_date] now call f_Misc_GetFile() in order to be sure to found the file the same way.
+[ok] mtype=*m or m* don't use encapsulation level, no can found <br />
 */
 // Check PHP version
 if (version_compare(PHP_VERSION,'4.0.6')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 4.0.6 or higher.';
@@ -493,7 +499,7 @@ var $ObjectRef = false;
 var $NoErr = false;
 var $Assigned = array();
 // Undocumented (can change at any version)
-var $Version = '3.6.2-rc-2011-02-09';
+var $Version = '3.6.2-rc-2011-02-22';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -1379,7 +1385,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 			break;
 		case 3:
 			$Loc->Enlarged = true;
-			$Loc2 = $this->f_Xml_FindTag($Txt,$Loc->PrmLst['magnet'],true,$Loc->PosBeg,false,1,false);
+			$Loc2 = $this->f_Xml_FindTag($Txt,$Loc->PrmLst['magnet'],true,$Loc->PosBeg,false,false,false);
 			if ($Loc2!==false) {
 				$Loc->PosBeg = $Loc2->PosBeg;
 				if ($Loc->PosEnd<$Loc2->PosEnd) $Loc->PosEnd = $Loc2->PosEnd;
@@ -1387,7 +1393,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 			break;
 		case 4:
 			$Loc->Enlarged = true;
-			$Loc2 = $this->f_Xml_FindTag($Txt,$Loc->PrmLst['magnet'],true,$Loc->PosBeg,true,1,false);
+			$Loc2 = $this->f_Xml_FindTag($Txt,$Loc->PrmLst['magnet'],true,$Loc->PosBeg,true,false,false);
 			if ($Loc2!==false) $Loc->PosEnd = $Loc2->PosEnd;
 			break;
 		case 5:
@@ -2121,7 +2127,7 @@ function meth_Merge_AutoSpe(&$Txt,&$Loc) {
 		case 'version': $x = $this->Version; break;
 		case 'script_name': $x = basename(((isset($_SERVER)) ? $_SERVER['PHP_SELF'] : $GLOBALS['HTTP_SERVER_VARS']['PHP_SELF'] )); break;
 		case 'template_name': $x = $this->_LastFile; break;
-		case 'template_date': $x = filemtime($this->_LastFile); break;
+		case 'template_date': $x = ''; if ($this->f_Misc_GetFile($x,$this->_LastFile,'',false)) $x = $x['mtime']; break;
 		case 'template_path': $x = dirname($this->_LastFile).'/'; break;
 		case 'name': $x = 'TinyButStrong'; break;
 		case 'logo': $x = '**TinyButStrong**'; break;
@@ -3155,21 +3161,29 @@ static function f_Misc_DelDelimiter(&$Txt,$Delim) {
 	}
 }
 
-static function f_Misc_GetFile(&$Txt,&$File,$LastFile='') {
+static function f_Misc_GetFile(&$Res,&$File,$LastFile='',$Contents=true) {
 // Load the content of a file into the text variable.
-	$Txt = '';
-	if (!file_exists($File)) {
+	$Res = '';
+	$fd = @fopen($File,'r',true); // 'rb' if binary for some OS. fopen() uses include_path and search on the __FILE__ directory while file_exists() doesn't.
+	if ($fd===false) {
 		if ($LastFile==='') return false;
-		$File = dirname($LastFile).'/'.$File;
-		if (!file_exists($File)) return false;
+		$File2 = dirname($LastFile).'/'.$File;
+		$fd = @fopen($File2,'r',true);
+		if ($fd===false) return false;
+		$File = $File2;
 	}
-	$fd = fopen($File,'r',true); // 'rb' if binary for some OS
 	if ($fd===false) return false;
-	$fs = @filesize($File); // return False for an URL
-	if ($fs===false) {
-		while (!feof($fd)) $Txt .= fread($fd,4096);
+	$fs = fstat($fd);
+	if ($Contents) {
+		// Return contents
+		if (isset($fs['size'])) {
+			if ($fs['size']>0) $Res = fread($fd,$fs['size']);
+		} else {
+			while (!feof($fd)) $Res .= fread($fd,4096);
+		}
 	} else {
-		if ($fs>0) $Txt = fread($fd,$fs);
+		// Return stats
+		$Res = $fs;
 	}
 	fclose($fd);
 	return true;
