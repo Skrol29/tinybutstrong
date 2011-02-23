@@ -13,8 +13,11 @@ You can redistribute and modify it even for commercial usage,
 but you must accept and respect the LPGL License version 3.
 */
 /*
-[ok] file_exists() no longer used for GetFile()
-[  ] mtype=*m or m* don't use encapsulation level, no can found <br />
+[ok] f_Misc_GetFile: no longer use file_exists() because file_exists() doesn't use include_path and the __FILE__ path.
+[ok] f_Misc_GetFile: found the correct size using fstat().
+[ok] [onshow..template_date] now call f_Misc_GetFile() in order to be sure to found the file the same way.
+[ok] mtype=*m or m* don't use encapsulation level, no can found <br />
+[ok] bug: when ondata is used on a array string then $CurrRec is not an array => "Warning: Cannot use a scalar value as an array in" (http://www.tinybutstrong.com/forum.php?thr=2673)
 */
 // Check PHP version
 if (version_compare(PHP_VERSION,'5.0')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 5.0 or higher. You should try with TinyButStrong Edition for PHP 4.';
@@ -383,6 +386,7 @@ public function DataFetch() {
 			if ((!is_array($this->CurrRec)) and (!is_object($this->CurrRec))) $this->CurrRec = array('key'=>$this->RecKey, 'val'=>$this->CurrRec);
 			$this->RecNum++;
 			if ($this->OnDataOk) {
+				$this->OnDataArgs[1] = &$this->CurrRec; // Reference has changed if ($this->SubType===2)
 				if ($this->OnDataPrm) call_user_func_array($this->OnDataPrmRef,$this->OnDataArgs);
 				if ($this->OnDataPi) $this->TBS->meth_PlugIn_RunAll($this->OnDataPiRef,$this->OnDataArgs);
 				if ($this->SubType!==2) $this->RecSet[$this->RecKey] = $this->CurrRec; // save modifications because array reading is done without reference :(
@@ -448,7 +452,6 @@ public function DataFetch() {
 	if ($this->CurrRec!==false) {
 		$this->RecNum++;
 		if ($this->OnDataOk) {
-			$this->OnDataArgs[1] = &$this->CurrRec; // Reference has changed if ($this->SubType===2)
 			if ($this->OnDataPrm) call_user_func_array($this->OnDataPrmRef,$this->OnDataArgs);
 			if ($this->OnDataPi) $this->TBS->meth_PlugIn_RunAll($this->OnDataPiRef,$this->OnDataArgs);
 		}
