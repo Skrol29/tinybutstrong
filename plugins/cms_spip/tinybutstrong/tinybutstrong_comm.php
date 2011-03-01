@@ -1,7 +1,7 @@
 <?php
 
 /* Common functions for the TinyButStrong plugin, can feet to any CMS.
-Version 2009-10-08
+Version 2009-12-14
 */
 
 function tbs_plugin_Loop(&$TBS, $p1, $tag_beg, $tag_end) {
@@ -127,10 +127,11 @@ function tbs_plugin_Loop(&$TBS, $p1, $tag_beg, $tag_end) {
 					tbs_plugin_AddError($TBS, "parameter 'embedded' is not allowed. See plugin configuration.");
 				}
 			}
+
+			$p1 = strpos($TBS->Source,$tag_beg);
 			
 		}
 		
-		$p1 = strpos($TBS->Source,$tag_end);
 		
 	} while ($p1!==false);
 
@@ -186,10 +187,10 @@ function tbs_plugin_CheckArticle($ArtId) {
 
 function tbs_plugin_InitTBS(&$TBS, $ArtText) {
 
-	if (version_compare(PHP_VERSION, '5.0.0', '>=')) {
-		include_once('tinybutstrong_class_php5.php');
-	} else {
+	if (version_compare(PHP_VERSION,'5.0')<0) {
 		include_once('tinybutstrong_class_php4.php');
+	} else {
+		include_once('tinybutstrong_class_php5.php');
 	}
 
 	$Opt_ChrBeg = tbs_plugin_GetOption('ChrBeg', '');
