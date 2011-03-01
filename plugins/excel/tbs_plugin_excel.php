@@ -5,12 +5,6 @@
 TinyButStrong plug-in: Excel Spreadsheets
 Version 1.1.0, on 2011-02-03, by Skrol29, for TBS version >= 3.6.2
 ********************************************************
-fixes:
-[ok] Warning:  Parameter 4 to clsTbsExcel::BeforeMergeBlock() expected to be a reference, value given [...]
-[ok] Strict Standards: call_user_func() expects parameter 1 to be a valid callback, non-static method clsTbsExcel::f_XmlConv() should not be called statically in ...\tbs_class.php on line 2411
-[ok] add possibility to save the contents in a local file
-[ok] avoid the download if a PHP is displayed (otherwise the contents is cut)
-[  ] check cell types with fields not in a block (onload+onshow)
 */
 
 // Name of the class is a keyword used for Plug-In authentication. So i'ts better to save it into a constant.
@@ -26,7 +20,7 @@ class clsTbsExcel {
 	// TBS events -----------------------------
 
 	function OnInstall() {
-		$this->Version = '1.1.0-dev'; // Version can be displayed using [onshow..tbs_info] since TBS 3.2.0
+		$this->Version = '1.1.0'; // Version can be displayed using [onshow..tbs_info] since TBS 3.2.0
 		// Constants for the plug-in
 		$this->TypeLst  = array('xlNum'=>'Number', 'xlDT'=>'DateTime', 'xlStr'=>'String', 'xlErr'=>'Error', 'xlBoo'=>'Boolean');
 		$this->TypeLst2 = array('number'=>'Number', 'date'=>'DateTime', 'string'=>'String', 'error'=>'Error', 'boolean'=>'Boolean');
