@@ -4,7 +4,6 @@
 /*
 1) Home›Administer›Site building›Modules => enable "Dynamic pages with TinyButStrong"
 2) Home›Administer›Site configuration›Input Formats => Add 
-
 */
 
 function tbs_help($path, $arg) {
@@ -22,53 +21,53 @@ function tbs_help($path, $arg) {
 	http://api.drupal.org/api/function/hook_filter
 */
 function tbs_filter($op, $delta = 0, $format = -1, $text = '', $cache_id  = 0) {
-  switch ($op) {
-  case 'list':
-  	return array(0=> t('Dynamic content with TinyButStrong')); // Title displayed in the "Add input format" screen
-  case 'no cache':
-  	return true; // avoid cache for this filter => the node must be dynamic, this is the main goal
-  case 'description':
-  	return "Activate TBS tags that produce dynamic content automatically or trought a custom script."; // displayed in "Home›Administer›Site configuration›Input Formats"
-  case 'prepare':
-  	return $text;
-  case 'process':
-  	tbs_merge_node($text);
-  	return $text;
-  case 'settings':
-  	// displayed in "Home›Administer›Site configuration›Input formats›TBS›Configure"
-    $form['tbs_filter'] = array('#type' => 'fieldset', '#title' => t('Dynamic content with TinyButStrong'), '#value' => t('You can define a global list of smileys on the !page.', array('!page' => l(t('smileys settings page'), 'admin/settings/tbs'))));
-    return $form;
-  }
+	switch ($op) {
+	case 'list':
+		return array(0=> t('Dynamic content with TinyButStrong')); // Title displayed in the "Add input format" screen
+	case 'no cache':
+		return true; // avoid cache for this filter => the node must be dynamic, this is the main goal
+	case 'description':
+		return "Activate TBS tags that produce dynamic content automatically or trought a custom script."; // displayed in "Home›Administer›Site configuration›Input Formats"
+	case 'prepare':
+		return $text;
+	case 'process':
+		tbs_merge_node($text);
+		return $text;
+	case 'settings':
+		// displayed in "Home›Administer›Site configuration›Input formats›TBS›Configure"
+		$form['tbs_filter'] = array('#type' => 'fieldset', '#title' => t('Dynamic content with TinyButStrong'), '#value' => t('You can define a global list of smileys on the !page.', array('!page' => l(t('smileys settings page'), 'admin/settings/tbs'))));
+		return $form;
+	}
 }
 
 function tbs_merge_node(&$text) {
 
-		// Search for plugin tags inside the article. There is a loop because the article can support several mergings.
-		$tag_beg = '{tbs}';
-		$tag_end = '{/tbs}';
-		$p1 = strpos($text, $tag_beg);
-		if ($p1===false) return; // If no TBS tag, then the node doesn't need the plugin.
+	// Search for plugin tags inside the article. There is a loop because the article can support several mergings.
+	$tag_beg = '{tbs}';
+	$tag_end = '{/tbs}';
+	$p1 = strpos($text, $tag_beg);
+	if ($p1===false) return; // If no TBS tag, then the node doesn't need the plugin.
 
-		include_once('tinybutstrong_comm.php');
-		include_once('tinybutstrong_spec.php');
+	include_once('tinybutstrong_comm.php');
+	include_once('tinybutstrong_spec.php');
 
-		$TBS = false;
+	$TBS = false;
 
-		// Drupal: The node Id cannot be retreive in the context of a filter process because the filter can be applied on a combination of nodes.
-		//if (!tbs_plugin_CheckArticle($NodeId)) return ''; // Exit the plug if the node is not allowed
-		
-		tbs_plugin_InitTBS($TBS, $text);
-		tbs_plugin_SqlDbInit($TBS); // retrieve SQL information and set them as custom property of $TBS
+	// Drupal: The node Id cannot be retreive in the context of a filter process because the filter can be applied on a combination of nodes.
+	//if (!tbs_plugin_CheckArticle($NodeId)) return ''; // Exit the plug if the node is not allowed
+	
+	tbs_plugin_InitTBS($TBS, $text);
+	tbs_plugin_SqlDbInit($TBS); // retrieve SQL information and set them as custom property of $TBS
 
-		// Wrappers for developpers
-		// $TBS->DrupalDb = $TBS->_CmsDbSrc;
+	// Wrappers for developpers
+	// $TBS->DrupalDb = $TBS->_CmsDbSrc;
 
-		$tag_lst = tbs_plugin_Loop($TBS, $p1, $tag_beg, $tag_end); // Search for all TBS tags and process them.
+	$tag_lst = tbs_plugin_Loop($TBS, $p1, $tag_beg, $tag_end); // Search for all TBS tags and process them.
 
-		$text = tbs_plugin_EndTBS($TBS); // ends the merge.
+	$text = tbs_plugin_EndTBS($TBS); // ends the merge.
 
-		unset($TBS);
-		return true;
+	unset($TBS);
+	return true;
 
 }
 
@@ -77,16 +76,16 @@ function tbs_merge_node(&$text) {
 // Implements hook_menu() http://api.drupal.org/api/function/hook_menu
 // The menu is added in both "Home›Administer›Site configuration" and "Home›Administer›Site building›Administration by module"
 function tbs_menu() {
-  $items = array();
-  $items['admin/settings/tbs'] = array(
-    'title' => 'TinyButStrong',
-    'description' => 'Settings for the module: Dynamic Content with TinyButStrong Template Engine',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('tbs_settings'),
-    'access arguments' => array('access administration pages'),
-    'type' => MENU_NORMAL_ITEM,
-   );
-  return $items;
+	$items = array();
+	$items['admin/settings/tbs'] = array(
+		'title' => 'TinyButStrong',
+		'description' => 'Settings for the module: Dynamic Content with TinyButStrong Template Engine',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('tbs_settings'),
+		'access arguments' => array('access administration pages'),
+		'type' => MENU_NORMAL_ITEM,
+	);
+	return $items;
 }
 
 // called defined by the hook onthisdate_menu().
@@ -124,16 +123,6 @@ function tbs_settings() {
     '#size' => 10,
     '#required' => false,
   );
-/*
-  $form['tbs_option_AllowedIds'] = array(
-    '#title' => t('Allowed nodes'),
-    '#description' => t("Default value is empty ('') which mean none. Enter one or several id of nodes allowed to use plugin tags, separated them with comas (,). An error is prompted if a non-allowed article contains a plugin tag such as {tbs}. Set this parameter to limit the articles that Drupal authors can use plugin tags with. You can use '*' to allow all articles, but use this value carefully because if option Direct MergeBlock is also allowed then any Drupal author will be able to display the Drupal database."),
-    '#default_value' => '',
-    '#type' => 'textfield',
-    '#size' => 30,
-    '#required' => false,
-  );
-*/
   $form['tbs_option_MergeBlock'] = array(
     '#title' => t('Direct MergeBlock'),
     '#description' => t("Allow plugin tags such as {tbs}mergeblock=...,sql=...,db=...{/tbs}."),
@@ -158,24 +147,6 @@ function tbs_settings() {
     '#size' => 60,
     '#required' => false,
   );
-  $form['tbs_option_Embedded'] = array(
-    '#title' => t('Embedded scripts'),
-    '#description' => t("Allow plugin tags such as {tbs}embedded{/tbs}. Please note that those tags allow to run PHP scripts which is embedded inside an article."),
-    '#default_value' => 'no',
-    '#type' => 'select',
-    '#options' => array('no'=>t('Forbidden'), 'all'=>t('Allowed')),
-    '#required' => true,
-  );
-/*
-  $form['tbs_option_FullRightsIds'] = array(
-    '#title' => t('Full rights nodes'),
-    '#description' => t("Default value is empty. Ids of nodes which are allowed to use all plugin tags with all permissions. You can seperate Ids with a coma (,). You can use '*' to allow all nodes. You can use this parameter to let Admin users to use plugin tags for their own nodes."),
-    '#default_value' => '',
-    '#type' => 'textfield',
-    '#size' => 30,
-    '#required' => false,
-  );
-*/
 	// retrieve saved values for the HTML form
 	$opt_lst = array_keys($form);
 	foreach ($opt_lst as $opt) {

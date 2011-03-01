@@ -1,0 +1,29 @@
+Changes from the previous versions of TBS Dynamic Articles (any CMS)
+
+[ok] delete the "Embedded scripts" feature
+
+Specific to Drupal ?
+[ok] delete the "AllowedIds" option
+[ok] delete the "Full rights articles" option
+
+[  ] default value for "script location" should be "site\all\tbs_scripts"
+[  ] allows only Direct MergeBlock with "SELECT" queries
+[  ] option for TBS delimiters should be only for Direct MergeBlock, not script + add a wrapper to set de delimiters from de PHP script
+[  ] option for TBS variables should be only for Direct MergeBlock, not script
+[  ] provide a wrapper that provide a TbsSQL instance
+
+CMS info
+[  ] provide an PHP wrapper that provide current user info : id+name+role+... 
+[  ] provide an PHP wrapper that tells if a user U is in the role R
+[  ] provide an TBS special field that return the current URL + current URL havin '&' or '?' for GET parameters
+
+
+
+
+
+
+
+
+
+
+

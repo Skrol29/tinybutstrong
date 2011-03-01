@@ -40,9 +40,9 @@ h3 {
 <body>
 <div align="center">
   <h1>Dynamic Content with TinyButStrong</h1>
-  version 1.0-beta<br />
+  version 1.5.0-beta<br />
   <strong>a  module for Drupal 6</strong> <br />
-  (help file updated on 2011-01-05)</div>
+  (help file updated on 2011-03-01)</div>
 <p> This module allows to include dynamic content  in Drupal pages using the <a href="http://www.tinybutstrong.com">TinyButStrong</a> Template Engine. 
   The possibilities of dynamic content are very rich. For example, it can be listing data from MySQL tables, or it can complete user interface asking and processing data given by the user.<br />
   TinyButStrong is very well adapted for CMS because, unlike other Template Engines, it allows to have templates build with visual or WYSIWYG editors. It means that a template can be a Joomla article build with the inline Html editor provide by default (TinyMCE).<br />
@@ -50,32 +50,21 @@ h3 {
 <h2>Requirement:</h2>
 Drupal 6.x. Does not work with Drupal 7 yet.<br />
 <h2>Installation:</h2>
-<p>Extract the files of the module  to your Drupal installation (normally into sites/all/modules).<br />
+<p>Extract the archive of the module  into your Drupal installation (normally into sites/all/modules).<br />
 Then enable the module in <em>Administer &gt; Site building &gt; Modules</em>.<br />
 You can eventually configure the module behavior in <em>Home &rsaquo; Administer &rsaquo; Site configuration &rsaquo; TinyButStrong</em>.</p>
 <h2>How it works:</h2>
-<p>Since the module is installed and activated in the Drupal website, a new Format is available when you create or edit a content (a Page, a Story, or other custom content type). The new format is named &quot;Dynamic content with TinyButStrong Template Engine&quot;.<br />
-  When this format is choosen in the content parameters, then you can use 3 types tags (Direct MergeBlock, External Script   and Internal Script) that in the content.<br />
-Because dynamic content can be dangeroulsy powerfull, by default only the Administrator has permission to apply this format to a content or to edit a content that has this format.</p>
+<p>Since the module is installed and activated in the Drupal website, a new Input Format is available when you create or edit a content (a Page, a Story, or other custom content type). The new format is named &quot;Dynamic content with TinyButStrong Template Engine&quot;.  When this format is choosen in the content parameters, then you can use 2 types of TBS tags (see below) that you can put in the content's body which will be found an processed by TinyButStrong.</p>
+<p>  Because dynamic content can be dangeroulsy powerfull, by default only the Administrator has permission to apply this Input Format to a content and to edit a content that has this Input Format.</p>
 <u> </u>
-<p>xxxxx<br />
-  At the installation, the module creates a new Filter, and a new Format. The Format is defined to use this filter, but with no role persmission (see &quot;Administer &rsaquo; Site configuration &rsaquo; Input formats&quot;).<br />
-  Format: combination of one or several Filters.<br />
-  <br />
-  <br />
-  Manage permissions for using the TinyButStrong module :<br />
-- got to &quot;Administer   &rsaquo; Site configuration &rsaquo; Input formats&quot;, choose the TinyButStrong format, and <br />
-  Drupal will deny edit mode to a node if the current user hasn't the permission to the filter applied on the node. So the user must has a role that allows access to the 
-  TinyButStrong filter.</p>
+<p>You can change this security level at you own risk. Permissions about Input Formats can be changed in <em>Administer &gt; Site configuration &gt; Input Formats</em>.</p>
 <p>  <u>Please note:</u></p>
 <ul>
   <li>You can have several  plugin tags (defined by {tbs} and {/tbs}) in the same node. They will be processed in order.</li>
   <li>All plugin tags can be placed anywhere, they will be deleted before the display.</li>
-  <li>You can tune several security parameters at the Joomla Administration interface.</li>
-  <li>The default Joomla  PDF  button won't work correctly with dynamic articles, unless you make <a href="#pdf">some changes</a>.<br />
-  </li>
+  <li>You can tune several security parameters at the Drupal Administration interface.</li>
 </ul>
-<p>This help file assumes that you understand the basic concepts of Template Engines and more specifically  the TinyButStrong Template Engine.</p>
+<p>This help file assumes that you understand the basic concepts of Template Engines and more specifically  the <a href="http://www.tinybutstrong.com">TinyButStrong</a> Template Engine.</p>
 <h2>Type #1: Direct MergeBlock</h2>
 <p>Syntax:
   {tbs}mergeblock=<span class="option">blockname</span>;db=<span class="option">dbname</span>;sql=<span class="option">sqlstatement</span>{/tbs}<br />
@@ -99,9 +88,9 @@ Because dynamic content can be dangeroulsy powerfull, by default only the Admini
     <td>The SQL statement that should return the data to display.<br />
       Since version 1.02 of this plugin: In order to facilitate the usage of operators '&lt;' and '&gt;' in the SQL statement, the plugin automatically replaces strings '-+' and '+-' with those operators. You can prevent this behavior by adding the parameter <span class="option">sql_preserve</span> in the  plugin tag.<br />
       Example:<br />
-      <span class="source">{tbs}mergeblock=u;sql=SELECT name FROM t_user WHERE id+-0{/tbs}</span><br />
+      <span class="source">{tbs}mergeblock=u;sql=SELECT name FROM users WHERE uid+-0{/tbs}</span><br />
       is the same as<br />
-      <span class="source">{tbs}mergeblock=u;sql=SELECT name FROM t_user WHERE id&gt;0;sql_preserve{/tbs}</span></td>
+      <span class="source">{tbs}mergeblock=u;sql=SELECT name FROM users WHERE uid&gt;0;sql_preserve{/tbs}</span></td>
   </tr>
 </table>
 <br />
@@ -150,8 +139,8 @@ The script should drive the merging assuming that the current article is already
 &nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;name&lt;/td&gt;<br />
 &nbsp;&nbsp;&lt;/tr&gt;<br />
 &nbsp;&nbsp;&lt;tr&gt;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;[b1.uid;block=tr]&lt;/td&gt;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;[b1.name]&lt;/td&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;[u.uid;block=tr]&lt;/td&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;[u.name]&lt;/td&gt;<br />
 &nbsp;&nbsp;&lt;/tr&gt;<br />
 &lt;/table&gt; </div>
   <br />
@@ -162,15 +151,15 @@ The script should drive the merging assuming that the current article is already
     <br />
     $key = (isset($_GET['key'])) ? intval($_GET['key']) : 0;<br />
     <br />
-    $TBS-&gt;MergeBlock('u', $active_db, 'SELECT uid, name FROM users WHERE id='.$key);<br />
+    $TBS-&gt;MergeBlock('u', $active_db, 'SELECT id, name FROM t_user WHERE id='.$key);<br />
     <br />
   ?&gt;</div>
   <br />
   <u>myappli.php:</u> (external script using a different MySQL connection) <br />
   <div class="source">&lt;?php<br />
-    $key = (isset($_GET['key'])) ? intval($_GET['key']) : 0;<br />
+    $key = (isset($_GET['key'])) ? intval($_GET['key']) : 1;<br />
     $cid2 = mysql_connect('localhost', 'user', 'password');<br />
-    $TBS-&gt;MergeBlock('u','mysql','SELECT name, email FROM association_users WHERE id='.$key);<br />
+    $TBS-&gt;MergeBlock('u','mysql','SELECT uid, name FROM  users WHERE uid='.$key);<br />
     mysql_close($cid2);<br />
     ?&gt;</div>
 </div>
@@ -198,7 +187,7 @@ Two functions are given by the TinyButStrong plug-in to work with  the Drupal da
     <td align="left" valign="top">&nbsp;</td>
     <td align="left" valign="top"><em>(na)</em></td>
     <td align="left" valign="top">&nbsp;</td>
-    <td align="left" valign="top">Not possible because the plug-in is a Drupal Filter and can be applied on a text string which is a combination of contents.</td>
+    <td align="left" valign="top">Not possible because this plug-in is a Drupal Filter and can be applied on a text string which may be a combination of contents.</td>
   </tr>
   <tr>
     <td align="left" valign="top" nowrap="nowrap">Database connection</td>
@@ -216,44 +205,8 @@ Two functions are given by the TinyButStrong plug-in to work with  the Drupal da
   </tr>
 </table>
 <p>You can found more coding ressource at the <a href="http://api.drupal.org/api/drupal/6">Drupal API Reference</a></p>
-<h2>Type #3:  Internal script</h2>
-Syntax:
-{tbs}embedded<span class="option"></span>;db=<span class="option">dbname</span>{/tbs}<br />
-<br />
-This type of plugin tag is the same as the previous one but instead of  an external script, it run the parts of PHP code which are embedded in the current article. This can be very dangerous because all PHP commands are available. The parts of PHP code must be placed between tags <span class="option">&lt;!--TBS</span> and <span class="option">--&gt;</span>. Those tags are compatible with HTML comment tags, which means that they won't destroy the article looking, but they cannot be seen is visual mode. You must edit them by editing the HTML source. The PHP code is deleted before the article is displayed.<br />
-<br />
-<table border="0" cellspacing="0" cellpadding="4">
-  <tr>
-    <td width="100" valign="top"><span class="option">dbname</span>:</td>
-    <td>Optional. Name of the database to select before the script is run. The database must be available with the current Drupal connection.  You can specify the keyword <span class="option">%current%</span> for the Drupal database.<br />
-      If you want  to connect to a database with another account and password, then your script  must open this connection by itself, and you should specify explicitly the new  open connected for any use of MergeBlock().</td>
-  </tr>
-</table>
-<h3> Example:</h3>
-<div class="decal"><u>Drupal Page:</u><br />
-  <div class="source">{tbs}embedded{/tbs}<br />
-    <br />
-    &lt;table border=&quot;1&quot;&gt;<br />
-&nbsp;&nbsp;&lt;tr bgcolor=&quot;#CCCCCC&quot;&gt;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;uid&lt;/td&gt;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;name&lt;/td&gt;<br />
-&nbsp;&nbsp;&lt;/tr&gt;<br />
-&nbsp;&nbsp;&lt;tr&gt;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;[b1.uid;block=tr]&lt;/td&gt;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;[b1.name]&lt;/td&gt;<br />
-&nbsp;&nbsp;&lt;/tr&gt;<br />
-&lt;/table&gt; <br />
-<br />
-&lt;!--TBS<br />
-<br />
-$key = (isset($_GET['key'])) ? intval($_GET['key']) : 0;<br />
-$TBS-&gt;MergeBlock('u','mysql','SELECT name, email FROM jos_users WHERE id='.$key);<br />
-<br />
---&gt; <br />
-  </div>
-  <br />
-</div>
+<h2>Change-log</h2>
+<p>Verion 1.5.0-beta: first version<br />
 </p>
-<br />
 </body>
 </html>
