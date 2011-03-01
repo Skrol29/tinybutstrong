@@ -1,8 +1,0 @@
-version 1.0.4 (2009-10-08)
-
-- The default value for the allowed articles option is none ('') instead of all ('*') .
-- Display the unmodified article with an error message when its id is not allowed for TBS tags
-  instead of an error message alone.
-- Fix a bug which made the plugin to not found the customized option file.
-- Uses the most recent version of TBS. 
-

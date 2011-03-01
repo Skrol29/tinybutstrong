@@ -5,15 +5,16 @@
 <title>SPIP plugin: Dynamic Articles with TBS</title>
 <style type="text/css">
 <!--
-body,td,th {
+body, td, th {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 }
-.title-page {
+h1 {
 	font-size: 14px;
 	font-weight: bold;
 }
-.title-rub {
+h2 {
+	font-size: 11px;
 	font-weight: bold;
 }
 .option {
@@ -33,34 +34,25 @@ body,td,th {
 </head>
 
 <body>
-
-<div align="center"><span class="title-page"> Dynamic Articles with TinyButStrong</span><br />
+<div align="center">
+  <h1> Dynamic Articles with TinyButStrong</h1>
   version 1.0 (2009-08-12)<br />
-    <span class="title-rub">a content plugin for SPIP</span> <br />
-  (help file updated on 2009-08-12) </div>
-	
-	<br />
-This plug-in allows to include dynamic contents  in SPIP articles using the <a href="http://www.tinybutstrong.com">TinyButStrong</a> Template Engine. 
-The possibilities of dynamic content are very rich. For example, it can be listing data from MySQL tables, or it can complete user interface asking and processing data given by the user.<br />
-TinyButStrong is very well adapted for CMS because, unlike other Template Engines, it allows to have templates build with visual or WYSIWYG editors.<br />
-<br />
-<span class="title-rub">Requirement:</span><br />
-<br />
-SPIP version 1.9 or higher, including 2.0 or higher. <br />
-<br />
-<span class="title-rub">Installation:</span><br />
-<br />
-Install the plugin using the normal SPIP procedure, using the manual or the automatic way.<br />
-Direct link for auto install:
-<!--SPIP 2.0.9 uses the function basename() to build the downloaded temp file name. Under a Windows OS, the download process will failed because files with special chars are not allowed. That's why the direct download URL ends with "./filename". Thus, the basename() function will return a valid temporary file name. -->
-<a href="http://www.tinybutstrong.com/download/download.php?sid=136&amp;file=./spip_plugin_tinybutstrong.zip">http://www.tinybutstrong.com/download/download.php?sid=136&amp;file=./spip_plugin_tinybutstrong.zip</a><br />
-<br />
-<span class="title-rub">How it works:</span><br />
-<br />
- Since the plug-in is installed and activated in the SPIP website, you can use 3 types of tags (Direct MergeBlock, External Script and Internal Script) that you can put anywhere in your articles.<br />
-Because adding active content in articles can be powerfull, the plug-in has also several options to manage security levels that can be tuned for all articles or for specific articles.<br />
-<u><br />
-Please note:</u><br />
+  <span class="title-rub">a content plugin for SPIP</span> <br />
+  (help file updated on 2011-02-28) </div>
+<p> This plug-in allows to include dynamic contents  in SPIP articles using the <a href="http://www.tinybutstrong.com">TinyButStrong</a> Template Engine. 
+  The possibilities of dynamic content are very rich. For example, it can be listing data from MySQL tables, or it can complete user interface asking and processing data given by the user.<br />
+  TinyButStrong is very well adapted for CMS because, unlike other Template Engines, it allows to have templates build with visual or WYSIWYG editors.</p>
+<h2>Requirement:</h2>
+<p>SPIP version 1.9 or higher, including 2.0 or higher.</p>
+<h2>Installation:</h2>
+<p> Install the plugin using the normal SPIP procedure, using the manual or the automatic way.</p>
+<p> Direct link for auto install: 
+  <!--SPIP 2.0.9 uses the function basename() to build the downloaded temp file name. Under a Windows OS, the download process will failed because files with special chars are not allowed. That's why the direct download URL ends with "./filename". Thus, the basename() function will return a valid temporary file name. --> 
+  <a href="http://www.tinybutstrong.com/dl.php?f=spip_plugin_tinybutstrong.zip&amp;s=136">http://www.tinybutstrong.com/dl.php?f=spip_plugin_tinybutstrong.zip&amp;s=136</a></p>
+<h2>How it works:</h2>
+<p> Since the plug-in is installed and activated in the SPIP website, you can use 3 types of tags (Direct MergeBlock, External Script and Internal Script) that you can put anywhere in your articles.</p>
+<p>Because adding active content in articles can be powerfull, the plug-in has also several options to manage security levels that can be tuned for all articles or for specific articles.</p>
+<u>Please note:</u>
 <table border="0" cellpadding="3" cellspacing="0">
   <tr>
     <td valign="top">&bull;</td>
@@ -86,18 +78,14 @@ Please note:</u><br />
     <td valign="top">&bull;</td>
     <td valign="top">The SPIP shortcut &lt;HTML&gt;&lt;/HTML&gt; enables you to leave a part of the article source as is.</td>
   </tr>
-</table> 
-This help file assumes that you understand the basic concepts of Template Engines and more specifically  the TinyButStrong Template Engine. <br />
-<br />
-<span class="title-rub">TYPE #1: Direct MergeBlock</span><br />
-<br />
-Syntax:
-[tbs]mergeblock=<span class="option">blockname</span>;db=<span class="option">dbname</span>;sql=<span class="option">sqlstatement</span>[/tbs]<br />
-<br /> 
-This type of tag takes the current article as current template and performs a TBS-&gt;MergeBlock() over it.<br />
-The result of the merging is displayed instead of the original article.<br />
-There is no need to code any PHP to use this type of tag.<br />
-<br />
+</table>
+<p>This help file assumes that you understand the basic concepts of Template Engines and more specifically  the TinyButStrong Template Engine. </p>
+<h2>TYPE #1: Direct MergeBlock</h2>
+<p>Syntax:
+  [tbs]mergeblock=<span class="option">blockname</span>;db=<span class="option">dbname</span>;sql=<span class="option">sqlstatement</span>[/tbs]</p>
+<p>This type of tag takes the current article as current template and performs a TBS-&gt;MergeBlock() over it.<br />
+  The result of the merging is displayed instead of the original article.<br />
+  There is no need to code any PHP to use this type of tag.</p>
 <table border="0" cellspacing="0" cellpadding="4">
   <tr>
     <td width="90" valign="top"><span class="option">blockname</span>:</td>
@@ -106,39 +94,34 @@ There is no need to code any PHP to use this type of tag.<br />
   <tr>
     <td width="90" valign="top"><span class="option">dbname</span>:</td>
     <td>Optional. Name of the database where to use the SQL statement. The database must be available with the current SPIP connection.  You can specify the keyword <span class="option">%current%</span> for the SPIP database.<br />
-    If you want to connect to a database with another account and password, you must use another type of tag because this one cannot do it.</td>
+      If you want to connect to a database with another account and password, you must use another type of tag because this one cannot do it.</td>
   </tr>
   <tr>
     <td width="90" valign="top"><span class="option">sqlstatement</span>:</td>
     <td>The SQL statement that should return the data to display.<br />
       In order to facilitate the usage of operators '&lt;' and '&gt;' in the SQL statement, the plugin automatically replaces strings '-+' and '+-' with those operators. You can prevent this behavior by adding the parameter <span class="option">sql_preserve</span> in the [tbs] tag.<br />
       Example:<br />
-<span class="source">[tbs]mergeblock=u;sql=SELECT name FROM t_user WHERE id+-0[/tbs]</span><br />
-is the same as<br />
-<span class="source">[[tbs]mergeblock=u;sql=SELECT name FROM t_user WHERE id&gt;0;sql_preserve[/tbs]</span></td>
+      <span class="source">[tbs]mergeblock=u;sql=SELECT name FROM t_user WHERE id+-0[/tbs]</span><br />
+      is the same as<br />
+      <span class="source">[[tbs]mergeblock=u;sql=SELECT name FROM t_user WHERE id&gt;0;sql_preserve[/tbs]</span></td>
   </tr>
 </table>
-<br />
-
-Example: <br />
+<p>Example:</p>
 <div class="decal"><u>SPIP article:</u><br />
   <div class="source">&lt;intro&gt;Dynamic article example: Direct MergeBlock&lt;/intro&gt;<br />
-    [tbs]mergeblock=u;sql=SELECT * FROM spip_meta ORDER BY nom[/tbs]<br />    
+    [tbs]mergeblock=u;sql=SELECT * FROM spip_meta ORDER BY nom[/tbs]<br />
     || List of meta info ||<br />
     | {{name}} |<br />
     | [u.nom;block=tr] |<br />
   </div>
-  <br />
-You can notice that the TBS block is define with block=tr. This is because the plugin works the article after text formatting shortcuts for SPIP are replaced. &quot;|&quot; are shortcuts for a table presnetation, they will be replaced with &lt;table&gt;&lt;tr&gt; and &lt;td&gt; tags.</div>
-<br />
-<span class="title-rub">TYPE #2:  External script</span><br />
-<br />
-Syntax:
-[tbs]script=<span class="option">scriptname.php</span>;db=<span class="option">dbname</span>[/tbs]<br />
-<br />
-This type of tag is the same as the previous one but instead of a simple TBS-&gt;MergeBlock(), it run the specified PHP script.<br />
-The script should drive the merging assuming that the current article is already loaded as  the current template. There is no need to call TBS-&gt;Show() because the plugin will do it. Please note that your PHP script is run in the same context as a function and that the local variable <span class="option">$TBS</span> contains the ready to use TBS instance. The local variable <span class="option">$PrmLst</span> contains the parameters of the [tbs] tag if you need it.<br />
-<br />
+  <p> You can notice that the TBS block is define with block=tr. This is because the plugin works the article after text formatting shortcuts for SPIP are replaced. &quot;|&quot; are shortcuts for a table presnetation, they will be replaced with &lt;table&gt;&lt;tr&gt; and &lt;td&gt; tags.</p>
+</div>
+<h2>TYPE #2:  External script</h2>
+<p>Syntax:
+  [tbs]script=<span class="option">scriptname.php</span>;db=<span class="option">dbname</span>[/tbs]</p>
+<p> This type of tag is the same as the previous one but instead of a simple TBS-&gt;MergeBlock(), it run the specified PHP script.<br />
+  The script should drive the merging assuming that the current article is already loaded as  the current template. There is no need to call TBS-&gt;Show() because the plugin will do it. Please note that your PHP script is run in the same context as a function and that the local variable <span class="option">$TBS</span> contains the ready to use TBS instance. The local variable <span class="option">$PrmLst</span> contains the parameters of the [tbs] tag if you need it.<br />
+</p>
 <table border="0" cellspacing="0" cellpadding="4">
   <tr>
     <td width="100" valign="top"><span class="option">scriptname.php</span>:</td>
@@ -147,66 +130,71 @@ The script should drive the merging assuming that the current article is already
   <tr>
     <td width="90" valign="top"><span class="option">dbname</span>:</td>
     <td>Optional. Name of the database to select before the script is run. The database must be available with the current SPIP connection.  You can specify the keyword <span class="option">%current%</span> for the SPIP database.<br />
-    If you want  to connect to a database with another account and password, then your script  must open this connection by itself, and you should specify explicitly the new  open connected for any use of MergeBlock().</td>
+      If you want  to connect to a database with another account and password, then your script  must open this connection by itself, and you should specify explicitly the new  open connected for any use of MergeBlock().</td>
   </tr>
 </table>
-<br />
-Example<br />
+<p>Example</p>
 <div class="decal"><u>SPIP article:</u><br />
   <div class="source">&lt;intro&gt;Dynamic article example: External script&lt;/intro&gt;<br />
     [tbs]script=myappli.php[/tbs]<br />
-    <br />    
+    <br />
     | {{ID}} | {{Title}} |<br />
     | [u.id_article;block=tr] | [u.titre] |<br />
   </div>
   <br />
-    <u>myappli.php:</u> (external script using the same MySQL connection and database) <br />
-    <div class="source"> &lt;?php<br />
-      $key = (isset($_GET['key'])) ? intval($_GET['key']) : 0;<br />
-  $TBS-&gt;MergeBlock('u','mysql','SELECT titre, id_article FROM spip_articles WHERE id_article='.$key);<br />
-  ?&gt; </div>
-    <br />
-    <u>myappli.php:</u> (external script using a different MySQL connection) <br />
-<div class="source">&lt;?php<br />
-  $key = (isset($_GET['key'])) ? intval($_GET['key']) : 0;<br />
-      $cid2 = mysql_connect('localhost', 'user', 'password');<br />
-      $TBS-&gt;MergeBlock('u', $cid2, 'SELECT subname, name FROM table1 WHERE key='.$key);<br />
-      mysql_close($cid2);<br />
+  <u>myappli.php:</u> (external script using the same MySQL connection and database) <br />
+  <div class="source"> &lt;?php<br />
+    $key = (isset($_GET['key'])) ? intval($_GET['key']) : 0;<br />
+    $TBS-&gt;MergeBlock('u','mysql','SELECT titre, id_article FROM spip_articles WHERE id_article='.$key);<br />
+    ?&gt; </div>
+  <br />
+  <u>myappli.php:</u> (external script using a different MySQL connection) <br />
+  <div class="source">&lt;?php<br />
+    $key = (isset($_GET['key'])) ? intval($_GET['key']) : 0;<br />
+    $cid2 = mysql_connect('localhost', 'user', 'password');<br />
+    $TBS-&gt;MergeBlock('u', $cid2, 'SELECT subname, name FROM table1 WHERE key='.$key);<br />
+    mysql_close($cid2);<br />
     ?&gt;</div>
-    <br />
-<br />
 </div>
-<span class="title-rub"></span><br />
-<span class="title-rub">TYPE #3:  Internal script</span><br />
-<br />
-Syntax:
-[tbs]embedded<span class="option"></span>;db=<span class="option">dbname</span>[/tbs]<br />
-<br />
-This type of tag is the same as the previous one but instead of  an external script, it run the parts of PHP code which are embedded in the current article. This can be very dangerous because all PHP commands are available. The parts of PHP code must be placed between tags <span class="option">&lt;!--TBS</span> and <span class="option">--&gt;</span>. Those tags are compatible with HTML comment tags, which means that they won't destroy the article looking, but they cannot be seen is visual mode. You must edit them by editing the HTML source. The PHP code is deleted before the article is displayed.<br />
-<br />
+<h2>TYPE #3: Internal script</h2>
+<p>Syntax:
+  [tbs]embedded<span class="option"></span>;db=<span class="option">dbname</span>[/tbs]</p>
+<p> This type of tag is the same as the previous one but instead of  an external script, it run the parts of PHP code which are embedded in the current article. This can be very dangerous because all PHP commands are available. The parts of PHP code must be placed between tags <span class="option">&lt;!--TBS</span> and <span class="option">--&gt;</span>. Those tags are compatible with HTML comment tags, which means that they won't destroy the article looking, but they cannot be seen is visual mode. You must edit them by editing the HTML source. The PHP code is deleted before the article is displayed. </p>
 <table border="0" cellspacing="0" cellpadding="4">
   <tr>
     <td width="100" valign="top"><span class="option">dbname</span>:</td>
-    <td>Optional. Name of the database to select before the script is run. The database must be available with the current SPIP connection.  You can specify the keyword <span class="option">%current%</span> for the SPIP database.<br />If you want  to connect to a database with another account and password, then your script  must open this connection by itself, and you should specify explicitly the new  open connected for any use of MergeBlock().</td>
+    <td>Optional. Name of the database to select before the script is run. The database must be available with the current SPIP connection.  You can specify the keyword <span class="option">%current%</span> for the SPIP database.<br />
+      If you want  to connect to a database with another account and password, then your script  must open this connection by itself, and you should specify explicitly the new  open connected for any use of MergeBlock().</td>
   </tr>
 </table>
-<br />
-Example: <br />
+<p>Example:</p>
 <div class="decal"><u>SPIP article:</u><br />
   <div class="source">&lt;intro&gt;Dynamic article example: Internal script&lt;/intro&gt;<br />
     [tbs]embedded[/tbs]<br />
     <br />
     | {{ID}} | {{Title}} |<br />
-| [u.id_article;block=tr] | [u.titre] |</div>
+    | [u.id_article;block=tr] | [u.titre] |</div>
   <br />
   <u>Tag embedded in the SPIP article:</u><br />
   <div class="source">&lt;HTML&gt;&lt;!--TBS<br />
     <br />
     $key = (isset($_GET['key'])) ? intval($_GET['key']) : 0;<br />
-$TBS-&gt;MergeBlock('u','mysql','SELECT titre, id_article FROM spip_articles WHERE id_article='.$key);<br />
-  <br />
-  --&gt;&lt;/HTML&gt;</div>
+    $TBS-&gt;MergeBlock('u','mysql','SELECT titre, id_article FROM spip_articles WHERE id_article='.$key);<br />
+    <br />
+    --&gt;&lt;/HTML&gt;</div>
 </div>
-<p>&nbsp;</p>
+<a name="changelog" id="changelog"></a>
+<h2>Change log:</h2>
+version 1.0.5 (2011-02-28)
+<ul>
+  <li>Fixed bug: several plug-in tags are defined, but only the first one is merged.</li>
+</ul>
+version 1.0.4 (2009-10-08)
+<ul>
+  <li>The default value for the allowed articles option is none ('') instead of all ('*') .</li>
+  <li>Display the unmodified article with an error message when its id is not allowed for TBS tags instead of an error message alone.</li>
+  <li>Fix a bug which made the plugin to not found the customized option file.</li>
+  <li>Uses the most recent version of TBS.</li>
+</ul>
 </body>
 </html>
