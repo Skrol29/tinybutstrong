@@ -1,7 +1,7 @@
 <?php
 
 /* Common functions for the TinyButStrong plugin, can feet to any CMS.
-Version 2009-12-14
+Version 2011-03-01
 */
 
 function tbs_plugin_Loop(&$TBS, $p1, $tag_beg, $tag_end) {
@@ -12,7 +12,7 @@ function tbs_plugin_Loop(&$TBS, $p1, $tag_beg, $tag_end) {
 		$p1 = strpos($TBS->Source, $tag_beg); // if the first position is not yet set, we found it
 		if ($p1===false) return $tag_lst;
 	}
-	
+
 	do {
 
 		$p2 = strpos($TBS->Source,$tag_end,$p1);
@@ -96,35 +96,6 @@ function tbs_plugin_Loop(&$TBS, $p1, $tag_beg, $tag_end) {
 					tbs_plugin_CallScript($TBS, $prm, $Opt_ScriptPath.$prm['script']);
 				} else {
 					tbs_plugin_AddError($TBS, "parameter 'script' is not allowed. See plugin configuration.");
-				}
-			}
-
-			// Embedded script
-			if (isset($prm['embedded'])) {
-				// Check if this parameter is allowed
-				if (!isset($Opt_Embedded)) $Opt_Embedded = tbs_plugin_GetOption('Embedded', 'no');
-				if ($Opt_Embedded=='all') {
-					$t1 = '<!--TBS';
-					$t2 = '-->';
-					$tp1 = -1;
-					do {
-						$tp1 = strpos($TBS->Source,$t1,$tp1+1);
-						if ($tp1!==false) {
-							$tp2 = strpos($TBS->Source,$t2,$tp1);
-							if ($tp2===false) {
-								tbs_plugin_AddError($TBS, "one tag '-->' is missing after '<!--TBS'.");
-								$tp1 = false;
-							} else {
-								$script = substr($TBS->Source,$tp1+strlen($t1),$tp2-$tp1-strlen($t1));
-								$script = trim($script);
-								$TBS->Source = substr_replace($TBS->Source,'',$tp1,$tp2-$tp1+strlen($t2));
-								tbs_plugin_LoadTemplate($TBS);
-								eval($script);
-							}
-						}
-					} while ($tp1!==false);
-				} else {
-					tbs_plugin_AddError($TBS, "parameter 'embedded' is not allowed. See plugin configuration.");
 				}
 			}
 
