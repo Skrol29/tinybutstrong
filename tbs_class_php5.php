@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.6.2-rc-2011-02-22 for PHP 5
-Date     : 2011-02-22
+Version  : 3.6.2-rc-2011-03-11 for PHP 5
+Date     : 2011-03-11
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -12,13 +12,7 @@ This library is free software.
 You can redistribute and modify it even for commercial usage,
 but you must accept and respect the LPGL License version 3.
 */
-/*
-[ok] f_Misc_GetFile: no longer use file_exists() because file_exists() doesn't use include_path and the __FILE__ path.
-[ok] f_Misc_GetFile: found the correct size using fstat().
-[ok] [onshow..template_date] now call f_Misc_GetFile() in order to be sure to found the file the same way.
-[ok] mtype=*m or m* don't use encapsulation level, no can found <br />
-[ok] bug: when ondata is used on a array string then $CurrRec is not an array => "Warning: Cannot use a scalar value as an array in" (http://www.tinybutstrong.com/forum.php?thr=2673)
-*/
+
 // Check PHP version
 if (version_compare(PHP_VERSION,'5.0')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 5.0 or higher. You should try with TinyButStrong Edition for PHP 4.';
 
@@ -494,7 +488,7 @@ public $ObjectRef = false;
 public $NoErr = false;
 public $Assigned = array();
 // Undocumented (can change at any version)
-public $Version = '3.6.2-rc-2011-02-22';
+public $Version = '3.6.2-rc-2011-03-11';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
