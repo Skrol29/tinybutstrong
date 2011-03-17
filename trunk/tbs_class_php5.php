@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.6.2-rc-2011-03-11 for PHP 5
-Date     : 2011-03-11
+Version  : 3.7.0-beta-2011-03-17 for PHP 5
+Date     : 2011-03-17
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -12,7 +12,11 @@ This library is free software.
 You can redistribute and modify it even for commercial usage,
 but you must accept and respect the LPGL License version 3.
 */
-
+/*
+[ok] support MySQLi
+[ok] support PDO
+[  ] MergeBlock() has an extra parameter: $Prms
+*/
 // Check PHP version
 if (version_compare(PHP_VERSION,'5.0')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 5.0 or higher. You should try with TinyButStrong Edition for PHP 4.';
 
@@ -119,6 +123,10 @@ public function DataPrepare(&$SrcId,&$TBS) {
 		$this->Type = 9; $this->SubType = 2;
 	} elseif ($SrcId instanceof IteratorAggregate) {
 		$this->Type = 9; $this->SubType = 3;
+	} elseif ($SrcId instanceof MySQLi) {
+		$this->Type = 10;
+	} elseif ($SrcId instanceof PDO) {
+		$this->Type = 11;
 	} elseif (is_object($SrcId)) {
 		$FctInfo = get_class($SrcId);
 		$FctCat = 'o';
@@ -338,6 +346,17 @@ public function DataOpen(&$Query) {
 		}
 		$this->RecSet->rewind();
 		break;
+	case 10: // MySQLi
+		$this->RecSet = $this->SrcId->query($Query);
+		if ($this->RecSet===false) $this->DataAlert('MySQLi error message when opening the query:'.$this->SrcId->error);
+		break;
+	case 11: // PDO
+		$this->RecSet = $this->SrcId->query($Query);
+		if ($this->RecSet===false) {
+			$err = $this->SrcId->errorInfo();
+			$this->DataAlert('PDO error message when opening the query:'.$err[2]);
+		}
+		break;
 	}
 
 	if (($this->Type===0) or ($this->Type===9)) {
@@ -440,6 +459,13 @@ public function DataFetch() {
 			$this->CurrRec = false;
 		}
 		break;
+	case 10: // MySQLi
+		$this->CurrRec = $this->RecSet->fetch_assoc();
+		if (is_null($this->CurrRec)) $this->CurrRec = false;
+		break;
+	case 11: // PDO
+		$this->CurrRec = $this->RecSet->fetch(PDO::FETCH_ASSOC);
+		break;
 	}
 
 	// Set the row count
@@ -465,6 +491,8 @@ public function DataClose() {
 	case 4: call_user_func_array($this->FctClose,array(&$this->RecSet)); break;
 	case 5: $this->SrcId->tbsdb_close($this->RecSet); break;
 	case 7: pg_free_result($this->RecSet); break;
+	case 10: $this->RecSet->free(); break; // MySQLi
+	//case 11: $this->RecSet->closeCursor(); break; // PDO
 	}
 	if ($this->RecSaving) {
 		$this->RecSet = &$this->RecBuffer;
@@ -488,7 +516,7 @@ public $ObjectRef = false;
 public $NoErr = false;
 public $Assigned = array();
 // Undocumented (can change at any version)
-public $Version = '3.6.2-rc-2011-03-11';
+public $Version = '3.7.0-beta-2011-03-17';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
