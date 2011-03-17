@@ -44,6 +44,8 @@ $Ok = $Ok && f_Replace($Txt, 'static function ', 'function ', 'Change "static fu
 $Ok = $Ok && f_Replace($Txt, '($SrcId instanceof Iterator)', '(is_a($SrcId,\'Iterator\'))', 'Change "instanceof Iterator"');
 $Ok = $Ok && f_Replace($Txt, '($SrcId instanceof ArrayObject)', '(is_a($SrcId,\'ArrayObject\'))', 'Change "instanceof ArrayObject"');
 $Ok = $Ok && f_Replace($Txt, '($SrcId instanceof IteratorAggregate)', '(is_a($SrcId,\'IteratorAggregate\'))', 'Change "instanceof IteratorAggregate"');
+$Ok = $Ok && f_Replace($Txt, '($SrcId instanceof MySQLi)', '(is_a($SrcId,\'MySQLi\'))', 'Change "instanceof MySQLi"');
+$Ok = $Ok && f_Replace($Txt, '($SrcId instanceof PDO)', '(is_a($SrcId,\'PDO\'))', 'Change "instanceof PDO"');
 f_Update($Ok, $Dst4, $Txt);
 
 // Conversion in PHP 5
