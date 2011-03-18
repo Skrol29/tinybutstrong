@@ -3,7 +3,7 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.7.0-beta-2011-03-17 for PHP 5
+Version  : 3.7.0 for PHP 5
 Date     : 2011-03-17
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
@@ -11,11 +11,6 @@ Author   : http://www.tinybutstrong.com/onlyyou.html
 This library is free software.
 You can redistribute and modify it even for commercial usage,
 but you must accept and respect the LPGL License version 3.
-*/
-/*
-[ok] support MySQLi
-[ok] support PDO
-[  ] MergeBlock() has an extra parameter: $Prms
 */
 // Check PHP version
 if (version_compare(PHP_VERSION,'5.0')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 5.0 or higher. You should try with TinyButStrong Edition for PHP 4.';
@@ -160,7 +155,7 @@ public function DataPrepare(&$SrcId,&$TBS) {
 
 }
 
-public function DataOpen(&$Query) {
+public function DataOpen(&$Query,$QryPrms=false) {
 
 	// Init values
 	unset($this->CurrRec); $this->CurrRec = true;
@@ -313,15 +308,15 @@ public function DataOpen(&$Query) {
 		break;
 	case 3: // Custom function
 		$FctOpen = $this->FctOpen;
-		$this->RecSet = $FctOpen($this->SrcId,$Query);
+		$this->RecSet = $FctOpen($this->SrcId,$Query,$QryPrms);
 		if ($this->RecSet===false) $this->DataAlert('function '.$FctOpen.'() has failed to open query {'.$Query.'}');
 		break;
 	case 4: // Custom method from ObjectRef
-		$this->RecSet = call_user_func_array($this->FctOpen,array(&$this->SrcId,&$Query));
+		$this->RecSet = call_user_func_array($this->FctOpen,array(&$this->SrcId,&$Query,&$QryPrms));
 		if ($this->RecSet===false) $this->DataAlert('method '.get_class($this->FctOpen[0]).'::'.$this->FctOpen[1].'() has failed to open query {'.$Query.'}');
 		break;
 	case 5: // Custom method of object
-		$this->RecSet = $this->SrcId->tbsdb_open($this->SrcId,$Query);
+		$this->RecSet = $this->SrcId->tbsdb_open($this->SrcId,$Query,$QryPrms);
 		if ($this->RecSet===false) $this->DataAlert('method '.get_class($this->SrcId).'::tbsdb_open() has failed to open query {'.$Query.'}');
 		break;
 	case 7: // PostgreSQL
@@ -351,8 +346,15 @@ public function DataOpen(&$Query) {
 		if ($this->RecSet===false) $this->DataAlert('MySQLi error message when opening the query:'.$this->SrcId->error);
 		break;
 	case 11: // PDO
-		$this->RecSet = $this->SrcId->query($Query);
+		$this->RecSet = $this->SrcId->prepare($Query);
 		if ($this->RecSet===false) {
+			$ok = false;
+		} elseif (is_array($QryPrms)) {
+			$ok = $this->RecSet->execute($QryPrms);
+		} else {
+			$ok = $this->RecSet->execute();
+		}
+		if (!$ok) {
 			$err = $this->SrcId->errorInfo();
 			$this->DataAlert('PDO error message when opening the query:'.$err[2]);
 		}
@@ -516,7 +518,7 @@ public $ObjectRef = false;
 public $NoErr = false;
 public $Assigned = array();
 // Undocumented (can change at any version)
-public $Version = '3.7.0-beta-2011-03-17';
+public $Version = '3.7.0';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -653,10 +655,10 @@ public function GetBlockSource($BlockName,$AsArray=false,$DefTags=true,$ReplaceW
 	return $RetVal;
 }
 
-public function MergeBlock($BlockLst,$SrcId='assigned',$Query='') {
+public function MergeBlock($BlockLst,$SrcId='assigned',$Query='',$QryPrms=false) {
 
 	if ($SrcId==='assigned') {
-		$Arg = array($BlockLst,&$SrcId,&$Query);
+		$Arg = array($BlockLst,&$SrcId,&$Query,&$QryPrms);
 		if (!$this->meth_Misc_Assign($BlockLst, $Arg, 'MergeBlock')) return 0;
 		$BlockLst = $Arg[0]; $SrcId = &$Arg[1]; $Query = &$Arg[2];
 	}
@@ -671,7 +673,7 @@ public function MergeBlock($BlockLst,$SrcId='assigned',$Query='') {
 		}
 		return $Nbr;
 	} else {
-		return $this->meth_Merge_Block($this->Source,$BlockLst,$SrcId,$Query,false,0);
+		return $this->meth_Merge_Block($this->Source,$BlockLst,$SrcId,$Query,false,0,$QryPrms);
 	}
 
 }
@@ -1530,7 +1532,7 @@ function meth_Locator_Rename(&$Txt, $Replace) {
 				if ($new==='') {
 					$q = false;
 					$s = 'clear';
-					$this->meth_Merge_Block($Txt, $old, $s, $q, false, false);
+					$this->meth_Merge_Block($Txt, $old, $s, $q, false, false, false);
 				} else {
 					$old = $this->_ChrOpen.$old;
 					$old = array($old.'.', $old.' ', $old.';', $old.$this->_ChrClose);
@@ -1743,7 +1745,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 
 }
 
-function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum) {
+function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$QryPrms=false) {
 
 	$BlockSave = $this->_CurrBlock;
 	$this->_CurrBlock = $BlockLst;
@@ -1828,13 +1830,13 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum) {
 				// Special case: return data without any block to merge
 				$QueryOk = false;
 				if ($ReturnData and (!$Src->RecSaved)) {
-					if ($Src->DataOpen($QueryZ)) {
+					if ($Src->DataOpen($QueryZ,$QryPrms)) {
 						do {$Src->DataFetch();} while ($Src->CurrRec!==false);
 						$Src->DataClose();
 					}
 				}
 			}	else {
-				$QueryOk = $Src->DataOpen($QueryZ);
+				$QueryOk = $Src->DataOpen($QueryZ,$QryPrms);
 				if (!$QueryOk) {
 					if ($WasP1) {	$WasP1 = false;} else {$LocR->FieldOutside = false;} // prevent from infinit loop
 				}
@@ -2313,7 +2315,7 @@ function meth_Merge_SectionNormal(&$BDef,&$Src) {
 			} elseif (is_null($data) || ($data===false)) {
 				$data = array();
 			}
-			$this->meth_Merge_Block($Txt, $name, $data, $query, false, 0);
+			$this->meth_Merge_Block($Txt, $name, $data, $query, false, 0, false);
 		}
 	}
 
