@@ -158,19 +158,19 @@ a.opt-name:hover {
           </tr>
           <tr class="txt-tiny">
             <td>Date:</td>
-            <td>2011-02-14</td>
+            <td>2011-03-18</td>
           </tr>
         </table></td>
       <td width="34%" align="center"><div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div>
         <h1>TinyButStrong Documentation</h1>
-        <div class="txt-tiny">version 3.6</div>
+        <div class="txt-tiny">version 3.7</div>
         <div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div></td>
       <td width="33%" align="right" valign="top" class="txt-small">&nbsp;</td>
     </tr>
     <tr>
       <td width="33%" align="left" valign="top">&nbsp;</td>
       <td><div align="center">Template Engine for Pro and Beginners<br>
-          for PHP <span class="txt-tiny">4 and 5</span><br>
+          for PHP 5<br>
         </div></td>
       <td align="right" valign="top" class="txt-small">&nbsp;</td>
     </tr>
@@ -590,7 +590,7 @@ a.opt-name:hover {
     <span class="title-1b">Databases:</span> MySQL ; PostgreSQL ; SQLite.<br>
     You can also add a new one: '<a href="#plugins_db">database plug-ins</a>'.<br>
     <br>
-    Syntax: <span class="txt-code"><span class="opt-type">int</span><span class="opt-name"></span> <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-type">string</span><span class="opt-name"> BlockName</span>, <span class="opt-type">mixed</span> <span class="opt-name">Source<span style="color:#333333">{</span></span>, <span class="opt-type">string</span><span class="opt-name"> Query<span style="color:#333333">}</span></span>)</span>
+    Syntax: <span class="txt-code"><span class="opt-type">int</span><span class="opt-name"></span> <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-type">string</span><span class="opt-name"> BlockName</span>, <span class="opt-type">mixed</span> <span class="opt-name">Source<span style="color:#333333">{</span></span>, <span class="opt-type">string</span><span class="opt-name"> Query<span style="color:#333333">}{, <span class="opt-type">mixed</span><span class="opt-name"> QryPrms</span>}</span></span>)</span>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr class="title-1b">
         <td width="80" align="left" valign="top">Argument</td>
@@ -611,6 +611,10 @@ a.opt-name:hover {
         <td align="left" valign="top" class="opt-name">Query</td>
         <td align="left" valign="top"> Optional. Indicates the SQL statement which returns the records to merge.<br>
           The table below shows the possible values according to the data source type.</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top" class="opt-name">QryPrms</td>
+        <td align="left" valign="top">Optional. Extra parameters for the query. Few data source types are taking this argument in account.<br>          <div class="versioning">Versioning: the argument QryPrms  is supported since TBS version 3.7.0.</div></td>
       </tr>
     </table>
     <div class="title-1b"><br>
@@ -684,9 +688,9 @@ a.opt-name:hover {
     <br>
     <table cellpadding="2" cellspacing="0" class="border-0">
       <tr bgcolor="#B2B2B2" class="title-1c">
-        <td width="110" class="border-0">Data Source Type</td>
-        <td width="200" class="border-0">Source</td>
-        <td width="200" class="border-0">Query<span class="txt-code"><span class="opt-name"></span></span></td>
+        <td width="120" class="border-0">Data Source Type</td>
+        <td width="350" class="border-0">Source</td>
+        <td class="border-0">Query<span class="txt-code"><span class="opt-name"></span></span></td>
       </tr>
       <tr valign="top">
         <td class="border-0">Assigned <span class="txt-tiny">(*)</span></td>
@@ -728,8 +732,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td class="border-0">PHP&nbsp;ArrayObject</td>
-        <td rowspan="3" valign="top" class="border-0">A PHP object.<br>
-          <span class="versioning">Supported in native since TBS version 3.5.0.</span></td>
+        <td rowspan="3" valign="top" class="border-0">A PHP object. <span class="versioning">Supported since TBS version 3.5.0.</span></td>
         <td rowspan="3" valign="top" class="border-0">-</td>
       </tr>
       <tr>
@@ -737,6 +740,16 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td class="border-0">PHP&nbsp;IteratorAggregate</td>
+      </tr>
+      <tr valign="top">
+        <td class="border-0">PDO</td>
+        <td class="border-0">A PDO object. <span class="versioning">Supported since TBS version 3.7.0.</span></td>
+        <td class="border-0">An SQL statement</td>
+      </tr>
+      <tr valign="top">
+        <td class="border-0">MySQLi</td>
+        <td class="border-0">A MySQLi object. <span class="versioning">Supported since TBS version 3.7.0.</span></td>
+        <td class="border-0">An SQL statement</td>
       </tr>
       <tr valign="top">
         <td rowspan="2" class="border-0">MySQL</td>
