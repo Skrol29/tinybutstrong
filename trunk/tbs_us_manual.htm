@@ -158,7 +158,7 @@ a.opt-name:hover {
           </tr>
           <tr class="txt-tiny">
             <td>Date:</td>
-            <td>2011-03-18</td>
+            <td>2011-03-19</td>
           </tr>
         </table></td>
       <td width="34%" align="center"><div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div>
@@ -381,7 +381,9 @@ a.opt-name:hover {
   TBS has been engineered so that you can develop your templates with ease using any visual  editors (like Dreamweaver or FrontPage). But if you are used to designing your templates with a text editor, it is nice as well. TBS also enables you to create JavaScript dynamically.<br>
   <br>
   As the name of it tells, TBS is easy to use, strong and fast. It is completely <span style="color:#009900">°~° freeware °~°</span>.
-  <h3><a name="principles" id="principles"></a>Basic principles:</h3>
+  <h3><a name="principles" id="principles"></a>Basic princ
+    <input type="checkbox" name="checkbox" id="checkbox">
+  iples:</h3>
   On the HTML side (or other file type):<br>
   You design a page which does not necessarily contain any PHP scripts, nor any programming. In this page you place TBS tags in the places where you want to display the dynamic data. This page is called a 'template'.<br>
   There are two types of tags: the <a href="#html_field">'fields'</a> which are used to display dynamic data items, and the <a href="#html_block">'blocks'</a> which are used to define an area, mostly in order to display records from a data source.<br>
@@ -731,29 +733,29 @@ a.opt-name:hover {
         <td valign="top" class="border-0">A string that represents an array contained or nested in a PHP global variable (see below)</td>
       </tr>
       <tr>
-        <td class="border-0">PHP&nbsp;ArrayObject</td>
+        <td class="border-0">PHP&nbsp;<a href="http://www.php.net/manual/en/class.arrayobject.php">ArrayObject</a></td>
         <td rowspan="3" valign="top" class="border-0">A PHP object. <span class="versioning">Supported since TBS version 3.5.0.</span></td>
         <td rowspan="3" valign="top" class="border-0">-</td>
       </tr>
       <tr>
-        <td class="border-0">PHP&nbsp;Iterator</td>
+        <td class="border-0">PHP&nbsp;<a href="http://www.php.net/manual/en/class.iterator.php">Iterator</a></td>
       </tr>
       <tr>
-        <td class="border-0">PHP&nbsp;IteratorAggregate</td>
+        <td class="border-0">PHP&nbsp;<a href="http://www.php.net/manual/en/class.iteratoraggregate.php">IteratorAggregate</a></td>
       </tr>
       <tr valign="top">
         <td class="border-0">PDO</td>
-        <td class="border-0">A PDO object. <span class="versioning">Supported since TBS version 3.7.0.</span></td>
-        <td class="border-0">An SQL statement</td>
+        <td class="border-0">A <a href="http://www.php.net/manual/en/book.pdo.php">PDO</a> object. <span class="versioning">Supported since TBS version 3.7.0.</span></td>
+        <td class="border-0">An SQL statement. Optional argument  <a href="#php_mergeblock" class="opt-name">QryPrms</a> can be used like with <a href="http://www.php.net/manual/en/pdostatement.execute.php">PDOStatement-&gt;execute(QryPrms</a>).</td>
       </tr>
       <tr valign="top">
         <td class="border-0">MySQLi</td>
-        <td class="border-0">A MySQLi object. <span class="versioning">Supported since TBS version 3.7.0.</span></td>
+        <td class="border-0">A <a href="http://www.php.net/manual/en/book.mysqli.php">MySQLi</a> object. <span class="versioning">Supported since TBS version 3.7.0.</span></td>
         <td class="border-0">An SQL statement</td>
       </tr>
       <tr valign="top">
         <td rowspan="2" class="border-0">MySQL</td>
-        <td class="border-0">A MySql connection identifier or the keyword <span class="opt-value">'mysql'</span></td>
+        <td class="border-0">A <a href="http://www.php.net/manual/en/book.mysql.php">MySql</a> connection identifier or the keyword <span class="opt-value">'mysql'</span></td>
         <td class="border-0">An SQL statement</td>
       </tr>
       <tr>
@@ -762,7 +764,7 @@ a.opt-name:hover {
       </tr>
       <tr valign="top">
         <td rowspan="2" class="border-0">PostgreSQL</td>
-        <td class="border-0">A PostgreSql connection identifier</td>
+        <td class="border-0">A <a href="http://www.php.net/manual/en/book.pgsql.php">PostgreSql</a> connection identifier</td>
         <td class="border-0">An SQL statement</td>
       </tr>
       <tr>
@@ -771,7 +773,7 @@ a.opt-name:hover {
       </tr>
       <tr valign="top">
         <td rowspan="2" class="border-0">SQLite</td>
-        <td class="border-0">An SQLite connection identifier</td>
+        <td class="border-0">An <a href="http://www.php.net/manual/en/book.sqlite.php">SQLite</a> connection identifier</td>
         <td class="border-0">An SQLite statement</td>
       </tr>
       <tr>
