@@ -1,7 +1,7 @@
 <?php
 
 /*
-TbsZip version 2.3 (2010-11-29)
+TbsZip version 2.4 (2011-03-25)
 Author  : Skrol29 (email: http://www.tinybutstrong.com/onlyyou.html)
 Licence : LGPL
 This class is independent from any other classes and has been originally created for the OpenTbs plug-in
@@ -18,7 +18,7 @@ class clsTbsZip {
 
 	function __construct() {
 		$this->Meth8Ok = extension_loaded('zlib'); // check if Zlib extension is available. This is need for compress and uncompress with method 8.
-		$this->DisplayError = false;
+		$this->DisplayError = true;
 		$this->ArchFile = '';
 		$this->Error = false;
 	}
@@ -160,7 +160,7 @@ class clsTbsZip {
 	}
 
 	function RaiseError($Msg) {
-		if ($this->DisplayError) echo '<strong>'.get_class($this).' ERROR : '.$Msg.'</strong><br>'."\r\n";
+		if ($this->DisplayError) echo '<strong>'.get_class($this).' ERROR :</strong> '.$Msg.'<br>'."\r\n";
 		$this->Error = $Msg;
 		return false;
 	}
@@ -392,6 +392,11 @@ class clsTbsZip {
 
 	function Flush($Render=TBSZIP_DOWNLOAD, $File='', $ContentType='') {
 
+		if ( ($File!=='') && ($this->ArchFile===$File)) {
+			$this->RaiseError('Method Flush() cannot overwrite the current opened archive: \''.$File.'\''); // this makes corrupted zip archives without PHP error.
+			return false;
+		}
+	
 		$ArchPos = 0;
 		$Delta = 0;
 		$FicNewPos = array();
@@ -526,6 +531,10 @@ class clsTbsZip {
 		}
 		$this->_PutDec($b2, $this->CdPos+$Delta , 16, 4); // p_cd  (offset of start of central directory with respect to the starting disk number)
 		$this->OutputFromString($b2);
+		
+		$this->OutputClose();
+		
+		return true;
 		
 	}
 
