@@ -158,7 +158,7 @@ a.opt-name:hover {
           </tr>
           <tr class="txt-tiny">
             <td>Date:</td>
-            <td>2011-04-12</td>
+            <td>2011-04-21</td>
           </tr>
         </table></td>
       <td width="34%" align="center"><div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div>
@@ -570,12 +570,13 @@ a.opt-name:hover {
       } </div>
     <span class="title-1b"><br>
     Adding the file at the end of the current template:</span><br>
-    You can use the keyword <span class="opt-value">'+'</span> for the argument <span class="opt-name">Charset</span> to have the file defined by <span class="opt-name">File</span> added to the end of the current template. The actual charset is not change, it stays  same as for the first template. The feature <span class="opt-name">Charset</span>=<span class="opt-value">'+'</span> does not work for special values of <span class="opt-name">File</span> (see above).<br>
+    You can use the keyword <span class="opt-value">'+'</span> for the argument <span class="opt-name">Charset</span> to have the file defined by <span class="opt-name">File</span> added to the end of the current template. The current charset will not be modified.<br>
     <br>
     <span class="title-1b">Special actions using argument File:</span><br>
     <span class="versioning">Since TBS version 3.4.0.<br>
-    </span> If <span class="opt-name">File</span> is <span class="opt-value">null</span>, then all default actions (Plug-ins, [onload] tags, and Charset) are applyied without loading any file. <br>
+    </span> If <span class="opt-name">File</span> is <span class="opt-value">null</span>, then all default actions (Plug-ins, [onload] tags, and Charset) are applied without loading any file. <br>
     If <span class="opt-name">File</span> is <span class="opt-value">''</span> (empty string), then only the charset is modified, without doing any other action.<br>
+    In both cases, if <span class="opt-name">Charset</span> is <span class="opt-value">'+'</span>, then it will be ignored and the current charset will not be modified. <br>
     Example: <br>
     <div class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;Source = <span class="opt-name">$template</span>; <span class="opt-html">// load the template from a string</span> <br>
       <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">null</span>,<span class="opt-value">'BIG5'</span>); <span class="opt-html">//  run plug-ins if any, and merges [onload] tags if any</span><br>
