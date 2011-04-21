@@ -158,7 +158,7 @@ a.opt-name:hover {
           </tr>
           <tr class="txt-tiny">
             <td>Date :</td>
-            <td>2011-04-12</td>
+            <td>2011-04-21</td>
           </tr>
         </table></td>
       <td width="34%" align="center"><div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div>
@@ -569,13 +569,14 @@ a.opt-name:hover {
     <span class="title-1b"></span><br>
     <span class="title-1b"> <br>
     Ajouter le fichier à la suite du modèle en cours :</span><br>
-    Vous pouvez utiliser le mot-clé <span class="opt-value">'+'</span> pour l'argument <span class="opt-name">Charset</span> afin que le fichier spécifié par <span class="opt-name">Fichier</span> soit ajouté à la fin du modèle en cours au lieu de l'écraser. Le véritable charset n'est pas modifié, il reste  le même que pour le premier modèle. La fonctionnalité <span class="opt-name">Charset</span>=<span class="opt-value">'+'</span> ne fonctionne pas avec les valeurs spéciales de <span class="opt-name">Fichier</span> (voir ci-après).<br>
+    Vous pouvez utiliser le mot-clé <span class="opt-value">'+'</span> pour l'argument <span class="opt-name">Charset</span> afin que le fichier spécifié par <span class="opt-name">Fichier</span> soit ajouté à la fin du modèle en cours au lieu de l'écraser. Le  charset en cours ne sera pas modifié.<br>
     <br>
     <span class="title-1b">Actions spéciales avec l'argument Fichier :</span><br>
     <span class="versioning">Depuis TBS version 3.4.0.<br>
-    </span> Si <span class="opt-name">Fichier </span>est <span class="opt-value">null</span>, alors toutes les actions par défaut  (Plugins, balises [onload], et Charset) sont appliquées sans charger aucun fichier. <br>
-    Si <span class="opt-name">Fichier</span> est <span class="opt-value">''</span> (chaine vide), alors seul le charset est modifié, sans faire rien aucune autre action.<br>
-    Exemple : <br>
+    </span> Si <span class="opt-name">Fichier</span> est <span class="opt-value">''</span> (chaine vide), alors seul le charset est modifié, sans faire  aucune autre action. Un <span class="opt-name">Charset</span>=<span class="opt-value">'+'</span> sera ignoré.<br>
+Si <span class="opt-name">Fichier </span>est <span class="opt-value">null</span>, alors toutes les actions par défaut  (Plugins, balises [onload], et Charset) sont appliquées sans charger aucun fichier.<br>
+Dans les deux cas, si <span class="opt-name">Charset</span> vaut <span class="opt-value">'+'</span>, il sera ignoré et le charset en cours ne sera pas modifié.<br>
+    Exemple :<br>
     <div class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;Source = <span class="opt-name">$modele</span>; <span class="opt-html">// charge le modèle depuis une chaine</span> <br>
       <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">null</span>,<span class="opt-value">'BIG5'</span>); <span class="opt-html">//  lance les plugins s'il y en a, et fusionne les balises  [onload] s'il y en a</span><br>
       ...<br>
