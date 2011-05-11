@@ -44,9 +44,9 @@ body,td,th {
 
 <body>
 <h1>ZipTBS</h1>
-<div>version 2.4, 2011-03-25, by Skrol29<br />
+<div>version 2.5, 2011-05-12, by Skrol29<br />
   document 
-  updated on 2011-03-25<br />
+  updated on 2011-05-12<br />
 </div>
 <ol>
   <li><a href="#intro">Introduction</a></li>
@@ -230,10 +230,12 @@ $zip-&gt;Close(); <span class="versioning">// close the current archive</span>
   </tr>
 </table>
 <h2><a name="change" id="intro6"></a>6. Change log</h2>
-<p>Version 2.4, 2011-03-25<br />
-- minor  bug fixed: the new created archive using <span class="value">Flush()</span> was not unlocked at the end of the flush. The clsTbsZip instance had still an handle on it.<br />
-- minor  enhancement: now raise a TbsZip error if <span class="value">Flush()</span> attempts to overwrite the current archive.<br />
-- minor  enhancement: property <span class="value">DisplayError</span> is set to true by default.<br />
+<p>Version 2.5, 2011-05-12<br />
+- minor  bug fixed: strict compatibility with PHP 5 (no PHP warning with error reporting E_STRICT)</p>
+<p>  Version 2.4, 2011-03-25  <br />
+  - minor  bug fixed: the new created archive using <span class="value">Flush()</span> was not unlocked at the end of the flush. The clsTbsZip instance had still an handle on it.<br />
+  - minor  enhancement: now raise a TbsZip error if <span class="value">Flush()</span> attempts to overwrite the current archive.<br />
+  - minor  enhancement: property <span class="value">DisplayError</span> is set to true by default.<br />
 </p>
 <p> Version 2.3, 2010-11-29<br />
 - minor  bug fixed:  an archive created with both methods <span class="value">CreateNew()</span> and <span class="value">Flush(TBSZIP_DOWNLOAD)</span> could be truncated because the final size of the archive was badly estimated.</p>
