@@ -1,7 +1,7 @@
 <?php
 
 /*
-TbsZip version 2.4 (2011-03-25)
+TbsZip version 2.5 (2011-05-12)
 Author  : Skrol29 (email: http://www.tinybutstrong.com/onlyyou.html)
 Licence : LGPL
 This class is independent from any other classes and has been originally created for the OpenTbs plug-in
@@ -23,10 +23,9 @@ class clsTbsZip {
 		$this->Error = false;
 	}
 
-	function clsTbsZip() {$this->__construct();} // for PHP 4 compatibility
-
 	function CreateNew($ArchName='new.zip') {
 	// Create a new virtual empty archive, the name will be the default name when the archive is flushed.
+		if (!isset($this->Meth8Ok)) $this->__construct();  // for PHP 4 compatibility
 		$this->Close(); // note that $this->ArchHnd is set to false here
 		$this->Error = false;
 		$this->ArchFile = $ArchName;
@@ -39,6 +38,7 @@ class clsTbsZip {
 
 	function Open($ArchFile) {
 	// Open the zip archive
+		if (!isset($this->Meth8Ok)) $this->__construct();  // for PHP 4 compatibility
 		$this->Close(); // close handle and init info
 		$this->Error = false;
 		$this->ArchFile = $ArchFile;
