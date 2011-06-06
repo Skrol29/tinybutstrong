@@ -1,7 +1,7 @@
 <?php
 
 /*
-TbsZip version 2.5 (2011-05-12)
+TbsZip version 2.6 (2011-06-07)
 Author  : Skrol29 (email: http://www.tinybutstrong.com/onlyyou.html)
 Licence : LGPL
 This class is independent from any other classes and has been originally created for the OpenTbs plug-in
@@ -407,7 +407,7 @@ class clsTbsZip {
 		$date  = $this->_MsDos_Date($now);
 		$time  = $this->_MsDos_Time($now);
 
-		$this->OutputOpen($Render, $File, $ContentType);
+		if (!$this->OutputOpen($Render, $File, $ContentType)) return false;
 		
 		// output modified zipped files and unmodified zipped files that are beetween them
 		ksort($this->ReplByPos);
@@ -546,7 +546,12 @@ class clsTbsZip {
 
 		if (($Render & TBSZIP_FILE)==TBSZIP_FILE) {
 			if (''.$File=='') $File = basename($this->ArchFile).'.zip';
-			$this->OutputHandle = fopen($File, 'w');
+			$h = @fopen($File, 'w');
+			if ($h===false) {
+				$this->RaiseError('Method Flush() cannot overwrite the target file \''.$File.'\'. Permission denied. The file may be locked by another process.');
+				return false;
+			}
+			$this->OutputHandle = $h;
 			$this->OutputMode = TBSZIP_FILE;
 		} elseif (($Render & TBSZIP_STRING)==TBSZIP_STRING) {
 			$this->OutputMode = TBSZIP_STRING;
@@ -569,6 +574,9 @@ class clsTbsZip {
 				if ($Len!==false) header('Content-Length: '.$Len); 
 			}
 		}
+		
+		return true;
+		
 	}
 
 	function OutputFromArch($pos, $pos_stop) {

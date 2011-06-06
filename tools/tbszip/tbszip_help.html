@@ -44,9 +44,9 @@ body,td,th {
 
 <body>
 <h1>ZipTBS</h1>
-<div>version 2.5, 2011-05-12, by Skrol29<br />
+<div>version 2.6, 2011-06-07, by Skrol29<br />
   document 
-  updated on 2011-05-12<br />
+  updated on 2011-06-07<br />
 </div>
 <ol>
   <li><a href="#intro">Introduction</a></li>
@@ -230,8 +230,10 @@ $zip-&gt;Close(); <span class="versioning">// close the current archive</span>
   </tr>
 </table>
 <h2><a name="change" id="intro6"></a>6. Change log</h2>
-<p>Version 2.5, 2011-05-12<br />
-- minor  bug fixed: strict compatibility with PHP 5 (no PHP warning with error reporting E_STRICT)</p>
+<p>Version 2.6, 2011-06-07<br />
+- minor  enhancement: now raise a TbsZip error if <span class="value">Flush()</span> attempts to overwrite a locked file.</p>
+<p>Version 2.5, 2011-05-12  <br />
+  - minor  bug fixed: strict compatibility with PHP 5 (no PHP warning with error reporting E_STRICT)</p>
 <p>  Version 2.4, 2011-03-25  <br />
   - minor  bug fixed: the new created archive using <span class="value">Flush()</span> was not unlocked at the end of the flush. The clsTbsZip instance had still an handle on it.<br />
   - minor  enhancement: now raise a TbsZip error if <span class="value">Flush()</span> attempts to overwrite the current archive.<br />
