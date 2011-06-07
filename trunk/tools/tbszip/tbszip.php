@@ -1,7 +1,7 @@
 <?php
 
 /*
-TbsZip version 2.6 (2011-06-07)
+TbsZip version 2.7 (2011-06-07)
 Author  : Skrol29 (email: http://www.tinybutstrong.com/onlyyou.html)
 Licence : LGPL
 This class is independent from any other classes and has been originally created for the OpenTbs plug-in
@@ -545,14 +545,13 @@ class clsTbsZip {
 	function OutputOpen($Render, $File, $ContentType) {
 
 		if (($Render & TBSZIP_FILE)==TBSZIP_FILE) {
+			$this->OutputMode = TBSZIP_FILE;
 			if (''.$File=='') $File = basename($this->ArchFile).'.zip';
-			$h = @fopen($File, 'w');
-			if ($h===false) {
-				$this->RaiseError('Method Flush() cannot overwrite the target file \''.$File.'\'. Permission denied. The file may be locked by another process.');
+			$this->OutputHandle = @fopen($File, 'w');
+			if ($this->OutputHandle===false) {
+				$this->RaiseError('Method Flush() cannot overwrite the target file \''.$File.'\'. This may not be a valid file path or the file may be locked by another process or because of a denied permission.');
 				return false;
 			}
-			$this->OutputHandle = $h;
-			$this->OutputMode = TBSZIP_FILE;
 		} elseif (($Render & TBSZIP_STRING)==TBSZIP_STRING) {
 			$this->OutputMode = TBSZIP_STRING;
 			$this->OutputSrc = '';
@@ -604,7 +603,7 @@ class clsTbsZip {
 	}
 
 	function OutputClose() {
-		if ($this->OutputHandle!==false) fclose($this->OutputHandle);
+		if ( ($this->OutputMode===TBSZIP_FILE) && ($this->OutputHandle!==false) ) fclose($this->OutputHandle);
 	}
 
 	// ----------------
