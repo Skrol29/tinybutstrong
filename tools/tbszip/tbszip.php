@@ -1,7 +1,7 @@
 <?php
 
 /*
-TbsZip version 2.8 (2011-06-08)
+TbsZip version 2.9 (2011-07-27)
 Author  : Skrol29 (email: http://www.tinybutstrong.com/onlyyou.html)
 Licence : LGPL
 This class is independent from any other classes and has been originally created for the OpenTbs plug-in
@@ -233,7 +233,7 @@ class clsTbsZip {
 	function FileRead($NameOrIdx, $Uncompress=true) {
 		
 		$this->LastReadComp = false; // means the file is not found
-		$this->LastReadIdx - false;
+		$this->LastReadIdx = false;
 
 		$idx = $this->FileGetIdx($NameOrIdx);
 		if ($idx===false) return $this->RaiseError('File "'.$NameOrIdx.'" is not found in the Central Directory.');

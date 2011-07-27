@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>TbsZip class</title>
+<title>TbsZip - a zip modifier for PHP</title>
 <style type="text/css">
 <!--
 body,td,th {
@@ -43,11 +43,10 @@ body,td,th {
 </style></head>
 
 <body>
-<h1>ZipTBS</h1>
-<div>version 2.7, 2011-06-07, by Skrol29<br />
+<h1>TbsZip - a zip modifier for PHP</h1>
+<div>version 2.9, 2011-07-27, by Skrol29<br />
   document 
-  updated on 2011-06-07<br />
-</div>
+  updated on 2011-07-27</div>
 <ol>
   <li><a href="#intro">Introduction</a></li>
   <li><a href="#features">Features</a></li>
@@ -230,8 +229,10 @@ $zip-&gt;Close(); <span class="versioning">// close the current archive</span>
   </tr>
 </table>
 <h2><a name="change" id="intro6"></a>6. Change log</h2>
+<p>Version 2.9, 2011-07-22<br />
+-   bug fixed: a minor bug on FileRead when the asked file does not exists.</p>
 <p>Version 2.8, 2011-06-08<br />
--   bug fixed: PHP warning <span class="warning">&quot;Warning: fclose(): 10 is not a valid stream resource&quot;</span> may happen when closing an archive twice.</p>
+  -   bug fixed: PHP warning <span class="warning">&quot;Warning: fclose(): 10 is not a valid stream resource&quot;</span> may happen when closing an archive twice.</p>
 <p>Version 2.7, 2011-06-07<br />
 -   bug fixed: PHP error <span class="warning">&quot;supplied argument is not a valid stream resource&quot;</span> or <span class="warning">&quot;Undefined property: clsOpenTBS::$OutputHandle&quot;</span> may happen when using method Flush().</p>
 Version 2.6, 2011-06-07<br />
