@@ -1,7 +1,7 @@
 <?php
 
 /*
-TbsZip version 2.9 (2011-07-27)
+TbsZip version 2.10 (2011-08-13)
 Author  : Skrol29 (email: http://www.tinybutstrong.com/onlyyou.html)
 Licence : LGPL
 This class is independent from any other classes and has been originally created for the OpenTbs plug-in
@@ -60,7 +60,7 @@ class clsTbsZip {
 		$this->CdFileByName = array();
 		$this->VisFileLst = array();
 		$this->ArchCancelModif();
-	}	
+	}
 
 	function ArchCancelModif() {
 		$this->LastReadComp = false; // compression of the last read file (1=compressed, 0=stored not compressed, -1= stored compressed but read uncompressed)
@@ -168,7 +168,7 @@ class clsTbsZip {
 	function Debug($FileHeaders=false) {
 
 		$this->DisplayError = true;
-		
+
 		echo "<br />\r\n";
 		echo "------------------<br/>\r\n";
 		echo "Central Directory:<br/>\r\n";
@@ -179,8 +179,8 @@ class clsTbsZip {
 		echo "-----------------------------------<br/>\r\n";
 		echo "File List in the Central Directory:<br/>\r\n";
 		echo "-----------------------------------<br/>\r\n";
-		print_r($this->CdFileLst);			
-		
+		print_r($this->CdFileLst);
+
 		if ($FileHeaders) {
 			echo "<br/>\r\n";
 			echo "------------------------------<br/>\r\n";
@@ -196,13 +196,13 @@ class clsTbsZip {
 			}
 			print_r($this->VisFileLst);
 		}
-		
+
 	}
 
 	function FileExists($NameOrIdx) {
 		return ($this->FileGetIdx($NameOrIdx)!==false);
 	}
-	
+
 	function FileGetIdx($NameOrIdx) {
 	// Check if a file name, or a file index exists in the Central Directory, and return its index
 		if (is_string($NameOrIdx)) {
@@ -229,9 +229,9 @@ class clsTbsZip {
 		}
 		return false;
 	}
-	
+
 	function FileRead($NameOrIdx, $Uncompress=true) {
-		
+
 		$this->LastReadComp = false; // means the file is not found
 		$this->LastReadIdx = false;
 
@@ -270,9 +270,9 @@ class clsTbsZip {
 
 	function _ReadFile($idx, $ReadData) {
 	// read the file header (and maybe the data ) in the archive, assuming the cursor in at a new file position
-	
+
 		$b = $this->_ReadData(30);
-		
+
 		$x = $this->_GetHex($b,0,4);
 		if ($x!=='h:04034b50') return $this->RaiseError('Signature of file information not found in the Data Section in position '.(ftell($this->ArchHnd)-30).' for file #'.$idx.'.');
 
@@ -309,7 +309,7 @@ class clsTbsZip {
 		} else {
 			$this->_MoveTo($len, SEEK_CUR);
 		}
-		
+
 		// Description information
 		$desc_ok = ($x['purp'][2+3]=='1');
 		if ($desc_ok) {
@@ -330,7 +330,7 @@ class clsTbsZip {
 		} else {
 			return true;
 		}
-		
+
 	}
 
 	function FileReplace($NameOrIdx, $Data, $DataType=TBSZIP_STRING, $Compress=true) {
@@ -363,7 +363,7 @@ class clsTbsZip {
 	function FileCancelModif($NameOrIdx, $ReplacedAndDeleted=true) {
 	// cancel added, modified or deleted modifications on a file in the archive
 	// return the number of cancels
-	
+
 		$nbr = 0;
 
 		if ($ReplacedAndDeleted) {
@@ -378,16 +378,16 @@ class clsTbsZip {
 				}
 			}
 		}
-		
-		// added files		
+
+		// added files
 		$idx = $this->FileGetIdxAdd($NameOrIdx);
 		if ($idx!==false) {
 			unset($this->InfoAdd[$idx]);
 			$nbr++;
 		}
-		
+
 		return $nbr;
-		
+
 	}
 
 	function Flush($Render=TBSZIP_DOWNLOAD, $File='', $ContentType='') {
@@ -396,7 +396,7 @@ class clsTbsZip {
 			$this->RaiseError('Method Flush() cannot overwrite the current opened archive: \''.$File.'\''); // this makes corrupted zip archives without PHP error.
 			return false;
 		}
-	
+
 		$ArchPos = 0;
 		$Delta = 0;
 		$FicNewPos = array();
@@ -408,7 +408,7 @@ class clsTbsZip {
 		$time  = $this->_MsDos_Time($now);
 
 		if (!$this->OutputOpen($Render, $File, $ContentType)) return false;
-		
+
 		// output modified zipped files and unmodified zipped files that are beetween them
 		ksort($this->ReplByPos);
 		foreach ($this->ReplByPos as $ReplPos => $ReplIdx) {
@@ -459,15 +459,15 @@ class clsTbsZip {
 			// Update the current pos in the archive
 			$ArchPos = $ReplPos + $info_old_len;
 		}
-		
+
 		// Ouput all the zipped files that remain before the Central Directory listing
 		if ($this->ArchHnd!==false) $this->OutputFromArch($ArchPos, $this->CdPos); // ArchHnd is false if CreateNew() has been called
 		$ArchPos = $this->CdPos;
 
 		// Output file to add
 		$AddNbr = count($this->AddInfo);
+		$AddDataLen = 0; // total len of added data (inlcuding file headers)
 		if ($AddNbr>0) {
-			$AddDataLen = 0; // total len of added data (inlcuding file headers)
 			$AddPos = $ArchPos + $Delta; // position of the start
 			$AddLst = array_keys($this->AddInfo);
 			foreach ($AddLst as $idx) {
@@ -476,7 +476,7 @@ class clsTbsZip {
 				$AddDataLen += $n;
 			}
 		}
-				
+
 		// Modifiy file information in the Central Directory for replaced files
 		$b2 = '';
 		$old_cd_len = 0;
@@ -500,7 +500,7 @@ class clsTbsZip {
 		$this->OutputFromString($b2);
 		$ArchPos += $old_cd_len;
  		$DeltaCdLen =  $DeltaCdLen + strlen($b2) - $old_cd_len;
- 		
+ 
 		// Output until Central Directory footer
 		if ($this->ArchHnd!==false) $this->OutputFromArch($ArchPos, $this->CdEndPos); // ArchHnd is false if CreateNew() has been called
 
@@ -513,7 +513,7 @@ class clsTbsZip {
 			$this->OutputFromString($b2);
 			$DeltaCdLen += strlen($b2);
 		}
-		
+
 		// Output Central Directory footer
 		$b2 = $this->CdInfo['bin'];
 		$DelNbr = count($DelLst);
@@ -531,11 +531,11 @@ class clsTbsZip {
 		}
 		$this->_PutDec($b2, $this->CdPos+$Delta , 16, 4); // p_cd  (offset of start of central directory with respect to the starting disk number)
 		$this->OutputFromString($b2);
-		
+
 		$this->OutputClose();
-		
+
 		return true;
-		
+
 	}
 
 	// ----------------
@@ -573,9 +573,9 @@ class clsTbsZip {
 				if ($Len!==false) header('Content-Length: '.$Len); 
 			}
 		}
-		
+
 		return true;
-		
+
 	}
 
 	function OutputFromArch($pos, $pos_stop) {
@@ -684,7 +684,7 @@ class clsTbsZip {
 		}
 		$txt = substr_replace($txt, $x, $pos, $len);
 	}
-	
+
 	function _MsDos_Date($Timestamp = false) {
 		// convert a date-time timstamp into the MS-Dos format
 		$d = ($Timestamp===false) ? getdate() : getdate($Timestamp);
@@ -707,7 +707,7 @@ class clsTbsZip {
 		$s = ($time & 31) * 2; // seconds have been rounded to an even number in order to save 1 bit
 		return $y.'-'.str_pad($m,2,'0',STR_PAD_LEFT).'-'.str_pad($d,2,'0',STR_PAD_LEFT).' '.str_pad($h,2,'0',STR_PAD_LEFT).':'.str_pad($i,2,'0',STR_PAD_LEFT).':'.str_pad($s,2,'0',STR_PAD_LEFT);
 	}
-	
+
 	function _DataOuputAddedFile($Idx, $PosLoc) {
 
 		$Ref =& $this->AddInfo[$Idx];
@@ -739,7 +739,7 @@ class clsTbsZip {
 		$this->OutputFromString($b.$Ref['data']);
 		$OutputLen = strlen($b) + $Ref['len_c']; // new position of the cursor
 		unset($Ref['data']); // save PHP memory
-		
+
 		// Information for file in the Central Directory
 		$b = 'PK'.chr(01).chr(02).str_repeat(' ',42); // signature
 		$this->_PutDec($b,20,4,2);  // vers_used = 20
@@ -864,7 +864,7 @@ class clsTbsZip {
 				$Len += $Ref['len_c'] + $Ref['diff'];
 			}
 		}
-		
+
 		// files to add
 		$i_lst = array_keys($this->AddInfo);
 		foreach ($i_lst as $i) {
@@ -875,9 +875,9 @@ class clsTbsZip {
 				$Len += $Ref['len_c'] + $Ref['diff'];
 			}
 		}
-		
+
 		return $Len;
-		
+
 	}
-	
+
 }
