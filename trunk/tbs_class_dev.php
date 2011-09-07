@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.7.0 for PHP 4
-Date     : 2011-03-17
+Version  : 3.8.0-beta for PHP 4
+Date     : 2011-08-22
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -219,8 +219,8 @@ public function DataOpen(&$Query,$QryPrms=false) {
 					$i = $this->DataAlert('invalid query \''.$Query.'\' because property ObjectRef is not set.');
 				}
 			} else {
-				if (isset($GLOBALS[$Item0])) {
-					if ((PHP_VERSION==='4.4.1') and is_array($GLOBALS[$Item0])) {$Var = $GLOBALS[$Item0];} else {$Var = &$GLOBALS[$Item0];}
+				if (isset($this->VarRef[$Item0])) {
+					if ((PHP_VERSION==='4.4.1') and is_array($this->VarRef[$Item0])) {$Var = $this->VarRef[$Item0];} else {$Var = &$this->VarRef[$Item0];}
 					$i = 1;
 				} else {
 					$i = $this->DataAlert('invalid query \''.$Query.'\' because global variable \''.$Item0.'\' is not found.');
@@ -524,10 +524,11 @@ var $ObjectRef = false;
 var $NoErr = false;
 var $Assigned = array();
 // Undocumented (can change at any version)
-var $Version = '3.7.0';
+var $Version = '3.8.0-beta';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
+var $VarRef = null;
 var $FctPrefix = '';
 var $Protect = true;
 var $ErrCount = 0;
@@ -575,6 +576,7 @@ function clsTinyButStrong($Chrs='',$VarPrefix='',$FctPrefix='') {
 	}
 	$this->VarPrefix = $VarPrefix;
 	$this->FctPrefix = $FctPrefix;
+	$this->VarRef =& $GLOBALS;
 	// Links to global variables
 	global $_TBS_FormatLst, $_TBS_UserFctLst, $_TBS_AutoInstallPlugIns;
 	if (!isset($_TBS_FormatLst))  $_TBS_FormatLst  = array();
@@ -2123,8 +2125,8 @@ function meth_Merge_AutoVar(&$Txt,$ConvStr,$Id='var') {
 				$this->meth_Misc_Alert($Loc,'does not match the allowed prefix.',true);
 				$Pos = $Loc->PosEnd + 1;
 			}
-		} elseif (isset($GLOBALS[$Loc->SubLst[0]])) {
-			$Pos = $this->meth_Locator_Replace($Txt,$Loc,$GLOBALS[$Loc->SubLst[0]],1);
+		} elseif (isset($this->VarRef[$Loc->SubLst[0]])) {
+			$Pos = $this->meth_Locator_Replace($Txt,$Loc,$this->VarRef[$Loc->SubLst[0]],1);
 		} else {
 			if (isset($Loc->PrmLst['noerr'])) {
 				$Pos = $this->meth_Locator_Replace($Txt,$Loc,$x,false);
