@@ -46,6 +46,7 @@ $Ok = $Ok && f_Replace($Txt, '($SrcId instanceof ArrayObject)', '(is_a($SrcId,\'
 $Ok = $Ok && f_Replace($Txt, '($SrcId instanceof IteratorAggregate)', '(is_a($SrcId,\'IteratorAggregate\'))', 'Change "instanceof IteratorAggregate"');
 $Ok = $Ok && f_Replace($Txt, '($SrcId instanceof MySQLi)', '(is_a($SrcId,\'MySQLi\'))', 'Change "instanceof MySQLi"');
 $Ok = $Ok && f_Replace($Txt, '($SrcId instanceof PDO)', '(is_a($SrcId,\'PDO\'))', 'Change "instanceof PDO"');
+$Ok = $Ok && f_Replace($Txt, 'PDO::FETCH_ASSOC', 'PDO_FETCH_ASSOC', 'Change constant "PDO::FETCH_ASSOC"');
 f_Update($Ok, $Dst4, $Txt);
 
 // Conversion in PHP 5
