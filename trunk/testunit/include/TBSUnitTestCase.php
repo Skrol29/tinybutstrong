@@ -7,6 +7,7 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * Last instance of 'clsTinyButStrong' class.
 	 */
 	var $tbs;
+	var $newInstance = true;
 
 	/**
 	 * Dump last merge result.
@@ -70,7 +71,11 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * @param string $source         source of template
 	 */
 	function createTBSInstance($source) {
-		$this->tbs = new clsTinyButStrong;
+		if ($this->newInstance) {
+			$this->tbs = new clsTinyButStrong;
+		} else {
+			$this->newInstance = true;
+		}
 		$this->tbs->Source = $source;
 		$this->tbs->LoadTemplate(null);
 	}
