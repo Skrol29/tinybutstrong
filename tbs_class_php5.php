@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.7.0 for PHP 5
-Date     : 2011-03-17
+Version  : 3.8.0-beta for PHP 5
+Date     : 2011-08-22
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -213,11 +213,11 @@ public function DataOpen(&$Query,$QryPrms=false) {
 					$i = $this->DataAlert('invalid query \''.$Query.'\' because property ObjectRef is not set.');
 				}
 			} else {
-				if (isset($GLOBALS[$Item0])) {
-					$Var = &$GLOBALS[$Item0];
+				if (isset($this->VarRef[$Item0])) {
+					$Var = &$this->VarRef[$Item0];
 					$i = 1;
 				} else {
-					$i = $this->DataAlert('invalid query \''.$Query.'\' because global variable \''.$Item0.'\' is not found.');
+					$i = $this->DataAlert('invalid query \''.$Query.'\' because VarRef item \''.$Item0.'\' is not found.');
 				}
 			}
 			// Check sub-items
@@ -518,10 +518,11 @@ public $ObjectRef = false;
 public $NoErr = false;
 public $Assigned = array();
 // Undocumented (can change at any version)
-public $Version = '3.7.0';
+public $Version = '3.8.0-beta';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
+public $VarRef = null;
 public $FctPrefix = '';
 public $Protect = true;
 public $ErrCount = 0;
@@ -569,6 +570,7 @@ function __construct($Chrs='',$VarPrefix='',$FctPrefix='') {
 	}
 	$this->VarPrefix = $VarPrefix;
 	$this->FctPrefix = $FctPrefix;
+	$this->VarRef =& $GLOBALS;
 	// Links to global variables
 	global $_TBS_FormatLst, $_TBS_UserFctLst, $_TBS_AutoInstallPlugIns;
 	if (!isset($_TBS_FormatLst))  $_TBS_FormatLst  = array();
@@ -882,7 +884,7 @@ function meth_Locator_FindTbs(&$Txt,$Name,$Pos,$ChrSub) {
 
 }
 
-function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst) {
+function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
 
 	$Chk = true;
 	$LocLst = array();
@@ -896,7 +898,8 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst) {
 	}
 
 	// Cache TBS locators
-	if ($this->TurboBlock) {
+	$Cache = ($Cache && $this->TurboBlock);
+	if ($Cache) {
 
 		$Chk = false;
 		$Pos = 0;
@@ -1008,10 +1011,10 @@ function meth_Locator_SectionAddGrp(&$LocR,$BlockName,&$BDef,$Type,$Field,$Prm) 
 	$BDef->PrevValue = false;
 	$BDef->Type = $Type;
 
-  // Save sub items in a structure near to Locator.
-  $Field0 = $Field;
-  if (strpos($Field,$this->_ChrOpen)===false) $Field = $this->_ChrOpen.$BlockName.'.'.$Field.$this->_ChrClose;
-	$BDef->FDef = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,$Field,array());
+	// Save sub items in a structure near to Locator.
+	$Field0 = $Field;
+	if (strpos($Field,$this->_ChrOpen)===false) $Field = $this->_ChrOpen.$BlockName.'.'.$Field.$this->_ChrClose;
+	$BDef->FDef = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,$Field,array(),true);
 	if ($BDef->FDef->LocNbr==0)	$this->meth_Misc_Alert('Parameter '.$Prm,'The value \''.$Field0.'\' is unvalide for this parameter.');
 
 	if ($Type==='H') {
@@ -1589,7 +1592,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 					// Redefine the Header block
 					$Parent->Src = substr($Src,0,$LocR->PosBeg);
 					// Add a Footer block
-					$BDef = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,substr($Src,$LocR->PosEnd+1),$Parent->Prm);
+					$BDef = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,substr($Src,$LocR->PosEnd+1),$Parent->Prm,true);
 					$this->meth_Locator_SectionAddGrp($LocR,$BlockName,$BDef,'F',$Parent->Fld,'parentgrp');
 				}
 				// Now go down to previous level
@@ -1637,7 +1640,8 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 				}
 			}
 			// Save the block and cache its tags
-			$BDef = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,$Loc->BlockSrc,$Loc->PrmLst);
+			$IsParentGrp = isset($Loc->PrmLst['parentgrp']);
+			$BDef = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,$Loc->BlockSrc,$Loc->PrmLst,!$IsParentGrp);
 
 			// Add the text in the list of blocks
 			if (isset($Loc->PrmLst['nodata'])) { // Nodata section
@@ -1652,7 +1656,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 					$LocR->WhenLst = array();
 				}
 				$this->meth_Merge_AutoVar($Loc->PrmLst['when'],false);
-				$BDef->WhenCond = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,$Loc->PrmLst['when'],array());
+				$BDef->WhenCond = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,$Loc->PrmLst['when'],array(),true);
 				$BDef->WhenBeforeNS = ($LocR->SectionNbr===0);
 				$i = ++$LocR->WhenNbr;
 				$LocR->WhenLst[$i] = &$BDef;
@@ -1666,7 +1670,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 				$this->meth_Locator_SectionAddGrp($LocR,$BlockName,$BDef,'F',$Loc->PrmLst['footergrp'],'footergrp');
 			} elseif (isset($Loc->PrmLst['splittergrp'])) {
 				$this->meth_Locator_SectionAddGrp($LocR,$BlockName,$BDef,'S',$Loc->PrmLst['splittergrp'],'splittergrp');
-			} elseif (isset($Loc->PrmLst['parentgrp'])) {
+			} elseif ($IsParentGrp) {
 				$this->meth_Locator_SectionAddGrp($LocR,$BlockName,$BDef,'H',$Loc->PrmLst['parentgrp'],'parentgrp');
 				$BDef->Fld = $Loc->PrmLst['parentgrp'];
 				$BDef->Txt = &$Txt;
@@ -1700,7 +1704,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 					$SrId = 1;
 					do {
 						// Save previous subsection
-						$SrBDef = &$this->meth_Locator_SectionNewBDef($LocR,$SrName,$SrLoc->BlockSrc,$SrLoc->PrmLst);
+						$SrBDef = &$this->meth_Locator_SectionNewBDef($LocR,$SrName,$SrLoc->BlockSrc,$SrLoc->PrmLst,true);
 						$SrBDef->SrBeg = $SrLoc->PosBeg;
 						$SrBDef->SrLen = $SrLoc->PosEnd - $SrLoc->PosBeg + 1;
 						$SrBDef->SrTxt = false;
@@ -1736,7 +1740,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 
 	if ($LocR->WhenFound and ($LocR->SectionNbr===0)) {
 		// Add a blank section if When is used without a normal section
-		$BDef = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,'',array());
+		$BDef = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,'',array(),false);
 		$LocR->SectionNbr = 1;
 		$LocR->SectionLst[1] = &$BDef;
 	}
@@ -2081,7 +2085,7 @@ function meth_Merge_BlockSections(&$Txt,&$LocR,&$Src,&$RecSpe) {
 }
 
 function meth_Merge_AutoVar(&$Txt,$ConvStr,$Id='var') {
-// Merge automatic fields with global variables
+// Merge automatic fields with VarRef
 
 	$Pref = &$this->VarPrefix;
 	$PrefL = strlen($Pref);
@@ -2117,14 +2121,14 @@ function meth_Merge_AutoVar(&$Txt,$ConvStr,$Id='var') {
 				$this->meth_Misc_Alert($Loc,'does not match the allowed prefix.',true);
 				$Pos = $Loc->PosEnd + 1;
 			}
-		} elseif (isset($GLOBALS[$Loc->SubLst[0]])) {
-			$Pos = $this->meth_Locator_Replace($Txt,$Loc,$GLOBALS[$Loc->SubLst[0]],1);
+		} elseif (isset($this->VarRef[$Loc->SubLst[0]])) {
+			$Pos = $this->meth_Locator_Replace($Txt,$Loc,$this->VarRef[$Loc->SubLst[0]],1);
 		} else {
 			if (isset($Loc->PrmLst['noerr'])) {
 				$Pos = $this->meth_Locator_Replace($Txt,$Loc,$x,false);
 			} else {
 				$Pos = $Loc->PosEnd + 1;
-				$this->meth_Misc_Alert($Loc,'the PHP global variable named \''.$Loc->SubLst[0].'\' does not exist or is not set yet.',true);
+				$this->meth_Misc_Alert($Loc,'the key of VarRef named \''.$Loc->SubLst[0].'\' does not exist or is not set yet.',true);
 			}
 		}
 	}
