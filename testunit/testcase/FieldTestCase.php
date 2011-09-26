@@ -108,6 +108,22 @@ class FieldTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("<b>[a.ad._reporter._character_set]</b>", $data, "<b>".$this->_reporter->_character_set."</b>", "merge field with chain call #7");
 	}
 
+	function testVarRef() {
+		// test existing fields with non empty value
+		global $zzzz;
+		$zzzz =  'ok';
+		$this->assertEqualMergeFieldStrings("<b>[a;if '[var.zzzz]'='ok';then 1;else 2]</b>", array('a'=>'aaa'), "<b>1</b>", "merge global var #1");
+		
+		//if (!$this->atLeastTBSVersion('3.8')) return;
+		
+		$VarRef = array('zzzz'=>'new');
+		$this->tbs->VarRef =& $VarRef;
+		
+		$this->newInstance = false;
+		$this->assertEqualMergeFieldStrings("<b>[a;if '[var.zzzz]'='new';then 1;else 2]</b>", array('a'=>'aaa'), "<b>1</b>", "merge VarRef #1");
+		
+	}
+	
 	function testBugs() {
 		// merge bad array value syntax sould at least print a warning, except if 'noerr' parameter is used
 		// $this->assertErrorMergeFieldString("<b>[a]</b>", array('a'=>array()), "merge array value with bad syntax #1"); // should display an error
