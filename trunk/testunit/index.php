@@ -31,6 +31,7 @@ include(dirname(__FILE__).'/testcase/QuoteTestCase.php');
 include(dirname(__FILE__).'/testcase/FrmTestCase.php');
 include(dirname(__FILE__).'/testcase/FieldTestCase.php');
 include(dirname(__FILE__).'/testcase/BlockTestCase.php');
+include(dirname(__FILE__).'/testcase/MiscTestCase.php');
 
 // launch tests
 ini_set("display_errors", "On");
@@ -42,6 +43,7 @@ $test->addTestCase(new BlockTestCase());
 $test->addTestCase(new AttTestCase());
 $test->addTestCase(new QuoteTestCase());
 $test->addTestCase(new FrmTestCase());
+$test->addTestCase(new MiscTestCase());
 $test->run(new HtmlCodeCoverageReporter(array($tbsFileName, dirname(dirname(__FILE__)).'/plugins/')));
 
 ?>

@@ -551,32 +551,32 @@ var $_PlugIns = array();
 var $_PlugIns_Ok = false;
 var $_piOnFrm_Ok = false;
 
-function clsTinyButStrong($Chrs='',$VarPrefix='',$FctPrefix='') {
-	if ($Chrs!=='') {
-		$Ok = false;
-		$Len = strlen($Chrs);
-		if ($Len===2) { // For compatibility
-			$this->_ChrOpen = $Chrs[0];
-			$this->_ChrClose = $Chrs[1];
-			$Ok = true;
-		} else {
-			$Pos = strpos($Chrs,',');
-			if (($Pos!==false) and ($Pos>0) and ($Pos<$Len-1)) {
-				$this->_ChrOpen = substr($Chrs,0,$Pos);
-				$this->_ChrClose = substr($Chrs,$Pos+1);
-				$Ok = true;
+function clsTinyButStrong($Options=null,$VarPrefix='',$FctPrefix='') {
+	// Compatibility
+	if (is_string($Options)) {
+		$Chrs = $Options;
+		$Options = array('var_prefix'=>$VarPrefix, 'fct_prefix'=>$FctPrefix);
+		if ($Chrs!=='') {
+			$Err = true;
+			$Len = strlen($Chrs);
+			if ($Len===2) { // For compatibility
+				$Options['chr_open']  = $Chrs[0];
+				$Options['chr_close'] = $Chrs[1];
+				$Err = false;
+			} else {
+				$Pos = strpos($Chrs,',');
+				if (($Pos!==false) and ($Pos>0) and ($Pos<$Len-1)) {
+					$Options['chr_open']  = substr($Chrs,0,$Pos);
+					$Options['chr_close'] = substr($Chrs,$Pos+1);
+					$Err = false;
+				}
 			}
-		}
-		if ($Ok) {
-			$this->_ChrVal = $this->_ChrOpen.'val'.$this->_ChrClose;
-			$this->_ChrProtect = '&#'.ord($this->_ChrOpen[0]).';'.substr($this->_ChrOpen,1);
-		} else {
-			$this->meth_Misc_Alert('with clsTinyButStrong() function','value \''.$Chrs.'\' is a bad tag delimitor definition.');
+			if ($Err) $this->meth_Misc_Alert('with clsTinyButStrong() function','value \''.$Chrs.'\' is a bad tag delimitor definition.');
 		}
 	}
-	$this->VarPrefix = $VarPrefix;
-	$this->FctPrefix = $FctPrefix;
+	// Set options
 	$this->VarRef =& $GLOBALS;
+	if (is_array($Options)) $this->SetOptions($Options);
 	// Links to global variables
 	global $_TBS_FormatLst, $_TBS_UserFctLst, $_TBS_AutoInstallPlugIns;
 	if (!isset($_TBS_FormatLst))  $_TBS_FormatLst  = array();
@@ -585,6 +585,25 @@ function clsTinyButStrong($Chrs='',$VarPrefix='',$FctPrefix='') {
 	$this->_UserFctLst = &$_TBS_UserFctLst;
 	// Auto-installing plug-ins
 	if (isset($_TBS_AutoInstallPlugIns)) foreach ($_TBS_AutoInstallPlugIns as $pi) $this->PlugIn(TBS_INSTALL,$pi);
+}
+
+function SetOptions($o) {
+	$UpdateChr = false;
+	if (isset($o['var_prefix'])) $this->VarPrefix = $o['var_prefix'];
+	if (isset($o['fct_prefix'])) $this->FctPrefix = $o['fct_prefix'];
+	if (isset($o['chr_open'])) {
+		$this->_ChrOpen = $o['chr_open'];
+		$UpdateChr = true;
+	}
+	if (isset($o['chr_close'])) {
+		$this->_ChrClose = $o['chr_close'];
+		$UpdateChr = true;
+	}
+	if (isset($o['var_ref'])) $this->SetVarRef($o['var_ref']);
+	if ($UpdateChr) {
+		$this->_ChrVal = $this->_ChrOpen.'val'.$this->_ChrClose;
+		$this->_ChrProtect = '&#'.ord($this->_ChrOpen[0]).';'.substr($this->_ChrOpen,1);
+	}
 }
 
 // Public methods
@@ -816,6 +835,22 @@ public function PlugIn($Prm1,$Prm2=0) {
 	}
 	return $this->meth_Misc_Alert('with PlugIn() method','\''.$Prm1.'\' is an invalid plug-in key, the type of the value is \''.gettype($Prm1).'\'.');
 
+}
+
+function SetVarRef(&$VarRef) {
+	if (is_array($VarRef)) {
+		$this->VarRef =& $VarRef;
+	} else {
+		$this->VarRef =& $GLOBALS;
+	}
+}
+
+function SetTplFrms($Frms, $Val=false) {
+	if (is_array($Frms)) {
+		foreach ($Frms as $Frm=>$Val) $this->meth_Misc_FormatSave($Val,$Frm);
+	} else {
+		$this->meth_Misc_FormatSave($Val,$Frms);
+	}
 }
 
 // *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-

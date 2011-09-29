@@ -2,6 +2,8 @@
 - bug with PHP 4 : PDO::FETCH_ASSOC
 - bug: A string [] appears in the contents when parameter "att" is used with a "parentgrp" block.
 - new property ->VarRef
-- 
+- new method SetVarRef()
+- new method SetOptions()
+- new method AddTemplateFormats
 
 
