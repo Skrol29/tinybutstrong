@@ -114,7 +114,7 @@ class FieldTestCase extends TBSUnitTestCase {
 		$zzzz =  'ok';
 		$this->assertEqualMergeFieldStrings("<b>[a;if '[var.zzzz]'='ok';then 1;else 2]</b>", array('a'=>'aaa'), "<b>1</b>", "merge global var #1");
 		
-		//if (!$this->atLeastTBSVersion('3.8')) return;
+		if (!$this->atLeastTBSVersion('3.8')) return;
 		
 		$VarRef = array('zzzz'=>'new');
 		$this->tbs->VarRef =& $VarRef;
