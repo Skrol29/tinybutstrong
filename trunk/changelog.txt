@@ -3,7 +3,20 @@
 - bug: A string [] appears in the contents when parameter "att" is used with a "parentgrp" block.
 - new property ->VarRef
 - new method SetVarRef()
-- new method SetOptions()
-- new method AddTemplateFormats
+- new method SetOption()
+- new method SetTplFrms()
 
-
+options : 
+var_prefix ('')
+fct_prefix ('')
+var_ref ($GLOBALS)
+noerr (false)
+auto_merge (true)
+onload (true)
+onshow (true)
+att_delim ('"')
+protect (true)
+turbo_block (true)
+charset 
+chr_open ('[')
+chr_close (']')

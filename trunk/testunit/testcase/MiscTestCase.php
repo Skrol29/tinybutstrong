@@ -45,7 +45,7 @@ class MiscTestCase extends TBSUnitTestCase {
 		$this->assertEqual($this->tbs->FctPrefix, '', "NEW fct prefix");
 	
 		$Options2 = array('var_prefix'=>'vvvv', 'fct_prefix'=>'ffff');
-		$this->tbs->SetOptions($Options2);
+		$this->tbs->SetOption($Options2);
 		$this->assertEqual($this->tbs->VarPrefix, 'vvvv', "NEW var prefix");
 		$this->assertEqual($this->tbs->FctPrefix, 'ffff', "NEW fct prefix");
 	
