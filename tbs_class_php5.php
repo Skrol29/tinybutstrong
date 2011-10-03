@@ -567,10 +567,10 @@ function __construct($Options=null,$VarPrefix='',$FctPrefix='') {
 			}
 			if ($Err) $this->meth_Misc_Alert('with clsTinyButStrong() function','value \''.$Chrs.'\' is a bad tag delimitor definition.');
 		}
-	}
+	} 
 	// Set options
 	$this->VarRef =& $GLOBALS;
-	if (is_array($Options)) $this->SetOptions($Options);
+	if (is_array($Options)) $this->SetOption($Options);
 	// Links to global variables
 	global $_TBS_FormatLst, $_TBS_UserFctLst, $_TBS_AutoInstallPlugIns;
 	if (!isset($_TBS_FormatLst))  $_TBS_FormatLst  = array();
@@ -581,10 +581,23 @@ function __construct($Options=null,$VarPrefix='',$FctPrefix='') {
 	if (isset($_TBS_AutoInstallPlugIns)) foreach ($_TBS_AutoInstallPlugIns as $pi) $this->PlugIn(TBS_INSTALL,$pi);
 }
 
-function SetOptions($o) {
-	$UpdateChr = false;
+function SetOption($o, $v=null) {
+	if (!is_array($o)) $o = array($o=>$v);
 	if (isset($o['var_prefix'])) $this->VarPrefix = $o['var_prefix'];
 	if (isset($o['fct_prefix'])) $this->FctPrefix = $o['fct_prefix'];
+	if (isset($o['var_ref'])) $this->SetVarRef($o['var_ref']);
+	if (isset($o['noerr'])) $this->NoErr = $o['noerr'];
+	if (isset($o['auto_merge'])) {
+		$this->OnLoad = $o['auto_merge'];
+		$this->OnShow = $o['auto_merge'];
+	}
+	if (isset($o['onload'])) $this->OnLoad = $o['onload'];
+	if (isset($o['onshow'])) $this->OnShow = $o['onshow'];
+	if (isset($o['att_delim'])) $this->AttDelim = $o['att_delim'];
+	if (isset($o['protect'])) $this->Protect = $o['protect'];
+	if (isset($o['turbo_block'])) $this->TurboBlock = $o['turbo_block'];
+	if (isset($o['charset'])) $this->meth_Misc_Charset($o['charset']);
+	$UpdateChr = false;
 	if (isset($o['chr_open'])) {
 		$this->_ChrOpen = $o['chr_open'];
 		$UpdateChr = true;
@@ -593,10 +606,25 @@ function SetOptions($o) {
 		$this->_ChrClose = $o['chr_close'];
 		$UpdateChr = true;
 	}
-	if (isset($o['var_ref'])) $this->SetVarRef($o['var_ref']);
 	if ($UpdateChr) {
 		$this->_ChrVal = $this->_ChrOpen.'val'.$this->_ChrClose;
 		$this->_ChrProtect = '&#'.ord($this->_ChrOpen[0]).';'.substr($this->_ChrOpen,1);
+	}
+}
+
+function SetVarRef(&$VarRef) {
+	if (is_array($VarRef)) {
+		$this->VarRef =& $VarRef;
+	} else {
+		$this->VarRef =& $GLOBALS;
+	}
+}
+
+function SetTplFrms($Frms, $Val=false) {
+	if (is_array($Frms)) {
+		foreach ($Frms as $Frm=>$Val) $this->meth_Misc_FormatSave($Val,$Frm);
+	} else {
+		$this->meth_Misc_FormatSave($Val,$Frms);
 	}
 }
 
@@ -829,22 +857,6 @@ public function PlugIn($Prm1,$Prm2=0) {
 	}
 	return $this->meth_Misc_Alert('with PlugIn() method','\''.$Prm1.'\' is an invalid plug-in key, the type of the value is \''.gettype($Prm1).'\'.');
 
-}
-
-function SetVarRef(&$VarRef) {
-	if (is_array($VarRef)) {
-		$this->VarRef =& $VarRef;
-	} else {
-		$this->VarRef =& $GLOBALS;
-	}
-}
-
-function SetTplFrms($Frms, $Val=false) {
-	if (is_array($Frms)) {
-		foreach ($Frms as $Frm=>$Val) $this->meth_Misc_FormatSave($Val,$Frm);
-	} else {
-		$this->meth_Misc_FormatSave($Val,$Frms);
-	}
 }
 
 // *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
