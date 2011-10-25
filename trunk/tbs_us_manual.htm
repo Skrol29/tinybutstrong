@@ -158,7 +158,7 @@ a.opt-name:hover {
           </tr>
           <tr class="txt-tiny">
             <td>Date:</td>
-            <td>2011-05-28</td>
+            <td>2011-10-15</td>
           </tr>
         </table></td>
       <td width="34%" align="center"><div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div>
@@ -1676,17 +1676,18 @@ If parameter           <span class="opt-name">script</span> is used by omitting 
             <tr>
               <td valign="top">&nbsp;</td>
               <td valign="top"><span class="opt-name">$</span><span class="opt-name">FieldName</span></td>
-              <td>Gives the name of the current field (read only).</td>
+              <td>The name of the current field (read only).</td>
             </tr>
             <tr>
               <td valign="top" class="opt-name">&nbsp;</td>
               <td valign="top" class="opt-name">$CurrVal</td>
-              <td>Gives the value of the current field (read/write<span class="txt-small"> <em>; don't forget the &amp; character in the statement</em></span>).</td>
+              <td>The value of the current field. <span class="txt-small"> <em>(Don't forget the &amp; character in the statement</em></span>).<br>
+              The function is supposed to change this value in order to format it.</td>
             </tr>
             <tr id="v202_onformat_currprm">
               <td valign="top" class="opt-name">&nbsp;</td>
               <td valign="top" class="opt-name">$CurrPrm</td>
-              <td>Optional. Gives  the PHP array containing the parameters for the current field (<span class="txt-small"><em>Don't forget the &amp; character in the statement</em></span>).</td>
+              <td>Optional. The PHP array containing the parameters for the current field (<span class="txt-small"><em>Don't forget the &amp; character in the statement</em></span>).</td>
             </tr>
             <tr id="v202_onformat_tbs">
               <td valign="top" class="opt-name">&nbsp;</td>
@@ -1695,7 +1696,14 @@ If parameter           <span class="opt-name">script</span> is used by omitting 
                 Use this argument with lot of care. It is used sometimes for the subtemplate mode. </td>
             </tr>
           </table>
-          <span id="v202_subtpl_onformat">See chapter '<a href="#html_subtemplate">Subtemplates</a>' for more details about how to use this arguments in subtemplate mode.<br>
+          <span id="v202_subtpl_onformat">Example:</span>
+          <div class="decal"> <span class="opt-html">HTML</span>: [<span class="opt-name">onshow.x</span>;<span class="opt-name">onformat</span>=<span class="opt-value">f_to_utf8</span>] </div>
+          <div class="decal txt-code"> <span class="opt-html">PHP:</span><br>
+            function <span class="opt-value">f_to_utf8</span>(<span class="opt-name">$FieldName</span>, &amp;<span class="opt-name">$CurrVal</span>) {<br>
+           &nbsp;<span class="opt-name">&nbsp;$CurrVal</span>= utf8_encode(<span class="opt-name">$CurrVal</span>); <br>
+            }
+          </div>
+          <span>See chapter '<a href="#html_subtemplate">Subtemplates</a>' for more details about how to use this arguments in subtemplate mode.<br>
           Since TBS version 3.6.0, it's possible to limit the allowed PHP functions for parameter <span class="opt-name">onformat</span>. See <a href="#php_instanciate">create a new TBS object</a>. </span></td>
       </tr>
       <tr>
