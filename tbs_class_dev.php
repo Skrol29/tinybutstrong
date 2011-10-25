@@ -3302,7 +3302,7 @@ static function f_Misc_GetFile(&$Res, &$File, $LastFile='', $IncludePath=false, 
 				if ($fd!==false) break;
 			}
 		}
-		if ($fd===false) $fd = clsTinyButStrong::f_Misc_TryFile($File, dirname($LastFile));
+		if (($fd===false) && ($LastFile!='')) $fd = clsTinyButStrong::f_Misc_TryFile($File, dirname($LastFile));
 		if ($fd===false) return false;
 	}
 
