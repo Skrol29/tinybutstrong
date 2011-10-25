@@ -6,14 +6,28 @@ TinyButStrong 1.8.0 beta
 
 - bug with PHP 4 : PDO::FETCH_ASSOC is not recognized
 - bug: A string [] appears in the contents when parameter "att" is used with a "parentgrp" block.
-- new feature ExtendedMethods: enables plug-in coders to add new TBS methods
-- new feature VarRef + SetVarRef(): enables to change [var] field's reference.
-- new feature IncludePath: similar to PHP include_path for template, scripts and sub-templates.
-- new method SetOption() / GetOption() : a shorthand for many TBS options
-- new method SetTplFrms(): enables you to add format alaises at the PHP side
-- new native database support: Zend Adapater
-- new value for parameter "ope": upper, lower, upper1, upperw, utf8
 
+- new feature ExtendedMethods: enables plug-in coders to add new TBS methods (PHP 5 only).
+
+- new feature VarRef + SetVarRef(): enables to change [var] field's reference.
+  [var] fields could merge only global PHP variables. Now, this feature enables you
+  to redefine the scope of [var] fields. This can be useful when TBS is embedded in a business method.
+
+- new feature IncludePath: similar to PHP include_path.
+  You can now add new directory where TBS should search for templates, sub-templates and scripts.
+
+- new method SetOption() / GetOption() : a shorthand for many TBS options
+  See the list of options below.
+  
+- new method SetTplFrms(): enables you to add format aliases at the PHP side.
+  You have complicated formats for parameter "frm", or you'd like to share formats
+  between several templates. This can be done using this new method.
+
+- new native database support: Zend DB Adapater.
+  TBS now support Zend DB Adapater as source for merging queries.
+
+- new value for parameter "ope": upper, lower, upper1, upperw, utf8
+  Enables you to directly change the case of merged items.
 
 Options suported by  SetOption() / GetOption() :
 ================================================

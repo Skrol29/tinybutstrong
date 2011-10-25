@@ -3296,7 +3296,7 @@ static function f_Misc_GetFile(&$Res, &$File, $LastFile='', $IncludePath=false, 
 				if ($fd!==false) break;
 			}
 		}
-		if ($fd===false) $fd = self::f_Misc_TryFile($File, dirname($LastFile));
+		if (($fd===false) && ($LastFile!='')) $fd = self::f_Misc_TryFile($File, dirname($LastFile));
 		if ($fd===false) return false;
 	}
 
