@@ -1,6 +1,18 @@
 
 TinyButStrong 1.8.0 beta
 
+2011-10-26, change-log:
+=======================
+
+- bug in beta when using MergeBlock when argument source is "array".
+  Message: "invalid query 'xxx' because VarRef item 'xxx' is not found."
+
+- bug with operator "upper" and "lower" with "utf8". 
+
+- method SetTplFrms() replaced with option "tplfrms"
+
+- new option "include_path"
+
 2011-10-25, change-log:
 =======================
 
@@ -23,27 +35,29 @@ TinyButStrong 1.8.0 beta
   You have complicated formats for parameter "frm", or you'd like to share formats
   between several templates. This can be done using this new method.
 
-- new native database support: Zend DB Adapater.
-  TBS now support Zend DB Adapater as source for merging queries.
+- new native database support: Zend DB Adapter.
+  TBS now support Zend DB Adapter as source for merging queries.
 
 - new value for parameter "ope": upper, lower, upper1, upperw, utf8
   Enables you to directly change the case of merged items.
 
-Options suported by  SetOption() / GetOption() :
+Options supported by  SetOption() / GetOption() :
 ================================================
 
-Key         Default value
------------ -------------
-var_prefix  ''
-fct_prefix  ''
-var_ref     $GLOBALS
-noerr       false
-auto_merge  true
-onload      true
-onshow      true
-att_delim   '"'
-protect     true
-turbo_block true
-charset     '' 
-chr_open    '['
-chr_close   ']'
+Key             Default value
+-----------     -------------
+'var_prefix'    ''
+'fct_prefix'    ''
+'var_ref'       $GLOBALS
+'noerr'         false
+'auto_merge'    true
+'onload'        true
+'onshow'        true
+'att_delim'     '"'
+'protect'       true
+'turbo_block'   true
+'charset'       '' 
+'chr_open'      '['
+'chr_close'     ']'
+'tplfrms'       array()
+'include_path'  array()
