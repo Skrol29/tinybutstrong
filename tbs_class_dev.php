@@ -3,7 +3,7 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.8.0-beta for PHP 4
+Version  : 3.8.0-beta-2011-10-25 for PHP 4
 Date     : 2011-08-22
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
@@ -128,6 +128,8 @@ public function DataPrepare(&$SrcId,&$TBS) {
 		$this->Type = 10;
 	} elseif ($SrcId instanceof PDO) {
 		$this->Type = 11;
+	} elseif ($SrcId instanceof Zend_Db_Adapter_Abstract) {
+		$this->Type = 12;
 	} elseif (is_object($SrcId)) {
 		$FctInfo = get_class($SrcId);
 		$FctCat = 'o';
@@ -365,6 +367,13 @@ public function DataOpen(&$Query,$QryPrms=false) {
 			$this->DataAlert('PDO error message when opening the query:'.$err[2]);
 		}
 		break;
+	case 12: // Zend_DB_Adapter
+		try {
+			$this->RecSet = $this->SrcId->query($Query);
+		} catch (Exception $e) {
+			$this->DataAlert('Zend_DB_Adapter error message when opening the query: '.$e->getMessage());
+		}
+		break;
 	}
 
 	if (($this->Type===0) or ($this->Type===9)) {
@@ -474,6 +483,9 @@ public function DataFetch() {
 	case 11: // PDO
 		$this->CurrRec = $this->RecSet->fetch(PDO::FETCH_ASSOC);
 		break;
+	case 12: // Zend_DB_Adapater
+		$this->CurrRec = $this->RecSet->fetch(Zend_Db::FETCH_ASSOC);
+		break;
 	}
 
 	// Set the row count
@@ -524,7 +536,7 @@ var $ObjectRef = false;
 var $NoErr = false;
 var $Assigned = array();
 // Undocumented (can change at any version)
-var $Version = '3.8.0-beta';
+var $Version = '3.8.0-beta-2011-10-25';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -537,6 +549,8 @@ var $AttDelim = false;
 var $MethodsAllowed = false;
 var $OnLoad = true;
 var $OnShow = true;
+var $IncludePath = array();
+var $ExtendedMethods = array();
 // Private
 var $_ErrMsgName = '';
 var $_LastFile = '';
@@ -587,6 +601,18 @@ function clsTinyButStrong($Options=null,$VarPrefix='',$FctPrefix='') {
 	if (isset($_TBS_AutoInstallPlugIns)) foreach ($_TBS_AutoInstallPlugIns as $pi) $this->PlugIn(TBS_INSTALL,$pi);
 }
 
+function __call($meth, $args) {
+	if (isset($this->ExtendedMethods[$meth])) {
+		if ( is_array($this->ExtendedMethods[$meth]) || is_string($this->ExtendedMethods[$meth]) ) {
+			return call_user_func_array($this->ExtendedMethods[$meth], $args);
+		} else {
+			return call_user_func_array(array(&$this->ExtendedMethods[$meth], $meth), $args);
+		}
+	} else {
+		$this->meth_Misc_Alert('Method not found','\''.$meth.'\' is neither a native nor an extended method of TinyButStrong.');
+	}
+}
+
 function SetOption($o, $v=null) {
 	if (!is_array($o)) $o = array($o=>$v);
 	if (isset($o['var_prefix'])) $this->VarPrefix = $o['var_prefix'];
@@ -616,6 +642,23 @@ function SetOption($o, $v=null) {
 		$this->_ChrVal = $this->_ChrOpen.'val'.$this->_ChrClose;
 		$this->_ChrProtect = '&#'.ord($this->_ChrOpen[0]).';'.substr($this->_ChrOpen,1);
 	}
+}
+
+function GetOption($o) {
+	if ($o=='var_prefix') return $this->VarPrefix;
+	if ($o=='fct_prefix') return $this->FctPrefix;
+	if ($o=='var_ref') $this->VarRef;
+	if ($o=='noerr') return $this->NoErr;
+	if ($o=='auto_merge') return ($this->OnLoad && $this->OnShow);
+	if ($o=='onload') return $this->OnLoad;
+	if ($o=='onshow') return $this->OnShow;
+	if ($o=='att_delim') return $this->AttDelim;
+	if ($o=='protect') return $this->Protect;
+	if ($o=='turbo_block') return $this->TurboBlock;
+	if ($o=='charset') return $this->Charset;
+	if ($o=='chr_open') return $this->_ChrOpen;
+	if ($o=='chr_close') return $this->_ChrClose;
+	return $this->meth_Misc_Alert('with GetOption() method','option \''.$o.'\' is not supported.');;
 }
 
 function SetVarRef(&$VarRef) {
@@ -654,7 +697,7 @@ public function LoadTemplate($File,$Charset='') {
 	if ($Ok!==false) {
 		if (!is_null($File)) {
 			$x = '';
-			if (!$this->f_Misc_GetFile($x,$File,$this->_LastFile)) return $this->meth_Misc_Alert('with LoadTemplate() method','file \''.$File.'\' is not found or not readable.');
+			if (!$this->f_Misc_GetFile($x, $File, $this->_LastFile, $this->IncludePath)) return $this->meth_Misc_Alert('with LoadTemplate() method','file \''.$File.'\' is not found or not readable.');
 			if ($Charset==='+') {
 				$this->Source .= $x;
 			} else {
@@ -1196,6 +1239,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 			$OpeLst = explode(',',$Loc->PrmLst['ope']);
 			$Loc->OpeAct = array();
 			$Loc->OpeArg = array();
+			$Loc->OpeUtf8 = false;
 			foreach ($OpeLst as $i=>$ope) {
 				if ($ope==='list') {
 					$Loc->OpeAct[$i] = 1;
@@ -1206,6 +1250,11 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 					$Loc->MSave = $Loc->MagnetId;
 				} elseif ($ope==='attbool') { // this operation key is set when a loc is cached with paremeter atttrue
 					$Loc->OpeAct[$i] = 14;
+				} elseif ($ope==='utf8')  { $Loc->OpeUtf8 = true;
+				} elseif ($ope==='upper') { $Loc->OpeAct[$i] = 15;
+				} elseif ($ope==='lower') { $Loc->OpeAct[$i] = 16;
+				} elseif ($ope==='upper1') { $Loc->OpeAct[$i] = 17;
+				} elseif ($ope==='upperw') { $Loc->OpeAct[$i] = 18;
 				} else {
 					$x = substr($ope,0,4);
 					if ($x==='max:') {
@@ -1301,6 +1350,10 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 			case 12: if ((string)$CurrVal===$Loc->OpePrm[$i]) $CurrVal = ''; break;
 			case 13: $CurrVal = str_replace('*',$CurrVal,$Loc->OpePrm[$i]); break;
 			case 14: $CurrVal = clsTinyButStrong::f_Loc_AttBoolean($CurrVal, $Loc->PrmLst['atttrue'], $Loc->AttName); break;
+			case 15: $CurrVal = ($Loc->OpeUtf8) ? mb_strtoupper($CurrVal) : strtoupper($CurrVal); break;
+			case 16: $CurrVal = ($Loc->OpeUtf8) ? mb_strtolower($CurrVal) : strtolower($CurrVal); break;
+			case 17: $CurrVal = ucfirst($CurrVal); break;
+			case 18: $CurrVal = ($Loc->OpeUtf8) ? mb_convert_case($CurrVal, MB_CASE_TITLE) : ucwords($CurrVal); break;
 			}
 		}
 	}
@@ -1371,7 +1424,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 		$x = trim(str_replace($this->_ChrVal,$CurrVal,$x));
 		$CurrVal = '';
 		if ($x!=='') {
-			if ($this->f_Misc_GetFile($CurrVal,$x,$this->_LastFile)) {
+			if ($this->f_Misc_GetFile($CurrVal, $x, $this->_LastFile, $this->IncludePath)) {
 				if (isset($Loc->PrmLst['getbody'])) $CurrVal = $this->f_Xml_GetPart($CurrVal,$Loc->PrmLst['getbody'],true);
 				if (isset($Loc->PrmLst['rename'])) $this->meth_Locator_Rename($CurrVal, $Loc->PrmLst['rename']);
 			} else {
@@ -2203,7 +2256,7 @@ function meth_Merge_AutoSpe(&$Txt,&$Loc) {
 		case 'version': $x = $this->Version; break;
 		case 'script_name': $x = basename(((isset($_SERVER)) ? $_SERVER['PHP_SELF'] : $GLOBALS['HTTP_SERVER_VARS']['PHP_SELF'] )); break;
 		case 'template_name': $x = $this->_LastFile; break;
-		case 'template_date': $x = ''; if ($this->f_Misc_GetFile($x,$this->_LastFile,'',false)) $x = $x['mtime']; break;
+		case 'template_date': $x = ''; if ($this->f_Misc_GetFile($x,$this->_LastFile,'',array(),false)) $x = $x['mtime']; break;
 		case 'template_path': $x = dirname($this->_LastFile).'/'; break;
 		case 'name': $x = 'TinyButStrong'; break;
 		case 'logo': $x = '**TinyButStrong**'; break;
@@ -3237,18 +3290,22 @@ static function f_Misc_DelDelimiter(&$Txt,$Delim) {
 	}
 }
 
-static function f_Misc_GetFile(&$Res,&$File,$LastFile='',$Contents=true) {
+static function f_Misc_GetFile(&$Res, &$File, $LastFile='', $IncludePath=false, $Contents=true) {
 // Load the content of a file into the text variable.
+
 	$Res = '';
-	$fd = @fopen($File,'r',true); // 'rb' if binary for some OS. fopen() uses include_path and search on the __FILE__ directory while file_exists() doesn't.
+	$fd = clsTinyButStrong::f_Misc_TryFile($File, false); 
 	if ($fd===false) {
-		if ($LastFile==='') return false;
-		$File2 = dirname($LastFile).'/'.$File;
-		$fd = @fopen($File2,'r',true);
+		if (is_array($IncludePath)) {
+			foreach ($IncludePath as $d) {
+				$fd = clsTinyButStrong::f_Misc_TryFile($File, $d);
+				if ($fd!==false) break;
+			}
+		}
+		if ($fd===false) $fd = clsTinyButStrong::f_Misc_TryFile($File, dirname($LastFile));
 		if ($fd===false) return false;
-		$File = $File2;
 	}
-	if ($fd===false) return false;
+
 	$fs = fstat($fd);
 	if ($Contents) {
 		// Return contents
@@ -3261,8 +3318,19 @@ static function f_Misc_GetFile(&$Res,&$File,$LastFile='',$Contents=true) {
 		// Return stats
 		$Res = $fs;
 	}
+
 	fclose($fd);
 	return true;
+
+}
+
+static function f_Misc_TryFile(&$File, $Dir) {
+	if ($Dir==='') return false;
+	$FileSearch = ($Dir===false) ? $File : $Dir.'/'.$File;
+	// 'rb' if binary for some OS. fopen() uses include_path and search on the __FILE__ directory while file_exists() doesn't.
+	$f = @fopen($FileSearch, 'r', true);
+	if ($f!==false) $File = $FileSearch;
+	return $f;
 }
 
 static function f_Loc_PrmRead(&$Txt,$Pos,$XmlTag,$DelimChrs,$BegStr,$EndStr,&$Loc,&$PosEnd,$WithPos=false) {

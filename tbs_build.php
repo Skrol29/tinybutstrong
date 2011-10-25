@@ -47,6 +47,9 @@ $Ok = $Ok && f_Replace($Txt, '($SrcId instanceof IteratorAggregate)', '(is_a($Sr
 $Ok = $Ok && f_Replace($Txt, '($SrcId instanceof MySQLi)', '(is_a($SrcId,\'MySQLi\'))', 'Change "instanceof MySQLi"');
 $Ok = $Ok && f_Replace($Txt, '($SrcId instanceof PDO)', '(is_a($SrcId,\'PDO\'))', 'Change "instanceof PDO"');
 $Ok = $Ok && f_Replace($Txt, 'PDO::FETCH_ASSOC', 'PDO_FETCH_ASSOC', 'Change constant "PDO::FETCH_ASSOC"');
+$Ok = $Ok && f_Replace($Txt, 'Zend_Db::FETCH_ASSOC', 'Zend_Db_FETCH_ASSOC', 'Change constant "Zend_Db::FETCH_ASSOC"');
+$Ok = $Ok && f_Replace($Txt, "\ttry {"   , "\t if (true) { // try {", 'Avoid Try/Catch (1 on 2)');
+$Ok = $Ok && f_Replace($Txt, "\t} catch ", "\t //} catch "          , 'Avoid Try/Catch (2 on 2)');
 f_Update($Ok, $Dst4, $Txt);
 
 // Conversion in PHP 5
@@ -65,6 +68,7 @@ $Ok = $Ok && f_Replace($Txt, ' for PHP 4', ' for PHP 5', 'version: for PHP 5');
 $Ok = $Ok && f_Replace($Txt, 'if (version_compare(PHP_VERSION,\'4.0.6\')<0) echo \'<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is \'.PHP_VERSION.\' while TinyButStrong needs PHP version 4.0.6 or higher.\';'."\n".'if (!is_callable(\'array_key_exists\')) {'."\n".'	function array_key_exists (&$key,&$array) {return key_exists($key,$array);}'."\n".'}'."\n".'if (!is_callable(\'property_exists\')) {'."\n".'	function property_exists(&$obj,$prop) {return true;}'."\n".'}', 'if (version_compare(PHP_VERSION,\'5.0\')<0) echo \'<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is \'.PHP_VERSION.\' while TinyButStrong needs PHP version 5.0 or higher. You should try with TinyButStrong Edition for PHP 4.\';', 'check PHP version');
 $Ok = $Ok && f_Replace($Txt, 'function clsTinyButStrong','function __construct','Rename constructor');
 $Ok = $Ok && f_Replace($Txt, '			if (strcasecmp($x,substr($Txt,$p,$xl))!=0) continue; // For PHP 4 only'."\n", '', 'Avoid special check for strrpos()');
+$Ok = $Ok && f_Replace($Txt, 'clsTinyButStrong::', 'self::', 'Replace clsTinyButStrong:: with self::');
 f_Update($Ok, $Dst5, $Txt);
 
 exit;
