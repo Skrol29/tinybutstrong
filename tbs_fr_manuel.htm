@@ -158,12 +158,12 @@ a.opt-name:hover {
           </tr>
           <tr class="txt-tiny">
             <td>Date :</td>
-            <td>2011-04-21</td>
+            <td>2011-10-26</td>
           </tr>
         </table></td>
       <td width="34%" align="center"><div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div>
         <h1>Documentation pour TinyButStrong</h1>
-        <div class="txt-tiny">version 3.7</div>
+        <div class="txt-tiny">version 3.8</div>
         <div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div></td>
       <td width="33%" align="right" valign="top" class="txt-small">&nbsp;</td>
     </tr>
@@ -747,6 +747,11 @@ Dans les deux cas, si <span class="opt-name">Charset</span> vaut <span class="op
         <td class="border-0">PDO</td>
         <td valign="top" class="border-0">Un objet  <a href="http://www.php.net/manual/fr/book.pdo.php">PDO</a>. <span class="versioning">Supporté depuis  TBS version 3.7.0.</span></td>
         <td valign="top" class="border-0">Une requête SQL. L'argument optionel   <a href="#php_mergeblock" class="opt-name">QryPrms</a> peut être utilisé comme avec <a href="http://www.php.net/manual/fr/pdostatement.execute.php">PDOStatement-&gt;execute(QryPrms</a>).</td>
+      </tr>
+      <tr valign="top">
+        <td class="border-0">Zend DB Adapter</td>
+        <td valign="top" class="border-0">Un objet <a href="http://framework.zend.com/manual/fr/zend.db.adapter.html">Zend DB Adapter</a>. <span class="versioning">Supporté depuis  TBS version 3.8.0.</span></td>
+        <td valign="top" class="border-0">Une requête SQL. L'argument optionel <a href="#php_mergeblock" class="opt-name">QryPrms</a> peut être utilisé comme avec <a href="http://framework.zend.com/manual/fr/zend.db.adapter.html#zend.db.adapter.transactions">$db-&gt;query($sql, $prms)</a>.</td>
       </tr>
       <tr valign="top">
         <td class="border-0">MySQLi</td>
@@ -1696,7 +1701,13 @@ Dans les deux cas, si <span class="opt-name">Charset</span> vaut <span class="op
                 Utilisez cet argument avec prudence. Il est fournit pour le mode Sous-modèle.</td>
             </tr>
           </table>
-          <span id="v202_subtpl_onformat">Voir le paragraphe  '<a href="#html_subtemplate">Sous-modèles</a>' pour plus de détails sur l'utilisation de ces arguments en mode sous-modèle.<br>
+          <span id="v202_subtpl_onformat"><span id="v202_subtpl_onformat2">Exemple :</span> </span>
+          <div class="decal"> <span class="opt-html">HTML</span>: [<span class="opt-name">onshow.x</span>;<span class="opt-name">onformat</span>=<span class="opt-value">f_to_utf8</span>] </div>
+          <div class="decal txt-code"> <span class="opt-html">PHP:</span><br>
+            function <span class="opt-value">f_to_utf8</span>(<span class="opt-name">$NomChamp</span>, &amp;<span class="opt-name">$CurrVal</span>) {<br>
+  &nbsp;<span class="opt-name">&nbsp;$CurrVal</span>= utf8_encode(<span class="opt-name">$CurrVal</span>); <br>
+            } </div>
+          <span>Voir le paragraphe  '<a href="#html_subtemplate">Sous-modèles</a>' pour plus de détails sur l'utilisation de ces arguments en mode sous-modèle.<br>
           Depuis  TBS version 3.6.0, il est possible de limiter les fonctions PHP autorisées pour le paramètre <span class="opt-name">onformat</span>. Voir <a href="#php_instanciate">créer un nouvel objet PHP</a>. </span></td>
       </tr>
       <tr>
@@ -1768,6 +1779,26 @@ Dans les deux cas, si <span class="opt-name">Charset</span> vaut <span class="op
               <tr>
                 <td valign="top" class="opt-value">msk:x</td>
                 <td><em>(veut dire &quot;mask&quot;)</em> Applique un masque à la valeur. Les caractères '<span class="opt-value">*</span>' dans le masque seront remplacés par la valeur d'origine du champ.  Exemple : [onshow.img_id;<span class="opt-name">ope</span>=<span class="opt-value">msk:img_*.gif</span>] <span class="versioning">(supporté depuis TBS version 3.6.0)</span></td>
+              </tr>
+              <tr>
+                <td valign="top" class="opt-value">lower</td>
+                <td>Convertie la valeur en minuscules. <span class="versioning">(supporté depuis TBS version 3.8.0)</span></td>
+              </tr>
+              <tr>
+                <td valign="top" class="opt-value">upper</td>
+                <td>Convertie la valeur en majuscules. <span class="versioning">(supporté depuis TBS version 3.8.0)</span></td>
+              </tr>
+              <tr>
+                <td valign="top" class="opt-value">upper1</td>
+                <td>Convertie la valeur en majuscules pour la première lettre seulement. <span class="versioning">(supporté depuis TBS version 3.8.0)</span></td>
+              </tr>
+              <tr>
+                <td valign="top" class="opt-value">upperw</td>
+                <td>Convertie la valeur en majuscules pour la première lettre de chaque mot seulement. <span class="versioning">(supporté depuis TBS version 3.8.0)</span></td>
+              </tr>
+              <tr>
+                <td valign="top" class="opt-value">utf8</td>
+                <td>Peut être utilisé avec  <span class="opt-value">max</span>, <span class="opt-value">upper</span>, <span class="opt-value">lower</span>, <span class="opt-value">upperw</span> pour indiquer que la valeur est encodée en UTF8. <span class="opt-value">upper1</span> n'est pas supporté en UTF8. <span class="versioning">(supporté depuis TBS version 3.8.0)</span></td>
               </tr>
             </table>
           </div>

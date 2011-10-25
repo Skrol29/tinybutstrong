@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.8.0-beta-2011-10-25 for PHP 5
-Date     : 2011-08-22
+Version  : 3.8.0-beta-2011-10-26 for PHP 5
+Date     : 2011-10-26
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -215,8 +215,8 @@ public function DataOpen(&$Query,$QryPrms=false) {
 					$i = $this->DataAlert('invalid query \''.$Query.'\' because property ObjectRef is not set.');
 				}
 			} else {
-				if (isset($this->VarRef[$Item0])) {
-					$Var = &$this->VarRef[$Item0];
+				if (isset($this->TBS->VarRef[$Item0])) {
+					$Var = &$this->TBS->VarRef[$Item0];
 					$i = 1;
 				} else {
 					$i = $this->DataAlert('invalid query \''.$Query.'\' because VarRef item \''.$Item0.'\' is not found.');
@@ -351,10 +351,9 @@ public function DataOpen(&$Query,$QryPrms=false) {
 		$this->RecSet = $this->SrcId->prepare($Query);
 		if ($this->RecSet===false) {
 			$ok = false;
-		} elseif (is_array($QryPrms)) {
-			$ok = $this->RecSet->execute($QryPrms);
 		} else {
-			$ok = $this->RecSet->execute();
+			if (!is_array($QryPrms)) $QryPrms = array();
+			$ok = $this->RecSet->execute($QryPrms);
 		}
 		if (!$ok) {
 			$err = $this->SrcId->errorInfo();
@@ -363,7 +362,8 @@ public function DataOpen(&$Query,$QryPrms=false) {
 		break;
 	case 12: // Zend_DB_Adapter
 		try {
-			$this->RecSet = $this->SrcId->query($Query);
+			if (!is_array($QryPrms)) $QryPrms = array();
+			$this->RecSet = $this->SrcId->query($Query, $QryPrms);
 		} catch (Exception $e) {
 			$this->DataAlert('Zend_DB_Adapter error message when opening the query: '.$e->getMessage());
 		}
@@ -530,7 +530,7 @@ public $ObjectRef = false;
 public $NoErr = false;
 public $Assigned = array();
 // Undocumented (can change at any version)
-public $Version = '3.8.0-beta-2011-10-25';
+public $Version = '3.8.0-beta-2011-10-26';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -607,7 +607,7 @@ function __call($meth, $args) {
 	}
 }
 
-function SetOption($o, $v=null) {
+function SetOption($o, $v=null, $d=null) {
 	if (!is_array($o)) $o = array($o=>$v);
 	if (isset($o['var_prefix'])) $this->VarPrefix = $o['var_prefix'];
 	if (isset($o['fct_prefix'])) $this->FctPrefix = $o['fct_prefix'];
@@ -636,6 +636,31 @@ function SetOption($o, $v=null) {
 		$this->_ChrVal = $this->_ChrOpen.'val'.$this->_ChrClose;
 		$this->_ChrProtect = '&#'.ord($this->_ChrOpen[0]).';'.substr($this->_ChrOpen,1);
 	}
+	if (isset($o['tplfrms'])) {
+		$v = $o['tplfrms'];
+		if (!is_array($v)) $v = array($v=>$d);
+		foreach ($v as $a=>$s) {
+			// can force or delete the alias
+			unset($this->_FormatLst[$a]);
+			if ($s!==false) $this->meth_Misc_FormatSave($s,$a);
+		}
+	}
+	if (isset($o['include_path'])) {
+		$v = $o['include_path'];
+		if (!is_array($v)) $v = array($v=>$d);
+		foreach ($v as $p=>$a) {
+			if (!is_string($p)) {
+				$p = $a;
+				$a = true;
+			}
+			$k = array_search($p, $this->IncludePath, true);
+			if ($a===false) {
+				if ($k!==false) unset($this->IncludePath[$k]);
+			} else {
+				if ($k===false) $this->IncludePath[] = $p;
+			}
+		}
+	}
 }
 
 function GetOption($o) {
@@ -652,6 +677,13 @@ function GetOption($o) {
 	if ($o=='charset') return $this->Charset;
 	if ($o=='chr_open') return $this->_ChrOpen;
 	if ($o=='chr_close') return $this->_ChrClose;
+	if ($o=='tplfrms') {
+		// simplify the list of formats
+		$x = array();
+		foreach ($this->_FormatLst as $s=>$i) $x[$s] = $i['Str'];
+		return $x;
+	}
+	if ($o=='include_path') return $this->IncludePath;
 	return $this->meth_Misc_Alert('with GetOption() method','option \''.$o.'\' is not supported.');;
 }
 
@@ -660,14 +692,6 @@ function SetVarRef(&$VarRef) {
 		$this->VarRef =& $VarRef;
 	} else {
 		$this->VarRef =& $GLOBALS;
-	}
-}
-
-function SetTplFrms($Frms, $Val=false) {
-	if (is_array($Frms)) {
-		foreach ($Frms as $Frm=>$Val) $this->meth_Misc_FormatSave($Val,$Frm);
-	} else {
-		$this->meth_Misc_FormatSave($Val,$Frms);
 	}
 }
 
@@ -1252,7 +1276,8 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 				} else {
 					$x = substr($ope,0,4);
 					if ($x==='max:') {
-						if (isset($Loc->PrmLst['maxhtml'])) {$Loc->OpeAct[$i]=2;} elseif (isset($Loc->PrmLst['maxutf8'])) {$Loc->OpeAct[$i]=4;} else {$Loc->OpeAct[$i]=3;}
+						$Loc->OpeAct[$i] = (isset($Loc->PrmLst['maxhtml'])) ? 2 : 3;
+						if (isset($Loc->PrmLst['maxutf8'])) $Loc->OpeUtf8 = true;
 						$Loc->OpePrm[$i] = intval(trim(substr($ope,4)));
 						$Loc->OpeEnd = (isset($Loc->PrmLst['maxend'])) ? $Loc->PrmLst['maxend'] : '...';
 						if ($Loc->OpePrm[$i]<=0) $Loc->Ope = false;
@@ -1318,8 +1343,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 				}
 				break;
 			case  2: if (strlen(''.$CurrVal)>$Loc->OpePrm[$i]) $this->f_Xml_Max($CurrVal,$Loc->OpePrm[$i],$Loc->OpeEnd); break;
-			case  3: if (strlen(''.$CurrVal)>$Loc->OpePrm[$i]) $CurrVal = substr(''.$CurrVal,0,$Loc->OpePrm[$i]).$Loc->OpeEnd; break;
-			case  4: if (strlen(''.$CurrVal)>$Loc->OpePrm[$i]) $CurrVal = mb_substr(''.$CurrVal,0,$Loc->OpePrm[$i],'UTF-8').$Loc->OpeEnd; break;
+			case  3: if (strlen(''.$CurrVal)>$Loc->OpePrm[$i]) $CurrVal = (($Loc->OpeUtf8) ? mb_substr(''.$CurrVal,0,$Loc->OpePrm[$i],'UTF-8') : substr(''.$CurrVal,0,$Loc->OpePrm[$i])).$Loc->OpeEnd; break;
 			case  5: $CurrVal = ('0'+$CurrVal) % $Loc->OpePrm[$i]; break;
 			case  6: $CurrVal = ('0'+$CurrVal) + $Loc->OpePrm[$i]; break;
 			case  7: $CurrVal = ('0'+$CurrVal) * $Loc->OpePrm[$i]; break;
@@ -1344,10 +1368,10 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 			case 12: if ((string)$CurrVal===$Loc->OpePrm[$i]) $CurrVal = ''; break;
 			case 13: $CurrVal = str_replace('*',$CurrVal,$Loc->OpePrm[$i]); break;
 			case 14: $CurrVal = self::f_Loc_AttBoolean($CurrVal, $Loc->PrmLst['atttrue'], $Loc->AttName); break;
-			case 15: $CurrVal = ($Loc->OpeUtf8) ? mb_strtoupper($CurrVal) : strtoupper($CurrVal); break;
-			case 16: $CurrVal = ($Loc->OpeUtf8) ? mb_strtolower($CurrVal) : strtolower($CurrVal); break;
+			case 15: $CurrVal = ($Loc->OpeUtf8) ? mb_convert_case($CurrVal, MB_CASE_UPPER, 'UTF-8') : strtoupper($CurrVal); break;
+			case 16: $CurrVal = ($Loc->OpeUtf8) ? mb_convert_case($CurrVal, MB_CASE_LOWER, 'UTF-8') : strtolower($CurrVal); break;
 			case 17: $CurrVal = ucfirst($CurrVal); break;
-			case 18: $CurrVal = ($Loc->OpeUtf8) ? mb_convert_case($CurrVal, MB_CASE_TITLE) : ucwords($CurrVal); break;
+			case 18: $CurrVal = ($Loc->OpeUtf8) ? mb_convert_case($CurrVal, MB_CASE_TITLE, 'UTF-8') : ucwords($CurrVal); break;
 			}
 		}
 	}
@@ -2228,7 +2252,7 @@ function meth_Merge_AutoVar(&$Txt,$ConvStr,$Id='var') {
 				$Pos = $this->meth_Locator_Replace($Txt,$Loc,$x,false);
 			} else {
 				$Pos = $Loc->PosEnd + 1;
-				$this->meth_Misc_Alert($Loc,'the key of VarRef named \''.$Loc->SubLst[0].'\' does not exist or is not set yet.',true);
+				$this->meth_Misc_Alert($Loc,'the key \''.$Loc->SubLst[0].'\' does not exist or is not set yet in VarRef.',true);
 			}
 		}
 	}
@@ -3020,7 +3044,10 @@ function meth_Misc_Format(&$Value,&$PrmLst) {
 
 function meth_Misc_FormatSave(&$FrmStr,$Alias='') {
 
-	if (isset($this->_FormatLst[$FrmStr])) return $this->_FormatLst[$FrmStr];
+	if (isset($this->_FormatLst[$FrmStr])) {
+		if ($Alias!='') $this->_FormatLst[$Alias] = &$this->_FormatLst[$FrmStr];
+		return $this->_FormatLst[$FrmStr];
+	}
 
 	if (strpos($FrmStr,'|')!==false) {
 

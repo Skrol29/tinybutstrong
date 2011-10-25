@@ -158,12 +158,12 @@ a.opt-name:hover {
           </tr>
           <tr class="txt-tiny">
             <td>Date:</td>
-            <td>2011-10-15</td>
+            <td>2011-10-26</td>
           </tr>
         </table></td>
       <td width="34%" align="center"><div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div>
         <h1>TinyButStrong Documentation</h1>
-        <div class="txt-tiny">version 3.7</div>
+        <div class="txt-tiny">version 3.8</div>
         <div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div></td>
       <td width="33%" align="right" valign="top" class="txt-small">&nbsp;</td>
     </tr>
@@ -746,6 +746,11 @@ a.opt-name:hover {
         <td class="border-0">PDO</td>
         <td class="border-0">A <a href="http://www.php.net/manual/en/book.pdo.php">PDO</a> object. <span class="versioning">Supported since TBS version 3.7.0.</span></td>
         <td class="border-0">An SQL statement. Optional argument  <a href="#php_mergeblock" class="opt-name">QryPrms</a> can be used like with <a href="http://www.php.net/manual/en/pdostatement.execute.php">PDOStatement-&gt;execute(QryPrms</a>).</td>
+      </tr>
+      <tr valign="top">
+        <td class="border-0">Zend DB Adapter</td>
+        <td class="border-0">A <a href="http://framework.zend.com/manual/en/zend.db.adapter.html">Zend DB Adapter</a> object. <span class="versioning">Supported since TBS version 3.8.0.</span></td>
+        <td class="border-0">An SQL statement. Optional argument <a href="#php_mergeblock" class="opt-name">QryPrms</a> can be used like with <a href="http://framework.zend.com/manual/en/zend.db.adapter.html#zend.db.adapter.transactions">$db-&gt;execute($sql, $prms</a>).</td>
       </tr>
       <tr valign="top">
         <td class="border-0">MySQLi</td>
@@ -1774,6 +1779,26 @@ If parameter           <span class="opt-name">script</span> is used by omitting 
               <tr>
                 <td valign="top" class="opt-value">msk:x</td>
                 <td><em>(means &quot;mask&quot;)</em> Apply a mask to the value. Characters '<span class="opt-value">*</span>' in the mask will be replaced by the original value.  Example: [onshow.img_id;<span class="opt-name">ope</span>=<span class="opt-value">msk:img_*.gif</span>] <span class="versioning">(supported since TBS version 3.6.0)</span></td>
+              </tr>
+              <tr>
+                <td valign="top" class="opt-value">lower</td>
+                <td>Convert the value to lower case. <span class="versioning">(supported since TBS version 3.8.0)</span></td>
+              </tr>
+              <tr>
+                <td valign="top" class="opt-value">upper</td>
+                <td>Convert the value to upper case. <span class="versioning">(supported since TBS version 3.8.0)</span></td>
+              </tr>
+              <tr>
+                <td valign="top" class="opt-value">upper1</td>
+                <td>Convert the value to upper case for the first character only. <span class="versioning">(supported since TBS version 3.8.0)</span></td>
+              </tr>
+              <tr>
+                <td valign="top" class="opt-value">upperw</td>
+                <td>Convert the value to upper case for the first character of each word. <span class="versioning">(supported since TBS version 3.8.0)</span></td>
+              </tr>
+              <tr>
+                <td valign="top" class="opt-value">utf8</td>
+                <td>Can be used with <span class="opt-value">max</span>, <span class="opt-value">upper</span>, <span class="opt-value">lower</span>,  <span class="opt-value">upperw</span> in order to indicate that the value is UTF8 encoded.  <span class="opt-value">upper1</span> is not supported in UTF8. <span class="versioning">(supported since TBS version 3.8.0)</span></td>
               </tr>
             </table>
           </div>
