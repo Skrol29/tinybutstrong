@@ -667,6 +667,7 @@ function SetOption($o, $v=null, $d=null) {
 			}
 		}
 	}
+	if (isset($o['render'])) $this->Render = $o['render'];
 }
 
 function GetOption($o) {
@@ -690,6 +691,7 @@ function GetOption($o) {
 		return $x;
 	}
 	if ($o=='include_path') return $this->IncludePath;
+	if ($o=='render') return $this->Render;
 	return $this->meth_Misc_Alert('with GetOption() method','option \''.$o.'\' is not supported.');;
 }
 
@@ -989,14 +991,14 @@ function meth_Locator_FindTbs(&$Txt,$Name,$Pos,$ChrSub) {
 	} else {
 		$Loc->FullName = $Name;
 	}
-	if ($ReadPrm and isset($Loc->PrmLst['comm'])) {
+	if ( $ReadPrm && (isset($Loc->PrmLst['enlarge'] || isset($Loc->PrmLst['comm']))) ) {
 		$Loc->PosBeg0 = $Loc->PosBeg;
 		$Loc->PosEnd0 = $Loc->PosEnd;
-		$comm = $Loc->PrmLst['comm'];
-		if (($comm===true) or ($comm==='')) {
+		$enlarge = (isset($Loc->PrmLst['enlarge']) ? $Loc->PrmLst['enlarge'] : $Loc->PrmLst['comm'];
+		if (($enlarge===true) || ($enlarge==='')) {
 			$Loc->Enlarged = clsTinyButStrong::f_Loc_EnlargeToStr($Txt,$Loc,'<!--' ,'-->');
 		} else {
-			$Loc->Enlarged = clsTinyButStrong::f_Loc_EnlargeToTag($Txt,$Loc,$comm,false);
+			$Loc->Enlarged = clsTinyButStrong::f_Loc_EnlargeToTag($Txt,$Loc,$enlarge,false);
 		}
 	}
 
@@ -1086,7 +1088,7 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
 			if ($IsAtt) {
 				$Pos = $Loc->PrevPosBeg;
 				if ($IsAMF) $PrevIsAMF = true;
-			} elseif ($Loc->Enlarged) { // Parameter 'comm'
+			} elseif ($Loc->Enlarged) {
 				$Pos = $Loc->PosBeg0+1;
 				$Loc->Enlarged = false;
 			} else {
