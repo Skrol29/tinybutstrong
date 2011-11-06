@@ -1,6 +1,13 @@
 
 TinyButStrong 1.8.0 beta
 
+2011-11-03, change-log:
+=======================
+
+- new option "render"
+- 'var_ref' is no longer an option
+
+
 2011-10-26, change-log:
 =======================
 
