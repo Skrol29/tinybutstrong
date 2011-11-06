@@ -71,8 +71,8 @@ th {
 	vertical-align:top;
 	font-weight:normal;
 }
-.title-1b {
-	text-decoration: underline;
+pre {
+	font-size:12px;
 }
 .title-1c {
 	font-weight: bold;
@@ -86,16 +86,15 @@ th {
 }
 .txt-tiny {
 	font-size: 9px;
-}
-.asciiart {
-	font-family: "Courier New", Courier, mono;
-	font-size: 8px;
-	font-weight: bold;
-	color: #0066CC;
+	margin-top:0;
+	margin-bottom:0;
 }
 table {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
+}
+td p {
+	margin-top:0;
 }
 body {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -168,37 +167,29 @@ a.opt-name:hover {
 </head>
 <body bgcolor="#FFFFFF">
 <div id="main-body">
-  <table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td width="33%" align="left" valign="top"><table width="180" border="0" cellspacing="0" cellpadding="0">
-          <tr class="txt-tiny">
-            <td width="50">Site:</td>
-            <td><a href="http://www.tinybutstrong.com" target="_top">www.tinybutstrong.com</a></td>
-          </tr>
-          <tr class="txt-tiny">
-            <td>Authors:</td>
-            <td><a href="http://www.tinybutstrong.com/onlyyou.html">skrol29</a>, Pirjo</td>
-          </tr>
-          <tr class="txt-tiny">
-            <td>Date:</td>
-            <td>2011-10-26</td>
-          </tr>
-        </table></td>
-      <td width="34%" align="center"><div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div>
-        <h1>TinyButStrong Documentation</h1>
-        <div class="txt-tiny">version 3.8</div>
-        <div class="asciiart">*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*.^.*</div></td>
-      <td width="33%" align="right" valign="top" class="txt-small">&nbsp;</td>
-    </tr>
-    <tr>
-      <td width="33%" align="left" valign="top">&nbsp;</td>
-      <td><div align="center">Template Engine for Pro and Beginners<br>
-          for PHP 5 </div></td>
-      <td align="right" valign="top" class="txt-small">&nbsp;</td>
-    </tr>
-  </table>
-  <br>
-  <div class="title-1c">Table of Contents:</div>
+  <div class="txt-tiny" style="display:inline-block; float:left;">
+    <table class="txt-tiny" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="50">Site:</td>
+        <td><a href="http://www.tinybutstrong.com" target="_top">www.tinybutstrong.com</a></td>
+      </tr>
+      <tr>
+        <td>Authors:</td>
+        <td><a href="http://www.tinybutstrong.com/onlyyou.html">skrol29</a>, Pirjo</td>
+      </tr>
+      <tr>
+        <td>Date:</td>
+        <td>2011-10-26</td>
+      </tr>
+    </table>
+  </div>
+  <div style="margin:auto; width:500px; text-align:center;">
+    <h1>TinyButStrong Documentation</h1>
+    <div class="txt-tiny">version 3.8</div>
+    <div style="margin-top:10px;">Template Engine for Pro and Beginners<br>
+      for PHP 5</div>
+  </div>
+  <h2>Table of Contents:</h2>
   <div class="norm">
     <table border="0" cellspacing="0">
       <tr class="title-1c">
@@ -400,7 +391,7 @@ a.opt-name:hover {
     </table>
   </div>
   <h2 id="introduction" class="pagebreak">Introduction:</h2>
-  <p><span class="title-1c">TinyButStrong</span> (TBS) is a PHP class useful to develop an application in a clean way, separating PHP scripts and XML/HTML/Text files. With TBS, the files  are generated dynamically by merging a template with data. It is called a Template Engine. </p>
+  <p><strong>TinyButStrong</strong> (TBS) is a PHP class useful to develop an application in a clean way, separating PHP scripts and XML/HTML/Text files. With TBS, the files  are generated dynamically by merging a template with data. It is called a Template Engine. </p>
   <p> The name TBS comes from the fact that this tool contains only 8 functions and yet, it is very powerful. It allows you to merge templates with your PHP variables or your MySQL, PostgreSQL, or SQLite.</p>
   <p> TBS has been engineered so that you can develop your templates with ease using any visual  editors (like Dreamweaver or FrontPage). But if you are used to designing your templates with a text editor, it is nice as well. TBS also enables you to create JavaScript dynamically.</p>
   <p> As the name of it tells, TBS is easy to use, strong and fast. It is completely <span style="color:#009900">°~° freeware °~°</span>. </p>
@@ -411,81 +402,77 @@ a.opt-name:hover {
   <p> On the PHP side:<br>
     You use an object TBS variable to manage the merge of your template with the data. At the end, TBS shows the result of the merge. </p>
   <h3><a name="installation"></a>Installation:</h3>
-  <table width="100%" border="0" cellpadding="0" cellspacing="0">
-    <tr align="left" valign="top">
-      <td width="25">1.</td>
-      <td>Copy the file <span class="opt-html">tbs_class.php</span> in a directory of your Web site.</td>
-    </tr>
-    <tr align="left" valign="top">
-      <td>2.</td>
-      <td>At the beginning of your PHP program, add the lines:<br>
-        <span class="txt-code">&nbsp;&nbsp;include_once(<span class="opt-value">'tbs_class.php'</span>);</span><br>
-        <span class="txt-code"><span class="opt-name">&nbsp;&nbsp;$TBS</span> = new clsTinyButStrong;</span> <br>
-        <span class="txt-small">Remark: if the TBS file tbs_class.php is in a different directory than your application, then you have to precise the directory in front of the TBS file name.</span></td>
-    </tr>
-  </table>
+  <ol>
+    <li>Copy the file <span class="opt-html">tbs_class.php</span> in a directory of your Web site.</li>
+    <li>At the beginning of your PHP program, add the lines:
+      <pre class="decal txt-code">
+include_once(<span class="opt-value">'tbs_class.php'</span>);
+<span class="opt-name">$TBS</span> = new clsTinyButStrong;     </pre>
+      <p><span class="txt-small">Remark: if the TBS file tbs_class.php is in a different directory than your application, then you have to precise the directory in front of the TBS file name.</span></p>
+    </li>
+  </ol>
   <h4>Explanations and technical details:</h4>
   <p>TinyButStrong is a library written in PHP, it's a component to be referenced in your own PHP programs. In technical terms, TinyButStrong is a PHP 'class' ; the name of this class is clsTinyButStrong.</p>
   <p> The variable $TBS that you add at the beginning of your PHP program enables you to execute the merge of your template from your PHP application. In technical terms, the variable $TBS is an 'instance' of the clsTinyButStrong class. </p>
   <h3><a name="examples" id="examples"></a>Mini examples:</h3>
-  Example 1: <br>
-  <table width="100%" border="0" cellpadding="2" cellspacing="4">
-    <tr class="title-1c">
-      <td width="33%"> Html Template</td>
-      <td>Php Program</td>
-      <td width="33%">Result</td>
+  <p>Example 1: </p>
+  <table border="0" cellpadding="2" cellspacing="4">
+    <tr>
+      <th width="320">Html Template</th>
+      <th width="320">Php Program</th>
+      <th>Result</th>
     </tr>
-    <tr class="norm">
-      <td valign="top"><span class="opt-html">&lt;html&gt;<br>
-        &nbsp;&lt;body&gt;<br>
-        &nbsp;&nbsp;[onshow.message] <br>
-        &nbsp;&lt;/body&gt;<br>
-        &lt;/html&gt;</span><br></td>
-      <td valign="top" class="txt-code">&lt;?<br>
-        <br>
-        include_once(<span class="opt-value">'tbs_class.php'</span>);<br>
-        <span class="opt-name">$TBS</span> = new clsTinyButStrong;<br>
-        <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>);<br>
-        <br>
-        $message = <span class="opt-value">'Hello'</span>;<br>
-        <span class="opt-name">$TBS</span>-&gt;Show();<br>
-        <br>
-        ?&gt; <br></td>
-      <td valign="top" class="opt-html">&lt;html&gt;<br>
-        &nbsp;&lt;body&gt;<br>
-        &nbsp;&nbsp;Hello<br>
-        &nbsp;&lt;/body&gt;<br>
-        &lt;/html&gt;</td>
+    <tr>
+      <td valign="top"><pre class="opt-html">
+&lt;html&gt;
+  &lt;body&gt;
+    [onshow.message] 
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre></td>
+      <td valign="top"><pre class="txt-code">
+&lt;?php
+     
+  include_once(<span class="opt-value">'tbs_class.php'</span>);
+  <span class="opt-name">$TBS</span> = new clsTinyButStrong;
+  <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>);
+
+  $message = <span class="opt-value">'Hello'</span>;
+  <span class="opt-name">$TBS</span>-&gt;Show();
+</pre></td>
+      <td valign="top" ><pre class="opt-html">&lt;html&gt;
+  &lt;body&gt;
+    Hello
+  &lt;/body&gt;
+&lt;/html&gt;</pre></td>
     </tr>
   </table>
-  <br>
-  Example 2:<br>
-  <table width="100%" border="0" cellpadding="2" cellspacing="4">
-    <tr class="title-1c">
-      <td width="33%">Html Template</td>
-      <td>Php Program</td>
-      <td width="33%">Result</td>
+  <p>Example 2: </p>
+  <table border="0" cellpadding="2" cellspacing="4">
+    <tr>
+      <th width="320">Html Template</th>
+      <th width="320">Php Program</th>
+      <th>Result</th>
     </tr>
-    <tr class="norm">
-      <td valign="top"><span class="opt-html">&lt;table&gt;<br>
-        &nbsp;&lt;tr&gt;&lt;td&gt;[blk.val;block=tr]&lt;/td&gt;&lt;/tr&gt;<br>
-        &lt;/table&gt;</span><br></td>
-      <td valign="top" class="txt-code">&lt;?<br>
-        <br>
-        include_once(<span class="opt-value">'tbs_class.php'</span>);<br>
-        <span class="opt-name">$TBS</span> = new clsTinyButStrong;<br>
-        <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>);<br>
-        <br>
-        $list = array(<span class="opt-value">'X'</span>,<span class="opt-value">'Y'</span>,<span class="opt-value">'Z'</span>);<br>
-        <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'blk'</span>, $list); <br>
-        <span class="opt-name">$TBS</span>-&gt;Show();<br>
-        <br>
-        ?&gt; <br></td>
-      <td valign="top" class="opt-html">&lt;table&gt;<br>
-        &nbsp;&lt;tr&gt;&lt;td&gt;X&lt;/td&gt;&lt;/tr&gt;<br>
-        &nbsp;&lt;tr&gt;&lt;td&gt;Y&lt;/td&gt;&lt;/tr&gt;<br>
-        &nbsp;&lt;tr&gt;&lt;td&gt;Z&lt;/td&gt;&lt;/tr&gt;<br>
-        &lt;/table&gt;</td>
+    <tr>
+      <td valign="top"><pre class="opt-html">&lt;table&gt;
+  &lt;tr&gt;&lt;td&gt;[blk.val;block=tr]&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</pre></td>
+      <td valign="top"><pre class="txt-code">&lt;?
+
+  include_once(<span class="opt-value">'tbs_class.php'</span>);
+  <span class="opt-name">$TBS</span> = new clsTinyButStrong;
+  <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>);
+
+  $list = array(<span class="opt-value">'X'</span>,<span class="opt-value">'Y'</span>,<span class="opt-value">'Z'</span>);
+  <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'blk'</span>, $list);
+  <span class="opt-name">$TBS</span>-&gt;Show();
+</pre></td>
+      <td valign="top"><pre class="opt-html">&lt;table&gt;
+  &lt;tr&gt;&lt;td&gt;X&lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;Y&lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;Z&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</pre></td>
     </tr>
   </table>
   <a name="php_side"></a>
@@ -494,11 +481,11 @@ a.opt-name:hover {
     Example of statement: <span class="txt-code"><span class="opt-name">$TBS</span> = new clsTinyButStrong;</span> <br>
     This object allows you to load a template, to handle the merging of it with data, and then to show the result.</p>
   <p> Example of PHP code: </p>
-  <div class="txt-code decal">include_once(<span class="opt-value">'tbs_class.php'</span>);<br>
-    <span class="opt-name">$TBS</span> = new clsTinyButStrong;<br>
-    <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>) ;<br>
-    <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'ctry','mysql','SELECT * FROM t_country'</span>);<br>
-    <span class="opt-name">$TBS</span>-&gt;Show(); </div>
+  <pre class="txt-code decal">include_once(<span class="opt-value">'tbs_class.php'</span>);
+    <span class="opt-name">$TBS</span> = new clsTinyButStrong;
+    <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'template.htm'</span>) ;
+    <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'ctry','mysql','SELECT * FROM t_country'</span>);
+    <span class="opt-name">$TBS</span>-&gt;Show();</pre>
   <p>Here is the description of the TinyButStrong object: </p>
   <h3><a name="php_instanciate" id="php_instanciate"></a>create a new  TBS object:</h3>
   <div class="norm">
@@ -526,19 +513,15 @@ a.opt-name:hover {
       </tr>
     </table>
     <p>Examples:</p>
-    <div class="decal txt-code"><span class="opt-name">$TBS1</span> = new clsTinyButStrong; <span class="opt-html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// default behavior</span><br>
-      <span class="opt-name">$TBS2</span> = new clsTinyButStrong(<span class="opt-value">'{{,}}'</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="opt-html">// TBS tags will be like {{var.x}} instead of [var.x]</span><br>
-      <span class="opt-name">$TBS3</span> = new clsTinyButStrong(<span class="opt-value">''</span>, <span class="opt-value">'tbs_var_'</span>);<span class="opt-html"> &nbsp;&nbsp;&nbsp;// TBS will display only PHP global variables beginning with 'tbs_var_</span>'<br>
-      <span class="opt-name">$TBS4</span> = new clsTinyButStrong(<span class="opt-value">''</span>, <span class="opt-value">''</span>, <span class="opt-value">'tbs_fct_'</span>);<span class="opt-html">// TBS will call only PHP function beginning with 'tbs_fct_'</span></div>
+    <pre class="decal txt-code"><span class="opt-name">$TBS1</span> = new clsTinyButStrong; <span class="opt-html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// default behavior</span>
+<span class="opt-name">$TBS2</span> = new clsTinyButStrong(<span class="opt-value">'{{,}}'</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="opt-html">// TBS tags will be like {{var.x}} instead of [var.x]</span>
+<span class="opt-name">$TBS3</span> = new clsTinyButStrong(<span class="opt-value">''</span>, <span class="opt-value">'tbs_var_'</span>);<span class="opt-html"> &nbsp;&nbsp;&nbsp;// TBS will display only PHP global variables beginning with 'tbs_var_</span>'
+<span class="opt-name">$TBS4</span> = new clsTinyButStrong(<span class="opt-value">''</span>, <span class="opt-value">''</span>, <span class="opt-value">'tbs_fct_'</span>);<span class="opt-html">// TBS will call only PHP function beginning with 'tbs_fct_'</span></pre>
   </div>
   <h3><a name="php_loadtemplate" id="php_loadtemplate"></a>method LoadTemplate():</h3>
-  <div class="norm">Loads a template for the merging process.<br>
-    The complete contents of the file is immediately stored in the <a href="#php_source">Source</a> property of the TBS object, then [onload] <a href="#html_field_auto">fields</a> and <a href="#html_block_auto">blocks</a> are merged.<br>
-    If the file is not found, then it will also be searched in the folder of the last loaded template  (<span class="versioning">since TBS version 3.2.0</span>).<br>
-    <br>
-    Syntax: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-type">string</span> <span class="opt-name">File</span><span class="opt-name"><span style="color:#333333">{</span></span>, <span class="opt-type">string</span><span class="opt-name"> Charset<span style="color:#333333">}</span></span>)<br>
-    <br>
-    </span>
+  <div class="norm">
+    <p>Loads a template for the merging process. The complete contents of the file is immediately stored in the <a href="#php_source">Source</a> property of the TBS object, then [onload] <a href="#html_field_auto">fields</a> and <a href="#html_block_auto">blocks</a> are merged.    If the file is not found, then it will also be searched in the folder of the last loaded template  (<span class="versioning">since TBS version 3.2.0</span>).</p>
+    <p> Syntax: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-type">string</span> <span class="opt-name">File</span><span class="opt-name"><span style="color:#333333">{</span></span>, <span class="opt-type">string</span><span class="opt-name"> Charset<span style="color:#333333">}</span></span>)</span> </p>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
         <th>Argument</th>
@@ -551,12 +534,10 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td align="left" valign="top" class="opt-name">Charset</td>
-        <td align="left" valign="top">Optional. Indicates the character encoding (charset) to use for conversion of special characters   when data  will be merged. It should be the same as the charset of the template. The default value is <span class="opt-value">''</span> (empty string) which is equivalent to <span class="opt-value">'ISO-8859-1'</span> (Latin 1).<br>
-          <br>
-          If your template uses a special charset, then indicate the Html value for this charset.<br>
-          In a Html page, the charset is placed at the beginning of the file, in the attribute <span class="opt-html">'content'</span> of a <span class="opt-html">&lt;Meta&gt;</span> tag. The charsets supported by TBS are the charsets supported by the PHP function <a href="http://www.php.net/htmlentities" target="_blank">htmlentities()</a>. For example: <span class="opt-value">'BIG5'</span> (Chinese) or <span class="opt-value">'EUCJP'</span> (Japanese).<br>
-          <br>
-          See below for more possibilities.</td>
+        <td align="left" valign="top"><p>Optional. Indicates the character encoding (charset) to use for conversion of special characters   when data  will be merged. It should be the same as the charset of the template. The default value is <span class="opt-value">''</span> (empty string) which is equivalent to <span class="opt-value">'ISO-8859-1'</span> (Latin 1).</p>
+          <p> If your template uses a special charset, then indicate the Html value for this charset.<br>
+            In a Html page, the charset is placed at the beginning of the file, in the attribute <span class="opt-html">'content'</span> of a <span class="opt-html">&lt;Meta&gt;</span> tag. The charsets supported by TBS are the charsets supported by the PHP function <a href="http://www.php.net/htmlentities" target="_blank">htmlentities()</a>. For example: <span class="opt-value">'BIG5'</span> (Chinese) or <span class="opt-value">'EUCJP'</span> (Japanese).</p>
+          <p> See below for more possibilities.</p></td>
       </tr>
     </table>
     <h4>Scope of the file path:</h4>
@@ -566,20 +547,20 @@ a.opt-name:hover {
     <p>If you use value <span class="opt-value">false</span> as the argument <span class="opt-name">Charset</span>, data will to not be converted when merged into the model.<br>
       Note that parameters <a href="#html_field_prm_htmlconv" class="opt-name">htmlconv</a> can be use to define the conversion of special characters for one TBS field only. </p>
     <h4>User function:</h4>
-    <p>If your charset is not yet supported by PHP, you can indicate a user function that will perform the  conversion of special characters. For this, use the argument <span class="opt-name">Charset</span> with the syntax '=myfunction'.<br>
-      <span class="versioning">Since TBS version 3.0</span>, it's also possible to indicate a method of a class (see <a href="#php_oop">OOP</a>).<br>
+    <p>If your charset is not yet supported by PHP, you can indicate a user function that will perform the  conversion of special characters. For this, use the argument <span class="opt-name">Charset</span> with the syntax '=myfunction'.</p>
+    <p> <span class="versioning">Since TBS version 3.0</span>, it's also possible to indicate a method of a class (see <a href="#php_oop">OOP</a>).<br>
       <span class="versioning">Since TBS version 3.3.0</span>, such a custom function should have a second argument for line break conversion.<br>
-      <span class="versioning">Since TBS version 3.5.0</span>, argument Charset can also be an array containing an object and a method. Example: array(&amp;$obj, 'mymethod'). <br>
-      Here is an example which gives the expected syntaxe:
-    <div class="decal txt-code">function f_StrToXml(<span class="opt-name">$Txt</span> <span class="opt-type">string</span>,<span class="opt-name">$ConvBr <span class="opt-type">boolean</span></span>) {<br>
-      <span class="opt-html">// Convert a string into an XML text.</span><br>
-      &nbsp;&nbsp;<span class="opt-type"><span class="opt-name">$x</span></span> = htmlspecialchars(utf8_encode(<span class="opt-name">$Txt</span>));<br>
-      &nbsp;&nbsp;if (<span class="opt-name">$ConvBr</span>) {<br>
-      &nbsp;&nbsp;  &nbsp;<span class="opt-name">$x</span> = nl2br(<span class="opt-name">$x</span>); <span class="opt-html">// Convert any type of line break</span><br>
-      &nbsp;&nbsp;&nbsp;&nbsp;<span class="opt-name">$x</span> = str_replace(<span class="opt-value">'&lt;br /&gt;'</span>, <span class="opt-value">'&lt;text:line-break/&gt;'</span>,<span class="opt-name">$x</span>);<br>
-      &nbsp;&nbsp;return <span class="opt-name">$x</span>; <br>
-      } </div>
-    </p>
+      <span class="versioning">Since TBS version 3.5.0</span>, argument Charset can also be an array containing an object and a method. Example: array(&amp;$obj, 'mymethod'). </p>
+    <p> Here is an example which gives the expected syntaxe:</p>
+    <pre class="decal txt-code">function f_StrToXml(<span class="opt-name">$Txt</span> <span class="opt-type">string</span>,<span class="opt-name">$ConvBr <span class="opt-type">boolean</span></span>) {
+  <span class="opt-html">// Convert a string into an XML text.</span>
+  <span class="opt-type"><span class="opt-name">$x</span></span> = htmlspecialchars(utf8_encode(<span class="opt-name">$Txt</span>));
+  if (<span class="opt-name">$ConvBr</span>) {
+    <span class="opt-name">$x</span> = nl2br(<span class="opt-name">$x</span>); <span class="opt-html">// Convert any type of line break</span>
+    <span class="opt-name">$x</span> = str_replace(<span class="opt-value">'&lt;br /&gt;'</span>, <span class="opt-value">'&lt;text:line-break/&gt;'</span>,<span class="opt-name">$x</span>);
+  }
+  return <span class="opt-name">$x</span>;
+}</pre>
     <h4>Adding the file at the end of the current template:</h4>
     <p>You can use the keyword <span class="opt-value">'+'</span> for the argument <span class="opt-name">Charset</span> to have the file defined by <span class="opt-name">File</span> added to the end of the current template. The current charset will not be modified.</p>
     <h4>Special actions using argument File:</h4>
@@ -588,10 +569,10 @@ a.opt-name:hover {
       If <span class="opt-name">File</span> is <span class="opt-value">''</span> (empty string), then only the charset is modified, without doing any other action.<br>
       In both cases, if <span class="opt-name">Charset</span> is <span class="opt-value">'+'</span>, then it will be ignored and the current charset will not be modified.</p>
     <p> Example:</p>
-    <div class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;Source = <span class="opt-name">$template</span>; <span class="opt-html">// load the template from a string</span> <br>
-      <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">null</span>,<span class="opt-value">'BIG5'</span>); <span class="opt-html">//  run plug-ins if any, and merges [onload] tags if any</span><br>
-      ...<br>
-      <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">''</span>,<span class="opt-value">false</span>); <span class="opt-html">// turn the charset to no-charset</span> </div>
+    <pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;Source = <span class="opt-name">$template</span>; <span class="opt-html">// load the template from a string</span>
+<span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">null</span>,<span class="opt-value">'BIG5'</span>); <span class="opt-html">//  run plug-ins if any, and merges [onload] tags if any</span>
+...
+<span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">''</span>,<span class="opt-value">false</span>); <span class="opt-html">// turn the charset to no-charset</span></pre>
   </div>
   <h3><a name="php_mergeblock" id="php_mergeblock"></a>method MergeBlock():</h3>
   <div class="norm">
@@ -638,21 +619,20 @@ a.opt-name:hover {
       </tr>
     </table>
     <h4>Link between the block and the records:</h4>
-    <div class="decal"> The MergeBlock() method searches in your template for the specified TBS block name. Then, the block is repeated as many times as there are records in the data source.<br>
-      To display the data of a record, you have to use a linked TBS Field. A TBS Field is linked when the name of it is composed of the block's name followed by a dot and a column's or a key's name in the record set. A linked field must be inside the block.<br>
-      <br>
-      Example:<br>
+    <div class="decal">
+      <p>The MergeBlock() method searches in your template for the specified TBS block name. Then, the block is repeated as many times as there are records in the data source. </p>
+      <p> To display the data of a record, you have to use a linked TBS Field. A TBS Field is linked when the name of it is composed of the block's name followed by a dot and a column's or a key's name in the record set. A linked field must be inside the block.</p>
+      <p> Example: </p>
       <div class="decal"> Block's name: <span class="opt-value">block1</span><br>
         Columns returned by the query: <span class="opt-value">field1</span>,<span class="opt-value">field2</span>,<span class="opt-value">field3</span><br>
         Linked TBS Fields: <span class="opt-value"> [block1.field1]</span>, <span class="opt-value">[block1.field2]</span>, <span class="opt-value">[block1.field3]</span></div>
-      <br>
-      If no block's definition is found in the template, then the MergeBlock() method will merge the first record with all linked fields found in the template.<br>
-      <br>
-      You can also define more advanced blocks. For more information, refer to chapter <a href="#html_block">TBS Blocks</a>.</div>
+      <p>If no block's definition is found in the template, then the MergeBlock() method will merge the first record with all linked fields found in the template.</p>
+      <p> You can also define more advanced blocks. For more information, refer to chapter <a href="#html_block">TBS Blocks</a>.</p>
+    </div>
     <h4><a name="php_mergeblock_mergeseveral" id="php_mergeblock_mergeseveral"></a>Merging several blocks with the same data:</h4>
     <div class="decal">
-      <p>You can merge several blocks with the same data by indicating their names separated by commas in the <span class="opt-name">BlockName</span> parameter. In this case, the query is opened only one time, and records are buffered to feed blocks.<br>
-        Example: <span class="opt-name"><span class="txt-code">$TBS</span></span><span class="txt-code">-&gt;MergeBlock(<span class="opt-value">'block1,block2,block3'</span>,<span class="opt-value">'mysql'</span>,<span class="opt-value">'SELECT * FROM MyTable'</span>);</span></p>
+      <p>You can merge several blocks with the same data by indicating their names separated by commas in the <span class="opt-name">BlockName</span> parameter. In this case, the query is opened only one time, and records are buffered to feed blocks.</p>
+      <p> Example: <span class="opt-name"><span class="txt-code">$TBS</span></span><span class="txt-code">-&gt;MergeBlock(<span class="opt-value">'block1,block2,block3'</span>,<span class="opt-value">'mysql'</span>,<span class="opt-value">'SELECT * FROM MyTable'</span>);</span></p>
       <p> You cannot merge  several blocks having the same names because 
         they are considered by TBS has a one and only  block composed of several sections. Nevertheless, you can use a tip to get a similar behavior. If you use parameter <a href="#html_block_prm_p1" class="opt-name">p1</a> without value in the block definition, that does forces TBS to consider the section as a  new block break, like it does for <a href="#html_block_dynsb">subblocks</a>.</p>
       <p> Example: </p>
@@ -660,9 +640,9 @@ a.opt-name:hover {
         <table border="0" cellspacing="5" cellpadding="0">
           <tr>
             <td><table border="1" cellspacing="0" cellpadding="1">
-                <tr class="title-1c">
-                  <td bgcolor="#66CCFF">Id</td>
-                  <td bgcolor="#66CCFF">Name</td>
+                <tr style="font-weight:bold; background-color: #66CCFF;">
+                  <td>Id</td>
+                  <td>Name</td>
                 </tr>
                 <tr>
                   <td>[b.id;block=tr;p1]</td>
@@ -670,9 +650,9 @@ a.opt-name:hover {
                 </tr>
               </table></td>
             <td><table border="1" cellspacing="0" cellpadding="1">
-                <tr class="title-1c">
-                  <td bgcolor="#FFCC66">Id</td>
-                  <td bgcolor="#FFCC66">Name</td>
+                <tr style="font-weight:bold; background-color: #FFCC66;">
+                  <td>Id</td>
+                  <td>Name</td>
                 </tr>
                 <tr>
                   <td>[b.id;block=tr;p1]</td>
@@ -681,9 +661,9 @@ a.opt-name:hover {
               </table></td>
           </tr>
         </table>
-        <br>
-        <span class="opt-name"><span class="txt-code">$TBS</span></span><span class="txt-code">-&gt;MergeBlock(<span class="opt-value">'b'</span>,<span class="opt-value">'mysql'</span>,<span class="opt-value">'SELECT * FROM MyTable'</span>);</span> </div>
-      <div class="versioning">Versioning: this tip is available since TBS version 3.4. </div>
+        <p class="txt-code"><span class="opt-name"><span class="txt-code">$TBS</span></span>-&gt;MergeBlock(<span class="opt-value">'b'</span>,<span class="opt-value">'mysql'</span>,<span class="opt-value">'SELECT * FROM MyTable'</span>);</p>
+      </div>
+      <p class="versioning">Versioning: this tip is available since TBS version 3.4. </p>
     </div>
     <h4>Returning the full merged record set:</h4>
     <div class="decal">
@@ -701,7 +681,7 @@ a.opt-name:hover {
     <h4>Resource and Request arguments according to the data source type:</h4>
     <div class="decal">
       <table cellpadding="2" cellspacing="0" class="border-0">
-        <tr bgcolor="#B2B2B2" class="title-1c">
+        <tr style="font-weight:bold; background-color: #B2B2B2;">
           <td width="120" class="border-0">Data Source Type</td>
           <td width="350" class="border-0">Source</td>
           <td class="border-0">Query<span class="txt-code"><span class="opt-name"></span></span></td>
@@ -804,23 +784,24 @@ a.opt-name:hover {
           <td class="border-0">An SQL statement or something else.</td>
         </tr>
       </table>
-      <span class="txt-tiny">(*) See explanations in the chapter below.</span> </div>
+      <p class="txt-tiny">(*) See explanations in the chapter below.</p>
+    </div>
     <h4>Php data sources:</h4>
     <div class="decal">
-      <h5> Assigned</h5>
+      <h5>&bull; Assigned</h5>
       <div class="decal">
         <p>The argument <span class="opt-name">Source</span> has to be equal to <span class="opt-value">'assigned'</span> or be omitted. 
           The block is merged with the arguments defined in the property <a href="#php_assigned">Assigned</a>. </p>
         <p> Example : <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b1'</span>);</span></p>
         <div class="versioning">Versioning: the keyword  'assigned' is supported since TBS version 3.5. </div>
       </div>
-      <h5>Text</h5>
+      <h5>&bull; Text</h5>
       <div class="decal">
         <p>The argument <span class="opt-name">Source</span> has to be equal to <span class="opt-value">'text'</span>.
           The whole block is replaced by the text (it must be a string) given as the <span class="opt-name">Query</span> argument. No linked Fields are processed except '<span class="opt-value">#'</span> which returns 1, or 0 if <span class="opt-name">Query</span> is an empty string. </p>
         <p> Example: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b1'</span>,<span class="opt-value">'text'</span>,<span class="opt-value">'Hello, how are you?'</span>); </span></p>
       </div>
-      <h5> Number</h5>
+      <h5> &bull; Number</h5>
       <div class="decal">
         <p>The argument <span class="opt-name">Source</span> has to be equal to <span class="opt-value"></span> <span class="opt-value">'num'</span>.
           The argument <span class="opt-name">Query</span> can be either a number or an array. </p>
@@ -840,34 +821,34 @@ a.opt-name:hover {
           </tr>
         </table>
         <p>Examples:</p>
-        <div class="decal"><span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b1'</span>,<span class="opt-value">'num'</span>,<span class="opt-value">12</span>);</span><br>
-          <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b2'</span>,<span class="opt-value">'num'</span>,array(<span class="opt-value">'min'</span>=&gt;<span class="opt-value">20</span>,<span class="opt-value">'max'</span>=&gt;3<span class="opt-value">0</span>));</span><br>
-          <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b3'</span>,<span class="opt-value">'num'</span>,array(<span class="opt-value">'min'</span>=&gt;<span class="opt-value">10</span>,<span class="opt-value">'max'</span>=&gt;<span class="opt-value">20</span>,<span class="opt-value">'step'</span>=&gt;<span class="opt-value">2</span>));</span></div>
+        <pre class="decal"><span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b1'</span>,<span class="opt-value">'num'</span>,<span class="opt-value">12</span>);</span>
+<span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b2'</span>,<span class="opt-value">'num'</span>,array(<span class="opt-value">'min'</span>=&gt;<span class="opt-value">20</span>,<span class="opt-value">'max'</span>=&gt;3<span class="opt-value">0</span>));</span>
+<span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b3'</span>,<span class="opt-value">'num'</span>,array(<span class="opt-value">'min'</span>=&gt;<span class="opt-value">10</span>,<span class="opt-value">'max'</span>=&gt;<span class="opt-value">20</span>,<span class="opt-value">'step'</span>=&gt;<span class="opt-value">2</span>));</span></pre>
       </div>
-      <h5>Clear</h5>
+      <h5>&bull; Clear</h5>
       <div class="decal">
         <p>The argument <span class="opt-name">Source</span> has to be the keyword <span class="opt-value">'clear'</span>.
           All blocks and sections are deleted. It is the same thing as merging with an empty array. </p>
         <p> Example: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b1'</span>,<span class="opt-value">'clear'</span>); </span></p>
       </div>
-      <h5>Conditional</h5>
+      <h5>&bull; Conditional</h5>
       <div class="decal">
         <p>The argument <span class="opt-name">Source</span> has to be the keyword<span class="opt-value">'cond'</span>. 
           The block is merged like it was a <span class="opt-name"> <a href="#html_conditional_section">conditional blocks</a> onload</span> and <span class="opt-name">onshow</span>. The block is not merged with data, and so it must have no linked TBS field. Each block section needs a parameter <span class="opt-name">when</span> or a parameter <span class="opt-name">default</span>. See <a href="#html_conditional_section">conditional blocks</a> for more details. </p>
         <p> Example: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'bz'</span>,<span class="opt-value">'cond'</span>);</span></p>
       </div>
-      <h5>Array</h5>
+      <h5>&bull; Array</h5>
       <div class="decal">
         <p>The argument <span class="opt-name">Source</span> has to be a PHP Array or the keyword <span class="opt-value">'array'</span>. If you use the keyword <span class="opt-value">'array'</span>, then the argument <span class="opt-name">Query</span> has to be a Php Array or a string that represents an array contained or nested in a global variable.</p>
         <p> String syntax: <span class="opt-value">'globvar[item1][item2]...'</span></p>
         <p>'globvar' is the name of a global variable $globvar which must be an array.<br>
           'item1' and 'item2' are the keys of an item or a subitem of $globvar. </p>
         <p> Example: </p>
-        <div class="decal"> <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'block1'</span>,<span class="opt-value">'array'</span>,<span class="opt-value">'days[mon]'</span>);</span><br>
-          This will merge 'block1' with the value $day['mon'] assuming it is an array. </div>
+        <pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'block1'</span>,<span class="opt-value">'array'</span>,<span class="opt-value">'days[mon]'</span>);</pre>
+        <div class="decal txt-small">This will merge 'block1' with the value $day['mon'] assuming it is an array. </div>
         <p>It is possible to represent variable's name without items.</p>
         <p> Example: </p>
-        <div class="decal"> <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'block1'</span>,<span class="opt-value">'array'</span>,<span class="opt-value">'days'</span>);</span></div>
+        <pre class="decal"> <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'block1'</span>,<span class="opt-value">'array'</span>,<span class="opt-value">'days'</span>);</span></pre>
         <p>There are two advantages in using a string to represent the array:</p>
         <ul>
           <li> Items will be read directly in the Array (assigned by reference) instead of reading a copy of the items. This can improve the performance.</li>
@@ -882,9 +863,9 @@ a.opt-name:hover {
         <table  border="0" cellpadding="0" cellspacing="0">
           <tr>
             <td width="80" valign="top">Example: </td>
-            <td valign="top">['key1']=&gt;value1<br>
-              ['key2']=&gt;value2<br>
-              ...</td>
+            <td valign="top"><pre>['key1']=&gt;value1
+['key2']=&gt;value2
+ ...</pre></td>
           </tr>
         </table>
         <p>The returned Record Set consists of a column <span class="opt-value">'key'</span> containing the name of the key, and a column <span class="opt-value">'val'</span> containing the value of the key. </p>
@@ -892,10 +873,10 @@ a.opt-name:hover {
         <table  border="0" cellpadding="0" cellspacing="0">
           <tr>
             <td width="80" valign="top">Example: </td>
-            <td valign="top">[0] =&gt; (['column1']=&gt;value1-0 ; ['column2']=&gt;value2-0 ; ...)<br>
-              [1] =&gt; (['column1']=&gt;value1-1 ; ['column2']=&gt;value2-1 ; ...)<br>
-              [2] =&gt; (['column1']=&gt;value1-2 ; ['column2']=&gt;value2-2 ; ...)<br>
-              ...</td>
+            <td valign="top"><pre>[0] =&gt; (['column1']=&gt;value1-0 ; ['column2']=&gt;value2-0 ; ...)
+[1] =&gt; (['column1']=&gt;value1-1 ; ['column2']=&gt;value2-1 ; ...)
+[2] =&gt; (['column1']=&gt;value1-2 ; ['column2']=&gt;value2-2 ; ...)
+...</pre></td>
           </tr>
         </table>
         <p>The returned Record Set consists of the columns <span class="opt-value">'column1'</span>, <span class="opt-value">'column2'</span>,... with their associated values. </p>
@@ -983,28 +964,23 @@ a.opt-name:hover {
     <h4>Merging with a value:</h4>
     <p><span class="opt-name">X</span> can be numeric, string, an array or an object. For an array or an object, names of TBS Fields must have suffixes like <a href="#html_field_auto">automatic fields ([onload] and [onshow])</a>.</p>
     <p> Example: </p>
-    <div class="decal">
-      <div class="txt-code"><span class="opt-name">$TBS-&gt;</span>MergeField(<span class="opt-value">'account'</span>,array(<span class="opt-value">'id'</span>=&gt;<span class="opt-value">55</span>,<span class="opt-value">'name'</span>=&gt;<span class="opt-value">'Bob'</span>));<br>
-      </div>
-      <div class="txt-small">In this example, the fields <span class="opt-value"></span>[account.id] and [account.name] will be merged.</div>
-    </div>
+    <pre class="decal txt-code"><span class="opt-name">$TBS-&gt;</span>MergeField(<span class="opt-value">'account'</span>,array(<span class="opt-value">'id'</span>=&gt;<span class="opt-value">55</span>,<span class="opt-value">'name'</span>=&gt;<span class="opt-value">'Bob'</span>));</pre>
+    <div class="decal txt-small">In this example, the fields <span class="opt-value"></span>[account.id] and [account.name] will be merged.</div>
     <h4>Merging with a user function:</h4>
     <p>TBS calls this function for each field found in the template. <br>
       This function must have the following syntax: </p>
-    <div class="decal txt-code">function fct_user(<span class="opt-name">$Subname</span> [, <span class="opt-name">$PrmLst</span>]) {...}</div>
+    <pre class="decal txt-code">function fct_user(<span class="opt-name">$Subname</span> [, <span class="opt-name">$PrmLst</span>]) {...}</pre>
     <p>When the function is called, its argument <span class="opt-name">$Subname</span> has for value the suffix of the field's name (example: for a field named <span class="opt-value">'ml.title'</span>, <span class="opt-name">$Subname</span> will have the value <span class="opt-value">'title')</span>. And the optional argument <span class="opt-name">$PrmLst</span> contains an associative array with the field's parameters. The function must return the value to be merged. </p>
     <p> Example: </p>
-    <div class="decal">
-      <div class="txt-code"><span class="opt-name">$TBS-&gt;</span>MergeField(<span class="opt-value">'ml'</span>,<span class="opt-value">'m_multilanguage'</span>,<span class="opt-value">true</span>);<br>
-        ...<br>
-        function m_multilanguage(<span class="opt-name">$Subname</span>) {<br>
-        &nbsp;&nbsp;global <span class="opt-name">$lang_id</span>; <br>
-        &nbsp;&nbsp;<span class="opt-name">$rs</span> = mysql_query(<span class="opt-value">&quot;SELECT text_$lang_id AS txt FROM t_language WHERE key='$Subname&quot;</span>);<br>
-        &nbsp;&nbsp;<span class="opt-name">$rec</span> = mysql_fetch_array(<span class="opt-name">$rs</span>);<br>
-        &nbsp;&nbsp;return <span class="opt-name">$rec</span>[<span class="opt-value">'txt'</span>] ;<br>
-        }</div>
-      <div class="txt-small">In this example, a field such as <span class="opt-value">[ml.title]</span> will be merged with the value returned by <span class="opt-value">m_multilanguage('title')</span>.</div>
-    </div>
+    <pre class="decal txt-code"><span class="opt-name">$TBS-&gt;</span>MergeField(<span class="opt-value">'ml'</span>,<span class="opt-value">'m_multilanguage'</span>,<span class="opt-value">true</span>);
+...
+function m_multilanguage(<span class="opt-name">$Subname</span>) {
+  global <span class="opt-name">$lang_id</span>; 
+  <span class="opt-name">$rs</span> = mysql_query(<span class="opt-value">&quot;SELECT text_$lang_id AS txt FROM t_language WHERE key='$Subname&quot;</span>);
+  <span class="opt-name">$rec</span> = mysql_fetch_array(<span class="opt-name">$rs</span>);
+  return <span class="opt-name">$rec</span>[<span class="opt-value">'txt'</span>] ;
+}</pre>
+    <div class="decal txt-small">In this example, a field such as <span class="opt-value">[ml.title]</span> will be merged with the value returned by <span class="opt-value">m_multilanguage('title')</span>.</div>
     <h4>Merge automatic fields and blocks:</h4>
     <p>You can use the method  MergeField() in order to force the merge of the automatic <a href="#html_field_auto">fields</a> and <a href="#html_block_auto">blocks</a> ([onload] and [onshow]). But in this case, only the first argument should be indicated.</p>
     <p> Example: <span class="txt-code"><span class="opt-name">$TBS-&gt;</span>MergeField(<span class="opt-value">'var'</span>); </span> </p>
@@ -1036,7 +1012,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name">noerr</span></td>
-        <td align="left" valign="top" class="border-sep"><p>Enables you to avoid all TinyButStrong error messages for next operations. Default value is <span class="opt-value">false</span>. The errors that were not displayed can however be returned with the special field <a href="#html_field_special" class="opt-name">[onshow..error_msg]</a>. Furthermore you can check the presence of error using property <span class="opt-value">ErrCount</span> which counts  TBS errors regardless of option <span class="opt-name"> noerr</span>.</p>
+        <td align="left" valign="top" class="border-sep"><p>Enables you to avoid all TinyButStrong error messages for next operations. Default value is <span class="opt-value">false</span>. The errors that were not displayed can however be returned with the special field <a href="#html_field_special" class="opt-name">[onshow..error_msg]</a>. Furthermore you can check the presence of error using property <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;<span class="opt-value">ErrCount</span></span> which counts  TBS errors regardless of option <span class="opt-name"> noerr</span>.</p>
           <p> Option <span class="opt-name">noerr</span> is useful in two cases:</p>
           <ul>
             <li> For professional  sites put into production for whom no error message can be displayed. Take care because you will have no more indication about the good running of the merge. It is often more judicious to use parameter <a href="#html_field_prm_noerr" class="opt-name">noerr</a> which enables you to avoid messages concerning one particular TBS tag. </li>
@@ -1070,7 +1046,8 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name">protect</span></td>
-        <td align="left" valign="top" class="border-sep">&nbsp;</td>
+        <td align="left" valign="top" class="border-sep"><p>Protects all merged items by replacing the characters '<span class="opt-html">[</span>' with their corresponding XML/HTML code '<span class="opt-html">&amp;#91;</span>'. Default value is <span class="opt-value">true</span>.</p>
+        <p>By default, all data merged with a template is protected except if it's a file inclusion. It is strongly recommended to protect data when it comes from free enter like on a forum for example.</p></td>
         <td align="left" valign="top" class="border-sep">$TBS-&gt;Protect (deprecated)</td>
       </tr>
       <tr>
@@ -1149,17 +1126,14 @@ a.opt-name:hover {
     <h4>Calling a plug-in's command:</h4>
     <p>Use the plug-in's key as the main argument. Next arguments are for the called plug-in's purpose. </p>
     <p> Example: </p>
-    <div class="decal">
-      <div class="txt-code"><span class="opt-name">$TBS-&gt;</span>PlugIn(<span class="opt-value">TBS_XXX</span>,<span class="opt-name">$arg1</span>,<span class="opt-name">arg2</span>);</div>
-      <span class="txt-small">In this example, the plug-in identified by the key TBS_XXX is called.</span></div>
+    <pre class="decal txt-code"><span class="opt-name">$TBS-&gt;</span>PlugIn(<span class="opt-value">TBS_XXX</span>, <span class="opt-name">$arg1</span>, <span class="opt-name">arg2</span>);    </pre>
+    <div class="decal txt-small">In this example, the plug-in identified by the key TBS_XXX is called.</div>
     <p><em>Remark:</em> when you call a plug-in's command for the first time this plug-in is automatically installed on the TBS instance (<span class="opt-name">$TBS</span>).</p>
     <h4>Installing a plug-in: </h4>
     <p>Although some plug-ins are automatically installed, it can be useful in some other cases to  make a manual installation. For this, use the constant TBS_INSTALL with the plug-in's key.</p>
     <p> Example: </p>
-    </p>
-    <div class="decal">
-      <div class="txt-code"><span class="opt-name">$TBS-&gt;</span>PlugIn(<span class="opt-value">TBS_INSTALL</span>,<span class="opt-value">TBS_XXX</span>);</div>
-      <span class="txt-small">In this example, the plug-in identified by the key TBS_XXX is installed.</span></div>
+    <pre class="decal txt-code"><span class="opt-name">$TBS-&gt;</span>PlugIn(<span class="opt-value">TBS_XXX</span>, <span class="opt-value">TBS_XXX</span>);    </pre>
+    <div class="decal txt-small"><span class="txt-small">In this example, the plug-in identified by the key TBS_XXX is installed.</span></div>
     <p><em>Remarks:</em> </p>
     <ul>
       <li> A plug-in is installed relatively to a  TBS instance (a variable $TBS for example). If you are using a second TBS instance (for example <span class="opt-name">$TBS2</span>) then you will also need to install the plug-in on this instance. </li>
@@ -1168,11 +1142,10 @@ a.opt-name:hover {
     <div class="versioning">Versioning: the method PlugIn()  is supported since TBS version 3.0. </div>
   </div>
   <h3><a name="php_assigned" id="php_assigned"></a>Property Assigned:</h3>
-  <div class="norm"> Enables you to define information for a subsequent  merging which can be automatic or manual.<br>
-    <br>
-    Syntax: <span class="txt-code"><span class="opt-type">array</span> <span class="opt-name">$TBS</span>-&gt;Assigned</span><br>
-    <br>
-    Property Assigned is a PHP array defined by the user. Arguments for methods MergeBlock() and MergeField() can be saved there. Arguments have to be saved in a PHP array with numerical keys and ordered following the syntax of those methods. It is possible to use optional string keys in order to define specific behaviors: <br>
+  <div class="norm">
+    <p>Enables you to define information for a subsequent  merging which can be automatic or manual. </p>
+    <p> Syntax: <span class="txt-code"><span class="opt-type">array</span> <span class="opt-name">$TBS</span>-&gt;Assigned</span></p>
+    <p> Property Assigned is a PHP array defined by the user. Arguments for methods MergeBlock() and MergeField() can be saved there. Arguments have to be saved in a PHP array with numerical keys and ordered following the syntax of those methods. It is possible to use optional string keys in order to define specific behaviors: </p>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
         <th>Optional key</th>
@@ -1199,70 +1172,58 @@ a.opt-name:hover {
         <td>This key is added automatically by TBS during the merging. It counts the number of times this entry was merged.</td>
       </tr>
     </table>
-    <br>
-    Example of a manual merging: <br>
-    <div class="decal">
-      <div class="txt-code"><span class="opt-name">$TBS</span>-&gt;Assigned[<span class="opt-value">'b'</span>] = array(<span class="opt-value">'b1,b2'</span>, &amp;<span class="opt-name">$cnt_id</span>, <span class="opt-value">'SELECT id, name FROM table1'</span>);<br>
-        ... <br>
-        <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b'</span>); <span class="opt-html">// merge block b1 and b2 with the SQL query</span><br>
-        <br>
-      </div>
-    </div>
-    Example of an automatic merging: <br>
-    <div class="decal">
-      <div class="txt-code"><span class="opt-name">$TBS</span>-&gt;Assigned[<span class="opt-value">'b'</span>] = array(<span class="opt-value">'b1,b2'</span>, &amp;<span class="opt-name">$cnt_id</span>, <span class="opt-value">'SELECT id, name FROM table1'</span>, <span class="opt-value">'auto'</span>=&gt;<span class="opt-value">'onload'</span>); </div>
-    </div>
-    <br>
-    Example of merging fields: <br>
-    <div class="decal">
-      <div class="txt-code"><span class="opt-name">$TBS</span>-&gt;Assigned[<span class="opt-value">'f1'</span>] = array(<span class="opt-value">'f1'</span>, <span class="opt-name">$data</span>, <span class="opt-value">'type'</span>=&gt;<span class="opt-value">'mergefield'</span>);<br>
-        ... <br>
-        <span class="opt-name">$TBS</span>-&gt;MergeField(<span class="opt-value">'f1'</span>); <span class="opt-html">// merge field f1 witht the array $data</span><br>
-      </div>
-    </div>
-    <br>
-    Notes:<br>
-    - To merge an assigned block or field, you just have to call the corresponding method using only the name of the assigned key. You can add the argument  Source = <span class="opt-value">'assigned'</span>, but this is optional because it is the default value. In other words, <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b'</span>) is equivalent to <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b'</span>, <span class="opt-value">'assigned'</span>).<br>
-    - An assignment with <span class="opt-value">'auto'</span>=&gt;<span class="opt-value">'onload'</span> will be merged, of course, only if it is defined before calling the  LoadTemplate() method.<br>
-    - You can pass some arguments by <a href="http://www.php.net/manual/en/language.references.php">reference</a> for you assignments. This is particularly  useful for PHP 4 which is passing object with a copy by default.<br>
-    <br>
-    <br>
+    <p>Example of a manual merging: </p>
+    <pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;Assigned[<span class="opt-value">'b'</span>] = array(<span class="opt-value">'b1,b2'</span>, &amp;<span class="opt-name">$cnt_id</span>, <span class="opt-value">'SELECT id, name FROM table1'</span>);
+... 
+<span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b'</span>); <span class="opt-html">// merge block b1 and b2 with the SQL query</span>          </pre>
+    <p>Example of an automatic merging: </p>
+    <pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;Assigned[<span class="opt-value">'b'</span>] = array(<span class="opt-value">'b1,b2'</span>, &amp;<span class="opt-name">$cnt_id</span>, <span class="opt-value">'SELECT id, name FROM table1'</span>, <span class="opt-value">'auto'</span>=&gt;<span class="opt-value">'onload'</span>); </pre>
+    <p>Example of merging fields: </p>
+    <pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;Assigned[<span class="opt-value">'f1'</span>] = array(<span class="opt-value">'f1'</span>, <span class="opt-name">$data</span>, <span class="opt-value">'type'</span>=&gt;<span class="opt-value">'mergefield'</span>);
+... 
+<span class="opt-name">$TBS</span>-&gt;MergeField(<span class="opt-value">'f1'</span>); <span class="opt-html">// merge field f1 witht the array $data</span></pre>
+    <p>Notes:</p>
+    <ul>
+      <li> To merge an assigned block or field, you just have to call the corresponding method using only the name of the assigned key. You can add the argument  Source = <span class="opt-value">'assigned'</span>, but this is optional because it is the default value. In other words, <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b'</span>) is equivalent to <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b'</span>, <span class="opt-value">'assigned'</span>).</li>
+      <li> An assignment with <span class="opt-value">'auto'</span>=&gt;<span class="opt-value">'onload'</span> will be merged, of course, only if it is defined before calling the  LoadTemplate() method.</li>
+      <li> You can pass some arguments by <a href="http://www.php.net/manual/en/language.references.php">reference</a> for you assignments. This is particularly  useful for PHP 4 which is passing object with a copy by default. </li>
+    </ul>
     <div class="versioning">Versioning: property  Assigned is supported since TBS version 3.5. </div>
   </div>
   <h3><a name="php_source" id="php_source"></a>property Source:</h3>
-  <div class="norm">This property contains the source of the template currently merged. It is read/write. <br>
-    When TinyButStrong processes a merging (when using the MergeBlock() method for example), the  Source property is modified immediately. <br>
-    <br>
-    Syntax: <span class="txt-code"><span class="opt-type">string</span> <span class="opt-name">$TBS</span>-&gt;Source</span><br>
-    <br>
-    Notes:<br>
-    - The <a href="#php_loadtemplate">LoadTemplate()</a> method loads a file into the Source property and merges the [onload] tags automatically. Thus, Source may be different from the original template after LoadTemplate(). <br>
-    - The <a href="#php_show">Show()</a> method merges [onshow] tags automatically before to display the result. <br>
-    <br>
-    In order to load a template stored into a Php variable, you can code: <br>
-    <div class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;Source = <span class="opt-name">$my_template</span>;<br>
-      <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">null</span>); <span class="opt-html">//  run plug-ins if any, and merges [onload] tags if any</span></div>
-    <br>
-    In order to store the result at the end of the merging, you can code:<br>
-    <div class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;Show(<span class="opt-value">TBS_NOTHING</span>); <span class="opt-html">// terminate the merging without leaving the script nor to display the result</span><br>
-      <span class="opt-name">$result</span> = <span class="opt-name">$TBS</span>-&gt;Source;</div>
+  <div class="norm">
+    <p>This property contains the source of the template currently merged. It is read/write. 
+      When TinyButStrong processes a merging (when using the MergeBlock() method for example), the  Source property is modified immediately. </p>
+    <p>      Syntax: <span class="txt-code"><span class="opt-type">string</span> <span class="opt-name">$TBS</span>-&gt;Source</span></p>
+    <p>      Notes:</p>
+    <ul>
+      <li> The <a href="#php_loadtemplate">LoadTemplate()</a> method loads a file into the Source property and merges the [onload] tags automatically. Thus, Source may be different from the original template after LoadTemplate(). </li>
+      <li> The <a href="#php_show">Show()</a> method merges [onshow] tags automatically before to display the result.      </li>
+    </ul>
+<p>      In order to load a template stored into a Php variable, you can code:    </p>
+    <pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;Source = <span class="opt-name">$my_template</span>;
+<span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">null</span>); <span class="opt-html">//  run plug-ins if any, and merges [onload] tags if any</span></pre>
+    <p>In order to store the result at the end of the merging, you can code:    </p>
+    <pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;Show(<span class="opt-value">TBS_NOTHING</span>); <span class="opt-html">// terminate the merging without leaving the script nor to display the result</span>
+<span class="opt-name">$result</span> = <span class="opt-name">$TBS</span>-&gt;Source;</pre>
   </div>
   <h3><a name="php_tplvars" id="php_tplvars"></a>property TplVars:</h3>
-  <div class="norm">Contains the array of template variables corresponding to current template.<br>
-    <br>
-    Syntax: <span class="txt-code"><span class="opt-type">array</span> <span class="opt-name">$TBS</span>-&gt;TplVars<br>
-    </span><br>
-    You can define template variables using one or several <span class="opt-name">onload</span> <a href="#html_field_auto">automatic fields</a> with parameter <a href="#html_field_prm_tplvars" class="opt-name">tplvars</a>. 
-    All  parameters that follow parameter <a href="#html_field_prm_tplvars" class="opt-name">tplvars</a> are added to the TplVars property when the LoadTemplate() method is called.<br>
+  <div class="norm">
+    <p>Contains the array of template variables corresponding to current template. </p>
+    <p>      Syntax: <span class="txt-code"><span class="opt-type">array</span> <span class="opt-name">$TBS</span>-&gt;TplVars</span></p>
+    <p>      You can define template variables using one or several <span class="opt-name">onload</span> <a href="#html_field_auto">automatic fields</a> with parameter <a href="#html_field_prm_tplvars" class="opt-name">tplvars</a>. 
+      All  parameters that follow parameter <a href="#html_field_prm_tplvars" class="opt-name">tplvars</a> are added to the TplVars property when the LoadTemplate() method is called.    </p>
     <div class="decal">Example:<br>
       &nbsp;&nbsp;[<span class="opt-name">onload</span>;<span class="opt-name">tplvars</span>;<span class="opt-name">template_version</span>=<span class="opt-value">'1.12.27'</span>;<span class="opt-name">template_date</span>=<span class="opt-value">'2004-10-26'</span>]<br>
       <span class="txt-small">This TBS tag will create two items equivalent to the PHP code:</span><br>
       <span class="txt-code"><span class="opt-name">&nbsp;$TBS</span>-&gt;TplVars[<span class="opt-value">'template_version'</span>] = <span class="opt-value">'1.12.27'</span>;</span><br>
       <span class="txt-code"><span class="opt-name">&nbsp;$TBS</span>-&gt;TplVars[<span class="opt-value">'template_date'</span>] = <span class="opt-value">'2004-10-26'</span>;</span> <br>
     </div>
-    Remarks:<br>
-    - Parameter <a href="#html_field_prm_tplvars" class="opt-name">tplvars</a> works only with <span class="opt-name">onload</span> <a href="#html_field_auto">automatic fields</a>.<br>
-    - You can use parameter <a href="#html_field_prm_tplvars" class="opt-name">tplvars</a> several times in the same template. <br>
+    <p>Remarks: </p>
+    <ul>
+      <li>  Parameter <a href="#html_field_prm_tplvars" class="opt-name">tplvars</a> works only with <span class="opt-name">onload</span> <a href="#html_field_auto">automatic fields</a>.</li>
+      <li> You can use parameter <a href="#html_field_prm_tplvars" class="opt-name">tplvars</a> several times in the same template.      </li>
+    </ul>
   </div>
   <h3><a name="php_oop" id="php_oop"></a>Object Oriented Programming (OOP):</h3>
   <div class="norm" id="v202_oop">
@@ -1312,8 +1273,8 @@ a.opt-name:hover {
         <li> Since an object is referenced under ObjectRef, its sub objects will also be accessible by the TBS syntax. </li>
       </ul>
       <h5> &bull; Using ObjectRef in automatic fields:</h5>
-      Use the  symbol '~' to call what is referenced under ObjectRef.<br>
-      For example (valid for both <span class="opt-name">[onload]</span>, <span class="opt-name">[onshow]</span> and <span class="opt-name">[var</span>]):<br>
+      <p>Use the  symbol '~' to call what is referenced under ObjectRef.<br>
+        For example (valid for both <span class="opt-name">[onload]</span>, <span class="opt-name">[onshow]</span> and <span class="opt-name">[var</span>]):      </p>
       <div class="decal">
         <table border="0" cellpadding="3" cellspacing="0">
           <tr>
@@ -1359,23 +1320,23 @@ a.opt-name:hover {
           </tr>
           <tr id="v205_ondata_ooo">
             <td>Parameter <a href="#html_block_prm_ondata">ondata</a></td>
-            <td>[<span class="opt-name">blk1</span>.column1;<span class="opt-name">block</span>=<span class="opt-value">tr</span>;<span class="opt-name">ondata</span>=<span class="opt-value">~item1.methA</span>]</td>
+            <td class="txt-code">[<span class="opt-name">blk1</span>.column1;<span class="opt-name">block</span>=<span class="opt-value">tr</span>;<span class="opt-name">ondata</span>=<span class="opt-value">~item1.methA</span>]</td>
           </tr>
           <tr>
             <td>Parameter <a href="#html_field_prm_onformat">onformat</a></td>
-            <td>[<span class="opt-name">blk1</span>.column2;<span class="opt-name">onformat</span>=<span class="opt-value">~item1.methB</span>]</td>
+            <td class="txt-code">[<span class="opt-name">blk1</span>.column2;<span class="opt-name">onformat</span>=<span class="opt-value">~item1.methB</span>]</td>
           </tr>
           <tr>
             <td>Method <a href="#php_loadtemplate">LoadTemplate()</a></td>
-            <td>$TBS-&gt;<span class="opt-name">LoadTemplate</span>(<span class="opt-value">'mytemplate.htm'</span>,<span class="opt-value">'=~item1.methC'</span>);</td>
+            <td class="txt-code">$TBS-&gt;<span class="opt-name">LoadTemplate</span>(<span class="opt-value">'mytemplate.htm'</span>,<span class="opt-value">'=~item1.methC'</span>);</td>
           </tr>
           <tr>
             <td>Method <a href="#php_mergefield">MergeField()</a></td>
-            <td>$TBS-&gt;<span class="opt-name">MergeField</span>(<span class="opt-value">'myfield'</span>,<span class="opt-value">'~item1.methD'</span>,<span class="opt-value">true</span>);</td>
+            <td class="txt-code">$TBS-&gt;<span class="opt-name">MergeField</span>(<span class="opt-value">'myfield'</span>,<span class="opt-value">'~item1.methD'</span>,<span class="opt-value">true</span>);</td>
           </tr>
           <tr>
             <td>Method <a href="#plugins_db">MergeBlock()</a></td>
-            <td>$TBS-&gt;<span class="opt-name">MergeBlock</span>(<span class="opt-value">'blk1'</span>,<span class="opt-value">'~mydb'</span>,<span class="opt-value">'SELECT * FROM t_table'</span>);</td>
+            <td class="txt-code">$TBS-&gt;<span class="opt-name">MergeBlock</span>(<span class="opt-value">'blk1'</span>,<span class="opt-value">'~mydb'</span>,<span class="opt-value">'SELECT * FROM t_table'</span>);</td>
           </tr>
         </table>
       </div>
@@ -1655,7 +1616,7 @@ a.opt-name:hover {
           <table width="100%" border="0" cellpadding="2" cellspacing="0" >
             <tr>
               <td width="10" valign="top">*</td>
-              <td>Take care that in your script <span class="title-1c"> variables will be obsiously local instead of global</span>. This is because the script is called from a TBS method. In order to define or reach global variables in your script, you have to use the Php instruction <a href="http://fr.php.net/global" target="_blank">global</a> or the array <span class="txt-code">$GLOBAL</span>.</td>
+              <td>Take care that in your script <strong> variables will be obsiously local instead of global</strong>. This is because the script is called from a TBS method. In order to define or reach global variables in your script, you have to use the Php instruction <a href="http://fr.php.net/global" target="_blank">global</a> or the array <span class="txt-code">$GLOBAL</span>.</td>
             </tr>
             <tr id="v202_locvar">
               <td valign="top">*</td>
@@ -1789,7 +1750,7 @@ a.opt-name:hover {
           &nbsp; <span class="opt-name"><span class="opt-value">yes</span></span>: (default value) data item is protected.<br>
           &nbsp; <span class="opt-name"><span class="opt-value">no</span></span>: data item is not protected.<br>
           By default, all data merged with a template is protected except if it's a file inclusion. It is strongly recommended to protect data when it comes from free enter like on a forum for example.<br>
-          Nevertheless, it is possible to disable the protection by default if you set property <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">Protect</span> to <span class="opt-value">false</span>.</td>
+          Nevertheless, it is possible to disable the protection by default if you set TBS option <a href="#php_setoption" class="opt-name">'protect'</a>  to <span class="opt-value">false</span>.</td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><span class="opt-value"><a name="html_field_prm_ope" id="html_field_prm_ope"></a></span>ope</span>=<span class="opt-value">action</span></td>
@@ -1882,11 +1843,11 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_frm" id="html_field_prm_frm"></a>frm</span>=<span class="opt-value">format</span></td>
-        <td align="left" valign="top" class="border-sep">Specify a format to display for a data item which type is date/time or numeric. It is possible to use a conditional format which changes depending on the sign of the value. The format  is considered as numeric type as soon as it contains the character <span class="opt-value">0</span>, otherwise it is considered as date/time type. <br>
-          <br>
-          <div class="title-1c">Date-time format:</div>
-          <br>
-          It is a VisualBasic like format. The following keywords are recognized:<br>
+        <td align="left" valign="top" class="border-sep"><p>Specify a format to display for a data item which type is date/time or numeric. It is possible to use a conditional format which changes depending on the sign of the value. The format  is considered as numeric type as soon as it contains the character <span class="opt-value">0</span>, otherwise it is considered as date/time type. 
+          </p>
+          <h5>Date-time format:          
+          </h5>
+          <p>It is a VisualBasic like format. The following keywords are recognized:          </p>
           <table  border="0" cellspacing="0" cellpadding="0">
             <tr>
               <td width="150" valign="top"><span class="opt-value">d</span>, <span class="opt-value">dd</span>, <span class="opt-value">ddd</span>, <span class="opt-value">dddd</span>:</td>
@@ -1927,34 +1888,24 @@ a.opt-name:hover {
             </tr>
           </table>
           <br>
-          Other characters are kept.
-          It is possible to protect the strings inside by putting them between double quotes (&quot;).<br>
-          <br>
-          Examples:<br>
-          <div class="decal">[<span class="opt-value"><span class="opt-name">fld</span></span>;<span class="opt-name">frm</span>=<span class="opt-value">mm/dd/yyyy</span>] will display <span class="opt-html">12/21/2002</span><br>
-            [<span class="opt-value"><span class="opt-name">fld</span>;<span class="opt-name">frm</span>='yyyy-mm-dd hh:nn:ss'</span>] will display <span class="opt-html">2002-12-21 15:45:03</span></div>
-          <div class="versioning">Versioning:<br>
+          <p>Other characters are kept.
+          It is possible to protect the strings inside by putting them between double quotes (&quot;). </p>
+<p>            Examples:          </p>
+          <p class="decal">[<span class="opt-value"><span class="opt-name">fld</span></span>;<span class="opt-name">frm</span>=<span class="opt-value">mm/dd/yyyy</span>] will display <span class="opt-html">12/21/2002</span><br>
+            [<span class="opt-value"><span class="opt-name">fld</span>;<span class="opt-name">frm</span>='yyyy-mm-dd hh:nn:ss'</span>] will display <span class="opt-html">2002-12-21 15:45:03</span></p><p class="versioning">Versioning:<br>
             - Keywords ampm and AMPM are supported since TBS version 3.0.<br>
             - Keyword hm was supported since TBS 3.0 and is deprecated an replaced with keyword rr since TBS version 3.2.0.<br>
             - Keywords rr, r, and h are supported since TBS version 3.2.0.<br>
-            - Keyword (locale) is supported since TBS version 3.4.0.</div>
-          <br>
-          <br>
-          <br>
-          <div class="title-1c">Numeric format:</div>
-          <br>
-          To define the decimal part, use an expression like '<span class="opt-value">0d0...</span>' where <span class="opt-value">'d'</span> is the decimal separator , and <span class="opt-value">'0...'</span> is a continuation of zeros corresponding to the number of decimals.<br>
-          If there is no decimal, use the format '<span class="opt-value">0.</span>' (with a dot).<br>
-          <br>
-          To define a thousand separator, use an expression like '<span class="opt-value">0t000d...</span>' where <span class="opt-value">'t</span>' is the thousand separator. If there is no decimal, use the format '<span class="opt-value">0t000.</span>' (with a dot).<br>
-          <br>
-          In order to display leading zeros, use an expression like '<span class="opt-value">0000d...</span>' where <span class="opt-value">'0000</span>' represents the number of digits you want to have. If there is no decimal, use the format '<span class="opt-value">0000.</span>' (with a dot). <span class="versioning">Versioning: This feature is supported since TBS version 3.5.2.</span><br>
-          <br>
-          If the format contains the character '<span class="opt-value">%</span>', then the value to display will be multiplied by 100. The character '<span class="opt-value">%</span>' is displayed too.<br>
-          <br>
-          The numerical format may contain other strings. But only the expression with one or more zeroes placed to the right will be taken as a format, other characters will be kept.<br>
-          <br>
-          Examples:
+            - Keyword (locale) is supported since TBS version 3.4.0.</p>
+          <h5>Numeric format:          
+          </h5>
+          <p> To define the decimal part, use an expression like '<span class="opt-value">0d0...</span>' where <span class="opt-value">'d'</span> is the decimal separator , and <span class="opt-value">'0...'</span> is a continuation of zeros corresponding to the number of decimals.<br>
+            If there is no decimal, use the format '<span class="opt-value">0.</span>' (with a dot).          </p>
+          <p> To define a thousand separator, use an expression like '<span class="opt-value">0t000d...</span>' where <span class="opt-value">'t</span>' is the thousand separator. If there is no decimal, use the format '<span class="opt-value">0t000.</span>' (with a dot).          </p>
+          <p>            In order to display leading zeros, use an expression like '<span class="opt-value">0000d...</span>' where <span class="opt-value">'0000</span>' represents the number of digits you want to have. If there is no decimal, use the format '<span class="opt-value">0000.</span>' (with a dot). <span class="versioning">Versioning: This feature is supported since TBS version 3.5.2.</span></p>
+          <p>            If the format contains the character '<span class="opt-value">%</span>', then the value to display will be multiplied by 100. The character '<span class="opt-value">%</span>' is displayed too.</p>
+          <p> The numerical format may contain other strings. But only the expression with one or more zeroes placed to the right will be taken as a format, other characters will be kept.</p>
+          <p> Examples: </p>
           <div class="decal">
             <table border="0" cellspacing="0" cellpadding="1">
               <tr>
@@ -1994,12 +1945,10 @@ a.opt-name:hover {
               </tr>
             </table>
           </div>
-          <br>
-          <div class="title-1c">Conditional formats:</div>
-          <br>
-          You have the possibility to define up to 4 conditional formats when the value is respectively positive, negative, zero or null (or empty string). Conditional formats must be separated by a '|' character. Each conditional format is optional.<br>
-          <br>
-          Examples:
+          <h5>Conditional formats:
+          </h5>
+          <p>You have the possibility to define up to 4 conditional formats when the value is respectively positive, negative, zero or null (or empty string). Conditional formats must be separated by a '|' character. Each conditional format is optional.</p>
+          <p>            Examples:          </p>
           <div class="decal">
             <table border="0" cellspacing="0" cellpadding="1">
               <tr>
@@ -2056,7 +2005,7 @@ a.opt-name:hover {
     <h4><a name="html_field_prm_order" id="html_field_prm_order"></a>Order of processing  parameters:</h4>
     <p>When you whant to use several paremeters in the same TBS field, then it can be intersing to undertsand in which order they are processed. Each parameter is changing the  value to be merged, but the source from where the value is is taken is not changed. </p>
     <p>Order:</p>
-    <p>      1) -&gt; Retreiving the value of the field to be merged.<br>
+    <p> 1) -&gt; Retreiving the value of the field to be merged.<br>
       2) -&gt; Changing the value using parameters: <br>
       &nbsp;&nbsp;&nbsp;&nbsp;2.1) -&gt; <a href="#html_field_prm_onformat" class="opt-name">onformat</a><br>
       &nbsp;&nbsp;&nbsp;&nbsp;2.2) -&gt; <a href="#html_field_prm_ope" class="opt-name">ope</a> / plug-ins OnOperation<br>
@@ -2071,8 +2020,8 @@ a.opt-name:hover {
   <h3><a name="html_field_auto" id="html_field_auto"></a>Automatic fields</h3>
   <div class="norm">
     <p>Automatic fields enable you to automatically merge PHP global variables  when some events occur. </p>
-    <p> For example [<span class="opt-name">onload</span>.x] will be merged with the global variable $x  when the <a href="#php_loadtemplate">LoadTemplate()</a> method is called<span class="title-1c"></span>.</p>
-    <p> Automatic fields can only merge  PHP variables <span class="title-1c">when they are global</span>. There is no way to merge a variable which is local to a function, unless you make a reference to it with a global variable, or if you merge it using <a href="#php_mergefield">MergeField()</a>.<br>
+    <p> For example [<span class="opt-name">onload</span>.x] will be merged with the global variable $x  when the <a href="#php_loadtemplate">LoadTemplate()</a> method is called.</p>
+    <p> Automatic fields can only merge  PHP variables <strong>when they are global</strong>. There is no way to merge a variable which is local to a function, unless you make a reference to it with a global variable, or if you merge it using <a href="#php_mergefield">MergeField()</a>.<br>
       Automatic fields can also merge TBS special information (see <a href="#html_field_special">Special automatic fields</a>), or data of the ObjectRef property (see <a href="#php_oop">Objet Oriented Programming</a>). </p>
     <p> There are three types of automatic fields:</p>
     <ul>
@@ -2146,19 +2095,18 @@ a.opt-name:hover {
       <li> it is merged before the parent field,</li>
       <li> il is a <span class="opt-name">[var]</span> field placed into a paremeter <a href="#html_field_prm_file" class="opt-name">file</a>, <a href="#html_field_prm_script" class="opt-name">script</a>, <a href="#html_field_prm_if" class="opt-name">if</a>, <span class="opt-name">then</span>, <span class="opt-name">else</span> or <a href="#html_block_prm_when" class="opt-name">when</a>. </li>
     </ul>
-    <p> Examples: <br>
-    </p>
-    <div class="decal"> <span class="opt-html">[onload;if [onload.x]=1;then 'yes';else 'no']</span><br>
-      This example will always display <span class="opt-html">'no'</span>, because the embedded <span class="opt-html">[onload.x]</span> fild will never be evaluated. It is better to use <span class="opt-html">[onload;if [var.x]=1;then 'yes';else 'no']</span> instead, or better : <span class="opt-html">[onload.x;if [val]=1;then 'yes';else 'no']</span><br>
-      <br>
-      <span class="opt-html">[b1.nom;block=tr;headergrp=[var.x]]</span><br>
+    <p> Examples:    </p>
+<p class="decal"><span class="opt-html">[onload;if [onload.x]=1;then 'yes';else 'no']</span><br>
+      This example will always display <span class="opt-html">'no'</span>, because the embedded <span class="opt-html">[onload.x]</span> fild will never be evaluated. It is better to use <span class="opt-html">[onload;if [var.x]=1;then 'yes';else 'no']</span> instead, or better : <span class="opt-html">[onload.x;if [val]=1;then 'yes';else 'no']</span></p>
+    <p class="decal"><span class="opt-html">[b1.nom;block=tr;headergrp=[var.x]]</span><br>
       In this example,  [var.x] will not be merged yet when you call <span class="txt-code"><span class="opt-value">$TBS-&gt;MergeBlock('b1',...)</span></span><br>
       The header will then be defined badly. <br>
       It needs one of those: <br>
       - using an onload field: <span class="opt-html">[b1.name;block=tr;headergrp=[onload.x]]</span><br>
       - 
       calling <span class="opt-value"><span class="txt-code">$TBS-&gt;MergeField('var') </span></span>avant<span class="opt-value"><span class="txt-code"> $TBS-&gt;MergeBlock('b1',...)</span></span><br>
-      - using a customized field name: <span class="opt-html">[b1.name;block=tr;headergrp=[zzz]]</span> manually merged with <span class="opt-value"><span class="txt-code">$TBS-&gt;MergeField('zzz',$x)</span></span></div>
+      - using a customized field name: <span class="opt-html">[b1.name;block=tr;headergrp=[zzz]]</span> manually merged with <span class="opt-value"><span class="txt-code">$TBS-&gt;MergeField('zzz',$x)</span></span></p>
+    
     <h4>Security: how to limit automatic fields usage in templates?</h4>
     <p> You can limit the automatic fields usage by defining a prefix for allowed PHP variables. For details, see <a href="#php_instanciate">create a new TBS object</a>.</p>
     <h4>Prevent from processing automatic fields [onload] and [onshow]</h4>
@@ -2169,13 +2117,12 @@ a.opt-name:hover {
     </p>
   </div>
   <h3><a name="html_field_special" id="html_field_special3"></a>Special automatic fields :</h3>
-  <div class="norm"> A Special [var] field is a TBS Field which displays data provided by the TinyButStrong system.<br>
-    The name of a Special [var] field has to begin with '<span class="opt-name">var..</span>', followed by a keyword in the list below.<br>
-    The parameters for standard TBS Fields are available for Special [var] fields.<br>
-    <br>
-    Example: <span class="opt-html">Date of the day : </span>[onshow.<span class="opt-name">.now</span>;frm='mm-dd-yyyy'] <br>
-    <br>
-    (valid for both <span class="opt-name">onload</span>, <span class="opt-name">onshow</span> et <span class="opt-name">var</span>) <br>
+  <div class="norm"> 
+    <p>A Special [var] field is a TBS Field which displays data provided by the TinyButStrong system.
+      The name of a Special [var] field has to begin with '<span class="opt-name">var..</span>', followed by a keyword in the list below.
+      The parameters for standard TBS Fields are available for Special [var] fields. </p>
+    <p> Example: <span class="opt-html">Date of the day : </span>[onshow.<span class="opt-name">.now</span>;frm='mm-dd-yyyy'] </p>
+    <p>      (valid for both <span class="opt-name">onload</span>, <span class="opt-name">onshow</span> et <span class="opt-name">var</span>)    </p>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
         <th>Name</th>
@@ -2226,64 +2173,57 @@ a.opt-name:hover {
         <td align="left" valign="top">Display errors that have been avoid during the time when TBS option <a href="#php_setoption" class="opt-name">noerr</a> is set to <span class="opt-value">true</span>.</td>
       </tr>
     </table>
-    <br>
-    <div class="versioning">Versioning:<br>
+    <p class="versioning">Versioning:<br>
       - 
       special var fields &quot;cst&quot; and &quot;tbs_info&quot; are supported since TBS version 3.2.0.<br>
       - 
-      &quot;error_msg&quot; is supported since TBS version 3.5.0. </div>
+      &quot;error_msg&quot; is supported since TBS version 3.5.0. </p>
   </div>
   <h3><a name="html_block" id="html_block"></a>TBS Blocks:</h3>
   <div class="norm">
-    <p>A TBS block enables you define a zone and to display data from a record source.<br>
-      You can define a TBS block using one or two TBS tags (see below). <br>
-    </p>
+    <p>A TBS block enables you define a zone and to display data from a record source.
+      You can define a TBS block using one or two TBS tags (see below).    </p>
     <h4>Merging with data:</h4>
-    <p>      Merging a block with  data is done using the <a href="#php_mergeblock">MergeBlock()</a> method. When a  TBS block is merged with data,  it is repeated as many times as there are records; and the associated TBS fields are replaced by the value of the columns stored in the current record.<br>
-    A TBS field associated to a block is identified by its name which should be made of the name of the block followed by the  name of the column to display and separated by a dot.</p>
-    <p> Examples:    </p>
+    <p> Merging a block with  data is done using the <a href="#php_mergeblock">MergeBlock()</a> method. When a  TBS block is merged with data,  it is repeated as many times as there are records; and the associated TBS fields are replaced by the value of the columns stored in the current record.<br>
+      A TBS field associated to a block is identified by its name which should be made of the name of the block followed by the  name of the column to display and separated by a dot.</p>
+    <p> Examples: </p>
     <div class="decal"> - [<span class="opt-name">Block1</span>.<span class="opt-name">ColA</span>]   This field will display the value of column <span class="opt-name">ColA</span> when block <span class="opt-name">Block1</span> is merged. <br>
       - [<span class="opt-name">Blokc1</span>.<span class="opt-name">ColB</span>;<span class="opt-name">frm</span>=<span class="opt-value">'dd-mm-yyyy'</span>] Another field but with a TBS parameter. </div>
     <p><span class="versioning">Since TBS version 3.5.0 column names with spaces are accepted.</span></p>
-    <p><em>Remark:</em> when two separated blocks have the same name, then they will be considered has two sections of the same block. All content placed between those two sections of a block  will be <span class="title-1c">ignored and deleted</span> during the merging. See <a href="#html_block_section">sections of blocks</a> to know more about sections.</p>
-<h4>Block syntaxes:</h4>
-    <p>There are three possible syntaxes to define a TBS block:    </p>
-<h5>Explicit Syntax:</h5>
-    
+    <p><em>Remark:</em> when two separated blocks have the same name, then they will be considered has two sections of the same block. All content placed between those two sections of a block  will be <strong>ignored and deleted</strong> during the merging. See <a href="#html_block_section">sections of blocks</a> to know more about sections.</p>
+    <h4>Block syntaxes:</h4>
+    <p>There are three possible syntaxes to define a TBS block: </p>
+    <h5>Explicit Syntax:</h5>
     <div class="decal">Two TBS tags are used. One for the beginning of the block and another for the end of the block.<span class="opt-html"></span><span class="opt-html"></span>
       <div class="decal">Example:<br>
         <span class="opt-html"><strong>TEMPLATE...</strong></span>[<span class="opt-name">BlockName</span>;<span class="opt-name">block</span>=<span class="opt-value">begin</span><span class="opt-value">;<span class="opt-name">params</span></span>]<span class="opt-html"><strong>...TEMPLATE...</strong></span>[<span class="opt-name">BlockName</span>;<span class="opt-name">block</span>=<span class="opt-value">end</span>]<span class="opt-html"><strong>...TEMPLATE</strong></span></div>
       Those TBS tags for the block definition will be deleted during the merging.</div>
-<h5>Relative Syntax:</h5>
-    
+    <h5>Relative Syntax:</h5>
     <div class="decal">The block is defined by a pair of opening-closing XML/HTML tags which is given by a single TBS tag.
       <div class="decal">Example:<br>
         <span class="opt-html"><strong>TEMPLATE...&lt;tag_name...&gt;...</strong></span>[<span class="opt-name">BlockName</span>;<span class="opt-name">block</span>=<span class="opt-value">tag_name;<span class="opt-name">params</span></span>]<span class="opt-html"><strong>...&lt;/tag_name...&gt;...TEMPLATE</strong></span></div>
       This TBS tag for the block definition must be placed between the pair of XML/HTML tags.<br>
       This TBS tag will be deleted during the merging.<br>
-      <span class="title-1b">Remark:</span> You can aslo define a block's zone by a combination of XML/HTML tags. See  parameter <a href="#html_block_prm_block" class="opt-name">block</a> for more details. </div>
-<h5>Simplified Syntax:</h5>
-    
+      <em>Remark:</em> You can aslo define a block's zone by a combination of XML/HTML tags. See  parameter <a href="#html_block_prm_block" class="opt-name">block</a> for more details. </div>
+    <h5>Simplified Syntax:</h5>
     <div class="decal">An associated TBS field is used to define the block in a relative way (see the relative syntax above).
       <div class="decal">Example:<br>
         <span class="opt-html"><strong>TEMPLATE...&lt;tag_name...&gt;...</strong></span>[<span class="opt-name">BlockName</span>.<span class="opt-name">ColumnName</span>;<span class="opt-name">block</span>=<span class="opt-value">tag_name;<span class="opt-name">params</span></span>]<span class="opt-html"><strong>...&lt;/tag_name...&gt;...TEMPLATE</strong></span></div>
       The TBS tag for the block definition (i.e. the <span class="opt-name">block</span>=<span class="opt-value">...</span> parameter) must be placed between the pair of XML/HTML tags. You are nor obliged to put the parameter <span class="opt-name">block</span> on the first field, it can be any of them inside the zone defined by the block. <br>
-      <span class="title-1b">Remarks:</span> <br>
+      <em>Remarks:</em> <br>
       &bull; 
       You should not repeat the parameter <span class="opt-name">block</span>=<span class="opt-value">...</span> on each fields of the bloc, only one is enough. If you place several of them, this will be accepted by TBS but it may bring confusions about complementary parameters for block.<br>
       &bull; You can aslo define a block's zone by a combination of XML/HTML tags. See  parameter <a href="#html_block_prm_block" class="opt-name">block</a> for more details. </div>
-    <h4><span class="title-1b">Which syntax to use?</span></h4>
+    <h4>Which syntax to use?</h4>
     <div class="note">
-      <div class="title-1b"></div>
       <p>The 'absolute' syntax is rarely used with Visual Editors because TBS tags have often to be placed between two XML/HTML tags. On the other hand, it is convenient for textual editors. </p>
-      <p>        The 'relative' syntax enables you to indicate a block using only one TBS tag. Furthermore, there is no need to hide the TBS tag because it will be deleted during the displaying. This syntax is quite practical.</p>
-      <p>        The 'simplified' syntax is really simple. It enables you to define a TBS block and a TBS Field with only one TBS tag. This syntax is the most current and the most practical.</p>
+      <p> The 'relative' syntax enables you to indicate a block using only one TBS tag. Furthermore, there is no need to hide the TBS tag because it will be deleted during the displaying. This syntax is quite practical.</p>
+      <p> The 'simplified' syntax is really simple. It enables you to define a TBS block and a TBS Field with only one TBS tag. This syntax is the most current and the most practical.</p>
       <p>Tip: You can use the 'relative' or the 'absolute' syntax with custom tags using the XML/HTML standard. </p>
       <p> Example:</p>
       <p> <span class="opt-html">&lt;custom_tag&gt;</span>Hello [<span class="opt-name">blk1</span>.<span class="opt-name">column1</span>;<span class="opt-name">block</span>=<span class="opt-value">custom_tag</span>], how are you?<span class="opt-html">&lt;/custom_tag&gt;</span></p>
     </div>
-    <h4>      Synopsis of a block tag:
-    </h4>
+    <h4> Synopsis of a block tag: </h4>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
         <th>Element</th>
@@ -2310,7 +2250,7 @@ a.opt-name:hover {
           <span class="txt-small">or</span><br>
           <span class="opt-name">block</span>=<span class="opt-value">expr</span><br></td>
         <td align="left" valign="top"><p>Define a block bounded between the opening XML/HTML tag <span class="opt-html">&lt;tag...&gt;</span> and the closing XML/HTML tag <span class="opt-html">&lt;/tag&gt;</span> which surround the TBS tag. The couple of indicated XML/HTML tags are integral part of the bloc.</p>
-          <p> Example:          </p>
+          <p> Example: </p>
           <div class="decal"><span class="opt-html">&lt;table id=&quot;tab1&quot;&gt;</span>&nbsp;<span class="blockzone"><span class="opt-html">&lt;tr&gt;&lt;td&gt;</span>[<span class="opt-name">b1</span>.<span class="opt-name">field1</span>;<span class="opt-name">block</span>=tr]<span class="opt-html">&lt;/td&gt;&lt;/tr&gt;</span></span><span class="opt-html">&lt;/table&gt;</span><br>
             <span class="txt-small">The block is defined by the zone framed by pointillets.</span> </div>
           <h5>Special marks:</h5>
@@ -2327,16 +2267,16 @@ a.opt-name:hover {
           <p class="versioning">Versioning: special marks  &quot;_&quot; and &quot;/&quot; are supported since TBS 3.1.0.</p>
           <h5><a name="html_block_prm_extblk" id="html_block_prm_extblk"></a>Extended blocks: </h5>
           <p> You can extend the block's zone  (or the section's zone) beyond the simple XML/HTML tag or special marks by using the following expressions:</p>
-          <p>            Note that special marks (see above) can be used for extended blocks.</p>
-          <p> To extend the block's zone on several successive tags:          </p>
+          <p> Note that special marks (see above) can be used for extended blocks.</p>
+          <p> To extend the block's zone on several successive tags: </p>
           <div class="decal"><span class="opt-html">&lt;table&gt;</span><span class="blockzone"><span class="opt-html">&lt;tr&gt;</span>[<span class="opt-name">b1</span>.<span class="opt-name">field1</span>;<span class="opt-name">block</span>=<span class="opt-value">tr</span>+<span class="opt-value">tr</span>+<span class="opt-value">tr</span>]<span class="opt-html">&lt;/tr&gt;<span class="blocksep">&lt;</span>tr&gt;...&lt;/tr&gt;<span class="blocksep">&lt;</span>tr&gt;...&lt;/tr&gt;</span></span>&lt;/table&gt;<br>
-          <span class="txt-small">Note: you can specify tags of different types</span></div>
-          <p>To extend the block's zone on several successive tags placed before:          </p>
+            <span class="txt-small">Note: you can specify tags of different types</span></div>
+          <p>To extend the block's zone on several successive tags placed before: </p>
           <div class="decal"><span class="opt-html">...</span> <span class="blockzone"><span class="opt-html">&lt;span&gt;...&lt;/span&gt;<span class="blocksep">&lt;</span>div&gt;</span>[<span class="opt-name">b1</span>.<span class="opt-name">field1</span>;<span class="opt-name">block</span>=<span class="opt-value">span</span>+(<span class="opt-value">div)</span>]<span class="opt-html">&lt;/div&gt;</span></span> <span class="opt-html">...</span> <br>
             Other example: <br>
             <span class="opt-html">...</span> <span class="blockzone"><span class="opt-html">&lt;span&gt;...&lt;/span&gt; <span class="blocksep">&lt;</span>div&gt;</span>[<span class="opt-name">b1</span>.<span class="opt-name">field1</span>;<span class="opt-name">block</span>=<span class="opt-value">span</span>+(<span class="opt-value">div)</span>+<span class="opt-value">table</span>]<span class="opt-html">&lt;/div&gt; <span class="blocksep">&lt;</span>table&gt;...&lt;/table&gt;</span></span> <span class="opt-html">...</span> <br>
             The tag placed bewteen brackets means the one which  contains the block's definition.</div>
-          <p>To extend the block's zone on a tag of the same type but with a higher encapsulation level:          </p>
+          <p>To extend the block's zone on a tag of the same type but with a higher encapsulation level: </p>
           <div class="decal"><span class="blockzone"><span class="opt-html">&lt;div&gt; &lt;div&gt;</span> [<span class="opt-name">b1</span>.<span class="opt-name">field1</span>;<span class="opt-name">block</span>=<span class="opt-value">((div))</span>] <span class="opt-html">&lt;/div&gt; &lt;/div&gt;</span></span> <br>
             The number of bracket means le encapsulation level of the tags. </div>
           <p class="versioning">Versioning : The Extended Blocks feature is supported since  TBS version 3.0. Before that, you had to use parameters 'extend' and 'encaps' which are not supported anymore. </p></td>
@@ -2344,7 +2284,6 @@ a.opt-name:hover {
     </table>
     <a name="html_block_prm" id="html_block_prm"></a>
     <h4>Block's parameters:</h4>
-    
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
         <th>Parameter</th>
@@ -2453,7 +2392,7 @@ a.opt-name:hover {
               <td>Returns the number of the current record (read only, first record is number 1).</td>
             </tr>
           </table>
-Examples:
+          Examples:
           <div class="decal txt-code"> function f_add_column(<span class="opt-name">$BlockName</span>,<span class="opt-name">&amp;$CurrRec</span>,<span class="opt-name">$RecNum</span>) {<br>
             &nbsp;&nbsp;<span class="opt-name">$CurrRec</span>[<span class="opt-value">'len'</span>] = strlen(<span class="opt-name">$CurrRec</span>[<span class="opt-value">'text'</span>]); <br>
             } </div>
@@ -2505,11 +2444,11 @@ Examples:
             </table>
           </div>
           Both <span class="opt-value">expr1</span> and <span class="opt-value">expr2</span> must be string or numerical expressions. The expressions may contain <a href="#html_field_auto">[var] fields</a>.<br>
-Example:
+          Example:
           <div class="decal"><span class="opt-html">&lt;div&gt;</span>[<span class="opt-name">onload</span>;<span class="opt-name">block</span>=<span class="opt-value">div</span>;<span class="opt-name">when</span> [<span class="opt-name">var</span>.<span class="opt-name">x</span>]~=<span class="opt-value">'*to*'</span>] ... <span class="opt-html">&lt;/div&gt;</span><br>
             <span class="txt-small">The  &lt;div&gt; block will be displayed only if $x&gt;0. </span></div>
           <p><em>Note:</em> do not confuse parameter <span class="opt-name">when</span> (which works only for TBS blocs or sections) and parameter <span class="opt-name">if</span> (which works only for TBS fields). Thus, parameter <span class="opt-name">when</span> is taken into account only if parameter <span class="opt-name">block</span> exists in the same TBS tag.<br>
-          See <a href="#html_conditional">conditional blocks</a> for more details.</p></td>
+            See <a href="#html_conditional">conditional blocks</a> for more details.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_block_prm_default" id="html_block_prm_default"></a><span class="opt-name">default</span></td>
@@ -2523,14 +2462,15 @@ Example:
   </div>
   <h3> <a name="html_block_section" id="html_block_section"></a>Sections of block:</h3>
   <div class="norm">
-    <p>Different blocks having the same name will be regarded as sections of the same block.<br>
-      Sections can be used to:<br>
-      - alternate the display (normal sections),<br>
-      - display something if there is no data (NoData section),<br>
-      - display a header each time the value of a column changes (grouping sections).<br>
-    </p>
-    <h4>Normal sections:</h4>
-    <p>    When you define several normal sections, they will be used alternatively for each record.    </p>
+    <p>Different blocks having the same name will be regarded as sections of the same block.</p>
+    <p> Sections can be used to:</p>
+    <ul>
+      <li>  alternate the display (normal sections),</li>
+      <li> display something if there is no data (NoData section),</li>
+      <li> display a header each time the value of a column changes (grouping sections).      </li>
+    </ul>
+<h4>Normal sections:</h4>
+    <p> When you define several normal sections, they will be used alternatively for each record. </p>
     <div class="decal">Example:<br>
       <br>
       <table width="200" cellpadding="2" cellspacing="0" class="border-1">
@@ -2544,51 +2484,45 @@ Example:
       <br>
       <span class="txt-small">In this example, the block named 'b1' contains two normal sections. Records will be displayed alternatively with a green background and with a blue background.</span></div>
     <h4>NoData section:</h4>
-    <p>      The NoData section is a section displayed only if the data source has no records. There can be only one NoData section in a block. The NoData section is defined by adding the parameter <span class="opt-name">nodata</span>.
-    </p>
-    <div class="decal"> Example:<br>
-      <br>
-      <table width="250" cellpadding="2" cellspacing="0" class="border-1">
-        <tr>
-          <td class="border-1">[<span class="opt-name">b1</span>.caption;<span class="opt-name">block</span>=tr]</td>
-        </tr>
-        <tr>
-          <td bgcolor="#FFCCCC" class="border-1"><span class="opt-html">There is nothing. </span>[<span class="opt-name">b1</span>;<span class="opt-name">block</span>=tr;<span class="opt-name">nodata</span>]</td>
-        </tr>
-      </table>
-    </div>
+    <p> The NoData section is a section displayed only if the data source has no records. There can be only one NoData section in a block. The NoData section is defined by adding the parameter <span class="opt-name">nodata</span>. </p>
+<p>Example:</p>
+    <table width="250" cellpadding="2" cellspacing="0" class="decal border-1">
+      <tr>
+        <td class="border-1">[<span class="opt-name">b1</span>.caption;<span class="opt-name">block</span>=tr]</td>
+      </tr>
+      <tr>
+        <td bgcolor="#FFCCCC" class="border-1"><span class="opt-html">There is nothing. </span>[<span class="opt-name">b1</span>;<span class="opt-name">block</span>=tr;<span class="opt-name">nodata</span>]</td>
+      </tr>
+    </table>
+    
     <h4>Grouping sections:</h4>
-    <p>      Grouping sections are displayed every time a column's value in the record-set changes. You can define header, footer, splitter or parent sections using parameters <span class="opt-name">headergrp</span>, <span class="opt-name">footergrp</span>, <span class="opt-name">splittergrp</span>, and <span class="opt-name">parentgrp</span>. See <a href="#html_block_prm_headergrp">block's parameters</a> for more details.
-    </p>
-    <div class="decal">Example:<br>
-      <br>
-      <table width="300" cellpadding="2" cellspacing="0" class="border-1">
-        <tr>
-          <td colspan="2" class="border-1"><span class="title-1c">Year:</span> [<span class="opt-name">b1</span>.year;<span class="opt-name">block</span>=tr;<span class="opt-name">headergrp</span>=year] </td>
-        </tr>
-        <tr>
-          <td class="border-1">[<span class="opt-name">b1</span>.caption;block=tr]</td>
-          <td class="border-1">[<span class="opt-name">b1</span>.amount]</td>
-        </tr>
-      </table>
-    </div>
+    <p> Grouping sections are displayed every time a column's value in the record-set changes. You can define header, footer, splitter or parent sections using parameters <span class="opt-name">headergrp</span>, <span class="opt-name">footergrp</span>, <span class="opt-name">splittergrp</span>, and <span class="opt-name">parentgrp</span>. See <a href="#html_block_prm_headergrp">block's parameters</a> for more details. </p>
+    <p>Example:</p>
+<table width="300" cellpadding="2" cellspacing="0" class="decal border-1">
+      <tr>
+        <td colspan="2" class="border-1">Year: [<span class="opt-name">b1</span>.year;<span class="opt-name">block</span>=tr;<span class="opt-name">headergrp</span>=year] </td>
+      </tr>
+      <tr>
+        <td class="border-1">[<span class="opt-name">b1</span>.caption;block=tr]</td>
+        <td class="border-1">[<span class="opt-name">b1</span>.amount]</td>
+      </tr>
+    </table>
+    
     <h4>Conditional sections:</h4>
-    <p>      Conditional sections are displayed only if their condition is verified. The condition for display is defined using parameter <a href="#html_block_prm_when" class="opt-name">when</a>. As soon as a section has this parameter, it becomes conditional. See <a href="#html_conditional">Conditional display</a> for more details.    </p>
-    <div class="decal">Example:<br>
-      <br>
-      <table width="300" cellpadding="2" cellspacing="0" class="border-1">
-        <tr>
-          <td class="border-1">[<span class="opt-name">b1</span>.name;<span class="opt-name">block</span>=tr]</td>
-        </tr>
-        <tr>
-          <td bgcolor="#DDDDDD" class="border-1">[<span class="opt-name">b1</span>.address;<span class="opt-name">block</span>=tr;<span class="opt-name">when</span> [<span class="opt-name">b1</span>.add_ok]==1]</td>
-        </tr>
-      </table>
-    </div>
+    <p> Conditional sections are displayed only if their condition is verified. The condition for display is defined using parameter <a href="#html_block_prm_when" class="opt-name">when</a>. As soon as a section has this parameter, it becomes conditional. See <a href="#html_conditional">Conditional display</a> for more details. </p>
+    <p>Example:</p>
+<table width="300" cellpadding="2" cellspacing="0" class="decal border-1">
+      <tr>
+        <td class="border-1">[<span class="opt-name">b1</span>.name;<span class="opt-name">block</span>=tr]</td>
+      </tr>
+      <tr>
+        <td bgcolor="#DDDDDD" class="border-1">[<span class="opt-name">b1</span>.address;<span class="opt-name">block</span>=tr;<span class="opt-name">when</span> [<span class="opt-name">b1</span>.add_ok]==1]</td>
+      </tr>
+    </table>
   </div>
   <h3><a name="html_block_serial" id="html_block_serial"></a>Serial display (in columns):</h3>
   <div class="norm">
-    <p>The serial display enables you to display several records inside a block. For this, you have to use a main block and secondary blocks.    </p>
+    <p>The serial display enables you to display several records inside a block. For this, you have to use a main block and secondary blocks. </p>
     <div class="decal">Example:<br>
       <br>
       <table width="200" cellpadding="4" cellspacing="0" class="border-2">
@@ -2624,9 +2558,9 @@ Example:
         </tr>
       </table>
       <br>
-    <span class="txt-small">In this example, main blocks are the blue lines of the table, the secondary blocks are the pink cells.</span></div>
+      <span class="txt-small">In this example, main blocks are the blue lines of the table, the secondary blocks are the pink cells.</span></div>
     <h4>Syntax:</h4>
-    <p>The main block and its secondary blocks are merged using only one call to the MergeBock() method. The main block must be defined using the parameter <span class="opt-name">serial</span>. The secondary blocks must be nested into the main block. The secondary block's names must be the name of the main block followed by &quot;_&quot; and a number indicating display order.    </p>
+    <p>The main block and its secondary blocks are merged using only one call to the MergeBock() method. The main block must be defined using the parameter <span class="opt-name">serial</span>. The secondary blocks must be nested into the main block. The secondary block's names must be the name of the main block followed by &quot;_&quot; and a number indicating display order. </p>
     <div class="decal">Example:<br>
       <br>
       <table width="200" cellpadding="4" cellspacing="0" class="border-2">
@@ -2643,9 +2577,9 @@ Example:
       </table>
       <br>
       <span class="txt-small">The corresponding PHP is:</span><br>
-    <span class="txt-code"> &nbsp;$TBS-&gt;MergeBlock('<span style="color:#000099">bx</span>',$cnx_id,'<span style="color:#000099">SELECT txt FROM t_info ORDER BY txt</span>')</span></div>
-    <h4> Empty secondary block:    </h4>
-    <p>You can specify a special secondary block that will be used to replace unused secondary blocks (without records). This &quot;Empty&quot; secondary block must have the index 0. It can either be placed inside the main block with the normal secondary block, or alone inside another <span class="opt-name">serial</span> block. The &quot;empty&quot; secondary block is optional.    </p>
+      <span class="txt-code"> &nbsp;$TBS-&gt;MergeBlock('<span style="color:#000099">bx</span>',$cnx_id,'<span style="color:#000099">SELECT txt FROM t_info ORDER BY txt</span>')</span></div>
+    <h4> Empty secondary block: </h4>
+    <p>You can specify a special secondary block that will be used to replace unused secondary blocks (without records). This &quot;Empty&quot; secondary block must have the index 0. It can either be placed inside the main block with the normal secondary block, or alone inside another <span class="opt-name">serial</span> block. The &quot;empty&quot; secondary block is optional. </p>
     <div class="decal">Example:<br>
       <br>
       <table width="200" cellpadding="4" cellspacing="0" class="border-2">
@@ -2672,7 +2606,8 @@ Example:
       </table>
     </div>
     <p>Remark:
-      The serial display also works with <a href="#html_block_section">sections of block</a> and <a href="#html_block_subblock">dynamic queries</a>.</p></div>
+      The serial display also works with <a href="#html_block_section">sections of block</a> and <a href="#html_block_subblock">dynamic queries</a>.</p>
+  </div>
   <h3><a name="html_block_subblock" id="html_block_subblock"></a>Subblocks:</h3>
   <div class="norm"> A subblock is a TBS block nested into another TBS block and that  should be displayed as a separated block for each record of its parent block. <br>
     <div class="decal"> Example:<br>
@@ -2729,21 +2664,21 @@ Example:
     See <a href="#html_block_dynsb">Subblocks with dynamic queries</a> for more details. <br>
   </div>
   <h3><a name="html_block_subauto" id="html_block_subauto"></a>Automatic subblocks:</h3>
-  <div class="norm"><span class="versioning">Automatic subblock are supported since TBS version 3.5.0.</span><br>
-    <br>
-    You can use automatic subblocks when the data of the parent block has a column which contains the ready-to-merge subdata for the subblock.  
-    Set parameter <span class="opt-name">sub1</span>=<span class="opt-value">column</span> in the parent block to define the column which contain the data for the subblock. If you have several subblocks to merge in the same parent block then  use parameters <span class="opt-name">sub2</span>, <span class="opt-name">sub3</span>, ... The name of the subblock must be the same as the parent block followed by the suffix <span class="opt-name">_sub1</span>, (or <span class="opt-name">_sub2</span>, <span class="opt-name">_sub3</span>, ...)<br>
-    <br>
-    The data of the parent block must have a column which contains the data of the subblock. Supported data types are:<br>
-    - a PHP array<br>
-    - an object supported by TBS (natively or with a plug-in) <br>
-    - a text string  of values separated  by comas (,).<br>
-    <br>
-    <div class="decal">Example:<br>
-      <br>
+  <div class="norm">
+    <p><span class="versioning">Automatic subblock are supported since TBS version 3.5.0.</span></p>
+    <p> You can use automatic subblocks when the data of the parent block has a column which contains the ready-to-merge subdata for the subblock.  
+      Set parameter <span class="opt-name">sub1</span>=<span class="opt-value">column</span> in the parent block to define the column which contain the data for the subblock. If you have several subblocks to merge in the same parent block then  use parameters <span class="opt-name">sub2</span>, <span class="opt-name">sub3</span>, ... The name of the subblock must be the same as the parent block followed by the suffix <span class="opt-name">_sub1</span>, (or <span class="opt-name">_sub2</span>, <span class="opt-name">_sub3</span>, ...)</p>
+    <p> The data of the parent block must have a column which contains the data of the subblock. Supported data types are:</p>
+    <ul>
+      <li> a PHP array</li>
+      <li> an object supported by TBS (natively or with a plug-in) </li>
+      <li> a text string  of values separated  by comas (,). </li>
+    </ul>
+    <div class="decal">
+      <p>Example: </p>
       <table width="400" cellpadding="2" cellspacing="0" class="border-2">
         <tr>
-          <td class="border-2"><span style="color:#336699">Name:</span> [body.name;block=tr;sub1=spokenlg]<br>
+          <td class="border-2"><span style="color:#336699">Name:</span> [body.name;block=tr;sub1=spokenlg]
             <table cellpadding="1" cellspacing="0" class="border-1">
               <tr>
                 <td width="200" class="border-1">[body_sub1.val;block=tr]</td>
@@ -2751,15 +2686,13 @@ Example:
             </table></td>
         </tr>
       </table>
-      <br>
-      <span class="txt-small">Corresponding PHP code:</span><br>
-      <span class="txt-code">&nbsp;$TBS-&gt;MergeBlock('<span class="opt-value">body</span>',$cnx_id,'<span class="opt-value">SELECT name,spokenlg FROM t_body</span>)</span><br>
-      <br>
-      <span class="txt-small">Result of the merge:</span><br>
-      <br>
+      <p><span class="txt-small">Corresponding PHP code:</span><br>
+        <span class="txt-code">&nbsp;$TBS-&gt;MergeBlock('<span class="opt-value">body</span>',$cnx_id,'<span class="opt-value">SELECT name,spokenlg FROM t_body</span>)</span><br>
+      </p>
+      <p><span class="txt-small">Result of the merge:</span> </p>
       <table width="400" cellpadding="2" cellspacing="0" class="border-2">
         <tr>
-          <td class="border-2"><span style="color:#336699">Name:</span> Peter<br>
+          <td class="border-2"><span style="color:#336699">Name:</span> Peter
             <table cellpadding="1" cellspacing="0" class="border-1">
               <tr>
                 <td class="border-1">US</td>
@@ -2770,7 +2703,7 @@ Example:
             </table></td>
         </tr>
         <tr>
-          <td class="border-2"><span style="color:#336699">Name:</span> Paul<br>
+          <td class="border-2"><span style="color:#336699">Name:</span> Paul
             <table cellpadding="1" cellspacing="0" class="border-1">
               <tr>
                 <td width="190" class="border-1">US</td>
@@ -2778,7 +2711,7 @@ Example:
             </table></td>
         </tr>
         <tr>
-          <td class="border-2"><span style="color:#336699">Name: </span>Jack<br>
+          <td class="border-2"><span style="color:#336699">Name: </span>Jack
             <table cellpadding="1" cellspacing="0" class="border-1">
               <tr>
                 <td class="border-1">FR</td>
@@ -2793,14 +2726,13 @@ Example:
         </tr>
       </table>
     </div>
-    <br>
-    <span class="title-1b">Have the  column optional:</span> If you want no error message when the column is omitted in the parent data, then you can set it optional by using parenthesis. This is working only if the parent data is a PHP array. <span class="versioning">Optional column is supported since TBS version 3.6.0.</span><br>
-    <br>
-    <div class="decal">Example:<br>
-      <br>
+    <h4>Have the  column optional:</h4>
+    <p> If you want no error message when the column is omitted in the parent data, then you can set it optional by using parenthesis. This is working only if the parent data is a PHP array. <span class="versioning">Optional column is supported since TBS version 3.6.0.</span> </p>
+    <div class="decal">
+      <p>Example: </p>
       <table width="400" cellpadding="2" cellspacing="0" class="border-2">
         <tr>
-          <td class="border-2"><span style="color:#336699">Name:</span> [body.name;block=tr;sub1=(spokenlg)]<br>
+          <td class="border-2"><span style="color:#336699">Name:</span> [body.name;block=tr;sub1=(spokenlg)]
             <table cellpadding="1" cellspacing="0" class="border-1">
               <tr>
                 <td width="200" class="border-1">[body_sub1.val;block=tr]</td>
@@ -2808,30 +2740,24 @@ Example:
             </table></td>
         </tr>
       </table>
-      <br>
     </div>
-    <span class="title-1b"><br>
-    Direct subblocks (which are not saved under a column):</span> If you use parameter <span class="opt-name">sub1</span> by omitting the column name, then TBS will assume that the data for the subblock are available directly on the current record instead of under a column of this record. <span class="versioning">Direct subblocks are supported since TBS version 3.6.1.</span><br>
-    <br>
-    <div class="decal">Example of data that can be merged with a direct subblock:<br>
-      <span class="txt-code">$data = array();<br>
-      $data['group1'] = 
-      array();<br>
-      $data['group1'][] = 
-      array('id'=&gt;1, 'name'=&gt;'peter');<br>
-      $data['group1'][] = 
-      array('id'=&gt;2, 'name'=&gt;'paul');<br>
-      $data['group2'] = 
-      array();<br>
-      $data['group2'][] = 
-      array('id'=&gt;3, 'name'=&gt;'jules');<br>
-      $data['group2'][] = 
-      array('id'=&gt;4, 'name'=&gt;'jim');</span><br>
-      <br>
-      Example of direct subblock that can be merged with those data:<br>
+    <h4> Direct subblocks (which are not saved under a column):</h4>
+    <p>If you use parameter <span class="opt-name">sub1</span> by omitting the column name, then TBS will assume that the data for the subblock are available directly on the current record instead of under a column of this record. <span class="versioning">Direct subblocks are supported since TBS version 3.6.1.</span></p>
+    <p>Example of data that can be merged with a direct subblock:    </p>
+    <pre class="decal">
+$data = array();
+$data['group1'] = array();
+$data['group1'][] = array('id'=&gt;1, 'name'=&gt;'peter');
+$data['group1'][] = array('id'=&gt;2, 'name'=&gt;'paul');
+$data['group2'] = array();
+$data['group2'][] = array('id'=&gt;3, 'name'=&gt;'jules');
+$data['group2'][] = array('id'=&gt;4, 'name'=&gt;'jim');</pre>
+
+    <p> Example of direct subblock that can be merged with those data: </p>
+    <div class="decal">
       <table width="400" cellpadding="2" cellspacing="0" class="border-2">
         <tr>
-          <td class="border-2"><span style="color:#336699">Group :</span> [body.$;block=tr;sub1]<br>
+          <td class="border-2"><span style="color:#336699">Group :</span> [body.$;block=tr;sub1]
             <table cellpadding="1" cellspacing="0" class="border-1">
               <tr>
                 <td width="200" class="border-1">[body_sub1.name;block=tr]</td>
@@ -2963,16 +2889,16 @@ Example:
     </ul>
   </div>
   <h3><a name="html_block_auto" id="html_block_auto"></a>Automatic blocks:</h3>
-  <div class="norm">Automatic blocks enable you  to automatically merge conditional blocks when some events occur. <br>
-    <br>
-    There are two types of automatic blocks:<br>
-    - <span class="opt-name">[onload]</span> blocks which are merged automatically when the <a href="#php_loadtemplate">LoadTemplate()</a> method is called.<br>
-    - <span class="opt-name">[onshow]</span> blocks which are merged automatically when the <a href="#php_show">Show()</a> method is called.<br>
-    <br>
-    Automatic blocks</a> are not merged with data ; that's why they cannot have normal sections (non conditional sections) and linked fields. Automatic blocks can have only conditional sections. Conditions are evaluated only once, and they <span class="opt-name"></span> be  expressions containing [var] fields.<br>
-    <br>
-    <div class="decal">Example:<br>
-      <br>
+  <div class="norm">
+    <p>Automatic blocks enable you  to automatically merge conditional blocks when some events occur. </p>
+    <p> There are two types of automatic blocks:</p>
+    <ul>
+      <li><span class="opt-name">[onload]</span> blocks which are merged automatically when the <a href="#php_loadtemplate">LoadTemplate()</a> method is called.</li>
+      <li><span class="opt-name">[onshow]</span> blocks which are merged automatically when the <a href="#php_show">Show()</a> method is called. </li>
+    </ul>
+    <p> Automatic blocks are not merged with data ; that's why they cannot have normal sections (non conditional sections) and linked fields. Automatic blocks can have only conditional sections. Conditions are evaluated only once, and they can be  expressions containing [var] fields. </p>
+    <div class="decal">
+      <p>Example: </p>
       <table width="460" cellpadding="2" cellspacing="0" class="border-1">
         <tr>
           <td class="border-1">[<span class="opt-name">onload</span>;<span class="opt-name">block</span>=tr;<span class="opt-name">when</span> [<span class="opt-name">var.</span>light]=<span class="opt-value">1</span>]<span class="opt-html">Light is ON.</span></td>
@@ -2985,12 +2911,9 @@ Example:
         </tr>
       </table>
     </div>
-    <br>
-    If you need to have a group of exclusive  sections, with or without a default section, you can suffix the [onload] and [onshow] bloc's names with  &quot;_&quot; followed by a sub name.<br>
-    <br>
-    <br>
-    <div class="decal">Example:<br>
-      <br>
+    <p>If you need to have a group of exclusive  sections, with or without a default section, you can suffix the [onload] and [onshow] bloc's names with  &quot;_&quot; followed by a sub name. </p>
+    <div class="decal">
+      <p>Example: </p>
       <table width="400" cellpadding="2" cellspacing="0" class="border-1">
         <tr>
           <td class="border-1">[<span class="opt-name">onload_ligth</span>;<span class="opt-name">block</span>=tr;<span class="opt-name">when</span> [<span class="opt-name">var.</span>light]=<span class="opt-value">1</span>]<span class="opt-html"> Light is ON.</span></td>
@@ -3003,8 +2926,7 @@ Example:
         </tr>
       </table>
     </div>
-    <br>
-    See <a href="#html_conditional_section">Conditional sections</a> for more details.<br>
+    <p>See <a href="#html_conditional_section">Conditional sections</a> for more details. </p>
   </div>
   <h3><a name="html_subtemplate" id="html_subtemplate"></a>Subtemplates:</h3>
   <div class="norm">
@@ -3013,10 +2935,10 @@ Example:
     <p>This is the best way to simply insert a part  contained in another file, like usually done for headers and footers. </p>
     <p> The value given to parameter <span class="opt-name">file</span> must be the name of a file existing on the server. You can use an expression with [var] Fields and the [val] keyword which represent the value of the field. If the value is an empty string, then no error message is displayed, it is like parameter <span class="opt-name">file</span> is ignored. This can be used to manage conditional insertion. </p>
     <p>Examples: </p>
-    <div class="decal">[<span class="opt-name">onload</span>;<span class="opt-name">file</span>=header.htm]<br>
-      [<span class="opt-name">onload</span>;<span class="opt-name">file</span>=[<span class="opt-name">var</span>.file_header]]<br>
-      [<span class="opt-name">onload</span>.sub1;<span class="opt-name">file</span>=[<span class="opt-name">val</span>]]<br>
-      [<span class="opt-name">onload</span>;<span class="opt-name">file</span>=[<span class="opt-name">var</span>.<span class="opt-name">insert</span>;if [<span class="opt-name">val</span>]=1;<span class="opt-name">then</span> <span class="opt-value">'header.html'</span>;<span class="opt-name">else</span> <span class="opt-value">''</span>]]</div>
+    <pre class="decal">[<span class="opt-name">onload</span>;<span class="opt-name">file</span>=header.htm]
+[<span class="opt-name">onload</span>;<span class="opt-name">file</span>=[<span class="opt-name">var</span>.file_header]]
+[<span class="opt-name">onload</span>.sub1;<span class="opt-name">file</span>=[<span class="opt-name">val</span>]]
+[<span class="opt-name">onload</span>;<span class="opt-name">file</span>=[<span class="opt-name">var</span>.<span class="opt-name">insert</span>;if [<span class="opt-name">val</span>]=1;<span class="opt-name">then</span> <span class="opt-value">'header.html'</span>;<span class="opt-name">else</span> <span class="opt-value">''</span>]]</pre>
     <p>Contents of the file is inserted at the place of the field, without no <a href="#html_field_prm_htmlconv">char conversion</a> and no <a href="#html_field_prm_protect">TBS protection</a>.<br>
       [onload] tags contained in the file are  processed at the insertion. 
       [onshow] tags will be merged on the Show() method because they became part of the main template.</p>
@@ -3025,7 +2947,6 @@ Example:
     <h4>Insertion driven with Php code using parameter <span class="opt-name">subtpl</span>:</h4>
     <p>Parameter <span class="opt-name">subtpl</span> is useful to manage subtemplate insertion with Php code. Parameter <span class="opt-name">subtpl</span> is active  only when used with a parameter<span class="opt-name"> script</span> or <span class="opt-name">onformat.</span> It turns the current TBS instance in  Subtemplate mode during the script or function execution and can act on a new template without deteriorating the main template. </p>
     <p> The Subtemplate mode presents the following characteristics: </p>
-    </p>
     <table width="100%" border="0" cellpadding="2" cellspacing="0" >
       <tr>
         <td valign="top">*</td>
@@ -3047,16 +2968,16 @@ Example:
       <table width="100%" border="0" cellpadding="4" cellspacing="0" >
         <tr>
           <th width="120">HTML:</th>
-          <td>[<span class="opt-name">onload</span>.file;<span class="opt-name">script</span>=<span class="opt-value">specialbox.php</span>;<span class="opt-name">subtpl</span>]</td>
+          <td><pre>[<span class="opt-name">onload</span>.file;<span class="opt-name">script</span>=<span class="opt-value">specialbox.php</span>;<span class="opt-name">subtpl</span>]</pre></td>
         </tr>
         <tr>
           <th>PHP script:</th>
-          <td class="txt-code"><span class="opt-html">&lt;?php</span><br>
-            &nbsp;&nbsp;echo(<span class="opt-value">'* Here include a subtemplate *'</span>);<br>
-            &nbsp;&nbsp;<span class="opt-name">$this</span>-&gt;LoadTemplate(<span class="opt-name">$CurrVal</span>);<br>
-            &nbsp;&nbsp;<span class="opt-name">$this</span>-&gt;MergeBlock(<span class="opt-value">'blk1'</span>,<span class="opt-name">$GLOBALS</span>[<span class="opt-value">'conn_id'</span>],<span class="opt-value">'SELECT * FROM table1'</span>);<br>
-            &nbsp;&nbsp;<span class="opt-name">$this</span>-&gt;Show(); <br>
-            <span class="opt-html">?&gt;</span></td>
+          <td><pre class="txt-code"><span class="opt-html">&lt;?php</span>
+  echo(<span class="opt-value">'* Here include a subtemplate *'</span>);
+  <span class="opt-name">$this</span>-&gt;LoadTemplate(<span class="opt-name">$CurrVal</span>);
+  <span class="opt-name">$this</span>-&gt;MergeBlock(<span class="opt-value">'blk1'</span>,<span class="opt-name">$GLOBALS</span>[<span class="opt-value">'conn_id'</span>],<span class="opt-value">'SELECT * FROM table1'</span>);
+  <span class="opt-name">$this</span>-&gt;Show(); 
+<span class="opt-html">?&gt;</span></pre></td>
         </tr>
         <tr>
           <th>Remarks:</th>
@@ -3069,19 +2990,19 @@ Example:
       <table width="100%" border="0" cellpadding="4" cellspacing="0" >
         <tr>
           <th width="120">HTML:</th>
-          <td>[<span class="opt-name">onload</span>.user_mode;<span class="opt-name">onformat</span>=<span class="opt-value">f_user_info</span>;<span class="opt-name">subtpl</span>]</td>
+          <td><pre>[<span class="opt-name">onload</span>.user_mode;<span class="opt-name">onformat</span>=<span class="opt-value">f_user_info</span>;<span class="opt-name">subtpl</span>]</pre></td>
         </tr>
         <tr>
           <th>PHP user function:</th>
-          <td class="txt-code">function f_user_info(<span class="opt-name">$FieldName</span>,&amp;<span class="opt-name">$CurrVal</span>,&amp;<span class="opt-name">$CurrPrm</span>,&amp;<span class="opt-name">$TBS</span>) {<br>
-            &nbsp;&nbsp;if ($CurrVal==1) { <span class="opt-html">// User is logged in </span> <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;<span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'user_info.htm'</span>);<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;<span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'blk1'</span>,<span class="opt-name">$GLOBALS</span>[<span class="opt-value">'conn_id'</span>],<span class="opt-value">'SELECT * FROM table1'</span>);<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;<span class="opt-name">$TBS</span>-&gt;Show();<br>
-            &nbsp;&nbsp;} else { <span class="opt-html">// User not logged in</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;echo(<span class="opt-value">'You are not logged in.'</span>); <br>
-            &nbsp;&nbsp;}<br>
-            }</td>
+          <td><pre class="txt-code">function f_user_info(<span class="opt-name">$FieldName</span>,&amp;<span class="opt-name">$CurrVal</span>,&amp;<span class="opt-name">$CurrPrm</span>,&amp;<span class="opt-name">$TBS</span>) {
+  if ($CurrVal==1) { <span class="opt-html">// User is logged in</span>
+    <span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-value">'user_info.htm'</span>);
+    <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'blk1'</span>,<span class="opt-name">$GLOBALS</span>[<span class="opt-value">'conn_id'</span>],<span class="opt-value">'SELECT * FROM table1'</span>);
+    <span class="opt-name">$TBS</span>-&gt;Show();
+  } else { <span class="opt-html">// User not logged in</span>
+    echo(<span class="opt-value">'You are not logged in.'</span>);
+  }
+}</pre></td>
         </tr>
         <tr>
           <th>Remarks:</th>
@@ -3091,11 +3012,10 @@ Example:
     </div>
   </div>
   <h3><a name="html_conditional" id="html_conditional"></a>Conditional display overview:</h3>
-  <div class="norm">TinyButStrong offers several tools for conditional display for both fields and blocks.<br>
-    <br>
-    <span class="title-1c">Conditional fields</span><br>
-    <br>
-    For any TBS fields you can use parameters for conditional display, recalled below.<br>
+  <div class="norm">
+    <p>TinyButStrong offers several tools for conditional display for both fields and blocks. </p>
+    <h4>Conditional fields</h4>
+    <p> For any TBS fields you can use parameters for conditional display, recalled below. </p>
     <div class="decal">
       <table border="0" cellpadding="2" cellspacing="0" >
         <tr>
@@ -3129,22 +3049,15 @@ Example:
     <br>
     <div class="decal">Example:<br>
       [<span class="opt-name">onshow.error_id</span>;<span class="opt-name">if</span> <span class="opt-value">[val]=0</span>;<span class="opt-name">then</span> <span class="opt-value">'no error'</span>;<span class="opt-name">else</span> <span class="opt-value">'error found'</span>] </div>
-    <br>
-    <span class="title-1c"><a name="html_conditional_section"></a>Conditional sections</span> <br>
-    <br>
-    You can use conditional sections any TBS block (<a href="#html_block">data block</a> or <a href="#html_block_auto">automatic block</a>). A conditional section is a  section which has a parameter <span class="opt-name">when</span> defining a condition, or parameter <span class="opt-name">default</span>. At the block's merging, each <span class="opt-name">when</span> condition of conditional sections is evaluated until one is verified. As soon as one <span class="opt-name">when</span> condition is verified, its conditional section is kept and other conditional sections are deleted. If no <span class="opt-name">when</span> condition is verified, then the <span class="opt-name">default</span> section is displayed if it exists. <br>
-    <br>
-    <span class="title-1b">The case of data blocks:</span><br>
-    If it is a data block, it means a block merged with <a href="#php_mergeblock">MergeBlock()</a>, then the conditional sections are reassessed for each record. It is even possible to  define a data block with only conditional sections, with no standard section.<br>
-    <br>
-    <span class="title-1b">Defining the conditions:</span><br>
-    The conditions defined into parameters <span class="opt-name">when</span> can be expressions that contain <a href="#html_field_auto">[var] fields</a> et and linked fields (if it is  a data block). See <a href="#html_block_prm_when">parameter when</a> for more details about operators supported by TBS.<br>
-    <br>
-    <span class="title-1b">Section exclusivity: </span><br>
-    By default conditional sections are exclusive inside a block. It means only one conditional section of a block can be displayed. But if you want a block to have non-exclusive conditional sections, you can use parameter <span class="opt-name">several</span> on the first conditional section. With this parameter, all conditions are evaluated and each true condition makes its section to be displayed.<br>
-    <br>
-    Example with a <a href="#html_block">data block</a>: <br>
-    <br>
+    <h4><a name="html_conditional_section"></a>Conditional sections</h4>
+    <p> You can use conditional sections any TBS block (<a href="#html_block">data block</a> or <a href="#html_block_auto">automatic block</a>). A conditional section is a  section which has a parameter <span class="opt-name">when</span> defining a condition, or parameter <span class="opt-name">default</span>. At the block's merging, each <span class="opt-name">when</span> condition of conditional sections is evaluated until one is verified. As soon as one <span class="opt-name">when</span> condition is verified, its conditional section is kept and other conditional sections are deleted. If no <span class="opt-name">when</span> condition is verified, then the <span class="opt-name">default</span> section is displayed if it exists. </p>
+    <h5>&bull; The case of data blocks:</h5>
+    <p> If it is a data block, it means a block merged with <a href="#php_mergeblock">MergeBlock()</a>, then the conditional sections are reassessed for each record. It is even possible to  define a data block with only conditional sections, with no standard section.</p>
+    <h5>&bull; Defining the conditions:</h5>
+    <p> The conditions defined into parameters <span class="opt-name">when</span> can be expressions that contain <a href="#html_field_auto">[var] fields</a> et and linked fields (if it is  a data block). See <a href="#html_block_prm_when">parameter when</a> for more details about operators supported by TBS.</p>
+    <h5>&bull; Section exclusivity: </h5>
+    <p> By default conditional sections are exclusive inside a block. It means only one conditional section of a block can be displayed. But if you want a block to have non-exclusive conditional sections, you can use parameter <span class="opt-name">several</span> on the first conditional section. With this parameter, all conditions are evaluated and each true condition makes its section to be displayed.</p>
+    <p> Example with a <a href="#html_block">data block</a>: </p>
     <div class="decal">
       <table width="600" cellpadding="2" cellspacing="0" class="border-1">
         <tr>
@@ -3164,8 +3077,7 @@ Example:
         </tr>
       </table>
     </div>
-    <br>
-    Example with an <a href="#html_block_auto">automatic block</a>: <br>
+    <p>Example with an <a href="#html_block_auto">automatic block</a>: </p>
     <div class="decal">
       <table cellpadding="2" cellspacing="0" class="border-1">
         <tr>
@@ -3179,18 +3091,18 @@ Example:
         </tr>
       </table>
     </div>
-    <br>
   </div>
   <a name="plugins" id="plugins"></a>
   <h2 class="pagebreak">Coding plug-ins:</h2>
-  You can  add features to TinyButStrong using plug-ins. The <span class="title-1c">database plug-ins</span> simply enable the method MergeBlock() to recognize new types of database. The <span class="title-1c">other plug-ins</span> enable you to add features to TBS or to modify its main methods in order to make it more specialized. <br>
-  <br>
-  In both cases, a plug-in is made of a set of PHP functions or one PHP class which have to fit with a special syntax expected by TBS. Some plug-ins are proposed for download at the <a href="http://www.tinybutstrong.com">TinyButStrong web site</a>.
+  <p>You can  add features to TinyButStrong using plug-ins. The <strong>database plug-ins</strong> simply enable the method MergeBlock() to recognize new types of database. The <strong>other plug-ins</strong> enable you to add features to TBS or to modify its main methods in order to make it more specialized. 
+ </p>
+  <p>    In both cases, a plug-in is made of a set of PHP functions or one PHP class which have to fit with a special syntax expected by TBS. Some plug-ins are proposed for download at the <a href="http://www.tinybutstrong.com">TinyButStrong web site</a>.
+  </p>
   <h3><a name="plugins_db" id="plugins_db"></a>Database plug-ins:</h3>
-  <div class="norm"> <span class="versioning">Versioning: database plug-ins are supported since TBS version 1.8.</span> <br>
-    <br>
-    A database plug-in enables the method MergeBlock() to recognize a new type of database.<br>
-    When you have a call such as <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-name">$BlockName</span>, <span class="opt-name">$Source</span>, <span class="opt-name">$Query</span>), the MergeBlock process is first examining <span class="opt-name">$Source</span> to see if its type is supported. <br>
+  <div class="norm">
+    <p><span class="versioning">Versioning: database plug-ins are supported since TBS version 1.8.</span></p>
+    <p> A database plug-in enables the method MergeBlock() to recognize a new type of database.
+      When you have a call such as <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-name">$BlockName</span>, <span class="opt-name">$Source</span>, <span class="opt-name">$Query</span>), the MergeBlock process is first examining <span class="opt-name">$Source</span> to see if its type is supported. </p>
     <table border="0" cellspacing="0" cellpadding="3">
       <tr>
         <td valign="top">&bull;</td>
@@ -3209,126 +3121,94 @@ Example:
         <td valign="top">If <span class="opt-name">$Source</span> is something else then the MergeBlock process  is trying to found the plug-in made by user functions that correspond to the type of <span class="opt-name">$Source</span>. (See more details below)</td>
       </tr>
     </table>
-    <br>
-    <span class="title-1c">Database plug-in based un user functions: </span> <br>
-    <br>
-    When the MergeBlock process meet a type of value for <span class="opt-name">$Source</span> which is not supported in native, it determines the TBS Id corresponding to that type. Then it looks for the user functions corresponding to that TBS Id.<br>
-    <br>
-    <span class="title-1b">How to determine the TBS Id:</span><br>
-    The TBS Id is a string identifier determined  by the argument <span class="opt-name">$Source</span>.<br>
-    If <span class="opt-name">$Source</span> is a string =&gt; the TBS Id is that string.<br>
-    If <span class="opt-name">$Source</span> is a PHP resource =&gt; the TBS Id is the name of the  resource's type.<br>
-    If <span class="opt-name">$Source</span> is an object =&gt; the TBS Id is the name of the class.<br>
-    For some convenience, if the TBS Id contains spaces (' '), it is cut. If the TBS Id contains '-', they are replaced with '_'.<br>
-    For example, a PHP variable for a Sybase connection is typed as Resource and its resource name is <span class="opt-value">'sybase-db link'</span>. The corresponding TBS Id is <span class="opt-value">'sybase_db'</span>.<br>
-    <br>
-    <span class="title-1b">How to build the plug-in for a TBS Id:</span><br>
-    The plug-in is made of 3 user functions which must have specific names.<br>
-    The following function names are made for a TBS Id which is <span class="opt-value">'tbsid'</span>. For another TBS Id, you just have to rename the functions.<br>
-    You can found several examples of database plug-in at the <a href="http://www.tinybutstrong.com/plugins.php#plugin_db">TinyButStrong web site</a>.<br>
-    <br>
-    Synopsis:<br>
-    <br>
-    function <span class="tbsname">tbsdb_tbsid_open</span>(&amp;<span class="opt-name">$Source</span>, &amp;<span class="opt-name">$Query</span>)<br>
+    <h4>Database plug-in based un user functions: </h4>
+    <p> When the MergeBlock process meet a type of value for <span class="opt-name">$Source</span> which is not supported in native, it determines the TBS Id corresponding to that type. Then it looks for the user functions corresponding to that TBS Id.</p>
+    <h5>&bull; How to determine the TBS Id:</h5>
+    <p> The TBS Id is a string identifier determined  by the argument <span class="opt-name">$Source</span>.<br>
+      If <span class="opt-name">$Source</span> is a string =&gt; the TBS Id is that string.<br>
+      If <span class="opt-name">$Source</span> is a PHP resource =&gt; the TBS Id is the name of the  resource's type.<br>
+      If <span class="opt-name">$Source</span> is an object =&gt; the TBS Id is the name of the class.<br>
+      For some convenience, if the TBS Id contains spaces (' '), it is cut. If the TBS Id contains '-', they are replaced with '_'.<br>
+      For example, a PHP variable for a Sybase connection is typed as Resource and its resource name is <span class="opt-value">'sybase-db link'</span>. The corresponding TBS Id is <span class="opt-value">'sybase_db'</span>.</p>
+    <h5>&bull; How to build the plug-in for a TBS Id:</h5>
+    <p> The plug-in is made of 3 user functions which must have specific names.
+      The following function names are made for a TBS Id which is <span class="opt-value">'tbsid'</span>. For another TBS Id, you just have to rename the functions.
+      You can found several examples of database plug-in at the <a href="http://www.tinybutstrong.com/plugins.php#plugin_db">TinyButStrong web site</a>.</p>
+    <p> Synopsis:</p>
+    <p> function <span class="tbsname">tbsdb_tbsid_open</span>(&amp;<span class="opt-name">$Source</span>, &amp;<span class="opt-name">$Query</span>) </p>
     <div class="decal">This function is  called one time by the MergeBlock process, before the other user functions. <br>
       It is supposed to  	use <span class="opt-name">$Source</span> and <span class="opt-name">$Query</span> to open a recordset, and return a reference of that recordset.<br>
     </div>
-    function <span class="tbsname">tbsdb_tbsid_fetch</span>(&amp;<span class="opt-name">$Rs</span> [,<span class="opt-name">$RecNum</span>])<br>
+    <p>function <span class="tbsname">tbsdb_tbsid_fetch</span>(&amp;<span class="opt-name">$Rs</span> [,<span class="opt-name">$RecNum</span>]) </p>
     <div class="decal">This function is  called several times by the MergeBlock process, as many times as there are data to fetch from the query. <br>
       This function should return the next record as an associative array (column name=&gt; value), or return <span class="opt-value">false</span> if there is no record left.<br>
       <span class="opt-name">$Rs</span> is the value provided by <span class="tbsname">tbsdb_tbsid_open</span>(). It is commonly  a recordset's reference.<br>
       <span class="opt-name">$RecNum</span> can be useful for some database type such as Oracle, for which the number of the record is needed to retrieve it. </div>
-    function <span class="tbsname">tbsdb_tbsid_close</span>(&amp;<span class="opt-name">$Rs</span>)<br>
+    <p>function <span class="tbsname">tbsdb_tbsid_close</span>(&amp;<span class="opt-name">$Rs</span>) </p>
     <div class="decal">This function is  called on time by the MergeBlock process, after the other user functions. <br>
       This function should close the recordset properly. <br>
       <span class="opt-name">$Rs</span> is the value provided by <span class="tbsname">tbsdb_tbsid_open</span>(). It is commonly  a recordset's reference.</div>
-    <br>
-    <br>
-    <span class="title-1c">Database plug-in based on  object:</span> <br>
-    <br>
-    When the MergeBlock process meet of value for <span class="opt-name">$Source</span> which is an object, and if that object has a method named <span class="tbsname">tbsdb_open()</span>, then it assumes that the object is a database plug-in. <br>
-    The object must have at least the 3 methods <span class="tbsname">tbsdb_open()</span>, <span class="tbsname">tbsdb_fetch()</span> and <span class="tbsname">tbsdb_close()</span>. There can be other methods and properties, but those 3 methods must have the same syntax and the same feature as the user functions described above.<br>
-    <br>
-    Synopsis:<br>
-    <br>
-    class clsTbsPlugin {<br>
-    &nbsp;&nbsp;function tbsdb_open(&amp;<span class="opt-name">$Source</span>, &amp;<span class="opt-name">$Query</span>)<br>
-    &nbsp;&nbsp;function tbsdb_fetch(&amp;<span class="opt-name">$Rs</span> [,<span class="opt-name">$RecNum</span>])<br>
-    &nbsp;&nbsp;function tbsdb_close(&amp;<span class="opt-name">$Rs</span>)<br>
-    }<br>
-    <br>
-    <br>
-    <span class="title-1c">Database plug-in based on property ObjectRef:<br>
-    </span><br>
-    When the MergeBlock process meet a value for <span class="opt-name">$Source</span> which is a string beginning with '~' then it assumes that   property <span class="opt-name">$TBS-</span>&gt;ObjectRef is a database plug-in based on  object (see <a href="#php_oop">OOP</a>). The object must have the same requirements  as a database plug-in based on objet described above, but the names of the methods can be different.<br>
-    <br>
-    Example: <br>
-    <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-name">$BlockName</span>,<span class="opt-value">'~dbkey'</span>,<span class="opt-name">$Query</span>);<br>
-    <br>
-    class clsTbsPlugin {<br>
-    &nbsp;&nbsp;function dbkey_open(&amp;<span class="opt-name">$Source</span>, &amp;<span class="opt-name">$Query</span>)<br>
-    &nbsp;&nbsp;function dbkey_fetch(&amp;<span class="opt-name">$Rs</span> [,<span class="opt-name">$RecNum</span>])<br>
-    &nbsp;&nbsp;function dbkey_close(&amp;<span class="opt-name">$Rs</span>)<br>
-    }<br>
-    <br>
+    <h4>Database plug-in based on  object:</h4>
+    <p> When the MergeBlock process meet of value for <span class="opt-name">$Source</span> which is an object, and if that object has a method named <span class="tbsname">tbsdb_open()</span>, then it assumes that the object is a database plug-in. <br>
+      The object must have at least the 3 methods <span class="tbsname">tbsdb_open()</span>, <span class="tbsname">tbsdb_fetch()</span> and <span class="tbsname">tbsdb_close()</span>. There can be other methods and properties, but those 3 methods must have the same syntax and the same feature as the user functions described above. </p>
+    <p> Synopsis:</p>
+    <pre class="decal">class clsTbsPlugin {
+  function tbsdb_open(&amp;<span class="opt-name">$Source</span>, &amp;<span class="opt-name">$Query</span>)
+  function tbsdb_fetch(&amp;<span class="opt-name">$Rs</span> [,<span class="opt-name">$RecNum</span>])
+  function tbsdb_close(&amp;<span class="opt-name">$Rs</span>)
+}</pre>
+    <h4>Database plug-in based on property ObjectRef:</h4>
+    <p> When the MergeBlock process meet a value for <span class="opt-name">$Source</span> which is a string beginning with '~' then it assumes that   property <span class="opt-name">$TBS-</span>&gt;ObjectRef is a database plug-in based on  object (see <a href="#php_oop">OOP</a>). The object must have the same requirements  as a database plug-in based on objet described above, but the names of the methods can be different.</p>
+    <p> Example:</p>
+    <pre class="decal"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-name">$BlockName</span>,<span class="opt-value">'~dbkey'</span>,<span class="opt-name">$Query</span>);
+
+class clsTbsPlugin {
+  function dbkey_open(&amp;<span class="opt-name">$Source</span>, &amp;<span class="opt-name">$Query</span>)
+  function dbkey_fetch(&amp;<span class="opt-name">$Rs</span> [,<span class="opt-name">$RecNum</span>])
+  function dbkey_close(&amp;<span class="opt-name">$Rs</span>)
+}    </pre>
   </div>
   <h3><a name="plugins_tbs" id="plugins_tbs"></a>Other plug-ins:</h3>
-  <div class="norm"><span class="zone-normal"><span class="versioning">Versioning:  plug-ins are supported since TBS version 3.0.</span><br>
-    <br>
-    <span class="title-1c">Coding a plug-in using a PHP class:</span><br>
-    <br>
-    <span class="title-1b">&bull; Plug-in's key:</span><br>
-    <br>
-    Each plug-in has a plug-in key which is  the name of its Php class. This key must be given to the method <a href="#php_plugin">PlugIn()</a> when you use it. Thus, it is recommended to  define a PHP constant for the plug-in's key (see example below).<br>
-    <br>
-    </span><span class="title-1b"><span class="zone-normal">&bull; </span>Plug-in events:</span><span class="zone-normal"><br>
-    <br>
-    A TBS plug-in must be a PHP class which contains one or several specific methods that will be recognized and plugged by TBS. Those specific methods are called plug-in events because they are executed automatically  by TBS when the corresponding event occurs. A TBS plug-in can also have other methods and properties for internal purpose. A TBS plug-in must have at least the OnInstall event.<br>
-    <br>
-    For example:<br>
-    </span>
-    <div class="decal txt-code"><span class="opt-html">// TBS plug-in XXX </span><br>
-      <span class="opt-name">define</span>(<span class="opt-value">'TBS_XXX'</span>,<span class="opt-value">'clsTbsPlugIng_XXX'</span>); <span class="opt-html">// That is the plug-in's key</span> <br>
-      <span class="opt-name">class</span> clsTbsPlugIng_XXX() {<br>
-      &nbsp;&nbsp;<span class="opt-name">function</span> OnInstall(...) {...} <span class="opt-html">// That is the OnInstall event</span> <br>
-      &nbsp;&nbsp;...<br>
-      }</div>
-    <span class="zone-normal"><br>
-    <br>
-    See the PHP file <span class="opt-html">&quot;tbs_plugin_syntaxes&quot;</span> to have all plug-in events, their usage and expected  arguments. There is also a list of supported events at the bottom of this section. <br>
-    <br>
-    The OnInstall event is special. It has to return an array with all activated events for the current plug-in (see  the PHP file <span class="opt-html">&quot;tbs_plugin_syntaxes&quot;</span>). The OnInstall event  is called when the plug-in is installed at the TBS instance.<br>
-    This event can be  called in three situations:<br>
-    - When using  method <a href="#php_plugin">PlugIn() </a>with the plug-in's key for the first time.<br>
-    - 
-    When using method PlugIn() with the plug-in's key and the argument TBS_INSTALL. <br>
-    - When a new TBS instance is created,  if the plug-in's key has be added to the global array <span class="opt-name">$_TBS_AutoInstallPlugIns[]</span> (see file <span class="opt-html">&quot;tbs_plugin_syntaxes.php&quot;</span> for more details). <br>
-    <br>
-    </span><span class="title-1b">Property -&gt;TBS:</span> <br>
-    <br>
-    As soon as the plug-in is installed on the TBS instance, a property <span class="opt-name"><span class="txt-code">-&gt;TBS</span></span> is automatically  added to the plug-in, its value is a reference to the parent TBS instance. Remember this because this property can be very useful inside the plug-in's code. <br>
-    <span class="zone-normal"><br>
-    </span><span class="zone-normal"><span class="title-1c">Coding a plug-in using PHP functions: </span></span><br>
-    <br>
-    The plug-ins' key is a string that you choose and which will be used for naming the function. <span class="zone-normal">It is recommended to  define a PHP constant for the plug-in's key (see example below).</span><br>
-    <br>
-    The plug-in events are coded using functions, and they names must be the string 'tbspi_', followed by the plug-in's key, followed by '_' and the event's name. <br>
-    Example:<br>
-    <div class="decal txt-code"><span class="opt-name">define</span>(<span class="opt-value">'TBS_XXX'</span>,<span class="opt-value">'xxx'</span>);<br>
-      <span class="opt-name">function</span> tbspi_xxx_OnInstall(...) {...}<br>
-      ...</div>
-    <br>
-    All the rest works like for plug-in coded with a class. You must have at least the event OnInstall created, and it works the same way. <br>
-    <br>
-    <span class="title-1b">Remark:</span> PHP functions are often faster than methods, but they don't let you having  a -&gt;TBS property to reach the parent TBS instance.<br>
-    <br>
-    <span class="title-1c">List of plug-in events: </span><br>
+  <div class="norm">
+    <p><span class="zone-normal"><span class="versioning">Versioning:  plug-ins are supported since TBS version 3.0.</span></span></p>
+    <h4><span class="zone-normal">Coding a plug-in using a PHP class:</span></h4>
+    <h5>&bull; Plug-in's key:</h5>
+    <p><span class="zone-normal"> Each plug-in has a plug-in key which is  the name of its Php class. This key must be given to the method <a href="#php_plugin">PlugIn()</a> when you use it. Thus, it is recommended to  define a PHP constant for the plug-in's key (see example below).</span></p>
+    <h5>&bull; Plug-in events:</h5>
+    <p><span class="zone-normal"> A TBS plug-in must be a PHP class which contains one or several specific methods that will be recognized and plugged by TBS. Those specific methods are called plug-in events because they are executed automatically  by TBS when the corresponding event occurs. A TBS plug-in can also have other methods and properties for internal purpose. A TBS plug-in must have at least the OnInstall event. </span></p>
+    <p><span class="zone-normal"> For example: </span> </p>
+    <pre class="decal txt-code"><span class="opt-html">// TBS plug-in XXX </span>
+<span class="opt-name">define</span>(<span class="opt-value">'TBS_XXX'</span>,<span class="opt-value">'clsTbsPlugIng_XXX'</span>); <span class="opt-html">// That is the plug-in's key</span> 
+<span class="opt-name">class</span> clsTbsPlugIng_XXX() {
+  <span class="opt-name">function</span> OnInstall(...) {...} <span class="opt-html">// That is the OnInstall event</span> 
+  ...
+}</pre>
+    <p><span class="zone-normal"> See the PHP file <span class="opt-html">&quot;tbs_plugin_syntaxes&quot;</span> to have all plug-in events, their usage and expected  arguments. There is also a list of supported events at the bottom of this section. </span></p>
+    <p><span class="zone-normal"> The OnInstall event is special. It has to return an array with all activated events for the current plug-in (see  the PHP file <span class="opt-html">&quot;tbs_plugin_syntaxes&quot;</span>). The OnInstall event  is called when the plug-in is installed at the TBS instance.</span></p>
+    <p><span class="zone-normal"> This event can be  called in three situations:</span></p>
+    <ul>
+      <li><span class="zone-normal"> When using  method <a href="#php_plugin">PlugIn() </a>with the plug-in's key for the first time.</span></li>
+      <li><span class="zone-normal"> When using method PlugIn() with the plug-in's key and the argument TBS_INSTALL.</span></li>
+      <li><span class="zone-normal"> When a new TBS instance is created,  if the plug-in's key has be added to the global array <span class="opt-name">$_TBS_AutoInstallPlugIns[]</span> (see file <span class="opt-html">&quot;tbs_plugin_syntaxes.php&quot;</span> for more details). </span></li>
+    </ul>
+    <h5>&bull; Property -&gt;TBS:</h5>
+    <p> As soon as the plug-in is installed on the TBS instance, a property <span class="opt-name"><span class="txt-code">-&gt;TBS</span></span> is automatically  added to the plug-in, its value is a reference to the parent TBS instance. Remember this because this property can be very useful inside the plug-in's code. </p>
+    <h4>Coding a plug-in using PHP functions: </h4>
+    <p> The plug-ins' key is a string that you choose and which will be used for naming the function. <span class="zone-normal">It is recommended to  define a PHP constant for the plug-in's key (see example below).</span></p>
+    <p> The plug-in events are coded using functions, and they names must be the string 'tbspi_', followed by the plug-in's key, followed by '_' and the event's name. </p>
+    <p> Example: </p>
+    <pre class="decal txt-code"><span class="opt-name">define</span>(<span class="opt-value">'TBS_XXX'</span>,<span class="opt-value"> 'xxx'</span>);
+<span class="opt-name">function</span> tbspi_xxx_OnInstall(...) {...}
+...</pre>
+    <p>All the rest works like for plug-in coded with a class. You must have at least the event OnInstall created, and it works the same way. </p>
+    <p><em>Remark:</em> PHP functions are often faster than methods, but they don't let you having  a -&gt;TBS property to reach the parent TBS instance.</p>
+    <h5>&bull; List of plug-in events:</h5>
     <table border="0" cellpadding="4" cellspacing="0" width="100%">
       <tbody>
         <tr>
-          <td width="10" valign="top" class="title-1b">&nbsp;</td>
-          <td width="120" class="title-1b">Plug-in Events </td>
-          <td class="title-1b">Description</td>
+          <th width="10">&nbsp;</th>
+          <th width="120">Plug-in Events </th>
+          <th>Description</th>
         </tr>
         <tr>
           <td valign="top">&bull;</td>
@@ -3342,7 +3222,7 @@ Example:
         </tr>
         <tr>
           <td valign="top" width="10">&bull;</td>
-          <td valign="top">BeforeLoadTemplate<br></td>
+          <td valign="top">BeforeLoadTemplate</td>
           <td>Executed when  LoadTemplate() method is called. Can cancel TBS basic process. </td>
         </tr>
         <tr>
@@ -3412,17 +3292,15 @@ Example:
         </tr>
       </tbody>
     </table>
-    <br>
-    <br>
   </div>
   <a name="summaries" id="summaries"></a>
   <h2 class="pagebreak">Summary:</h2>
   <h3><a name="appendix_field" id="appendix_field"></a>TBS Field's parameters:</h3>
   <div class="norm">
     <table width="100%" border="0" cellpadding="5" cellspacing="0">
-      <tr class="title-1b">
-        <td width="80" align="left" valign="top">Parameter</td>
-        <td align="left" valign="top">Summary</td>
+      <tr>
+        <th width="80">Parameter</th>
+        <th>Summary</th>
       </tr>
       <tr>
         <td align="left" valign="top"><a href="#html_field_prm_htmlconv" class="opt-name">htmlconv</a></td>
@@ -3489,8 +3367,12 @@ Example:
         <td align="left" valign="top">Protection mode for characters '['.</td>
       </tr>
       <tr>
+        <td align="left" valign="top"><a href="#html_field_prm_comm" class="opt-name">enlarge</a></td>
+        <td align="left" valign="top">Enlarges the field's bounds up to the Commentary tag that surround it.</td>
+      </tr>
+      <tr>
         <td align="left" valign="top"><a href="#html_field_prm_comm" class="opt-name">comm</a></td>
-        <td align="left" valign="top">Extends the field's bounds up to the Commentary tag that surround it.</td>
+        <td align="left" valign="top">Alias of <a href="#html_field_prm_comm" class="opt-name">enlarge</a>.</td>
       </tr>
       <tr>
         <td align="left" valign="top"><a href="#html_field_prm_noerr" class="opt-name">noerr</a></td>
@@ -3521,9 +3403,9 @@ Example:
   <h3><a name="appendix_block" id="appendix_block"></a>TBS Block's parameters:</h3>
   <div class="norm">
     <table width="100%" border="0" cellpadding="5" cellspacing="0">
-      <tr class="title-1b">
-        <td width="80" align="left" valign="top">Parameter</td>
-        <td align="left" valign="top">Summary</td>
+      <tr>
+        <th width="80">Parameter</th>
+        <th>Summary</th>
       </tr>
       <tr>
         <td align="left" valign="top"><a href="#html_block_prm_block" class="opt-name">block</a></td>
@@ -3582,9 +3464,9 @@ Example:
   <h3><a name="appendix_specialname" id="appendix_specialname"></a>Names of Special Fields and Blocks:</h3>
   <div class="norm">
     <table border="0" cellpadding="5" cellspacing="0">
-      <tr class="title-1b">
-        <td width="140" align="left" valign="top">Name</td>
-        <td align="left" valign="top">Summary</td>
+      <tr>
+        <th width="140">Name</th>
+        <th>Summary</th>
       </tr>
       <tr>
         <td align="left" valign="top"><a href="#html_field_prm_if" class="opt-name">val</a></td>
@@ -3612,7 +3494,6 @@ Example:
       </tr>
     </table>
   </div>
-  <div align="center" class="asciiart">.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:</div>
 </div>
 </body>
 </html>
