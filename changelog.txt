@@ -7,7 +7,8 @@ TinyButStrong 1.8.0 beta
 - new option "render"
 - 'var_ref' is no longer an option
 - 'enlarge', alias of 'comm'
-
+- 'getpart', alias of 'getbody'
+- new parameter store, storename, 
 
 2011-10-26, change-log:
 =======================
