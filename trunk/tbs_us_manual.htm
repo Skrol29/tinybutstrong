@@ -1046,7 +1046,7 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name">protect</span></td>
-        <td align="left" valign="top" class="border-sep"><p>Protects all merged items by replacing the characters '<span class="opt-html">[</span>' with their corresponding XML/HTML code '<span class="opt-html">&amp;#91;</span>'. Default value is <span class="opt-value">true</span>.</p>
+        <td align="left" valign="top" class="border-sep"><p>Protects all merged items by replacing the characters '<span class="opt-html">[</span>' with their corresponding XML/HTML code '<span class="opt-html">&amp;#91;</span>'. Default value is <span class="opt-value">true</span>. </p>
         <p>By default, all data merged with a template is protected except if it's a file inclusion. It is strongly recommended to protect data when it comes from free enter like on a forum for example.</p></td>
         <td align="left" valign="top" class="border-sep">$TBS-&gt;Protect (deprecated)</td>
       </tr>
@@ -1269,7 +1269,7 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
         <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;ObjectRef[<span class="opt-value">'item3'</span>][<span class="opt-value">'a'</span>][<span class="opt-value">0</span>] =&amp; <span class="opt-name">$MyObject4</span>;</span></div>
       <p><em>Remarks:</em></p>
       <ul>
-        <li> Think to use the assignment by reference using  &quot;=&amp;&quot; instead of &quot;=&quot;, otherwise a copy of the object will be created.</li>
+        <li> If you are coding for an old version of PHP prior to version 5, it is better to use the assignment by reference using  &quot;=&amp;&quot; instead of &quot;=&quot;, in order to force objects to be passed by reference.</li>
         <li> Since an object is referenced under ObjectRef, its sub objects will also be accessible by the TBS syntax. </li>
       </ul>
       <h5> &bull; Using ObjectRef in automatic fields:</h5>
@@ -1309,8 +1309,12 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
           </tr>
         </table>
       </div>
-      <p><em>Remark: </em> TBS proceeds to  a coherence control, it will determine itself whether  your <a href="#html_field_auto">automatic field</a> definition is calling to ObjectRef via an array's item, an object's property or an object's method. Anyway, take care that your <a href="#html_field_auto">automatic field</a> must call a value at the end,  not an object.</p>
-      <h5>&bull; Using ObjectRef in other TBS features:</h5>
+      <p><em>Remarks:</em></p>
+      <ul>
+        <li> TBS proceeds to  a coherence control, it will determine itself whether  your <a href="#html_field_auto">automatic field</a> definition is calling to ObjectRef via an array's item, an object's property or an object's method. Anyway, take care that your <a href="#html_field_auto">automatic field</a> must call a value at the end,  not an object.</li>
+        <li>When you are calling a method with arguments (like <span class="opt-name">methY(a,b)</span> in the example above), then TBS does a lazy analysis of arguments, without string delimiters. There is no intention to go further in the analysis because having PHP code in the template is not the purpose.</li>
+      </ul>
+<h5>&bull; Using ObjectRef in other TBS features:</h5>
       <p> The following TBS features support the call to the methods of  objects referenced under ObjectRef. </p>
       <div class="decal">
         <table width="100%"  border="0" cellspacing="0" cellpadding="2">

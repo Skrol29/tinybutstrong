@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.8.0-beta-2011-10-26 for PHP 4
-Date     : 2011-10-26
+Version  : 3.8.0-beta-2011-11-24 for PHP 4
+Date     : 2011-11-24
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -536,7 +536,7 @@ var $ObjectRef = false;
 var $NoErr = false;
 var $Assigned = array();
 // Undocumented (can change at any version)
-var $Version = '3.8.0-beta-2011-10-26';
+var $Version = '3.8.0-beta-2011-11-24';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -551,6 +551,8 @@ var $OnLoad = true;
 var $OnShow = true;
 var $IncludePath = array();
 var $ExtendedMethods = array();
+var $TplStoreMain = array();
+var $TplStoreSub = array();
 // Private
 var $_ErrMsgName = '';
 var $_LastFile = '';
@@ -991,10 +993,10 @@ function meth_Locator_FindTbs(&$Txt,$Name,$Pos,$ChrSub) {
 	} else {
 		$Loc->FullName = $Name;
 	}
-	if ( $ReadPrm && (isset($Loc->PrmLst['enlarge'] || isset($Loc->PrmLst['comm']))) ) {
+	if ( $ReadPrm && ( isset($Loc->PrmLst['enlarge']) || isset($Loc->PrmLst['comm']) ) ) {
 		$Loc->PosBeg0 = $Loc->PosBeg;
 		$Loc->PosEnd0 = $Loc->PosEnd;
-		$enlarge = (isset($Loc->PrmLst['enlarge']) ? $Loc->PrmLst['enlarge'] : $Loc->PrmLst['comm'];
+		$enlarge = (isset($Loc->PrmLst['enlarge'])) ? $Loc->PrmLst['enlarge'] : $Loc->PrmLst['comm'];
 		if (($enlarge===true) || ($enlarge==='')) {
 			$Loc->Enlarged = clsTinyButStrong::f_Loc_EnlargeToStr($Txt,$Loc,'<!--' ,'-->');
 		} else {
@@ -1451,8 +1453,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 		$CurrVal = '';
 		if ($x!=='') {
 			if ($this->f_Misc_GetFile($CurrVal, $x, $this->_LastFile, $this->IncludePath)) {
-				if (isset($Loc->PrmLst['getbody'])) $CurrVal = $this->f_Xml_GetPart($CurrVal,$Loc->PrmLst['getbody'],true);
-				if (isset($Loc->PrmLst['rename'])) $this->meth_Locator_Rename($CurrVal, $Loc->PrmLst['rename']);
+				$this->meth_Locator_PartAndRename($CurrVal, $Loc->PrmLst);
 			} else {
 				if (!isset($Loc->PrmLst['noerr'])) $this->meth_Misc_Alert($Loc,'the file \''.$x.'\' given by parameter file is not found or not readable.',true);
 			}
@@ -1474,8 +1475,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 				if (!isset($Loc->PrmLst['noerr'])) $this->meth_Misc_Alert($Loc,'the file \''.$x.'\' given by parameter script is not found or not readable.',true);
 			}
 			if ($sub) $this->meth_Misc_ChangeMode(false,$Loc,$CurrVal);
-			if (isset($Loc->PrmLst['getbody'])) $CurrVal = $this->f_Xml_GetPart($CurrVal,$Loc->PrmLst['getbody'],true);
-			if (isset($Loc->PrmLst['rename'])) $this->meth_Locator_Rename($CurrVal, $Loc->PrmLst['rename']);
+			$this->meth_Locator_PartAndRename($CurrVal, $Loc->PrmLst);
 			unset($this->CurrPrm);
 			$ConvProtect = false;
 		}
@@ -1655,29 +1655,56 @@ function meth_Locator_FindBlockNext(&$Txt,$BlockName,$PosBeg,$ChrSub,$Mode,&$P1,
 
 }
 
-function meth_Locator_Rename(&$Txt, $Replace) {
-// Rename or delete TBS tags names
-	if (is_string($Replace)) $Replace = explode(',',$Replace);
-	foreach ($Replace as $x) {
-		if (is_string($x)) $x = explode('=', $x);
-		if (count($x)==2) {
-			$old = trim($x[0]);
-			$new = trim($x[1]);
-			if ($old!=='') {
-				if ($new==='') {
-					$q = false;
-					$s = 'clear';
-					$this->meth_Merge_Block($Txt, $old, $s, $q, false, false, false);
-				} else {
-					$old = $this->_ChrOpen.$old;
-					$old = array($old.'.', $old.' ', $old.';', $old.$this->_ChrClose);
-					$new = $this->_ChrOpen.$new;
-					$new = array($new.'.', $new.' ', $new.';', $new.$this->_ChrClose);
-					$Txt = str_replace($old,$new,$Txt);
+function meth_Locator_PartAndRename(&$CurrVal, &$PrmLst) {
+
+	// Store part
+	if (isset($PrmLst['store'])) {
+		$storename = (isset($PrmLst['storename'])) ? $PrmLst['storename'] : 'getpart';
+		if (!isset($this->$TplStore[$storename])) $this->$TplStore[$storename] = '';
+		$this->$TplStore[$storename] .= $this->f_Xml_GetPart($CurrVal, $PrmLst['store'], false);
+	}
+
+	// Get part
+	if (isset($PrmLst['getpart'])) {
+		$part = $PrmLst['getpart'];
+	} elseif (isset($PrmLst['getbody'])) {
+		$part = $PrmLst['getbody'];
+	} else {
+		$part = false;
+	}
+	if ($part!=false) {
+		$CurrVal = $this->f_Xml_GetPart($CurrVal, $part, true);
+	}
+
+	// Rename or delete TBS tags names
+	if (isset($PrmLst['rename'])) {
+	
+		$Replace = $PrmLst['rename'];
+
+		if (is_string($Replace)) $Replace = explode(',',$Replace);
+		foreach ($Replace as $x) {
+			if (is_string($x)) $x = explode('=', $x);
+			if (count($x)==2) {
+				$old = trim($x[0]);
+				$new = trim($x[1]);
+				if ($old!=='') {
+					if ($new==='') {
+						$q = false;
+						$s = 'clear';
+						$this->meth_Merge_Block($CurrVal, $old, $s, $q, false, false, false);
+					} else {
+						$old = $this->_ChrOpen.$old;
+						$old = array($old.'.', $old.' ', $old.';', $old.$this->_ChrClose);
+						$new = $this->_ChrOpen.$new;
+						$new = array($new.'.', $new.' ', $new.';', $new.$this->_ChrClose);
+						$CurrVal = str_replace($old,$new,$CurrVal);
+					}
 				}
 			}
-		}
-	} 
+		} 
+
+	}
+
 }
 
 function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
@@ -2292,13 +2319,26 @@ function meth_Merge_AutoSpe(&$Txt,&$Loc) {
 		case 'tplvars':
 			if ($Loc->SubNbr==2) {
 				$SubStart = 2;
-				$x = implode(',',array_keys($this->TplVars));
+				$x = implode(',',array_keys($this->TplVars)); // list of all template variables
 			} else {
 				if (isset($this->TplVars[$Loc->SubLst[2]])) {
 					$SubStart = 3;
 					$x = &$this->TplVars[$Loc->SubLst[2]];
 				} else {
 					$ErrMsg = 'property TplVars doesn\'t have any item named \''.$Loc->SubLst[2].'\'.';
+				}
+			}
+			break;
+		case 'store':
+			if ($Loc->SubNbr==2) {
+				$SubStart = 2;
+				$x = implode('',$this->TplStore); // contatenation of all stores
+			} else {
+				if (isset($this->TplStore[$Loc->SubLst[2]])) {
+					$SubStart = 3;
+					$x = &$this->TplStore[$Loc->SubLst[2]];
+				} else {
+					$ErrMsg = 'Store named \''.$Loc->SubLst[2].'\' is not defined yet.';
 				}
 			}
 			break;
@@ -3884,7 +3924,7 @@ static function f_Xml_Max(&$Txt,&$Nbr,$MaxEnd) {
 
 }
 
-static function f_Xml_GetPart(&$Txt,$TagLst,$AllIfNothing=false) {
+static function f_Xml_GetPart(&$Txt, $TagLst, $AllIfNothing=false) {
 // Returns parts of the XML/HTML content, default is BODY.
 
 	if (($TagLst===true) or ($TagLst==='')) $TagLst = 'body';
@@ -3907,9 +3947,10 @@ static function f_Xml_GetPart(&$Txt,$TagLst,$AllIfNothing=false) {
 	$PosOut = strlen($Txt);
 	$Pos = 0;
 	
+	// Optimized search for all tag types
 	do {
 
-		// Search new positions
+		// Search next positions of each tag type
 		$TagMin = false;
 		$PosMin = $PosOut;
 		foreach ($TagLst as $i=>$Tag) {
@@ -3930,7 +3971,7 @@ static function f_Xml_GetPart(&$Txt,$TagLst,$AllIfNothing=false) {
 			}
 		}
 
-		// Add the part
+		// Add the part of tag types
 		if ($TagMin!==false) {
 			$Tag = &$TagLst[$TagMin];
 			$Pos = $Tag['e']+1;
