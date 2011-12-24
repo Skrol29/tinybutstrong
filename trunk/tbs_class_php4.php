@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.8.0-beta-2011-10-26 for PHP 4
-Date     : 2011-10-26
+Version  : 3.8.0-beta-2011-11-24 for PHP 4
+Date     : 2011-11-24
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -536,7 +536,7 @@ var $ObjectRef = false;
 var $NoErr = false;
 var $Assigned = array();
 // Undocumented (can change at any version)
-var $Version = '3.8.0-beta-2011-10-26';
+var $Version = '3.8.0-beta-2011-11-24';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -2351,6 +2351,17 @@ function meth_Merge_AutoSpe(&$Txt,&$Loc) {
 				$x .= "\r\n- plug-in [".(isset($o->Name) ? $o->Name : $pi ).'] version '.(isset($o->Version) ? $o->Version : '?' );
 			}
 			break;
+		case 'phpinfo':
+			ob_start();
+			phpinfo();
+			$x = ob_get_contents();
+			ob_end_clean();
+			$x = clsTinyButStrong::f_Xml_GetPart($x, '(style)+body', false);
+			if (!isset($Loc->PrmLst['htmlconv'])) {
+				$Loc->PrmLst['htmlconv'] = 'no';
+				$Loc->PrmLst['protect'] = 'no';
+			}
+			break;
 		default:
 			$IsSupported = false;
 			if (isset($this->_piOnSpecialVar)) {
@@ -3967,7 +3978,7 @@ function f_Xml_GetPart(&$Txt, $TagLst, $AllIfNothing=false) {
 			}
 			if ($Tag['b']<$PosMin) {
 				$TagMin = $i;
-				$PosMin = $Loc->PosBeg;
+				$PosMin = $Tag['b'];
 			}
 		}
 
