@@ -2351,6 +2351,17 @@ function meth_Merge_AutoSpe(&$Txt,&$Loc) {
 				$x .= "\r\n- plug-in [".(isset($o->Name) ? $o->Name : $pi ).'] version '.(isset($o->Version) ? $o->Version : '?' );
 			}
 			break;
+		case 'phpinfo':
+			ob_start();
+			phpinfo();
+			$x = ob_get_contents();
+			ob_end_clean();
+			$x = clsTinyButStrong::f_Xml_GetPart($x, '(style)+body', false);
+			if (!isset($Loc->PrmLst['htmlconv'])) {
+				$Loc->PrmLst['htmlconv'] = 'no';
+				$Loc->PrmLst['protect'] = 'no';
+			}
+			break;
 		default:
 			$IsSupported = false;
 			if (isset($this->_piOnSpecialVar)) {
@@ -3967,7 +3978,7 @@ static function f_Xml_GetPart(&$Txt, $TagLst, $AllIfNothing=false) {
 			}
 			if ($Tag['b']<$PosMin) {
 				$TagMin = $i;
-				$PosMin = $Loc->PosBeg;
+				$PosMin = $Tag['b'];
 			}
 		}
 
