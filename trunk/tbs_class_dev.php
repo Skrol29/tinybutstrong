@@ -3962,8 +3962,8 @@ static function f_Xml_GetPart(&$Txt, $TagLst, $AllIfNothing=false) {
 	do {
 
 		// Search next positions of each tag type
-		$TagMin = false;
-		$PosMin = $PosOut;
+		$TagMin = false;   // idx of the tag at first position
+		$PosMin = $PosOut; // pos of the tag at first position
 		foreach ($TagLst as $i=>$Tag) {
 			if ($Tag['b']<$Pos) {
 				$Loc = clsTinyButStrong::f_Xml_FindTag($Txt,$Tag['t'],true,$Pos,true,false,false);
