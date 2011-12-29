@@ -29,6 +29,7 @@ require_once(dirname(__FILE__).'/include/HtmlCodeCoverageReporter.php');
 include(dirname(__FILE__).'/testcase/AttTestCase.php');
 include(dirname(__FILE__).'/testcase/QuoteTestCase.php');
 include(dirname(__FILE__).'/testcase/FrmTestCase.php');
+include(dirname(__FILE__).'/testcase/StrconvTestCase.php');
 include(dirname(__FILE__).'/testcase/FieldTestCase.php');
 include(dirname(__FILE__).'/testcase/BlockTestCase.php');
 include(dirname(__FILE__).'/testcase/MiscTestCase.php');
@@ -43,6 +44,7 @@ $test->addTestCase(new BlockTestCase());
 $test->addTestCase(new AttTestCase());
 $test->addTestCase(new QuoteTestCase());
 $test->addTestCase(new FrmTestCase());
+$test->addTestCase(new StrconvTestCase());
 $test->addTestCase(new MiscTestCase());
 $test->run(new HtmlCodeCoverageReporter(array($tbsFileName, dirname(dirname(__FILE__)).'/plugins/')));
 
