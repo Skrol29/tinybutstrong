@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.8.0-beta-2011-11-24 for PHP 5
-Date     : 2011-11-24
+Version  : 3.8.0-beta-2011-11-29 for PHP 5
+Date     : 2011-11-29
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -530,7 +530,7 @@ public $ObjectRef = false;
 public $NoErr = false;
 public $Assigned = array();
 // Undocumented (can change at any version)
-public $Version = '3.8.0-beta-2011-11-24';
+public $Version = '3.8.0-beta-2011-11-29';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -1230,18 +1230,11 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 			$Loc->ConvMode = 0; // Frm
 			$Loc->ConvProtect = false;
 		} else {
-			// Analyze parameter 'htmlconv'
-			if (isset($Loc->PrmLst['htmlconv'])) {
-				$x = strtolower($Loc->PrmLst['htmlconv']);
-				$x = '+'.str_replace(' ','',$x).'+';
-				if (strpos($x,'+esc+')!==false)  {$this->f_Misc_ConvSpe($Loc); $Loc->ConvStr = false; $Loc->ConvEsc = true; }
-				if (strpos($x,'+wsp+')!==false)  {$this->f_Misc_ConvSpe($Loc); $Loc->ConvWS = true; }
-				if (strpos($x,'+js+')!==false)   {$this->f_Misc_ConvSpe($Loc); $Loc->ConvStr = false; $Loc->ConvJS = true; }
-				if (strpos($x,'+url+')!==false)  {$this->f_Misc_ConvSpe($Loc); $Loc->ConvStr = false; $Loc->ConvUrl = true; }
-				if (strpos($x,'+utf8+')!==false)  {$this->f_Misc_ConvSpe($Loc); $Loc->ConvStr = false; $Loc->ConvUtf8 = true; }
-				if (strpos($x,'+no+')!==false)   $Loc->ConvStr = false;
-				if (strpos($x,'+yes+')!==false)  $Loc->ConvStr = true;
-				if (strpos($x,'+nobr+')!==false) {$Loc->ConvStr = true; $Loc->ConvBr = false; }
+			// Analyze parameter 'strconv'
+			if (isset($Loc->PrmLst['strconv'])) {
+				$this->meth_Conv_Prepare($Loc, $Loc->PrmLst['strconv']);
+			} elseif (isset($Loc->PrmLst['htmlconv'])) { // compatibility
+				$this->meth_Conv_Prepare($Loc, $Loc->PrmLst['htmlconv']);
 			} else {
 				if ($this->Charset===false) $Loc->ConvStr = false; // No conversion
 			}
@@ -2351,8 +2344,8 @@ function meth_Merge_AutoSpe(&$Txt,&$Loc) {
 			$x = ob_get_contents();
 			ob_end_clean();
 			$x = self::f_Xml_GetPart($x, '(style)+body', false);
-			if (!isset($Loc->PrmLst['htmlconv'])) {
-				$Loc->PrmLst['htmlconv'] = 'no';
+			if (!isset($Loc->PrmLst['strconv'])) {
+				$Loc->PrmLst['strconv'] = 'no';
 				$Loc->PrmLst['protect'] = 'no';
 			}
 			break;
@@ -2634,6 +2627,20 @@ function meth_Merge_AutoOn(&$Txt,$Name,$TplVar,$MergeVar) {
 		}
 	}
 
+}
+
+// Prepare the strconv parameter
+function meth_Conv_Prepare(&$Loc, $StrConv) {
+	$x = strtolower($StrConv);
+	$x = '+'.str_replace(' ','',$x).'+';
+	if (strpos($x,'+esc+')!==false)  {$this->f_Misc_ConvSpe($Loc); $Loc->ConvStr = false; $Loc->ConvEsc = true; }
+	if (strpos($x,'+wsp+')!==false)  {$this->f_Misc_ConvSpe($Loc); $Loc->ConvWS = true; }
+	if (strpos($x,'+js+')!==false)   {$this->f_Misc_ConvSpe($Loc); $Loc->ConvStr = false; $Loc->ConvJS = true; }
+	if (strpos($x,'+url+')!==false)  {$this->f_Misc_ConvSpe($Loc); $Loc->ConvStr = false; $Loc->ConvUrl = true; }
+	if (strpos($x,'+utf8+')!==false)  {$this->f_Misc_ConvSpe($Loc); $Loc->ConvStr = false; $Loc->ConvUtf8 = true; }
+	if (strpos($x,'+no+')!==false)   $Loc->ConvStr = false;
+	if (strpos($x,'+yes+')!==false)  $Loc->ConvStr = true;
+	if (strpos($x,'+nobr+')!==false) {$Loc->ConvStr = true; $Loc->ConvBr = false; }
 }
 
 // Convert a string with charset or custom function
@@ -3956,8 +3963,8 @@ static function f_Xml_GetPart(&$Txt, $TagLst, $AllIfNothing=false) {
 	do {
 
 		// Search next positions of each tag type
-		$TagMin = false;
-		$PosMin = $PosOut;
+		$TagMin = false;   // idx of the tag at first position
+		$PosMin = $PosOut; // pos of the tag at first position
 		foreach ($TagLst as $i=>$Tag) {
 			if ($Tag['b']<$Pos) {
 				$Loc = self::f_Xml_FindTag($Txt,$Tag['t'],true,$Pos,true,false,false);
