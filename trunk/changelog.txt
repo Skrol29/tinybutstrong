@@ -4,6 +4,7 @@ TinyButStrong 1.8.0 beta
 2011-12-29, change-log:
 =======================
 
+- parameter 'frm' support thousand seperators with several characters
 - 'strconv' alias of 'htmlconv'
 
 2011-12-23, change-log:
