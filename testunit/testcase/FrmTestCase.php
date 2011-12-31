@@ -23,6 +23,15 @@ class FrmTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("{[a;frm=0,000.00]}", array('a'=>3128.495),  "{3,128.50}", "test thousand and decimal #3");
 		$this->assertEqualMergeFieldStrings("{[a;frm=0.000 00]}", array('a'=>3128.495),  "{3.128 50}", "test thousand and decimal #4 wired separators");
 
+		if ($this->atLeastTBSVersion('1.8.0')) {
+			// thousand separator with several characters
+			$this->assertEqualMergeFieldStrings("{[a;frm='0&nbsp;000.00']}", array('a'=>3128.495),  "{3&nbsp;128.50}", "test thousand multichar and decimal #1");
+			$this->assertEqualMergeFieldStrings("{[a;frm='0&nbsp;000,00']}", array('a'=>3128.495),  "{3&nbsp;128,50}", "test thousand multichar and decimal #2");
+			$this->assertEqualMergeFieldStrings("{[a;frm='0<b>,</b>000.00']}", array('a'=>3128.495),  "{3<b>,</b>128.50}", "test thousand multichar and decimal #3");
+			$this->assertEqualMergeFieldStrings("{[a;frm='0<b>.</b>000 00']}", array('a'=>3128.495),  "{3<b>.</b>128 50}", "test thousand multichar and decimal #4 wired separators");
+			//$this->dumpLastSource(); // debug
+		};
+		
 		// leading zeros
 		$this->assertEqualMergeFieldStrings("{[a;frm=0000000.00]}", array('a'=>3128.495),  "{0003128.50}", "test leading zeros");
 
