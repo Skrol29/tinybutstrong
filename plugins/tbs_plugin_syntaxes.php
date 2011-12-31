@@ -155,8 +155,9 @@ function OnSpecialVar($Name,&$IsSupported,&$Value,&$PrmLst,&$Source,&$PosBeg,&$P
 	$PosBeg:      (Read/Write) position of the first char of the current field in $Source. If this value is set to false, then TBS doesn't merge the field itself. In this case, $PosEnd must be set to the position where TBS must continue the merge.
 	$PosEnd:      (Read/Write) position of the last char of the current field in $Source.
 	$Loc:         optional, undocumented.
-}
 */
+	}
+
 
   function OnMergeField($AskedName,$SubName,&$Value,&$PrmLst,&$Source,&$PosBeg,&$PosEnd) {
 		// Executed each time a field is merged using the MergeField() method.
@@ -164,5 +165,3 @@ function OnSpecialVar($Name,&$IsSupported,&$Value,&$PrmLst,&$Source,&$PosBeg,&$P
   }
 
 }
-
-?>

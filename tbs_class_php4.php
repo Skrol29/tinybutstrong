@@ -3076,6 +3076,7 @@ function meth_Misc_Format(&$Value,&$PrmLst) {
 		}
 		if ($Frm['PerCent']) $Value = $Value * 100;
 		$Value = number_format($Value,$Frm['DecNbr'],$Frm['DecSep'],$Frm['ThsSep']);
+		if ($Frm['ThsRpl']!==false) $Value = str_replace($Frm['ThsSep'], $Frm['ThsRpl'], $Value);
 		$Value = substr_replace($Frm['Str'],$Value,$Frm['Pos'],$Frm['Len']);
 		if ($Frm['Pad']!==false) $Value = str_pad($Value, $Frm['Pad'], '0', STR_PAD_LEFT);
 		return $Value;
@@ -3154,10 +3155,22 @@ function meth_Misc_FormatSave(&$FrmStr,$Alias='') {
 
 		// Thousand separator
 		$nThsSep = '';
+		$nThsRpl = false;
 		if (($nDecOk) and ($nPos>=5)) {
-			if ((substr($FrmStr,$nPos-3,3)==='000') and ($FrmStr[$nPos-4]!=='0') and ($FrmStr[$nPos-5]==='0')) {
-				$nPos = $nPos-4;
-				$nThsSep = $FrmStr[$nPos];
+			if ((substr($FrmStr,$nPos-3,3)==='000') and ($FrmStr[$nPos-4]!=='0')) {
+				$p = strrpos(substr($FrmStr,0,$nPos-4), '0');
+				if ($p!==false) {
+					$len = $nPos-4-$p;
+					$x = substr($FrmStr, $p+1, $len);
+					if ($len>1) {
+						// for compatibility for number_format() with PHP < 5.4.0
+						$nThsSep = ($nDecSep=='*') ? '.' : '*';
+						$nThsRpl = $x;
+					} else {
+						$nThsSep = $x;
+					}
+					$nPos = $p+1;
+				}
 			}
 		}
 
@@ -3173,7 +3186,7 @@ function meth_Misc_FormatSave(&$FrmStr,$Alias='') {
 		// Percent
 		$nPerCent = (strpos($FrmStr,'%')===false) ? false : true;
 
-		$this->_FormatLst[$FrmStr] = array('type'=>'num','Str'=>$FrmStr,'Pos'=>($nPos+1),'Len'=>$nLen,'ThsSep'=>$nThsSep,'DecSep'=>$nDecSep,'DecNbr'=>$nDecNbr,'PerCent'=>$nPerCent,'Pad'=>$nPad);
+		$this->_FormatLst[$FrmStr] = array('type'=>'num','Str'=>$FrmStr,'Pos'=>($nPos+1),'Len'=>$nLen,'ThsSep'=>$nThsSep,'ThsRpl'=>$nThsRpl,'DecSep'=>$nDecSep,'DecNbr'=>$nDecNbr,'PerCent'=>$nPerCent,'Pad'=>$nPad);
 
 	} else {
 
@@ -3672,11 +3685,11 @@ function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagLst,$RetInnerSrc) {
 	$LevelStop = 0;
 	$TagLst = explode('+',$TagLst);
 	$TagIsSgl = array();
-  $TagMax = count($TagLst) - 1;
-  for ($i=0;$i<=$TagMax;$i++) {
+	$TagMax = count($TagLst) - 1;
+	for ($i=0;$i<=$TagMax;$i++) {
  		do { // Check parentheses, relative position and single tag
  			$tag = &$TagLst[$i];
-	  	$tag = trim($tag);
+			$tag = trim($tag);
 	 		$x = strlen($tag) - 1; // pos of last char
 	 		if (($x>1) and ($tag[0]==='(') and ($tag[$x]===')')) {
 	 			if ($Ref===0) $Ref = $i;
@@ -3692,7 +3705,7 @@ function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagLst,$RetInnerSrc) {
 	 			$x = false;
 	 		}
  		}	while ($x!==false);
-  }
+	}
 
 	// Find tags that embeds the locator
 	if ($TagIsSgl[$Ref]) {
