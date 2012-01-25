@@ -41,6 +41,7 @@ $Txt = $SrcTxt;
 $Ok = true;
 $Ok = $Ok && f_Replace($Txt, 'public function ', 'function ', 'Change "public function"');
 $Ok = $Ok && f_Replace($Txt, 'static function ', 'function ', 'Change "static function"');
+$Ok = $Ok && f_Replace($Txt, 'self::', 'clsTinyButStrong::', 'Change self:: with clsTinyButStrong::');
 $Ok = $Ok && f_Replace($Txt, '($SrcId instanceof Iterator)', '(is_a($SrcId,\'Iterator\'))', 'Change "instanceof Iterator"');
 $Ok = $Ok && f_Replace($Txt, '($SrcId instanceof ArrayObject)', '(is_a($SrcId,\'ArrayObject\'))', 'Change "instanceof ArrayObject"');
 $Ok = $Ok && f_Replace($Txt, '($SrcId instanceof IteratorAggregate)', '(is_a($SrcId,\'IteratorAggregate\'))', 'Change "instanceof IteratorAggregate"');

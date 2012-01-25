@@ -1,6 +1,16 @@
 
 TinyButStrong 1.8.0 beta
 
+TODO: SetVarRef() not working with null or false because of reference expected
+
+2012-01-25, change-log:
+=======================
+
+- self:: replace clsTinyButStrong::
+- error message about varRef tries to ckec either it refers to $GLOBALS or not
+- sub-template mode takes care about VarRef
+- new option GetOption('all')
+
 2011-12-29, change-log:
 =======================
 
