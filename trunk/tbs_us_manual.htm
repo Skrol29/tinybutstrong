@@ -489,34 +489,30 @@ include_once(<span class="opt-value">'tbs_class.php'</span>);
   <p>Here is the description of the TinyButStrong object: </p>
   <h3><a name="php_instanciate" id="php_instanciate"></a>create a new  TBS object:</h3>
   <div class="norm">
-    <p>A TBS object is created as a new instance of the clsTinyButStrong class. A TBS object enables you to work with one or several templates using the object's methods and properties. </p>
-    <p> Syntax to create a new TBS object: <span class="txt-code"><span class="opt-name">$TBS</span> = new clsTinyButStrong({<span class="opt-type">string</span> <span class="opt-name">TagDelim</span> {, <span class="opt-type">string</span><span class="opt-name"> VarPrefix</span> {, <span class="opt-type">string </span><span class="opt-name">FctPrefix</span>}}})</span></p>
+    <p>A TBS object is created as a new instance of the clsTinyButStrong class. A TBS object enables you to work with one or several templates using the object's methods and properties.</p>
+    <p> Syntax to create a new TBS object as of version 3.8.0: <span class="txt-code"><span class="opt-name">$TBS</span> = new clsTinyButStrong({<span class="opt-type">array</span> <span class="opt-name">Options</span>})</span></p>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
         <th width="80">Argument</th>
         <th>Description</th>
       </tr>
       <tr>
-        <td align="left" valign="top" class="opt-name">TagDelim</td>
-        <td align="left" valign="top">Define the couple of delimiters for TBS tags recognized in templates. The default value is <span class="opt-value">''</span> (empty string) which means the default TBS delimiters. That is '[' and ']'.<br>
-          Example: if you want to have the delimiters to be <span class="opt-value">{{</span> and <span class="opt-value">}}</span> for TBS fields, then set <span class="opt-name">TagDelim</span> to the value <span class="opt-value">'{{,}}'</span>. Thus  TBS fields will be like <span class="opt-html">{{var.x}}</span> instead of <span class="opt-html">[var.x]</span>. <br>
-          It's recommended to let the default TBS delimiters, while changing them is working well. Default TBS delimiters are <span class="opt-value">[</span> and <span class="opt-value">]</span> because those characters are usable quite everywhere in  XML/HTML documents, and they are located faster than  delimiters <span class="opt-value">{</span> / <span class="opt-value">}</span> or <span class="opt-value">(</span> / <span class="opt-value">)</span> since they are  rarer, especially in HTML.</td>
-      </tr>
-      <tr>
-        <td align="left" valign="top" class="opt-name">VarPrefix</td>
-        <td align="left" valign="top">Limit the usage of <a href="#html_field_auto">automatic fields</a> ([onload] [onshow] and [var])  in templates. TBS  will display only global PHP variables prefixed with <span class="opt-name">VarPrefix</span>. Other variables will produce an error message. The default for <span class="opt-name">VarPrefix</span> value is <span class="opt-value">''</span> (empty string) which means no limitation.</td>
-      </tr>
-      <tr>
-        <td align="left" valign="top" class="opt-name">FctPrefix</td>
-        <td align="left" valign="top">Limit the usage of custom PHP functions (relative to parameters <a href="#html_field_prm_onformat" class="opt-name">onformat</a> and <a href="#html_block_prm_ondata" class="opt-name">ondata</a>) in templates. TBS  will call   only PHP function prefixed with <span class="opt-name">FctPrefix</span>. Other functions will produce an error message. The default value is <span class="opt-value">''</span> (empty string) which means no limitation.<br>
-          <span class="versioning">This argument is supported since TBS version 3.6.0.</span></td>
+        <td align="left" valign="top" class="opt-name">Options</td>
+        <td align="left" valign="top">An array of options to set for the option of the template engine. See all available options at the <a href="#php_setoption">SetOption</a> section.</td>
       </tr>
     </table>
     <p>Examples:</p>
-    <pre class="decal txt-code"><span class="opt-name">$TBS1</span> = new clsTinyButStrong; <span class="opt-html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// default behavior</span>
-<span class="opt-name">$TBS2</span> = new clsTinyButStrong(<span class="opt-value">'{{,}}'</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="opt-html">// TBS tags will be like {{var.x}} instead of [var.x]</span>
-<span class="opt-name">$TBS3</span> = new clsTinyButStrong(<span class="opt-value">''</span>, <span class="opt-value">'tbs_var_'</span>);<span class="opt-html"> &nbsp;&nbsp;&nbsp;// TBS will display only PHP global variables beginning with 'tbs_var_</span>'
-<span class="opt-name">$TBS4</span> = new clsTinyButStrong(<span class="opt-value">''</span>, <span class="opt-value">''</span>, <span class="opt-value">'tbs_fct_'</span>);<span class="opt-html">// TBS will call only PHP function beginning with 'tbs_fct_'</span></pre>
+<pre class="decal txt-code"><span class="opt-name">$TBS1</span> = new clsTinyButStrong; <span class="opt-html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                         // default behavior</span>
+<span class="opt-name">$TBS2</span> = new clsTinyButStrong(<span class="opt-value"> array('chr_open'=&gt;</span><span class="opt-value">'{', 'chr_close'=&gt;'}')</span> ); <span class="opt-html">// TBS tags will be like {var.x} instead of [var.x]</span>
+<span class="opt-name">$TBS3</span> = new clsTinyButStrong(<span class="opt-value"> array('var_prefix'=&gt;</span><span class="opt-value">'tbs_fct_')</span> );<span class="opt-html"> &nbsp;&nbsp;&nbsp;      // TBS will display only PHP global variables beginning with 'tbs_var_</span>'
+<span class="opt-name">$TBS4</span> = new clsTinyButStrong(<span class="opt-value"> array('fct_prefix'=&gt;</span><span class="opt-value">'tbs_fct_') </span>);<span class="opt-html">          // TBS will call only PHP function beginning with 'tbs_fct_'</span></pre>
+  <p class="versioning">Versioning:<br>
+    Before TBS version 3.8.0, the syntax to create a new TBS object was: <br>
+    &nbsp;&nbsp;&nbsp;<span class="txt-code"><span class="opt-name">$TBS</span> = new clsTinyButStrong({string <span class="opt-name">chr_delim</span> {, string <span class="opt-name">var_prefix</span> {, string <span class="opt-name">fct_prefix</span>}}});</span><br>
+    where: <br>
+    -<span class="opt-name"> chr_delim</span> is the concatenation of (the option <a href="#php_setoption_chr_open" class="opt-name">chr_open</a> + the string ',' +  the option <a href="#php_setoption_chr_close" class="opt-name">chr_close</a>). For example: '{,}'<br>
+    - <span class="opt-name">var_prefix</span> is the value for the option <a href="#php_setoption_var_prefix" class="opt-name">var_prefix</a><br>
+    - <span class="opt-name">fct_prefix</span> is the value for the option <a href="#php_setoption_fct_prefix" class="opt-name">fct_prefix</a></p>
   </div>
   <h3><a name="php_loadtemplate" id="php_loadtemplate"></a>method LoadTemplate():</h3>
   <div class="norm">
@@ -534,39 +530,18 @@ include_once(<span class="opt-value">'tbs_class.php'</span>);
       </tr>
       <tr>
         <td align="left" valign="top" class="opt-name">Charset</td>
-        <td align="left" valign="top"><p>Optional. Indicates the character encoding (charset) to use for conversion of special characters   when data  will be merged. It should be the same as the charset of the template. The default value is <span class="opt-value">''</span> (empty string) which is equivalent to <span class="opt-value">'ISO-8859-1'</span> (Latin 1).</p>
-          <p> If your template uses a special charset, then indicate the Html value for this charset.<br>
-            In a Html page, the charset is placed at the beginning of the file, in the attribute <span class="opt-html">'content'</span> of a <span class="opt-html">&lt;Meta&gt;</span> tag. The charsets supported by TBS are the charsets supported by the PHP function <a href="http://www.php.net/htmlentities" target="_blank">htmlentities()</a>. For example: <span class="opt-value">'BIG5'</span> (Chinese) or <span class="opt-value">'EUCJP'</span> (Japanese).</p>
-          <p> See below for more possibilities.</p></td>
+        <td align="left" valign="top"><p>Optional. Will set the <a href="#php_setoption_charset" class="opt-name">charset</a> option.</p></td>
       </tr>
     </table>
     <h4>Scope of the file path:</h4>
     <p>If the file is nout found then its' also searched into the directory of the last loaded template, or the last loaded subtemplate. <br>
       <span class="versioning">Since TBS version 3.3.0</span>, the file also searched into the <a href="http://www.php.net/manual/en/ini.core.php#ini.include-path">include_path</a>.</p>
-    <h4>No character conversion:</h4>
-    <p>If you use value <span class="opt-value">false</span> as the argument <span class="opt-name">Charset</span>, data will to not be converted when merged into the model.<br>
-      Note that parameters <a href="#html_field_prm_htmlconv" class="opt-name">htmlconv</a> can be use to define the conversion of special characters for one TBS field only. </p>
-    <h4>User function:</h4>
-    <p>If your charset is not yet supported by PHP, you can indicate a user function that will perform the  conversion of special characters. For this, use the argument <span class="opt-name">Charset</span> with the syntax '=myfunction'.</p>
-    <p> <span class="versioning">Since TBS version 3.0</span>, it's also possible to indicate a method of a class (see <a href="#php_oop">OOP</a>).<br>
-      <span class="versioning">Since TBS version 3.3.0</span>, such a custom function should have a second argument for line break conversion.<br>
-      <span class="versioning">Since TBS version 3.5.0</span>, argument Charset can also be an array containing an object and a method. Example: array(&amp;$obj, 'mymethod'). </p>
-    <p> Here is an example which gives the expected syntaxe:</p>
-    <pre class="decal txt-code">function f_StrToXml(<span class="opt-name">$Txt</span> <span class="opt-type">string</span>,<span class="opt-name">$ConvBr <span class="opt-type">boolean</span></span>) {
-  <span class="opt-html">// Convert a string into an XML text.</span>
-  <span class="opt-type"><span class="opt-name">$x</span></span> = htmlspecialchars(utf8_encode(<span class="opt-name">$Txt</span>));
-  if (<span class="opt-name">$ConvBr</span>) {
-    <span class="opt-name">$x</span> = nl2br(<span class="opt-name">$x</span>); <span class="opt-html">// Convert any type of line break</span>
-    <span class="opt-name">$x</span> = str_replace(<span class="opt-value">'&lt;br /&gt;'</span>, <span class="opt-value">'&lt;text:line-break/&gt;'</span>,<span class="opt-name">$x</span>);
-  }
-  return <span class="opt-name">$x</span>;
-}</pre>
     <h4>Adding the file at the end of the current template:</h4>
     <p>You can use the keyword <span class="opt-value">'+'</span> for the argument <span class="opt-name">Charset</span> to have the file defined by <span class="opt-name">File</span> added to the end of the current template. The current charset will not be modified.</p>
     <h4>Special actions using argument File:</h4>
     <p><span class="versioning">Since TBS version 3.4.0.<br>
       </span> If <span class="opt-name">File</span> is <span class="opt-value">null</span>, then all default actions (Plug-ins, [onload] tags, and Charset) are applied without loading any file. <br>
-      If <span class="opt-name">File</span> is <span class="opt-value">''</span> (empty string), then only the charset is modified, without doing any other action.<br>
+      If <span class="opt-name">File</span> is <span class="opt-value">''</span> (empty string), then only the <a href="#php_setoption_charset" class="opt-name">charset</a> option is modified, without doing any other action. (deprecated since TBS version 3.8.0, use <a href="#php_setoption">SetOption()</a> instead)<br>
       In both cases, if <span class="opt-name">Charset</span> is <span class="opt-value">'+'</span>, then it will be ignored and the current charset will not be modified.</p>
     <p> Example:</p>
     <pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;Source = <span class="opt-name">$template</span>; <span class="opt-html">// load the template from a string</span>
@@ -998,7 +973,7 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
         <th class="border-sep">Corresponding property</th>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name">var_prefix</span></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_var_prefix" id="php_setoption2"></a>var_prefix</span></td>
         <td align="left" valign="top" class="border-sep"><p>Limit the usage of <a href="#html_field_auto">automatic fields</a> ([onload] [onshow] and [var])  in templates. TBS  will display only keys prefixed with <span class="opt-name">var_prefix</span>. Other keys will produce an error message. The default value is <span class="opt-value">''</span> (empty string) which means no limitation.</p>
           <p> Example: if option <span class="opt-name">var_prefix</span> is set to <span class="opt-value">'my'</span> then<br>
             fields <span class="opt-html">[onload.my_key]</span>, <span class="opt-html">[onshow.my_key]</span> and <span class="opt-html">[var.my_key]</span> will be merged,<br>
@@ -1006,12 +981,12 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
         <td align="left" valign="top" class="border-sep">set with constructor (deprecated)</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name">fct_prefix</span></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_fct_prefix" id="php_setoption3"></a>fct_prefix</span></td>
         <td align="left" valign="top" class="border-sep">Limit the usage of custom PHP functions (relative to parameters <a href="#html_field_prm_onformat" class="opt-name">onformat</a> and <a href="#html_block_prm_ondata" class="opt-name">ondata</a>) in templates. TBS  will call   only PHP function prefixed with <span class="opt-name">fct_prefix</span>. Other functions will produce an error message. The default value is <span class="opt-value">''</span> (empty string) which means no limitation.</td>
         <td align="left" valign="top" class="border-sep">set with constructor (deprecated)</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name">noerr</span></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_noerr" id="php_setoption4"></a>noerr</span></td>
         <td align="left" valign="top" class="border-sep"><p>Enables you to avoid all TinyButStrong error messages for next operations. Default value is <span class="opt-value">false</span>. The errors that were not displayed can however be returned with the special field <a href="#html_field_special" class="opt-name">[onshow..error_msg]</a>. Furthermore you can check the presence of error using property <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;<span class="opt-value">ErrCount</span></span> which counts  TBS errors regardless of option <span class="opt-name"> noerr</span>.</p>
           <p> Option <span class="opt-name">noerr</span> is useful in two cases:</p>
           <ul>
@@ -1020,65 +995,84 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
           </ul>
           <p class="versioning">Versioning:<br>
             - 
-            Property  NoErr is supported since TBS version 3.0, it become deprecated with version 3.8. <br>
+             Option <span class="opt-name">noerr</span> is the same as the the property NoErr which was <span id="result_box" lang="en">  introduced</span> with TBS version 3.0 and  becomes deprecated since version TBS 3.8. <br>
             - Special field [onshow..error_msg] is supported since TBS version 3.5.0. </p></td>
         <td align="left" valign="top" class="border-sep">$TBS-&gt;NoErr (deprecated)</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name">auto_merge</span></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_automerge" id="php_setoption5"></a>auto_merge</span></td>
         <td align="left" valign="top" class="border-sep">A combination of the couple of options <span class="opt-name">onload</span> and <span class="opt-name">onshow</span>. Default value is <span class="opt-value">true</span>.</td>
         <td align="left" valign="top" class="border-sep">&nbsp;</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name">onload</span></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_onload" id="php_setoption12"></a>onload</span></td>
         <td align="left" valign="top" class="border-sep">Cancel the automatic processing of [onload] fields. This option accept only values <span class="opt-value">true</span> of <span class="opt-value">false</span>. Default value is <span class="opt-value">true</span>. This can be very useful especially, but not only, for some TBS plug-ins.</td>
         <td align="left" valign="top" class="border-sep">$TBS-&gt;OnLoad (deprecated)</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name">onshow</span></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_onshow" id="php_setoption11"></a>onshow</span></td>
         <td align="left" valign="top" class="border-sep">Cancel the automatic processing of [onshow] fields.This option accept only values <span class="opt-value">true</span> of <span class="opt-value">false</span>. Default value is <span class="opt-value">true</span>. This can be very useful especially, but not only, for some TBS plug-ins. Note that for compatibility, free [var] fields are automatically processed even if option <span class="opt-name">onshow</span> is set to false.</td>
         <td align="left" valign="top" class="border-sep">$TBS-&gt;OnShow (deprecated)</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name">att_delim</span></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_att_delim" id="php_setoption10"></a>att_delim</span></td>
         <td align="left" valign="top" class="border-sep"> This option may affect the result of paremeter <a href="#html_field_prm_att">att</a>. When the attribute has no value before the field is moved, then TBS chooses what string delimiter  to use regarding other attributes (XML/HTML accepts both (&quot;) and (')). You can force the delimiter  you need using property $TBS-&gt;AttDelim.</td>
         <td align="left" valign="top" class="border-sep">$TBS-&gt;AttDelim (deprecated)</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name">protect</span></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_protect" id="php_setoption9"></a>protect</span></td>
         <td align="left" valign="top" class="border-sep"><p>Protects all merged items by replacing the characters '<span class="opt-html">[</span>' with their corresponding XML/HTML code '<span class="opt-html">&amp;#91;</span>'. Default value is <span class="opt-value">true</span>. </p>
         <p>By default, all data merged with a template is protected except if it's a file inclusion. It is strongly recommended to protect data when it comes from free enter like on a forum for example.</p></td>
         <td align="left" valign="top" class="border-sep">$TBS-&gt;Protect (deprecated)</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name">charset</span></td>
-        <td align="left" valign="top" class="border-sep">&nbsp;</td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_charset" id="php_setoption8"></a>charset</span></td>
+        <td align="left" valign="top" class="border-sep"><p>Indicates the character encoding (charset) to use for conversion of special characters   when data  will be merged. It should be the same as the charset of the  template. In a Html page, the template charset is defined at the beginning of the file, in the attribute <span class="opt-html">'content'</span> of a <span class="opt-html">&lt;Meta&gt;</span> tag.</p>
+        <p> The default value is <span class="opt-value">''</span> (empty string) which is the correct value for charsets <span class="opt-value">'UTF-8'</span>, <span class="opt-value">'ISO-8859-1'</span> (Latin 1), <span class="opt-value">'ISO-8859-15'</span>, <span class="opt-value">'cp866'</span>, <span class="opt-value">'cp1251'</span>, <span class="opt-value">'cp1252'</span>, and <span class="opt-value">'KOI8-R'</span>. See the PHP function <a href="http://www.php.net/manual/en/function.htmlspecialchars.php">htmlspecialchars()</a> for other charsets and technical explanations.</p>
+        <h4>No character conversion:</h4>
+        <p>If you use value <span class="opt-value">false</span> for the <span class="opt-name">charset</span> option, then data will to not be converted when merged into the model.<br>
+          Note that parameters <a href="#html_field_prm_htmlconv" class="opt-name">htmlconv</a> can be use to define the conversion of special characters for one TBS field only. </p>
+        <h4>User function:</h4>
+        <p>If your charset is not yet supported by PHP, you can indicate a user function that will perform the  conversion of special characters. For this, use the <span class="opt-name">charset</span> option with the syntax '=myfunction'.</p>
+        <p> <span class="versioning">Since TBS version 3.0</span>, it's also possible to indicate a method of a class (see <a href="#php_oop">OOP</a>).<br>
+          <span class="versioning">Since TBS version 3.3.0</span>, such a custom function should have a second argument for line break conversion.<br>
+          <span class="versioning">Since TBS version 3.5.0</span>, the charset option can also be an array containing an object and a method. Example: array(&amp;$obj, 'mymethod'). </p>
+        <p> Here is an example which gives the expected syntaxe:</p>
+        <pre class="decal txt-code">function f_StrToXml(<span class="opt-name">$Txt</span> <span class="opt-type">string</span>,<span class="opt-name">$ConvBr <span class="opt-type">boolean</span></span>) {
+  <span class="opt-html">// Convert a string into an XML text.</span>
+  <span class="opt-type"><span class="opt-name">$x</span></span> = htmlspecialchars(utf8_encode(<span class="opt-name">$Txt</span>));
+  if (<span class="opt-name">$ConvBr</span>) {
+    <span class="opt-name">$x</span> = nl2br(<span class="opt-name">$x</span>); <span class="opt-html">// Convert any type of line break</span>
+    <span class="opt-name">$x</span> = str_replace(<span class="opt-value">'&lt;br /&gt;'</span>, <span class="opt-value">'&lt;text:line-break/&gt;'</span>,<span class="opt-name">$x</span>);
+  }
+  return <span class="opt-name">$x</span>;
+}</pre></td>
         <td align="left" valign="top" class="border-sep">set with LoadTemplate()</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name">chr_open</span></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_chr_open" id="php_setoption6"></a>chr_open</span></td>
         <td align="left" valign="top" class="border-sep"><p>Opening delimiter for TBS fields.</p>
           <p> It's recommended to let the default TBS delimiters, while changing them is working well. Default TBS delimiters are [ and ] because those characters are usable quite everywhere in  XML/HTML documents, and they are located faster than  delimiters { / } or ( / ) since they are  rarer, especially in HTML.</p></td>
         <td align="left" valign="top" class="border-sep">set with constructor (deprecated)</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name">chr_close</span></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_chr_close" id="php_setoption7"></a>chr_close</span></td>
         <td align="left" valign="top" class="border-sep">Closing delimiter for TBS fields. Must be only one character.</td>
         <td align="left" valign="top" class="border-sep">set with constructor (deprecated)</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name">tplfrms</span></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_tplfrms" id="php_setoption13"></a>tplfrms</span></td>
         <td align="left" valign="top" class="border-sep">&nbsp;</td>
         <td align="left" valign="top" class="border-sep">&nbsp;</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name">include_path</span></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_include_path" id="php_setoption14"></a>include_path</span></td>
         <td align="left" valign="top" class="border-sep">List of path where TBS should search files for method LoadTemplate(), parameters <a href="#html_field_prm_script" class="opt-name">script</a> and <a href="#html_field_prm_file" class="opt-name">file</a>.<br>
           In fact, when you call SetOption, include_path are added to the list. </td>
         <td align="left" valign="top" class="border-sep">&nbsp;</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name">render</span></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_render" id="php_setoption15"></a>render</span></td>
         <td align="left" valign="top" class="border-sep"><p>Indicates how the merging ends. 
             The value must be a combination of the following constants. The default value is (<span class="opt-value">TBS_OUTPUT</span> + <span class="opt-value">TBS_EXIT</span>). The Render property changes the behavior of the <a href="#php_show">Show()</a> method. </p>
           <table border="0" cellpadding="5" cellspacing="0">
@@ -1101,13 +1095,11 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
           </table></td>
         <td align="left" valign="top" class="border-sep">deprecated -&gt;Render</td>
       </tr>
-      <tr>
-        <td align="left" valign="top" class="opt-name">&nbsp;</td>
-        <td align="left" valign="top">&nbsp;</td>
-        <td align="left" valign="top">&nbsp;</td>
-      </tr>
     </table>
-    <div class="versioning">Versioning:  methods SetOption()  is supported since TBS version 3.8.0. </div>
+    <p>Special syntax for array option :</p>
+    <p>Syntax 1: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-type"><span class="opt-value">string</span></span> $option_name, <span class="opt-type">string</span> $item, <span class="opt-type">mixed</span> $value)</span><br>
+Syntax 2: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-type"><span class="opt-value">string</span></span> $option_name, <span class="opt-type">array</span> $values)</span></p>
+    <p class="versioning">Versioning:  methods SetOption()  is supported since TBS version 3.8.0. </p>
   </div>
   <h3><a name="php_getoption" id="php_getoption"></a>Method GetOption():</h3>
   <div class="norm">

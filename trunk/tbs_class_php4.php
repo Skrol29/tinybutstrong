@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.8.0-beta-2011-11-29 for PHP 4
-Date     : 2011-11-29
+Version  : 3.8.0-beta-2012-01-24 for PHP 4
+Date     : 2012-01-24
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -536,7 +536,7 @@ var $ObjectRef = false;
 var $NoErr = false;
 var $Assigned = array();
 // Undocumented (can change at any version)
-var $Version = '3.8.0-beta-2011-11-29';
+var $Version = '3.8.0-beta-2012-01-24';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -619,7 +619,6 @@ function SetOption($o, $v=null, $d=null) {
 	if (!is_array($o)) $o = array($o=>$v);
 	if (isset($o['var_prefix'])) $this->VarPrefix = $o['var_prefix'];
 	if (isset($o['fct_prefix'])) $this->FctPrefix = $o['fct_prefix'];
-	if (isset($o['var_ref'])) $this->SetVarRef($o['var_ref']);
 	if (isset($o['noerr'])) $this->NoErr = $o['noerr'];
 	if (isset($o['auto_merge'])) {
 		$this->OnLoad = $o['auto_merge'];
@@ -644,56 +643,38 @@ function SetOption($o, $v=null, $d=null) {
 		$this->_ChrVal = $this->_ChrOpen.'val'.$this->_ChrClose;
 		$this->_ChrProtect = '&#'.ord($this->_ChrOpen[0]).';'.substr($this->_ChrOpen,1);
 	}
-	if (isset($o['tplfrms'])) {
-		$v = $o['tplfrms'];
-		if (!is_array($v)) $v = array($v=>$d);
-		foreach ($v as $a=>$s) {
-			// can force or delete the alias
-			unset($this->_FormatLst[$a]);
-			if ($s!==false) $this->meth_Misc_FormatSave($s,$a);
-		}
-	}
-	if (isset($o['include_path'])) {
-		$v = $o['include_path'];
-		if (!is_array($v)) $v = array($v=>$d);
-		foreach ($v as $p=>$a) {
-			if (!is_string($p)) {
-				$p = $a;
-				$a = true;
-			}
-			$k = array_search($p, $this->IncludePath, true);
-			if ($a===false) {
-				if ($k!==false) unset($this->IncludePath[$k]);
-			} else {
-				if ($k===false) $this->IncludePath[] = $p;
-			}
-		}
-	}
+	if (isset($o['tplfrms'])) clsTinyButStrong::f_Misc_UpdateArray($this->_FormatLst, false, $o['tplfrms'], $d);
+	if (isset($o['include_path'])) clsTinyButStrong::f_Misc_UpdateArray($this->IncludePath, true, $o['include_path'], $d);
 	if (isset($o['render'])) $this->Render = $o['render'];
 }
 
 function GetOption($o) {
-	if ($o=='var_prefix') return $this->VarPrefix;
-	if ($o=='fct_prefix') return $this->FctPrefix;
-	if ($o=='var_ref') $this->VarRef;
-	if ($o=='noerr') return $this->NoErr;
-	if ($o=='auto_merge') return ($this->OnLoad && $this->OnShow);
-	if ($o=='onload') return $this->OnLoad;
-	if ($o=='onshow') return $this->OnShow;
-	if ($o=='att_delim') return $this->AttDelim;
-	if ($o=='protect') return $this->Protect;
-	if ($o=='turbo_block') return $this->TurboBlock;
-	if ($o=='charset') return $this->Charset;
-	if ($o=='chr_open') return $this->_ChrOpen;
-	if ($o=='chr_close') return $this->_ChrClose;
-	if ($o=='tplfrms') {
+	if ($o==='all') {
+		$x = explode(',', 'var_prefix,fct_prefix,noerr,auto_merge,onload,onshow,att_delim,protect,turbo_block,charset,chr_open,chr_close,tplfrms,include_path,render');
+		$r = array();
+		for ($x as $o) $r[$o] = $this->GetOption($o);
+		return $r;
+	}
+	if ($o==='var_prefix') return $this->VarPrefix;
+	if ($o==='fct_prefix') return $this->FctPrefix;
+	if ($o==='noerr') return $this->NoErr;
+	if ($o==='auto_merge') return ($this->OnLoad && $this->OnShow);
+	if ($o==='onload') return $this->OnLoad;
+	if ($o==='onshow') return $this->OnShow;
+	if ($o==='att_delim') return $this->AttDelim;
+	if ($o==='protect') return $this->Protect;
+	if ($o==='turbo_block') return $this->TurboBlock;
+	if ($o==='charset') return $this->Charset;
+	if ($o==='chr_open') return $this->_ChrOpen;
+	if ($o==='chr_close') return $this->_ChrClose;
+	if ($o==='tplfrms') {
 		// simplify the list of formats
 		$x = array();
 		foreach ($this->_FormatLst as $s=>$i) $x[$s] = $i['Str'];
 		return $x;
 	}
-	if ($o=='include_path') return $this->IncludePath;
-	if ($o=='render') return $this->Render;
+	if ($o==='include_path') return $this->IncludePath;
+	if ($o==='render') return $this->Render;
 	return $this->meth_Misc_Alert('with GetOption() method','option \''.$o.'\' is not supported.');;
 }
 
@@ -2280,7 +2261,8 @@ function meth_Merge_AutoVar(&$Txt,$ConvStr,$Id='var') {
 				$Pos = $this->meth_Locator_Replace($Txt,$Loc,$x,false);
 			} else {
 				$Pos = $Loc->PosEnd + 1;
-				$this->meth_Misc_Alert($Loc,'the key \''.$Loc->SubLst[0].'\' does not exist or is not set yet in VarRef.',true);
+				$msg = (isset($this->VarRef['GLOBALS'])) ? 'VarRef seems refers to $GLOBALS' : 'VarRef seems refers to a custom array of values';
+				$this->meth_Misc_Alert($Loc,'the key \''.$Loc->SubLst[0].'\' does not exist or is not set in VarRef. ('.$msg.')',true);
 			}
 		}
 	}
@@ -2722,6 +2704,7 @@ function meth_Misc_ChangeMode($Init,&$Loc,&$CurrVal) {
 		$Loc->SaveSrc = &$this->Source;
 		$Loc->SaveRender = $this->Render;
 		$Loc->SaveMode = $this->_Mode;
+		$Loc->SaveVarRef = &$this->VarRef;
 		unset($this->Source); $this->Source = '';
 		$this->Render = TBS_OUTPUT;
 		$this->_Mode++; // Mode>0 means subtemplate mode
@@ -2731,6 +2714,7 @@ function meth_Misc_ChangeMode($Init,&$Loc,&$CurrVal) {
 		$this->Source = &$Loc->SaveSrc;
 		$this->Render = $Loc->SaveRender;
 		$this->_Mode = $Loc->SaveMode;
+		$this->VarRef = &$Loc->SaveVarRef;
 		$CurrVal = ob_get_contents();
 		ob_end_clean();
 	}
@@ -2909,7 +2893,7 @@ function meth_Misc_Charset($Charset) {
 			if ($this->meth_Misc_UserFctCheck($Charset,'f',$ErrMsg,$ErrMsg,false)) {
 				$this->_CharsetFct = true;
 			} else {
-				$this->meth_Misc_Alert('with LoadTemplate() method',$ErrMsg);
+				$this->meth_Misc_Alert('with charset option',$ErrMsg);
 				$Charset = '';
 			}
 		}
@@ -2918,7 +2902,7 @@ function meth_Misc_Charset($Charset) {
 	} elseif ($Charset===false) {
 		$this->Protect = false;
 	} else {
-		$this->meth_Misc_Alert('with LoadTemplate() method','the CharSet argument is not a string nor an array.');
+		$this->meth_Misc_Alert('with charset option','the option value is not a string nor an array.');
 		$Charset = '';
 	}
 	$this->Charset = $Charset;
@@ -3266,6 +3250,34 @@ function meth_Misc_FormatSave(&$FrmStr,$Alias='') {
 
 	return $this->_FormatLst[$FrmStr];
 
+}
+
+// Simply update an array
+function f_Misc_UpdateArray(&$array, $numerical, $v, $d) {
+	if (!is_array($v)) $v = array($v=>$d);
+	foreach ($v as $p=>$a) {
+		if ($numerical) { // numerical keys
+			if (is_string($p)) {
+				// syntax: item => true/false
+				$i = array_search($p, $array, true);
+				if ($i===false) {
+					if (!$a) $array = array_splice($array $i, 1);
+				} else {
+					if ($a) $array[] = $p;
+				}
+			} else {
+				// syntax: i => item
+				$i = array_search($a, $array, true);
+				if ($i==false) $array[] = $a;
+			}
+		} else { // string keys
+			if (is_null($a) || ($a===false)) {
+				unset($array[$p]);
+			} else {
+				$array[$p] = $a;
+			}
+		}
+	}
 }
 
 function f_Misc_ConvSpe(&$Loc) {
