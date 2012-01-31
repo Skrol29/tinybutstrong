@@ -179,7 +179,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2011-10-26</td>
+        <td>2012-01-30</td>
       </tr>
     </table>
   </div>
@@ -265,12 +265,12 @@ a.opt-name:hover {
         <td>execute a plug-in's action </td>
       </tr>
       <tr>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_assigned"><span class="txt-small">property</span> Assigned</a></td>
-        <td>prepares  information for a subsequent merging</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_varref"><span class="txt-small">property</span> VarRef</a></td>
+        <td>set variables to be merged with automatic fields</td>
       </tr>
       <tr>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_render"><span class="txt-small">property</span> Render</a></td>
-        <td> to alter the merge ending option</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_assigned"><span class="txt-small">property</span> Assigned</a></td>
+        <td>prepares  information for a subsequent merging</td>
       </tr>
       <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_source"><span class="txt-small">property</span> Source</a></td>
@@ -963,9 +963,26 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
   </div>
   <h3><a name="php_setoption" id="php_setoption"></a>Method SetOption():</h3>
   <div class="norm">
-    <p>Set one or several TBS options.</p>
-    <p> Syntax 1: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-type"><span class="opt-value">string</span></span> $option_name, <span class="opt-type">mixed</span> $value)</span><br>
-      Syntax 2: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-type"><span class="opt-value">array</span></span> $options)</span> </p>
+    <p>Set one or several TBS options. See the list and desciptions of options below.</p>
+    <p> Syntax: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-type"><span class="opt-value">string</span></span> $option_name, <span class="opt-type">mixed</span> $value)</span></p>
+    <p>Syntax for  an array of options:  <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-type"><span class="opt-value">array</span></span> $options)</span>    </p>
+    <p>Syntaxes for  options that are arrays:</p>
+    <p>Syntax 1: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-type"><span class="opt-value">string</span></span> $option_name, <span class="opt-type">string</span> $item, <span class="opt-type">mixed</span> $value)</span><br>
+      Syntax 2: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-type"><span class="opt-value">string</span></span> $option_name, <span class="opt-type">array</span> $values)</span></p>
+    <p>Examples: </p>
+    <pre class="decal txt-code"><span class="opt-name">$TBS-&gt;</span>SetOption(<span class="opt-value">'charset'</span>,<span class="opt-value"> false</span>); <span class="opt-html">// change the Charset option</span>
+<span class="opt-name">$TBS-&gt;</span>SetOption( array(<span class="opt-value">'chr_open'</span>=&gt;<span class="opt-value">'{'</span>, <span class="opt-value">'chr_close'</span>=&gt;<span class="opt-value">'}'</span>) <span class="opt-value"></span>); <span class="opt-html">// change several options</span>
+
+<span class="opt-name">$TBS-&gt;</span>SetOption(<span class="opt-value">'tplfrms'</span>,<span class="opt-value"> 'curr', '0,000.0'</span><span class="opt-value"></span>); <span class="opt-html">// add item 'curr' to the Template Formats</span>
+<span class="opt-name">$TBS-&gt;</span>SetOption(<span class="opt-value">'tplfrms'</span>,<span class="opt-value"> 'curr', null</span>); <span class="opt-html">// delete item 'curr' from the Template Formats</span>
+<span class="opt-name">$TBS-&gt;</span>SetOption(<span class="opt-value">'tplfrms'</span>,<span class="opt-value"> null</span>); <span class="opt-html">// delete all items from the Template Formats</span>
+
+<span class="opt-name">$TBS-&gt;</span>SetOption(<span class="opt-value">'include_path'</span>,<span class="opt-value"> 'tpl/english'</span><span class="opt-value"></span>); <span class="opt-html">// add one path to the TBS include_path</span>
+<span class="opt-name">$TBS-&gt;</span>SetOption(<span class="opt-value">'include_path'</span>,<span class="opt-value"> 'tpl/english', null</span><span class="opt-value"></span>); <span class="opt-html">// delete one path from the TBS include_path</span>
+<span class="opt-name">$TBS-&gt;</span>SetOption(<span class="opt-value">'include_path'</span>,<span class="opt-value"> null</span><span class="opt-value"></span>); <span class="opt-html">// delete all pathes from the TBS include_path</span>
+
+    </pre>
+    <h4>Options</h4>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
         <th class="border-sep">Option name</th>
@@ -1096,10 +1113,8 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
         <td align="left" valign="top" class="border-sep">deprecated -&gt;Render</td>
       </tr>
     </table>
-    <p>Special syntax for array option :</p>
-    <p>Syntax 1: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-type"><span class="opt-value">string</span></span> $option_name, <span class="opt-type">string</span> $item, <span class="opt-type">mixed</span> $value)</span><br>
-Syntax 2: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-type"><span class="opt-value">string</span></span> $option_name, <span class="opt-type">array</span> $values)</span></p>
-    <p class="versioning">Versioning:  methods SetOption()  is supported since TBS version 3.8.0. </p>
+    <p>&nbsp;</p>
+<p class="versioning">Versioning:  methods SetOption()  is supported since TBS version 3.8.0. </p>
   </div>
   <h3><a name="php_getoption" id="php_getoption"></a>Method GetOption():</h3>
   <div class="norm">
@@ -1133,7 +1148,26 @@ Syntax 2: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;SetOptio
     </ul>
     <div class="versioning">Versioning: the method PlugIn()  is supported since TBS version 3.0. </div>
   </div>
-  <h3><a name="php_assigned" id="php_assigned"></a>Property Assigned:</h3>
+  <h3><a name="php_varref" id="php_assigned2"></a>Property VarRef:</h3>
+  <div class="norm">
+    <p>This property enables you to set the scope of variables availables for <a href="#html_field_auto">automatic fields</a> ([onload], [onshow] and [var]).</p>
+    <p>By default, VarRef is a <a href="http://www.php.net/manual/en/language.references.whatare.php">reference</a> to the <span class="opt-name">$GLOBALS</span> PHP variable, which means all global PHP variables are available for automatic field.</p>
+    <p> Syntax: <span class="txt-code"><span class="opt-type">array</span> <span class="opt-name">$TBS</span>-&gt;VarRef</span></p>
+    <p>Notes:</p>
+    <ul>
+      <li> Method ResetVarRef($ToGlobal) is a shorthand for reseting the VarRef property to $GLOBALS or to an empty array.</li>
+      <li> If VarRef is changed by a sub-template, its original reference will be recovered when the sub-template mode is over.</li>
+    </ul>
+<p>Example for setting VarRef to global variables: </p>
+<pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;VarRef = &amp;<span class="opt-name">$GLOBALS</span>;
+
+<span class="opt-name">$TBS</span>-&gt;ResetVarRef(true)<span class="opt-name"></span>;
+</pre>
+<p>Example for setting VarRef to a custome scopr of variables: </p>
+<pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;ResetVarRef(false); // VarRef is now a new empty array<br><span class="opt-name">$TBS</span>-&gt;VarRef['x'] = 'This is value X';</pre>
+    <p class="versioning">Versioning: property  VarRef is supported since TBS version 3.8. </p>
+</div>
+<h3><a name="php_assigned" id="php_assigned"></a>Property Assigned:</h3>
   <div class="norm">
     <p>Enables you to define information for a subsequent  merging which can be automatic or manual. </p>
     <p> Syntax: <span class="txt-code"><span class="opt-type">array</span> <span class="opt-name">$TBS</span>-&gt;Assigned</span></p>
