@@ -3,6 +3,10 @@ TinyButStrong 1.8.0 beta
 
 TODO: SetVarRef() not working with null or false because of reference expected
 
+2012-01-30
+
+- no more SetVarRef()
+
 2012-01-25, change-log:
 =======================
 

@@ -615,7 +615,7 @@ function __call($meth, $args) {
 	}
 }
 
-function SetOption($o, $v=null, $d=null) {
+function SetOption($o, $v=false, $d=false) {
 	if (!is_array($o)) $o = array($o=>$v);
 	if (isset($o['var_prefix'])) $this->VarPrefix = $o['var_prefix'];
 	if (isset($o['fct_prefix'])) $this->FctPrefix = $o['fct_prefix'];
@@ -643,8 +643,8 @@ function SetOption($o, $v=null, $d=null) {
 		$this->_ChrVal = $this->_ChrOpen.'val'.$this->_ChrClose;
 		$this->_ChrProtect = '&#'.ord($this->_ChrOpen[0]).';'.substr($this->_ChrOpen,1);
 	}
-	if (isset($o['tplfrms'])) self::f_Misc_UpdateArray($this->_FormatLst, false, $o['tplfrms'], $d);
-	if (isset($o['include_path'])) self::f_Misc_UpdateArray($this->IncludePath, true, $o['include_path'], $d);
+	if (array_key_exists('tplfrms',$o)) self::f_Misc_UpdateArray($this->_FormatLst, false, $o['tplfrms'], $d);
+	if (array_key_exists('include_path',$o)) self::f_Misc_UpdateArray($this->IncludePath, true, $o['include_path'], $d);
 	if (isset($o['render'])) $this->Render = $o['render'];
 }
 
@@ -652,7 +652,7 @@ function GetOption($o) {
 	if ($o==='all') {
 		$x = explode(',', 'var_prefix,fct_prefix,noerr,auto_merge,onload,onshow,att_delim,protect,turbo_block,charset,chr_open,chr_close,tplfrms,include_path,render');
 		$r = array();
-		for ($x as $o) $r[$o] = $this->GetOption($o);
+		foreach ($x as $o) $r[$o] = $this->GetOption($o);
 		return $r;
 	}
 	if ($o==='var_prefix') return $this->VarPrefix;
@@ -678,11 +678,12 @@ function GetOption($o) {
 	return $this->meth_Misc_Alert('with GetOption() method','option \''.$o.'\' is not supported.');;
 }
 
-function SetVarRef(&$VarRef) {
-	if (is_array($VarRef)) {
-		$this->VarRef =& $VarRef;
+public function ResetVarRef($ToGlobal) {
+	if ($ToGlobal) {
+		$this->VarRef = &$GLOBALS;
 	} else {
-		$this->VarRef =& $GLOBALS;
+		$x = array();
+		$this->VarRef = &$x;
 	}
 }
 
@@ -3254,16 +3255,23 @@ function meth_Misc_FormatSave(&$FrmStr,$Alias='') {
 
 // Simply update an array
 static function f_Misc_UpdateArray(&$array, $numerical, $v, $d) {
-	if (!is_array($v)) $v = array($v=>$d);
+	if (!is_array($v)) {
+		if (is_null($v)) {
+			$array = array();
+			return;
+		} else {
+			$v = array($v=>$d);
+		}
+	}
 	foreach ($v as $p=>$a) {
 		if ($numerical) { // numerical keys
 			if (is_string($p)) {
 				// syntax: item => true/false
 				$i = array_search($p, $array, true);
 				if ($i===false) {
-					if (!$a) $array = array_splice($array $i, 1);
+					if (!is_null($a)) $array[] = $p;
 				} else {
-					if ($a) $array[] = $p;
+					if (is_null($a)) array_splice($array, $i, 1);
 				}
 			} else {
 				// syntax: i => item
@@ -3271,7 +3279,7 @@ static function f_Misc_UpdateArray(&$array, $numerical, $v, $d) {
 				if ($i==false) $array[] = $a;
 			}
 		} else { // string keys
-			if (is_null($a) || ($a===false)) {
+			if (is_null($a)) {
 				unset($array[$p]);
 			} else {
 				$array[$p] = $a;
