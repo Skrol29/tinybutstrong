@@ -1155,17 +1155,18 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
     <p> Syntax: <span class="txt-code"><span class="opt-type">array</span> <span class="opt-name">$TBS</span>-&gt;VarRef</span></p>
     <p>Notes:</p>
     <ul>
-      <li> Method ResetVarRef($ToGlobal) is a shorthand for reseting the VarRef property to $GLOBALS or to an empty array.</li>
-      <li> If VarRef is changed by a sub-template, its original reference will be recovered when the sub-template mode is over.</li>
+      <li> Method<span class="txt-code"> ResetVarRef(<span class="opt-name">$ToGlobal</span>)</span> is a shorthand for reseting property VarRef to <span class="opt-name">$GLOBALS</span> or to an empty array.</li>
+      <li> If property VarRef is changed by a sub-template, the change is available only for the sub-template.</li>
     </ul>
-<p>Example for setting VarRef to global variables: </p>
+<p>Example for setting VarRef to global variables :</p>
 <pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;VarRef = &amp;<span class="opt-name">$GLOBALS</span>;
 
 <span class="opt-name">$TBS</span>-&gt;ResetVarRef(true)<span class="opt-name"></span>;
 </pre>
-<p>Example for setting VarRef to a custome scopr of variables: </p>
-<pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;ResetVarRef(false); // VarRef is now a new empty array<br><span class="opt-name">$TBS</span>-&gt;VarRef['x'] = 'This is value X';</pre>
-    <p class="versioning">Versioning: property  VarRef is supported since TBS version 3.8. </p>
+<p>Example for setting VarRef to a custome scope of variables: </p>
+<pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;ResetVarRef(false); <span class="opt-html">// VarRef is now a new empty array</span>
+<span class="opt-name">$TBS</span>-&gt;VarRef['x'] = 'This is value X';</pre>
+    <p class="versioning">Versioning: property  VarRef is supported since TBS version 3.8. Before this version, the scope of automatic fields was PHP global variables.</p>
 </div>
 <h3><a name="php_assigned" id="php_assigned"></a>Property Assigned:</h3>
   <div class="norm">
