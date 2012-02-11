@@ -1,17 +1,19 @@
 
 TinyButStrong 1.8.0 beta
 
-TODO: SetVarRef() not working with null or false because of reference expected
+TODO: alias multi-tags
 
-2012-01-30
+2012-02-10, change-log:
+=======================
 
-- no more SetVarRef()
+- SetVarRef() replaced with ResetVarRef()
+- Block Alias ( and option 'block_alias)
 
 2012-01-25, change-log:
 =======================
 
 - self:: replace clsTinyButStrong::
-- error message about varRef tries to ckec either it refers to $GLOBALS or not
+- error message about varRef tries to check either it refers to $GLOBALS or not
 - sub-template mode takes care about VarRef
 - new option GetOption('all')
 
