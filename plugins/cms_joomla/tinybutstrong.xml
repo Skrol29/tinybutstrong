@@ -7,7 +7,7 @@
   <license>GNU/GPL</license>
   <authorEmail>http://www.tinybutstrong.com/onlyyou.html</authorEmail>
   <authorUrl>http://www.tinybutstrong.com</authorUrl>
-  <version>1.2.4-beta</version>
+  <version>1.2.4</version>
   <description>Allows to include dynamic content in Joomla articles using the TinyButStrong Template Engine.
   	Site: http://www.tinybutstrong.com,
   	<br /> help file: plugins/content/tinybutstrong_help.html</description>
