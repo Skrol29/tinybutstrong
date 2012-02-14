@@ -1,7 +1,7 @@
 <?php
 
 /*
-TbsZip version 2.10 (2011-08-13)
+TbsZip version 2.11 (2012-02-14)
 Author  : Skrol29 (email: http://www.tinybutstrong.com/onlyyou.html)
 Licence : LGPL
 This class is independent from any other classes and has been originally created for the OpenTbs plug-in
@@ -382,7 +382,7 @@ class clsTbsZip {
 		// added files
 		$idx = $this->FileGetIdxAdd($NameOrIdx);
 		if ($idx!==false) {
-			unset($this->InfoAdd[$idx]);
+			unset($this->AddInfo[$idx]);
 			$nbr++;
 		}
 
