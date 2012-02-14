@@ -3,6 +3,7 @@ Content plug-in for Joomla - Dynamic Articles with TinyButStrong
 version 1.2.4 (2012-02-14)
 
 - Compatibility with Joomla 1.6 and 1.7
+- Uses the most recent stable TBS version: 3.7.0. 
 
 version 1.2.3 (2010-09-22)
 
