@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.8.0-beta-2012-01-24 for PHP 5
-Date     : 2012-01-24
+Version  : 3.8.0-beta-2012-02-25 for PHP 5
+Date     : 2012-02-25
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -530,7 +530,7 @@ public $ObjectRef = false;
 public $NoErr = false;
 public $Assigned = array();
 // Undocumented (can change at any version)
-public $Version = '3.8.0-beta-2012-01-24';
+public $Version = '3.8.0-beta-2012-02-25';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -3701,7 +3701,7 @@ This is because of the calling function.
 
 }
 
-static function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagLst,$RetInnerSrc) {
+static function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagStr,$RetInnerSrc) {
 //Modify $Loc, return false if tags not found, returns the inner source of tag if $RetInnerSrc=true
 
 	$AliasLst = &$GLOBALS['_TBS_BlockAlias'];
@@ -3709,33 +3709,49 @@ static function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagLst,$RetInnerSrc) {
 	// Analyze string
 	$Ref = 0;
 	$LevelStop = 0;
-	$TagLst = explode('+',$TagLst);
-	$TagMax = count($TagLst) - 1;
+	$i = 0;
 	$TagFct = array();
-	for ($i=0;$i<=$TagMax;$i++) {
+	$TagLst = array();
+	while ($TagStr!=='') {
+		// get next tag
+		$p = strpos($TagStr, '+');
+		if ($p===false) {
+			$t = $TagStr;
+			$TagStr = '';
+		} else {
+			$t = substr($TagStr,0,$p);
+			$TagStr = substr($TagStr,$p+1);
+		}
  		do { // Check parentheses, relative position and single tag
- 			$tag = &$TagLst[$i];
-			$tag = trim($tag);
-	 		$x = strlen($tag) - 1; // pos of last char
-	 		if (($x>1) and ($tag[0]==='(') and ($tag[$x]===')')) {
+ 			$t = trim($t);
+	 		$e = strlen($t) - 1; // pos of last char
+	 		if (($e>1) and ($t[0]==='(') and ($t[$e]===')')) {
 	 			if ($Ref===0) $Ref = $i;
 	 			if ($Ref===$i) $LevelStop++;
-	 			$tag = substr($tag,1,$x-1);
+	 			$t = substr($t,1,$e-1);
 	 		} else {
-	 			if (($x>=0) and ($tag[$x]==='/')) $tag = substr($tag,0,$x); // for compatibilty
-	 			$x = false;
+	 			if (($e>=0) and ($t[$e]==='/')) $t = substr($t,0,$e); // for compatibilty
+	 			$e = false;
 	 		}
-			$TagFct[$i] = false;
-			if (isset($AliasLst[$tag])) {
-				$a = $AliasLst[$tag];
-				if (is_string($a)) {
-					$tag = $a;
-				} else {
-					$TagFct[$i] = $a;
-				}
+ 		} while ($e!==false);
+		if (isset($AliasLst[$t])) {
+			$a = $AliasLst[$t];
+			if (is_string($a)) {
+				if ($i>999) return false; // prevent from circular alias
+				$TagStr = ($TagStr==='') ? $a : $a.'+'.$TagStr;
+			} else {
+				$TagLst[$i] = $t;
+				$TagFct[$i] = $a;
+				$i++;
 			}
- 		}	while ($x!==false);
+		} else {
+			$TagLst[$i] = $t;
+			$TagFct[$i] = false;
+			$i++;
+		}
 	}
+	
+	$TagMax = $i-1;
 
 	// Find tags that embeds the locator
 	if ($LevelStop===0) $LevelStop = 1;
@@ -3792,7 +3808,12 @@ static function f_Loc_Enlarge_Find($Txt, $Tag, $Fct, $Pos, $Forward, $LevelStop)
 	if ($Fct===false) {
 		return self::f_Xml_FindTag($Txt,$Tag,(!$Forward),$Pos,$Forward,$LevelStop,false);
 	} else {
-		return call_user_func_array($Fct,array($Tag,$Txt,$Pos,$Forward,$LevelStop));
+		$p = call_user_func_array($Fct,array($Tag,$Txt,$Pos,$Forward,$LevelStop));
+		if ($p===false) {
+			return false;
+		} else {
+			return (object) array('PosBeg'=>$p, 'PosEnd'=>$p, 'RightLevel'=> 0); // it's a trick
+		}	
 	}
 }
 
