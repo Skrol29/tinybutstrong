@@ -13,7 +13,18 @@ class BlockTestCase extends TBSUnitTestCase {
 	}
 
 	function testArrayParameter() {
-		$value = array('a'=>array('b'=>'c', 'd'=>array('e'=>'f', 'g'=>'h')), 'A'=>array('B'=>'C', 'D'=>'E'), 'C,D,E'=>array(0, 1, 2, 3));
+	
+		$value = array(
+			'a' => array(
+				'b'=>'c',
+				'd'=>array('e'=>'f', 'g'=>'h')
+			),
+			'A' => array(
+				'B'=>'C',
+				'D'=>'E'
+			),
+			'C,D,E' => array(0, 1, 2, 3)
+		);
 
 		// test with an empty value
 		$this->assertErrorMergeBlockString("<p><b>[a.val;block=b]</b></p>", array('a'=>null), "test block with array parameter #1");
@@ -35,6 +46,16 @@ class BlockTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeBlockStrings("<p><b>[E.#;block=b]</b></p>", $value, "<p><b>1</b><b>2</b><b>3</b><b>4</b></p>", "test block with array parameter #15");
 		$this->assertErrorMergeBlockString("<p><b>[E.#;block=div]</b></p>", $value, "test block with array parameter #16");
 		$this->assertEqualMergeBlockStrings("<b>[A.key;block=b;when [A.key]!=B]</b>", $value, "<b>D</b>", "test block with array parameter #17");
+
+		// test with extended blocks
+		$this->assertEqualMergeBlockStrings("<p><u>[A.val;block=u+v]</u><v>ok</v></p>", $value, "<p><u>C</u><v>ok</v><u>E</u><v>ok</v></p>", "test extended blocks #1");
+		$this->assertEqualMergeBlockStrings("<p><u id='[A.val;block=u+v]' /><v>ok</v></p>", $value, "<p><u id='C' /><v>ok</v><u id='E' /><v>ok</v></p>", "test extended blocks #1bis");
+		$this->assertEqualMergeBlockStrings("<p><u id='[A.val;block=u+v]'/><v>ok</v></p>", $value, "<p><u id='C'/><v>ok</v><u id='E'/><v>ok</v></p>", "test extended blocks #1bis");
+		$this->assertEqualMergeBlockStrings("<p><u>[A.val;block=u+v+w]</u><v>ok</v><w /></p>", $value, "<p><u>C</u><v>ok</v><w /><u>E</u><v>ok</v><w /></p>", "test extended blocks #2");
+		$this->assertEqualMergeBlockStrings("<p><u>[A.val;block= u + v + w ]</u><v>ok</v><w /></p>", $value, "<p><u>C</u><v>ok</v><w /><u>E</u><v>ok</v><w /></p>", "test extended blocks #3");
+		$this->assertEqualMergeBlockStrings("<p><u>[A.val;block=(u)+v+w]</u><v>ok</v><w /></p>", $value, "<p><u>C</u><v>ok</v><w /><u>E</u><v>ok</v><w /></p>", "test extended blocks #4");
+		$this->assertEqualMergeBlockStrings("<p><u>ok</u><v>[A.val;block=u+(v)+w]</v><w /></p>", $value, "<p><u>ok</u><v>C</v><w /><u>ok</u><v>E</v><w /></p>", "test extended blocks #5");
+		$this->assertEqualMergeBlockStrings("<p><u>ok</u><v><v>[A.val;block=u+((v))+w]</v><z /></v><w /></p>", $value, "<p><u>ok</u><v><v>C</v><z /></v><w /><u>ok</u><v><v>E</v><z /></v><w /></p>", "test extended blocks #5");
 
 		// test multiple blocks
 		$this->assertEqualMergeBlockStrings("<p><b>[C.#;block=b][D.#;block=b]</b></p>", $value, "<p><b>11</b><b>22</b><b>33</b><b>44</b></p>", "test block with array parameter #18");
