@@ -1,9 +1,7 @@
 
 TinyButStrong 1.8.0 beta
 
-TODO: alias multi-tags
-
-2012-02-10, change-log:
+2012-02-25, change-log:
 =======================
 
 - SetVarRef() replaced with ResetVarRef()
