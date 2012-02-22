@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.8.0-beta-2012-02-25 for PHP 4
-Date     : 2012-02-25
+Version  : 3.8.0-RC1 for PHP 4
+Date     : 2012-02-22
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -536,7 +536,7 @@ var $ObjectRef = false;
 var $NoErr = false;
 var $Assigned = array();
 // Undocumented (can change at any version)
-var $Version = '3.8.0-beta-2012-02-25';
+var $Version = '3.8.0-RC1';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -648,7 +648,7 @@ function SetOption($o, $v=false, $d=false) {
 		$this->_ChrVal = $this->_ChrOpen.'val'.$this->_ChrClose;
 		$this->_ChrProtect = '&#'.ord($this->_ChrOpen[0]).';'.substr($this->_ChrOpen,1);
 	}
-	if (array_key_exists('tplfrms',$o)) clsTinyButStrong::f_Misc_UpdateArray($GLOBALS['_TBS_FormatLst'], 'frm', $o['tplfrms'], $d);
+	if (array_key_exists('tpl_frms',$o)) clsTinyButStrong::f_Misc_UpdateArray($GLOBALS['_TBS_FormatLst'], 'frm', $o['tpl_frms'], $d);
 	if (array_key_exists('block_alias',$o)) clsTinyButStrong::f_Misc_UpdateArray($GLOBALS['_TBS_BlockAlias'], false, $o['block_alias'], $d);
 	if (array_key_exists('include_path',$o)) clsTinyButStrong::f_Misc_UpdateArray($this->IncludePath, true, $o['include_path'], $d);
 	if (isset($o['render'])) $this->Render = $o['render'];
@@ -656,7 +656,7 @@ function SetOption($o, $v=false, $d=false) {
 
 function GetOption($o) {
 	if ($o==='all') {
-		$x = explode(',', 'var_prefix,fct_prefix,noerr,auto_merge,onload,onshow,att_delim,protect,turbo_block,charset,chr_open,chr_close,tplfrms,block_alias,include_path,render');
+		$x = explode(',', 'var_prefix,fct_prefix,noerr,auto_merge,onload,onshow,att_delim,protect,turbo_block,charset,chr_open,chr_close,tpl_frms,block_alias,include_path,render');
 		$r = array();
 		foreach ($x as $o) $r[$o] = $this->GetOption($o);
 		return $r;
@@ -673,7 +673,7 @@ function GetOption($o) {
 	if ($o==='charset') return $this->Charset;
 	if ($o==='chr_open') return $this->_ChrOpen;
 	if ($o==='chr_close') return $this->_ChrClose;
-	if ($o==='tplfrms') {
+	if ($o==='tpl_frms') {
 		// simplify the list of formats
 		$x = array();
 		foreach ($GLOBALS['_TBS_FormatLst'] as $s=>$i) $x[$s] = $i['Str'];

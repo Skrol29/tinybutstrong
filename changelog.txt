@@ -1,98 +1,77 @@
 
-TinyButStrong 1.8.0 beta
+TinyButStrong 1.8.0 RC1
 
-2012-02-25, change-log:
-=======================
+Skrol29, 2012-02-22
 
-- SetVarRef() replaced with ResetVarRef()
-- Block Alias ( and option 'block_alias)
+Change-log:
+===========
 
-2012-01-25, change-log:
-=======================
+* New property $TBS->VarRef
 
-- self:: replace clsTinyButStrong::
-- error message about varRef tries to check either it refers to $GLOBALS or not
-- sub-template mode takes care about VarRef
-- new option GetOption('all')
+  It is supposed to be an associative array. All autoamtic TBS fields will seacrh the values in the VarRef scope.
+  By default this property is a reference on the global variable $GLOBALS. This bring the compatibily with previous versions.
+  You can reset VarRef to an empty array using: $TBS->ResetVarRef(false)
+  You can reset VarRef to $GLOBALS       using: $TBS->ResetVarRef(true)
 
-2011-12-29, change-log:
-=======================
+* New methods SetOption() and GetOption()
 
-- parameter 'frm' support thousand seperators with several characters
-- 'strconv' alias of 'htmlconv'
-
-2011-12-23, change-log:
-=======================
-
-- bug using parameter getbody : Notice: Trying to get property of non-object in ...\tbs_class.php on line 3775
-- new special field phpinfo
-
-2011-11-03, change-log:
-=======================
-
-- new option "render"
-- 'var_ref' is no longer an option
-- 'enlarge', alias of 'comm'
-- 'getpart', alias of 'getbody'
-- new parameter store, storename, 
-
-2011-10-26, change-log:
-=======================
-
-- bug in beta when using MergeBlock when argument source is "array".
-  Message: "invalid query 'xxx' because VarRef item 'xxx' is not found."
-
-- bug with operator "upper" and "lower" with "utf8". 
-
-- method SetTplFrms() replaced with option "tplfrms"
-
-- new option "include_path"
-
-2011-10-25, change-log:
-=======================
-
-- bug with PHP 4 : PDO::FETCH_ASSOC is not recognized
-- bug: A string [] appears in the contents when parameter "att" is used with a "parentgrp" block.
-
-- new feature ExtendedMethods: enables plug-in coders to add new TBS methods (PHP 5 only).
-
-- new feature VarRef + SetVarRef(): enables to change [var] field's reference.
-  [var] fields could merge only global PHP variables. Now, this feature enables you
-  to redefine the scope of [var] fields. This can be useful when TBS is embedded in a business method.
-
-- new feature IncludePath: similar to PHP include_path.
-  You can now add new directory where TBS should search for templates, sub-templates and scripts.
-
-- new method SetOption() / GetOption() : a shorthand for many TBS options
-  See the list of options below.
+  For a better harmonization, most of TBS options can be set and get using SetOption() and GetOption().
+  This alos ebales you to set all options at the crration of an instance, and alos to retrieve the array of all options.
+  For example: $TBS = new clsTinyButStrong($my_options)
   
-- new method SetTplFrms(): enables you to add format aliases at the PHP side.
-  You have complicated formats for parameter "frm", or you'd like to share formats
-  between several templates. This can be done using this new method.
+  Supported options are:
 
-- new native database support: Zend DB Adapter.
-  TBS now support Zend DB Adapter as source for merging queries.
+  Key             Default value
+  -----------     -------------
+  'var_prefix'    ''
+  'fct_prefix'    ''
+  'noerr'         false
+  'auto_merge'    true
+  'onload'        true
+  'onshow'        true
+  'att_delim'     '"'
+  'protect'       true
+  'turbo_block'   true
+  'charset'       '' 
+  'chr_open'      '['
+  'chr_close'     ']'
+  'tpl_frms'       array()
+  'include_path'  array()
+  'block_alias'   array()
+  'render'        TBS_OUTPUT + TBS_EXIT
 
-- new value for parameter "ope": upper, lower, upper1, upperw, utf8
-  Enables you to directly change the case of merged items.
+* New option 'include_path' enables you to defines one or several paths for sub-templates and scripts.
 
-Options supported by  SetOption() / GetOption() :
-================================================
+* New option 'block_alias' enables you to defines aliases of blocks.
 
-Key             Default value
------------     -------------
-'var_prefix'    ''
-'fct_prefix'    ''
-'var_ref'       $GLOBALS
-'noerr'         false
-'auto_merge'    true
-'onload'        true
-'onshow'        true
-'att_delim'     '"'
-'protect'       true
-'turbo_block'   true
-'charset'       '' 
-'chr_open'      '['
-'chr_close'     ']'
-'tplfrms'       array()
-'include_path'  array()
+* New option 'tpl_frms' enables you to defines aliases of blocks.
+ 
+* New data source supported in native: Zend DB Adapter
+ 
+* Parameter 'frm' now supports the thousand seperator with several characters. Useful for Html entites for example.
+
+* New values supported by parameter "ope": upper, lower, upper1, upperw, utf8
+ 
+* New parameters 'store' and 'storename':
+  They enable you to bufferize the content of a sub-templates in a store, that you can replace anywhere in the main template using [onshow..store].
+  Usefull for developping sub-templates as components.
+ 
+* New special field [onshow..phpinfo]: insert the php info.
+ 
+* New property ExtendedMethods: enables plug-in coders to add new TBS methods (PHP 5 only)
+ 
+* Parameter 'enlarge' is a new alias of parameter 'comm'
+
+* Parameter 'getpart' is a new alias of parameter 'getbody'
+
+* Parameter 'strconv' is a new alias of parameter 'htmlconv'
+
+Fixed bugs:
+
+* A string [] appears in the contents when parameter "att" is used with a "parentgrp" block.
+
+* using parameter getbody : Notice: Trying to get property of non-object in ...\tbs_class.php on line 3775
+
+* with PHP 4 : PDO::FETCH_ASSOC is not recognized
+
+ 
