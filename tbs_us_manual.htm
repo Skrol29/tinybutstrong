@@ -93,8 +93,11 @@ table {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
 }
-td p {
+td {
 	margin-top:0;
+}
+p {
+	margin-top:4;
 }
 body {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -167,7 +170,7 @@ a.opt-name:hover {
 </head>
 <body bgcolor="#FFFFFF">
 <div id="main-body">
-  <div class="txt-tiny" style="display:inline-block; float:left;">
+   <div class="txt-tiny" style="display:inline-block; float:left;">
     <table class="txt-tiny" border="0" cellspacing="0" cellpadding="0">
       <tr>
         <td width="50">Site:</td>
@@ -980,8 +983,7 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
 <span class="opt-name">$TBS-&gt;</span>SetOption(<span class="opt-value">'include_path'</span>,<span class="opt-value"> 'tpl/english'</span><span class="opt-value"></span>); <span class="opt-html">// add one path to the TBS include_path</span>
 <span class="opt-name">$TBS-&gt;</span>SetOption(<span class="opt-value">'include_path'</span>,<span class="opt-value"> 'tpl/english', null</span><span class="opt-value"></span>); <span class="opt-html">// delete one path from the TBS include_path</span>
 <span class="opt-name">$TBS-&gt;</span>SetOption(<span class="opt-value">'include_path'</span>,<span class="opt-value"> null</span><span class="opt-value"></span>); <span class="opt-html">// delete all pathes from the TBS include_path</span>
-
-    </pre>
+</pre>
     <h4>Options</h4>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
@@ -999,7 +1001,7 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_fct_prefix" id="php_setoption3"></a>fct_prefix</span></td>
-        <td align="left" valign="top" class="border-sep">Limit the usage of custom PHP functions (relative to parameters <a href="#html_field_prm_onformat" class="opt-name">onformat</a> and <a href="#html_block_prm_ondata" class="opt-name">ondata</a>) in templates. TBS  will call   only PHP function prefixed with <span class="opt-name">fct_prefix</span>. Other functions will produce an error message. The default value is <span class="opt-value">''</span> (empty string) which means no limitation.</td>
+        <td align="left" valign="top" class="border-sep"><p>Limit the usage of custom PHP functions (relative to parameters <a href="#html_field_prm_onformat" class="opt-name">onformat</a> and <a href="#html_block_prm_ondata" class="opt-name">ondata</a>) in templates. TBS  will call   only PHP function prefixed with <span class="opt-name">fct_prefix</span>. Other functions will produce an error message. The default value is <span class="opt-value">''</span> (empty string) which means no limitation.</p></td>
         <td align="left" valign="top" class="border-sep">set with constructor (deprecated)</td>
       </tr>
       <tr>
@@ -1018,27 +1020,27 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_automerge" id="php_setoption5"></a>auto_merge</span></td>
-        <td align="left" valign="top" class="border-sep">A combination of the couple of options <span class="opt-name">onload</span> and <span class="opt-name">onshow</span>. Default value is <span class="opt-value">true</span>.</td>
+        <td align="left" valign="top" class="border-sep"><p>A combination of the couple of options <span class="opt-name">onload</span> and <span class="opt-name">onshow</span>. Default value is <span class="opt-value">true</span>.</p></td>
         <td align="left" valign="top" class="border-sep">&nbsp;</td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_onload" id="php_setoption12"></a>onload</span></td>
-        <td align="left" valign="top" class="border-sep">Cancel the automatic processing of [onload] fields. This option accept only values <span class="opt-value">true</span> of <span class="opt-value">false</span>. Default value is <span class="opt-value">true</span>. This can be very useful especially, but not only, for some TBS plug-ins.</td>
+        <td align="left" valign="top" class="border-sep"><p>Cancel the automatic processing of [onload] fields. This option accept only values <span class="opt-value">true</span> of <span class="opt-value">false</span>. Default value is <span class="opt-value">true</span>. This can be very useful especially, but not only, for some TBS plug-ins.</p></td>
         <td align="left" valign="top" class="border-sep">$TBS-&gt;OnLoad (deprecated)</td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_onshow" id="php_setoption11"></a>onshow</span></td>
-        <td align="left" valign="top" class="border-sep">Cancel the automatic processing of [onshow] fields.This option accept only values <span class="opt-value">true</span> of <span class="opt-value">false</span>. Default value is <span class="opt-value">true</span>. This can be very useful especially, but not only, for some TBS plug-ins. Note that for compatibility, free [var] fields are automatically processed even if option <span class="opt-name">onshow</span> is set to false.</td>
+        <td align="left" valign="top" class="border-sep"><p>Cancel the automatic processing of [onshow] fields.This option accept only values <span class="opt-value">true</span> of <span class="opt-value">false</span>. Default value is <span class="opt-value">true</span>. This can be very useful especially, but not only, for some TBS plug-ins. Note that for compatibility, free [var] fields are automatically processed even if option <span class="opt-name">onshow</span> is set to false.</p></td>
         <td align="left" valign="top" class="border-sep">$TBS-&gt;OnShow (deprecated)</td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_att_delim" id="php_setoption10"></a>att_delim</span></td>
-        <td align="left" valign="top" class="border-sep"> This option may affect the result of paremeter <a href="#html_field_prm_att">att</a>. When the attribute has no value before the field is moved, then TBS chooses what string delimiter  to use regarding other attributes (XML/HTML accepts both (&quot;) and (')). You can force the delimiter  you need using property $TBS-&gt;AttDelim.</td>
+        <td align="left" valign="top" class="border-sep"> <p>This option may affect the result of paremeter <a href="#html_field_prm_att">att</a>. When the attribute has no value before the field is moved, then TBS chooses what string delimiter  to use regarding other attributes (XML/HTML accepts both (&quot;) and (')). You can force the delimiter  you need using property $TBS-&gt;AttDelim.</p></td>
         <td align="left" valign="top" class="border-sep">$TBS-&gt;AttDelim (deprecated)</td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_protect" id="php_setoption9"></a>protect</span></td>
-        <td align="left" valign="top" class="border-sep"><p>Protects all merged items by replacing the characters '<span class="opt-html">[</span>' with their corresponding XML/HTML code '<span class="opt-html">&amp;#91;</span>'. Default value is <span class="opt-value">true</span>. </p>
+        <td align="left" valign="top" class="border-sep"><p>Protects all merged items by replacing the characters '<span class="opt-html">[</span>' with their corresponding XML/HTML code '<span class="opt-html">&amp;#91;</span>'. Default value is <span class="opt-value">true</span>.</p>
         <p>By default, all data merged with a template is protected except if it's a file inclusion. It is strongly recommended to protect data when it comes from free enter like on a forum for example.</p></td>
         <td align="left" valign="top" class="border-sep">$TBS-&gt;Protect (deprecated)</td>
       </tr>
@@ -1048,7 +1050,7 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
         <p> The default value is <span class="opt-value">''</span> (empty string) which is the correct value for charsets <span class="opt-value">'UTF-8'</span>, <span class="opt-value">'ISO-8859-1'</span> (Latin 1), <span class="opt-value">'ISO-8859-15'</span>, <span class="opt-value">'cp866'</span>, <span class="opt-value">'cp1251'</span>, <span class="opt-value">'cp1252'</span>, and <span class="opt-value">'KOI8-R'</span>. See the PHP function <a href="http://www.php.net/manual/en/function.htmlspecialchars.php">htmlspecialchars()</a> for other charsets and technical explanations.</p>
         <h4>No character conversion:</h4>
         <p>If you use value <span class="opt-value">false</span> for the <span class="opt-name">charset</span> option, then data will to not be converted when merged into the model.<br>
-          Note that parameters <a href="#html_field_prm_htmlconv" class="opt-name">htmlconv</a> can be use to define the conversion of special characters for one TBS field only. </p>
+          Note that parameters <a href="#html_field_prm_strconv" class="opt-name">strconv</a> can be use to define the conversion of special characters for one TBS field only. </p>
         <h4>User function:</h4>
         <p>If your charset is not yet supported by PHP, you can indicate a user function that will perform the  conversion of special characters. For this, use the <span class="opt-name">charset</span> option with the syntax '=myfunction'.</p>
         <p> <span class="versioning">Since TBS version 3.0</span>, it's also possible to indicate a method of a class (see <a href="#php_oop">OOP</a>).<br>
@@ -1074,7 +1076,7 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_chr_close" id="php_setoption7"></a>chr_close</span></td>
-        <td align="left" valign="top" class="border-sep">Closing delimiter for TBS fields. Must be only one character.</td>
+        <td align="left" valign="top" class="border-sep"><p>Closing delimiter for TBS fields. Must be only one character.</p></td>
         <td align="left" valign="top" class="border-sep">set with constructor (deprecated)</td>
       </tr>
       <tr>
@@ -1084,8 +1086,8 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_include_path" id="php_setoption14"></a>include_path</span></td>
-        <td align="left" valign="top" class="border-sep">List of path where TBS should search files for method LoadTemplate(), parameters <a href="#html_field_prm_script" class="opt-name">script</a> and <a href="#html_field_prm_file" class="opt-name">file</a>.<br>
-          In fact, when you call SetOption, include_path are added to the list. </td>
+        <td align="left" valign="top" class="border-sep"><p>List of path where TBS should search files for method LoadTemplate(), parameters <a href="#html_field_prm_script" class="opt-name">script</a> and <a href="#html_field_prm_file" class="opt-name">file</a>.<br>
+          In fact, when you call SetOption, include_path are added to the list. </p></td>
         <td align="left" valign="top" class="border-sep">&nbsp;</td>
       </tr>
       <tr>
@@ -1113,9 +1115,8 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
         <td align="left" valign="top" class="border-sep">deprecated -&gt;Render</td>
       </tr>
     </table>
-    <p>&nbsp;</p>
-<p class="versioning">Versioning:  methods SetOption()  is supported since TBS version 3.8.0. </p>
-  </div>
+    <p class="versioning">Versioning:  methods <span class="opt-name">SetOption()</span> is supported since TBS version 3.8.0. </p>
+</div>
   <h3><a name="php_getoption" id="php_getoption"></a>Method GetOption():</h3>
   <div class="norm">
     <p>Return the value of a TBS option.</p>
@@ -1411,7 +1412,7 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
           - the embedded field if a <span class="opt-name">[var]</span> field placed into a parameter <a href="#html_field_prm_file" class="opt-name">file</a>, <a href="#html_field_prm_script" class="opt-name">script</a>, <a href="#html_field_prm_if" class="opt-name">if</a>, <span class="opt-name">then</span>, <span class="opt-name">else</span> or <a href="#html_block_prm_when" class="opt-name">when</a>.<br>
           In the other cases; the embedded  TBS field will not be processed and will be taken as is, like text.<br>
           Examples: <br>
-          <div class="decal"><span class="opt-html">[x;htmlconv=[var.y]]</span> : [var.y] will not be merged and parameter   &quot;htmlconv&quot; will have an unvalid value.<br>
+          <div class="decal"><span class="opt-html">[x;strconv=[var.y]]</span> : [var.y] will not be merged and parameter   &quot;strconv&quot; will have an unvalid value.<br>
             <span class="opt-html">[x;if [var.y]=1]</span> : [var.y] will be correctly merged and the &quot;if&quot; condition will be correctly evaluated.</div></td>
       </tr>
     </table>
@@ -1422,22 +1423,24 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
         <th>Description</th>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_htmlconv" id="html_field_prm_htmlconv"></a>htmlconv</span>=<span class="opt-value">val</span></td>
-        <td align="left" valign="top" class="border-sep">Ennables you to modify the special character conversion for this TBS field only. Note that the special character conversion  used by default for all TBS fields is the one defined by <a href="#php_loadtemplate">LoadTemplate()</a>. It is often corresponding to an Xml/Html charset but not necessary.<br>
-          The value <span class="opt-value">val</span> can be one of the following keywords:
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_strconv" id="html_field_prm_htmlconv2"></a><a name="html_field_prm_htmlconv" id="html_field_prm_htmlconv"></a>strconv</span>=<span class="opt-value">val</span></td>
+        <td align="left" valign="top" class="border-sep"><p>Ennables you to modify the string conversion for this TBS field only. Note that the string conversion  used by default for all TBS fields is the <a href="#php_setoption_charset">charset</a> option. It is often corresponding to an Xml/Html charset but not necessary.</p>
+          <p> You can specify several values using seperator <span class="opt-value">'+'</span>. Example : <span class="opt-name">strconv</span>=<span class="opt-value">yes+js</span></p>
+          <p>The values can be one of the following keywords:
+          </p>
           <div class="decal">
             <table border="0" cellspacing="0" cellpadding="2">
               <tr>
                 <td width="50" valign="top"><span class="opt-value">yes</span></td>
-                <td>(default value) Performe  the default special character conversion, including new lines.</td>
+                <td>(default value) Performe  the default special string conversion, including new lines.</td>
               </tr>
               <tr>
                 <td valign="top"><span class="opt-value">no</span></td>
-                <td>No special character conversion. Useful to modify Xml/Html source.</td>
+                <td>No special string conversion. Useful to modify Xml/Html source.</td>
               </tr>
               <tr>
                 <td valign="top"><span class="opt-value">nobr</span></td>
-                <td>Let  the default special character conversion, except new lines (useful for &lt;pre&gt; tags for example).</td>
+                <td>Let  the default string conversion, except new lines (useful for &lt;pre&gt; tags for example).</td>
               </tr>
               <tr>
                 <td valign="top"><span class="opt-value">wsp</span></td>
@@ -1445,7 +1448,7 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
               </tr>
               <tr>
                 <td valign="top"><span class="opt-value">esc</span></td>
-                <td>No special character conversion and double the single quote characters (').</td>
+                <td>No special string conversion and double the single quote characters (').</td>
               </tr>
               <tr>
                 <td valign="top"><span class="opt-value">js</span></td>
@@ -1461,90 +1464,85 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
               </tr>
               <tr>
                 <td valign="top"><span class="opt-value">look</span></td>
-                <td>Deprecated. Performe the default special character conversion  only if no Xml/Html entities are found inside the data item.</td>
+                <td>Deprecated. Performs the default string  conversion  only if no Xml/Html entities are found inside the data item.</td>
               </tr>
             </table>
           </div>
-          You can specify several values using seperator <span class="opt-value">'+'</span>. Example : <span class="opt-name">htmlconv</span>=<span class="opt-value">yes+js</span></td>
+          <p class="versioning">Versioning: Parameter <span class="opt-name">strconv</span> is supported since TBS version 3.8.0. It is an alias of parameter <span class="opt-name">htmlconv</span> which was misnamed and becomes deprecated.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_dot" id="html_field_prm_dot"></a>. </span>(dot)</td>
-        <td align="left" valign="top" class="border-sep">If the data item is empty, then an unbreakable space is displayed. Useful for cells in tables.</td>
+        <td align="left" valign="top" class="border-sep"><p>If the data item is empty, then an unbreakable space is displayed. Useful for cells in tables.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_ifempty" id="html_field_prm_ifempty"></a>ifempty</span>=<span class="opt-value">val</span></td>
-        <td align="left" valign="top" class="border-sep">If the data item is empty, then it is replaced with the specified value.</td>
+        <td align="left" valign="top" class="border-sep"><p>If the data item is empty, then it is replaced with the specified value.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_att" id="html_field_prm_ifempty2"></a>att</span>=<span class="opt-value">path</span></td>
-        <td align="left" valign="top" class="border-sep">Move the current field into an attribute of an XML/HTML  tag before it is merged. This parameter is very useful when it is too difficult for the template designer  to place a TBS field into an attribute.<br>
-          The value <span class="opt-value">path</span> must indicate the place of the attribute relatively to the current field.<br>
-          If the attribute doesn't exist in the specified tag, then it is created.<br>
-          If the attribute already exists in the specified tag and it has already a value, then the field replaces all the current value.<br>
-          You can chose to place the field as an added value using parameter <a href="#html_field_prm_attadd" class="opt-name">attadd</a>.<br>
-          You can complete the attribute's value by applying a mask to it using parameter <a href="#html_field_prm_ope" class="opt-name">ope</a>=<span class="opt-value">msk</span>.<br>
-          You can delete the attribute in case of empty value using parameter <a href="#html_field_prm_magnet" class="opt-name">magnet</a>=<span class="opt-value">#</span>.<br>
-          <br>
-          Syntax for value <span class="opt-value">path</span>:      [<span class="opt-value">+</span>][<span class="opt-value">tag1+tag2+tag3+...#</span>]<span class="opt-value">attribute</span><br>
-          By default the attribute is searched before the current field. But if '<span class="opt-value">+</span>' is the first character of the path, then it is searched after. If no tag list is specified, then the attribute is looked at in the first tag met in the search direction. If a tag list is used, <span class="opt-value">tag1</span> is search first, then <span class="opt-value">tag2</span>, ... regardless of the direction of the search (before/after). You can put a tag name between one or several bracket levels in order to specify that the searched tag must embed the current field.<br>
-          <br>
-          Examples:<br>
+        <td align="left" valign="top" class="border-sep"><p>Move the current field into an attribute of an XML/HTML  tag before it is merged. This parameter is very useful when it is too difficult for the template designer  to place a TBS field into an attribute.</p>
+          <p>            The value <span class="opt-value">path</span> must indicate the place of the attribute relatively to the current field.<br>
+            If the attribute doesn't exist in the specified tag, then it is created.<br>
+            If the attribute already exists in the specified tag and it has already a value, then the field replaces all the current value.<br>
+            You can chose to place the field as an added value using parameter <a href="#html_field_prm_attadd" class="opt-name">attadd</a>.<br>
+            You can complete the attribute's value by applying a mask to it using parameter <a href="#html_field_prm_ope" class="opt-name">ope</a>=<span class="opt-value">msk</span>.<br>
+          You can delete the attribute in case of empty value using parameter <a href="#html_field_prm_magnet" class="opt-name">magnet</a>=<span class="opt-value">#</span>.</p>
+          <p>            Syntax for value <span class="opt-value">path</span>:      [<span class="opt-value">+</span>][<span class="opt-value">tag1+tag2+tag3+...#</span>]<span class="opt-value">attribute</span><br>
+          By default the attribute is searched before the current field. But if '<span class="opt-value">+</span>' is the first character of the path, then it is searched after. If no tag list is specified, then the attribute is looked at in the first tag met in the search direction. If a tag list is used, <span class="opt-value">tag1</span> is search first, then <span class="opt-value">tag2</span>, ... regardless of the direction of the search (before/after). You can put a tag name between one or several bracket levels in order to specify that the searched tag must embed the current field.</p>
+          <p>            Examples:          </p>
           <div class="decal">[<span class="opt-name">onshow.x</span>;<span class="opt-name">att</span>=<span class="opt-value">class</span>] moves into attribute '<span class="opt-value">class</span>' of the first tag placed before.<br>
             [<span class="opt-name">onshow.x</span>;<span class="opt-name">att</span>=<span class="opt-value">div#class</span>] moves into attribute '<span class="opt-value">class</span>' of the first <span class="opt-html">&lt;div&gt;</span> placed before.<br>
             [<span class="opt-name">onshow.x</span>;<span class="opt-name">att</span>=<span class="opt-value">+div#class</span>] moves into attribute '<span class="opt-value">class</span>' of the first <span class="opt-html">&lt;div&gt;</span> placed after.<br>
             [<span class="opt-name">onshow.x</span>;<span class="opt-name">att</span>=<span class="opt-value">((div))#class</span>] moves into attribute '<span class="opt-value">class</span>' of the second embedding <span class="opt-html">&lt;div&gt;</span> placed before.<br>
             [<span class="opt-name">onshow.x</span>;<span class="opt-name">att</span>=<span class="opt-value">table+div#class</span>] moves into attribute '<span class="opt-value">class</span>' of the first <span class="opt-html">&lt;div&gt;</span> after the first <span class="opt-html">&lt;table&gt;</span> placed before.</div>
-          <br>
-          Notes:<br>
-          - Method  MergeBlock() cannot   move a TBS field  over another TBS field placed after it. This makes a TBS error to occur.<br>
-          - When the attribute has no value before the field is moved, then TBS chooses what string delimiter  to use regarding other attributes (XML/HTML accepts both (&quot;) and (')). You can force the delimiter  you need using property $TBS-&gt;AttDelim.<br>
-          <br>
-          <span class="versioning">Versioning: Parameter att is supported since TBS version 3.5.0</span></td>
+          <p>Notes:<br>
+            - Method  MergeBlock() cannot   move a TBS field  over another TBS field placed after it. This makes a TBS error to occur.<br>
+          - When the attribute has no value before the field is moved, then TBS chooses what string delimiter  to use regarding other attributes (XML/HTML accepts both (&quot;) and (')). You can force the delimiter  you need using property $TBS-&gt;AttDelim.</p>
+          <p class="versioning">Versioning: Parameter <span class="opt-name">att</span> is supported since TBS version 3.5.0</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_attadd" id="html_field_prm_ifempty3"></a>attadd</span></td>
-        <td align="left" valign="top" class="border-sep">To be used with parameter<span class="opt-name"> att</span>. Indicate that the field is added into the attribute's value, instead of being replacing the attribute's value. Please note that the added value won't be simply concatenated with previous values, it will be added with a space character separator in order to perform an adding to the meaning of attributes.<br>
-          Example:
+        <td align="left" valign="top" class="border-sep"><p>To be used with parameter<span class="opt-name"> att</span>. Indicate that the field is added into the attribute's value, instead of being replacing the attribute's value. Please note that the added value won't be simply concatenated with previous values, it will be added with a space character separator in order to perform an adding to the meaning of attributes.</p>
+          <p> Example:</p>
           <div class="decal"><span class="opt-html">&lt;div class=&quot;style1&quot;&gt;</span>[<span class="opt-name">onshow.x</span>;<span class="opt-name">att</span>=<span class="opt-value">class</span>;<span class="opt-name">attadd</span>]<br>
             in this example, if we have <span class="txt-code">$x='style2'</span> then we obtain <span class="opt-html">&lt;div class=&quot;style1 style2&quot;&gt;</span></div>
-          There is no way for now to simply concatenate the field's value with the previous attribute's value. But instead, you can use parameter <a href="html_field_prm_ope" class="opt-name">ope</a>=<span class="opt-value">msk</span> in order to apply a mask to the field's value.<br>
-          Example:
+          <p>There is no way for now to simply concatenate the field's value with the previous attribute's value. But instead, you can use parameter <a href="html_field_prm_ope" class="opt-name">ope</a>=<span class="opt-value">msk</span> in order to apply a mask to the field's value.</p>
+          <p> Example: </p>
           <div class="decal"><span class="opt-html">&lt;div class=&quot;old&quot;&gt;</span>[<span class="opt-name">onshow.z</span>;<span class="opt-name">att</span>=<span class="opt-value">class</span>;<span class="opt-name">ope</span>=<span class="opt-value">msk:style*</span>]<br>
             in this example, if we have <span class="txt-code">$z='2'</span> then we obtain <span class="opt-html">&lt;div class=&quot;style2&quot;&gt;</span></div>
-          <br>
-          <span class="versioning">Versioning: Parameter attadd is supported since TBS version 3.5.0</span></td>
+          <p class="versioning">Versioning: Parameter <span class="opt-name">attadd</span> is supported since TBS version 3.5.0</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_atttrue" id="html_field_prm_ifempty4"></a><span class="opt-name">atttrue</span><br>
           <span class="txt-small">or</span><br>
           <span class="opt-name">atttrue</span>=<span class="opt-value">value</span></td>
-        <td align="left" valign="top" class="border-sep">To be used with parameter<span class="opt-name"> att</span>. Indicates that the attribute (indicated with parameter <span class="opt-name">att</span>) must be managed as a boolan XHTML/HTML attribute. I.e. it is either present in the tag with the format <span class="opt-html">attribute=&quot;attribute&quot;</span> in order to mean <em>TRUE</em>, or ommited in the tag in order to mean <em>FALSE</em>.<br>
-          If <span class="opt-name">atttrue</span> is set with  a given <span class="opt-value">value</span>, then the boolean attribute
-          will be <em>TRUE</em> (<em>present</em>) if the field is equal to this <span class="opt-value">value</span>, otherwise  it will be <em>FALSE</em> (<em>omitted</em>).<br>
-          If <span class="opt-name">atttrue</span> is set with no value, then the boolean attribute
-          will be <em>TRUE</em> (<em>present</em>) if the field's value is non empty, and it will be <em>FALSE</em> (<em>omitted</em>) if the field's value is empty. <br>
-          Examples:
+        <td align="left" valign="top" class="border-sep"><p>To be used with parameter<span class="opt-name"> att</span>. Indicates that the attribute (indicated with parameter <span class="opt-name">att</span>) must be managed as a boolan XHTML/HTML attribute. I.e. it is either present in the tag with the format <span class="opt-html">attribute=&quot;attribute&quot;</span> in order to mean <em>TRUE</em>, or ommited in the tag in order to mean <em>FALSE</em>.</p>
+          <p> If <span class="opt-name">atttrue</span> is set with  a given <span class="opt-value">value</span>, then the boolean attribute
+            will be <em>TRUE</em> (<em>present</em>) if the field is equal to this <span class="opt-value">value</span>, otherwise  it will be <em>FALSE</em> (<em>omitted</em>).<br>
+            If <span class="opt-name">atttrue</span> is set with no value, then the boolean attribute
+            will be <em>TRUE</em> (<em>present</em>) if the field's value is non empty, and it will be <em>FALSE</em> (<em>omitted</em>) if the field's value is empty.          </p>
+          <p>          Examples:</p>
           <div class="decal"><span class="opt-html">&lt;input type=&quot;checkbox&quot;&gt;</span>[<span class="opt-name">onshow.accept</span>;<span class="opt-name">att</span>=<span class="opt-value">selected</span>;<span class="opt-name">atttrue</span>=<span class="opt-value">1</span>]</div>
-          <br>
-          <span class="versioning">Versioning: Parameter atttrue is supported since TBS version 3.6.0</span></td>
+          <p class="versioning">Versioning: Parameter <span class="opt-name">atttrue</span> is supported since TBS version 3.6.0</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_magnet" id="html_field_prm_magnet"></a><span class="opt-name">magnet</span>=<span class="opt-value">tag</span><br>
           <span class="txt-small">or</span><br>
           <span class="opt-name">magnet</span>=<span class="opt-value">expr</span></td>
-        <td align="left" valign="top" class="border-sep">Assign a magnet XML/HTML zone to the TBS field. A magnet tag is kept as is when the field has a value, and is deleted when the field is null or empty string. Parameter <span class="opt-name">magnet</span> supports the same syntax as parameter <a href="#html_block_prm_block" class="opt-name">block</a>, i.e. that <span class="opt-value">expr</span> must be an XML/HTML tag or a TBS <a href="#html_block_prm_extblk">extended block</a> expression.<br>
-          <div class="decal">Example:<br>
-            <span class="opt-html">(&lt;a href=&quot;[onshow.link;magnet=a]&quot;&gt;click here&lt;/a&gt;)</span><br>
+        <td align="left" valign="top" class="border-sep"><p>Assign a magnet XML/HTML zone to the TBS field. A magnet tag is kept as is when the field has a value, and is deleted when the field is null or empty string. Parameter <span class="opt-name">magnet</span> supports the same syntax as parameter <a href="#html_block_prm_block" class="opt-name">block</a>, i.e. that <span class="opt-value">expr</span> must be an XML/HTML tag or a TBS <a href="#html_block_prm_extblk">extended block</a> expression.
+          </p>
+          <p>Example:</p>
+          <div class="decal"><span class="opt-html">(&lt;a href=&quot;[onshow.link;magnet=a]&quot;&gt;click here&lt;/a&gt;)</span><br>
             Result for <span class="txt-code">$link='www.tbs.com'</span>: <span class="opt-html">(&lt;a href=&quot;www.tbs.com&quot;&gt;click here&lt;/a&gt;)</span><br>
-            Result for <span class="txt-code">$link=''</span>: <span class="opt-html">()</span></div>
-          By default, the magnet XML/HTML zone should be delimited by a pair of opening-closing tags (like <span class="opt-html">&lt;a&gt;&lt;/a&gt;</span>) which first tag is placed before the TBS fields. But this can be changed using parameter <span class="opt-name">mtype</span> (see below).<br>
-          <span class="versioning">Since TBS version 3.3.0</span>, <a href="#html_field_prm_ope">parameter</a> <a href="#html_field_prm_ope" class="opt-name">ope</a> has keywords (<span class="opt-value">nif</span>, <span class="opt-value">minv</span>, <span class="opt-value">mok</span> and <span class="opt-value">mko</span>) that improve parameter <span class="opt-name">magnet</span>. <br>
-          Remark: the parameters <span class="opt-name">if then else</span> are processed before parameter <span class="opt-name">magnet.</span></td>
+          Result for <span class="txt-code">$link=''</span>: <span class="opt-html">()</span></div>
+          <p>By default, the magnet XML/HTML zone should be delimited by a pair of opening-closing tags (like <span class="opt-html">&lt;a&gt;&lt;/a&gt;</span>) which first tag is placed before the TBS fields. But this can be changed using parameter <span class="opt-name">mtype</span> (see below).</p>
+          <p class="versioning"> Since TBS version 3.3.0, <a href="#html_field_prm_ope" class="opt-name">parameter ope</a> has keywords (<span class="opt-value">nif</span>, <span class="opt-value">minv</span>, <span class="opt-value">mok</span> and <span class="opt-value">mko</span>) that improve parameter <span class="opt-name">magnet</span>. <br>
+          Remark: the parameters <span class="opt-name">if then else</span> are processed before parameter <span class="opt-name">magnet.</span></p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_mtype" id="html_field_prm_mtype"></a><span class="opt-name">mtype</span>=<span class="opt-value">val</span></td>
-        <td align="left" valign="top" class="border-sep">To be used with parameter<span class="opt-name"> magnet</span>. Define the magnet type.<br>
-          <br>
+        <td align="left" valign="top" class="border-sep"><p>To be used with parameter<span class="opt-name"> magnet</span>. Define the magnet type.
+          </p>
           <div class="decal">
             <table  border="0" cellpadding="0" cellspacing="0">
               <tr>
@@ -1582,9 +1580,7 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
           </div></td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><a name="html_field_prm_enlarge" id="html_field_prm_enlarge"></a><span class="opt-name">enlarge</span><br>
-          or<br>
-          <a name="html_field_prm_comm"></a><span class="opt-name">comm</span></td>
+        <td align="left" valign="top" class="border-sep"><a name="html_field_prm_enlarge" id="html_field_prm_enlarge"></a><a name="html_field_prm_comm"></a><span class="opt-name">enlarge</span></td>
         <td align="left" valign="top" class="border-sep"><p>Enlarge the bounds of the TBS Field up to the bounds of the commentary Html tags which surround it, or up to another specified couple of XML/HTML tags.</p>
           <p>Example: </p>
           <div class="decal"><span class="opt-html">xxx &lt;!-- </span>[<span class="opt-name">myfield</span>;<span class="opt-name">enlarge</span>]<span class="opt-html"> here some comments --&gt; yyy</span></div>
@@ -1593,57 +1589,61 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
           <p>are strictly identical to: </p>
           <div class="decal"><span class="opt-html">xxx</span> [<span class="opt-name">myfield</span>]<span class="opt-html"> yyy </span></div>
           <p><span class="opt-html"></span> This parameter is particularly useful for the template designing when you are using a Visual HTML Editor (such as Dreamweaver or FrontPage). </p>
-          <div class="versioning">Versioning: Enlarge Support for other XML/HTML tags was added in TBS 3.0.</div></td>
+          <p class="versioning">Versioning:<br>
+            Parameter <span class="opt-name">enlarge</span> is supported since TBS version 3.8.0. It is an alias of parameter <span class="opt-name">comm</span> which was misnamed and becomes deprecated.<br>
+          Parameter <span class="opt-name">comm</span> is available for other XML/HTML tags since TBS 3.0.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_noerr"></a><span class="opt-name">noerr</span></td>
-        <td align="left" valign="top" class="border-sep">Avoid some of the TBS Error messages. When a message can be cancelled, it is mentioned in the message.</td>
+        <td align="left" valign="top" class="border-sep"><p>Avoid some of the TBS Error messages. When a message can be cancelled, it is mentioned in the message.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_file"></a>file</span>=<span class="opt-value">filename</span></td>
-        <td align="left" valign="top" class="border-sep">Replace the field with the contents of the file.<br>
-          <span class="opt-name"><span class="opt-value">Filename</span></span> can be a string or an expression.<br>
-          You can use the keyword <span class="opt-value">[val]</span> inside the expression to insert the current data item.<br>
-          You can use <span class="opt-value">[var]</span> fields inside the expression.<br>
-          If parameter <span class="opt-name">script</span> is used by omitting the <span class="opt-value">filename</span> value (example: [onshow.file;<span class="opt-name">script</span>;<span class="opt-name">subtpl</span>]), then the field's value is used for the file name.<br>
-          If the file is not found, then it will be searched in the folder of the last loaded template (<span class="versioning">since TBS version 3.2.0</span>).<br>
-          Examples: <br>
+        <td align="left" valign="top" class="border-sep"><p>Replace the field with the contents of the file.</p>
+          <p> <span class="opt-name"><span class="opt-value">Filename</span></span> can be a string or an expression.<br>
+            You can use the keyword <span class="opt-value">[val]</span> inside the expression to insert the current data item.<br>
+            You can use <span class="opt-value">[var]</span> fields inside the expression.<br>
+            If parameter <span class="opt-name">script</span> is used by omitting the <span class="opt-value">filename</span> value (example: [onshow.file;<span class="opt-name">script</span>;<span class="opt-name">subtpl</span>]), then the field's value is used for the file name.<br>
+          If the file is not found, then it will be searched in the folder of the last loaded template (<span class="versioning">since TBS version 3.2.0</span>).</p>
+          <p> Examples:</p>
           <div class="decal">[<span class="opt-name">onload</span>;<span class="opt-name">file</span>=<span class="opt-value">header.html</span>]<br>
             [<span class="opt-name">onload</span>;<span class="opt-name">file</span>=[<span class="opt-name">var</span>.<span class="opt-name">filename</span>]] </div>
-          If <span class="opt-value">filename</span> is an empty string, then no error message is displayed, it is like parameter <span class="opt-name">file</span> is ignored. This can be used to manage conditional insertion. <br>
-          Example: <br>
-          <div class="decal"> [<span class="opt-name">onload</span>;<span class="opt-name">file</span>=[<span class="opt-name">var</span>.<span class="opt-name">insert</span>;if [<span class="opt-name">val</span>]=1;<span class="opt-name">then</span> <span class="opt-value">'header.html'</span>;<span class="opt-name">else</span> <span class="opt-value">''</span>]]</div>
-          You will found more details about this parameter in the chapter <a href="#html_subtemplate">Subtemplates</a>.<br>
-          <span class="txt-small">See also: <a href="#html_field_prm_getbody" class="opt-name">getbody</a> <a href="#html_field_prm_script" class="opt-name">script</a></span></td>
+          <p>If <span class="opt-value">filename</span> is an empty string, then no error message is displayed, it is like parameter <span class="opt-name">file</span> is ignored. This can be used to manage conditional insertion. </p>
+          <p> Example:          </p>
+          <div class="decal"> [<span class="opt-name">onload</span>;<span class="opt-name">file</span>=[<span class="opt-name">var</span>.<span class="opt-name">insert</span>;if [<span class="opt-name">val</span>]=1;<span class="opt-name">then</span> <span class="opt-value">'header.html'</span>;<span class="opt-name">else</span> <span class="opt-value">''</span>]]          </div>
+          <p>You will found more details about this parameter in the chapter <a href="#html_subtemplate">Subtemplates</a>.</p>
+          <p>See also: <a href="#html_field_prm_getpart" class="opt-name">getpart</a> and <a href="#html_field_prm_script" class="opt-name">script</a></p></td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><a name="html_field_prm_getbody" id="html_field_prm_getbody"></a><span class="opt-name">getbody</span>=<span class="opt-value">taglist</span></td>
-        <td align="left" valign="top" class="border-sep">To be used with parameter <span class="opt-name">file</span> or <span class="opt-name">script</span>. Indicates that not all the file contents is loaded but only some XML/HTML parts of it defined with the  tag list. The tags of the list must be separated with plus (+), and placed between parentheses if you want the tags themselves to be retrieved with their content. If the file has several XML/HTML part of a tag, all those parts will be automatically concatenated.    	  If parameter <span class="opt-name">getbody</span> is used without value, then  the &lt;body&gt; tag is taken by default.<br>
-          Example:
-          <div class="decal">[onload;<span class="opt-name">file</span>=<span class="opt-value">header.htm</span>;<span class="opt-name">getbody</span>=<span class="opt-value">(script)+(style)+body</span>]</div>
-          <br>
-          <div class="versioning">Versioning: parameter getbody is supported since TBS version 3.0. 
+        <td align="left" valign="top" class="border-sep"><a name="html_field_prm_getpart" id="html_field_prm_getbody2"></a><a name="html_field_prm_getbody" id="html_field_prm_getbody"></a><span class="opt-name">getpart</span>=<span class="opt-value">taglist</span></td>
+        <td align="left" valign="top" class="border-sep"><p>To be used with parameter <span class="opt-name">file</span> or <span class="opt-name">script</span>. Indicates that not all the file contents is loaded but only some XML/HTML parts of it defined with the  tag list. The tags of the list must be separated with plus (+), and placed between parentheses if you want the tags themselves to be retrieved with their content. If the file has several XML/HTML part of a tag, all those parts will be automatically concatenated.    	  If parameter <span class="opt-name">getpart</span> is used without value, then  the &lt;body&gt; tag is taken by default.</p>
+          <p> Example: </p>
+          <div class="decal">[onload;<span class="opt-name">file</span>=<span class="opt-value">header.htm</span>;<span class="opt-name">getpart</span>=<span class="opt-value">(script)+(style)+body</span>]</div>
+<p class="versioning">Versioning:<br>
+  Parameter <span class="opt-name">getgetpart</span> is supported since TBS version 3.8.0. 
+             It is an alias of parameter <span class="opt-name">getbody</span> which was misnamed and becomes deprecated. <br>
+Parameter <span class="opt-name">getbody</span> is supported since TBS version 3.0. 
             In previous versions, it was automatically processed when using parameter file. Now it becomes explicit. <br>
-            The tag list is supported since TBS version 3.5.0. Before this version, the value of getbody can be only one tag without parentheses. </div></td>
+            The tag list is supported since TBS version 3.5.0. Before this version, the value of getbody can be only one tag without parentheses. </p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_rename" id="html_field_prm_subtpl2"></a><span class="opt-name">rename</span> <span class="opt-value">old</span><span class="opt-name">=</span><span class="opt-value">new</span></td>
-        <td align="left" valign="top" class="border-sep">To be used with parameter <span class="opt-name">file</span> or <span class="opt-name">script</span>. Renames  TBS blocks and fields in the subtemplate before it is inserted. You can define several block to rename by separate them with coma. If a new name is an empty string  then the old block is deleted by merging it with an empty array.<br>
-          This parameter is useful when you want to use the same subtemplate several times in the main template. <br>
-          Example:
+        <td align="left" valign="top" class="border-sep"><p>To be used with parameter <span class="opt-name">file</span> or <span class="opt-name">script</span>. Renames  TBS blocks and fields in the subtemplate before it is inserted. You can define several block to rename by separate them with coma. If a new name is an empty string  then the old block is deleted by merging it with an empty array.</p>
+          <p> This parameter is useful when you want to use the same subtemplate several times in the main template. </p>
+          <p> Example:</p>
           <div class="decal">Address 1: [onload;<span class="opt-name">file</span>=<span class="opt-value">address.htm</span>]<br>
             Address 2: [onload;<span class="opt-name">file</span>=<span class="opt-value">address.htm</span>;<span class="opt-name">rename </span><span class="opt-value">town1=town2,zip1=zip2,email=</span>]</div>
-          <div class="versioning">Versioning: parameter rename is supported since TBS version 3.5.1.</div>
+          <p class="versioning">Versioning: parameter rename is supported since TBS version 3.5.1.</p>
           See chapter '<a href="#html_subtemplate">Subtemplates</a>' for more details about subtemplates.</td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_script"></a>script</span>=<span class="opt-value">filename</span></td>
-        <td align="left" valign="top" class="border-sep">Execute the Php script just before replacing the TBS field.<br>
-          <span class="opt-name"><span class="opt-value">Filename</span></span> can be a string or an expression.<br>
-          You can use the keyword <span class="opt-value">[val]</span> inside the expression to insert the current data item.<br>
-          You can use <span class="opt-value">[var]</span> fields inside the expression.<br>
-          If parameter <span class="opt-name">script</span> is used by omitting the <span class="opt-value">filename</span> value (example: [onshow.file;<span class="opt-name">script</span>;<span class="opt-name">subtpl</span>]), then the field's value is used for the file name.<br>
-          If the file is not found, then it will be searched in the folder of the last loaded template (<span class="versioning">since TBS version 3.2.0</span>). <br>
+        <td align="left" valign="top" class="border-sep"><p>Execute the Php script just before replacing the TBS field.</p>
+          <p><span class="opt-name"><span class="opt-value">Filename</span></span> can be a string or an expression.<br>
+            You can use the keyword <span class="opt-value">[val]</span> inside the expression to insert the current data item.<br>
+            You can use <span class="opt-value">[var]</span> fields inside the expression.<br>
+            If parameter <span class="opt-name">script</span> is used by omitting the <span class="opt-value">filename</span> value (example: [onshow.file;<span class="opt-name">script</span>;<span class="opt-name">subtpl</span>]), then the field's value is used for the file name.<br>
+            If the file is not found, then it will be searched in the folder of the last loaded template (<span class="versioning">since TBS version 3.2.0</span>).          </p>
           <table width="100%" border="0" cellpadding="2" cellspacing="0" >
             <tr>
               <td width="10" valign="top">*</td>
@@ -1661,18 +1661,17 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
               <td>If the <span class="opt-value">filename</span> expression (or the value of the field) return an empty string (''), then parameter script is ignored and no error occurs. You can use this behavior in order to use a conditional insertion.</td>
             </tr>
           </table>
-          <span id="v202_subtpl_script">See chapter '<a href="#html_subtemplate">Subtemplates</a>' for more details about how to use this parameter in subtemplate mode.</span></td>
+          <p><span>See chapter '<a href="#html_subtemplate">Subtemplates</a>' for more details about how to use this parameter in subtemplate mode.</span></p></td>
       </tr>
       <tr id="v202_subtpl">
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_subtpl" id="html_field_prm_subtpl"></a><span class="opt-name">subtpl</span></td>
-        <td align="left" valign="top" class="border-sep">To be used with the parameter<span class="opt-name"> script</span> or parameter <span class="opt-name">onformat</span>.<br>
-          Activate the subtemplate mode during the script or function execution.<br>
-          See chapter '<a href="#html_subtemplate">Subtemplates</a>' for more details.</td>
+        <td align="left" valign="top" class="border-sep"><p>To be used with the parameter<span class="opt-name"> script</span> or parameter <span class="opt-name">onformat</span>. Activate the subtemplate mode during the script or function execution.</p>
+          <p> See chapter '<a href="#html_subtemplate">Subtemplates</a>' for more details.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_if" id="html_field_prm_if"></a>if</span> <span class="opt-value">expr1</span><span class="opt-name">=</span><span class="opt-value">expr2</span></td>
-        <td align="left" valign="top" class="border-sep">Display the data item only if the condition is verified, otherwise display nothing unless parameter <span class="opt-name">then</span> or <span class="opt-name">else</span> are used.<br>
-          Supported operators are: <br>
+        <td align="left" valign="top" class="border-sep"><p>Display the data item only if the condition is verified, otherwise display nothing unless parameter <span class="opt-name">then</span> or <span class="opt-name">else</span> are used.</p>
+          <p> Supported operators are:          </p>
           <div class="decal">
             <table  border="0" cellpadding="0" cellspacing="0">
               <tr>
@@ -1705,22 +1704,22 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
               </tr>
             </table>
           </div>
-          Both <span class="opt-value">expr1</span> and <span class="opt-value">expr2</span> must be string or numerical expressions.<br>
-          You can use the keyword <span class="opt-value">[val]</span> inside the expression to insert the current data item.<br>
-          You can use <span class="opt-value">[var]</span> fields inside the expression.<br>
-          The expressions may contain other TBS fields, but you have to make sure that they are merged before the containing field.<br>
-          <span class="versioning">Since TBS version 3.0,</span> it is also possible to define several couples of <span class="opt-name">if</span>/<span class="opt-name">then</span> in the same field.<br>
-          See parameters <span class="opt-name">then</span> and <span class="opt-name">else</span> for some examples.</td>
+          <p>Both <span class="opt-value">expr1</span> and <span class="opt-value">expr2</span> must be string or numerical expressions.<br>
+            You can use the keyword <span class="opt-value">[val]</span> inside the expression to insert the current data item.<br>
+            You can use <span class="opt-value">[var]</span> fields inside the expression.<br>
+            The expressions may contain other TBS fields, but you have to make sure that they are merged before the containing field.<br>
+          <span class="versioning">Since TBS version 3.0,</span> it is also possible to define several couples of <span class="opt-name">if</span>/<span class="opt-name">then</span> in the same field.</p>
+          <p> See parameters <span class="opt-name">then</span> and <span class="opt-name">else</span> for some examples.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_then" id="html_field_prm_then"></a>then</span><span class="opt-value"> val1</span></td>
-        <td align="left" valign="top" class="border-sep">If the parameter <span class="opt-name">if</span> is defined and its condition is verified, then the data item is replaced with <span class="opt-value">val1</span>.<br>
-          <span class="versioning">Since TBS version 3.0,</span> it is also possible to define several couples of <span class="opt-name">if</span>/<span class="opt-name">then</span> in the same field.<br>
-          Examples:<br>
+        <td align="left" valign="top" class="border-sep"><p>If the parameter <span class="opt-name">if</span> is defined and its condition is verified, then the data item is replaced with <span class="opt-value">val1</span>.</p>
+          <p><span class="versioning">Since TBS version 3.0,</span> it is also possible to define several couples of <span class="opt-name">if</span>/<span class="opt-name">then</span> in the same field.</p>
+          <p> Examples:          </p>
           <div class="decal"> [<span class="opt-name">onshow.image</span>;<span class="opt-name">if</span> <span class="opt-value">[val]</span>=<span class="opt-value">''</span>;<span class="opt-name">then</span> <span class="opt-value">'image0.gif'</span>]<br>
             [<span class="opt-name">onshow</span>.<span class="opt-name">x</span>;<span class="opt-name">if</span> <span class="opt-value">[val]=1</span>;<span class="opt-name">then</span> <span class="opt-value">'one'</span>;<span class="opt-name">if</span> <span class="opt-value">[val]=2</span>;<span class="opt-name">then</span> <span class="opt-value">'two'</span>;<span class="opt-name">else</span> <span class="opt-value">'more'</span>] </div>
-          You can use the keyword <span class="opt-value">[val]</span> inside the expression to insert the current data item.<br>
-          You can use <span class="opt-value">[var]</span> fields inside the expression.</td>
+          <p>You can use the keyword <span class="opt-value">[val]</span> inside the expression to insert the current data item.<br>
+          You can use <span class="opt-value">[var]</span> fields inside the expression.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_else" id="html_field_prm_else"></a><span class="opt-name">else</span> <span class="opt-value">val2</span></td>
@@ -1732,11 +1731,12 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_onformat" id="html_field_prm_onformat"></a><span class="opt-name">onformat</span>=<span class="opt-value">fct_name</span></td>
-        <td align="left" valign="top" class="border-sep"> Indicates the name of a user Php function that will be executed at the time when the value is formated for the merge. This allows typically to modify the text to display.<br>
-          Since TBS version 3.0, it's also possible to indicate a method of a class (see <a href="#php_oop">OOP</a>).<br>
-          The function <span class="opt-value">fct_name</span> must have the following syntax:<br>
-          <span class="txt-code">&nbsp;&nbsp;function <span class="opt-value">fct_name</span>(<span class="opt-name">$FieldName</span>,&amp;<span class="opt-name">$CurrVal</span>,{&amp;<span class="opt-name">$CurrPrm</span>,{&amp;<span class="opt-name">$TBS</span>}}) { ... }<br>
-          </span> <span class="opt-name"> </span>
+        <td align="left" valign="top" class="border-sep"> <p>Indicates the name of a user Php function that will be executed at the time when the value is formated for the merge. This allows typically to modify the text to display.<br>
+          Since TBS version 3.0, it's also possible to indicate a method of a class (see <a href="#php_oop">OOP</a>).</p>
+          <p> The function <span class="opt-value">fct_name</span> must have the following syntax:<br>
+            <span class="txt-code">&nbsp;&nbsp;function <span class="opt-value">fct_name</span>(<span class="opt-name">$FieldName</span>,&amp;<span class="opt-name">$CurrVal</span>,{&amp;<span class="opt-name">$CurrPrm</span>,{&amp;<span class="opt-name">$TBS</span>}}) { ... }<br>
+            </span> <span class="opt-name"> </span>
+          </p>
           <table border="0" cellspacing="0" cellpadding="2">
             <tr>
               <th width="10">&nbsp;</th>
@@ -1766,29 +1766,31 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
                 Use this argument with lot of care. It is used sometimes for the subtemplate mode. </td>
             </tr>
           </table>
-          <span id="v202_subtpl_onformat">Example:</span>
+          <p>Example:
+          </p>
           <div class="decal"> <span class="opt-html">HTML</span>: [<span class="opt-name">onshow.x</span>;<span class="opt-name">onformat</span>=<span class="opt-value">f_to_utf8</span>] </div>
           <div class="decal txt-code"> <span class="opt-html">PHP:</span><br>
             function <span class="opt-value">f_to_utf8</span>(<span class="opt-name">$FieldName</span>, &amp;<span class="opt-name">$CurrVal</span>) {<br>
             &nbsp;<span class="opt-name">&nbsp;$CurrVal</span>= utf8_encode(<span class="opt-name">$CurrVal</span>); <br>
             } </div>
-          <span>See chapter '<a href="#html_subtemplate">Subtemplates</a>' for more details about how to use this arguments in subtemplate mode.<br>
-          Since TBS version 3.6.0, it's possible to limit the allowed PHP functions for parameter <span class="opt-name">onformat</span>. See <a href="#php_instanciate">create a new TBS object</a>. </span></td>
+          <p><span>See chapter '<a href="#html_subtemplate">Subtemplates</a>' for more details about how to use this arguments in subtemplate mode.<br>
+          Since TBS version 3.6.0, it's possible to limit the allowed PHP functions for parameter <span class="opt-name">onformat</span>. See <a href="#php_instanciate">create a new TBS object</a>. </span></p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_protect" id="html_field_prm_protect"></a>protect</span>=<span class="opt-value">val</span></td>
-        <td align="left" valign="top" class="border-sep">Enables you to protect or unprotect the data item to be merged by replacing the characters '<span class="opt-html">[</span>' with their corresponding XML/HTML code '<span class="opt-html">&amp;#91;</span>'. The value <span class="opt-name"><span class="opt-value">val</span></span> can be one of the following keywords:<br>
+        <td align="left" valign="top" class="border-sep"><p>Enables you to protect or unprotect the data item to be merged by replacing the characters '<span class="opt-html">[</span>' with their corresponding XML/HTML code '<span class="opt-html">&amp;#91;</span>'. The value <span class="opt-name"><span class="opt-value">val</span></span> can be one of the following keywords:<br>
           &nbsp; <span class="opt-name"><span class="opt-value">yes</span></span>: (default value) data item is protected.<br>
-          &nbsp; <span class="opt-name"><span class="opt-value">no</span></span>: data item is not protected.<br>
-          By default, all data merged with a template is protected except if it's a file inclusion. It is strongly recommended to protect data when it comes from free enter like on a forum for example.<br>
-          Nevertheless, it is possible to disable the protection by default if you set TBS option <a href="#php_setoption" class="opt-name">'protect'</a>  to <span class="opt-value">false</span>.</td>
+          &nbsp; <span class="opt-name"><span class="opt-value">no</span></span>: data item is not protected.
+        </p>
+          <p>          By default, all data merged with a template is protected except if it's a file inclusion. It is strongly recommended to protect data when it comes from free enter like on a forum for example.</p>
+          <p> Nevertheless, it is possible to disable the protection by default if you set TBS option <a href="#php_setoption" class="opt-name">'protect'</a>  to <span class="opt-value">false</span>.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><span class="opt-value"><a name="html_field_prm_ope" id="html_field_prm_ope"></a></span>ope</span>=<span class="opt-value">action</span></td>
-        <td align="left" valign="top" class="border-sep">Makes one or several operations on the value to merge. You can define several operations to be processed in order by separating them with coma (,).<br>
-          Example: <br>
+        <td align="left" valign="top" class="border-sep"><p>Makes one or several operations on the value to merge. You can define several operations to be processed in order by separating them with coma (,).</p>
+          <p> Example:          </p>
           <div class="decal">[<span class="opt-name">onshow</span>.<span class="opt-name">x</span>;<span class="opt-name">ope</span>=<span class="opt-value">add:-1</span>,<span class="opt-value">mod:10</span>]</div>
-          Supported operations are:
+          <p>Supported operations are: </p>
           <div class="decal">
             <table  border="0" cellspacing="0" cellpadding="3">
               <tr>
@@ -1866,11 +1868,11 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
               </tr>
             </table>
           </div>
-          <div class="versioning">Versioning:<br>
+          <p class="versioning">Versioning:<br>
             - 
             Parameter ope   is supported since TBS version 3.0. 
             It replaces parameter max which doesn't exist since this version.<br>
-            - Multiple operations and 'mul&quot; and &quot;div&quot; are supported since TBS version 3.2.0 </div></td>
+            - Multiple operations and 'mul&quot; and &quot;div&quot; are supported since TBS version 3.2.0 </p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_frm" id="html_field_prm_frm"></a>frm</span>=<span class="opt-value">format</span></td>
@@ -2017,20 +2019,20 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_locale" id="html_field_prm_locale"></a><span class="opt-name">locale</span></td>
-        <td align="left" valign="top" class="border-sep"><span class="versioning">Deprecated since TBS version 3.4.0.</span><br>
-          It does the same as the keyword <span class="opt-value">(locale)</span> used in parameter <a href="#html_field_prm_frm" class="opt-name">frm</a>. </td>
+        <td align="left" valign="top" class="border-sep"><p><span class="versioning">Deprecated since TBS version 3.4.0.</span><br>
+          It does the same as the keyword <span class="opt-value">(locale)</span> used in parameter <a href="#html_field_prm_frm" class="opt-name">frm</a>. </p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_tplfrms" id="html_field_prm_tplfrms"></a><span class="opt-name">tplfrms</span></td>
-        <td align="left" valign="top" class="border-sep">Enables you to define formats in the template that you can reuse for parameter <a href="#html_field_prm_frm" class="opt-name">frm</a>. Works only with <span class="opt-name">onload</span> <a href="#html_field_auto">automatic fields</a>. <br>
-          Example:<br>
+        <td align="left" valign="top" class="border-sep"><p>Enables you to define formats in the template that you can reuse for parameter <a href="#html_field_prm_frm" class="opt-name">frm</a>. Works only with <span class="opt-name">onload</span> <a href="#html_field_auto">automatic fields</a>. </p>
+          <p> Example:</p>
           <div class="decal">[onload;<span class="opt-name">tplfrms</span>;<span class="opt-value">doll</span>=$ 0,000.00;<span class="opt-value">mydt</span>=yyyy-mm-dd]<br>
             [onshow.amount;<span class="opt-name">frm</span>=<span class="opt-value">doll</span>] ... [onshow.date;<span class="opt-name">frm</span>=<span class="opt-value">mydt</span>] <br>
           </div></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_tplvars" id="html_field_prm_tplvars"></a><span class="opt-name">tplvars</span></td>
-        <td align="left" valign="top" class="border-sep">Enables you to define variables in the template that you can retrieve in the Php programm using <a href="#php_tplvars">TplVars property</a>. Works only with <span class="opt-name">onload</span> <a href="#html_field_auto">automatic fields</a>. </td>
+        <td align="left" valign="top" class="border-sep"><p>Enables you to define variables in the template that you can retrieve in the Php programm using <a href="#php_tplvars">TplVars property</a>. Works only with <span class="opt-name">onload</span> <a href="#html_field_auto">automatic fields</a>. </p></td>
       </tr>
     </table>
     <h4><a name="html_field_prm_order" id="html_field_prm_order"></a>Order of processing  parameters:</h4>
@@ -2915,7 +2917,7 @@ $data['group2'][] = array('id'=&gt;4, 'name'=&gt;'jim');</pre>
     </div>
     <p>Remarks:</p>
     <ul>
-      <li> The parameter <span class="opt-name">htmlconv</span>=<span class="opt-value">esc</span> enables you to pass protected string values to the query.</li>
+      <li> The parameter <span class="opt-name">strconv</span>=<span class="opt-value">esc</span> enables you to pass protected string values to the query.</li>
       <li> The dynamic queries also work with <a href="#html_block_section">sections of block</a> and <a href="#html_block_serial">serial display</a>.</li>
     </ul>
   </div>
@@ -2974,7 +2976,7 @@ $data['group2'][] = array('id'=&gt;4, 'name'=&gt;'jim');</pre>
       [onload] tags contained in the file are  processed at the insertion. 
       [onshow] tags will be merged on the Show() method because they became part of the main template.</p>
     <p> The subtemplate can contain any TBS fields, including [var] fields and blocks to be merged. If you intend to merge data with a block defined into a subtemplate, then it's suggested to use parameter <span class="opt-name">file</span> in  an [onload] field in order to ensure that the subtemplate is inserted before you call MergeBlock(). </p>
-    <p> You can create a subtemplate in an independent XML/HTML/Text file, and ask TBS to include in the main template only the <span class="opt-html">&lt;body&gt;</span> part (or another part). This can be done by adding parameter <a href="#html_field_prm_getbody" class="opt-name">getbody</a> to parameter <span class="opt-name">file</span> in the TBS field of the main template. This technique enables you to work <span class="contextual" title="What You See Is What You Get">WYSIWYG</span> with your subtemplates.</p>
+    <p> You can create a subtemplate in an independent XML/HTML/Text file, and ask TBS to include in the main template only the <span class="opt-html">&lt;body&gt;</span> part (or another part). This can be done by adding parameter <a href="#html_field_prm_getpart" class="opt-name">getpart</a> to parameter <span class="opt-name">file</span> in the TBS field of the main template. This technique enables you to work <span class="contextual" title="What You See Is What You Get">WYSIWYG</span> with your subtemplates.</p>
     <h4>Insertion driven with Php code using parameter <span class="opt-name">subtpl</span>:</h4>
     <p>Parameter <span class="opt-name">subtpl</span> is useful to manage subtemplate insertion with Php code. Parameter <span class="opt-name">subtpl</span> is active  only when used with a parameter<span class="opt-name"> script</span> or <span class="opt-name">onformat.</span> It turns the current TBS instance in  Subtemplate mode during the script or function execution and can act on a new template without deteriorating the main template. </p>
     <p> The Subtemplate mode presents the following characteristics: </p>
@@ -3334,8 +3336,12 @@ class clsTbsPlugin {
         <th>Summary</th>
       </tr>
       <tr>
-        <td align="left" valign="top"><a href="#html_field_prm_htmlconv" class="opt-name">htmlconv</a></td>
+        <td align="left" valign="top"><a href="#html_field_prm_strconv" class="opt-name">strconv</a></td>
         <td align="left" valign="top"><p>Char conversion Mode for the field's value.</p></td>
+      </tr>
+      <tr>
+        <td align="left" valign="top"><a href="#html_field_prm_htmlconv" class="opt-name">htmlconv</a></td>
+        <td align="left" valign="top">Deprecated, alias of <span class="opt-name">strconv</span>.</td>
       </tr>
       <tr>
         <td align="left" valign="top"><a href="#html_field_prm_dot" class="opt-name">. </a>(dot)</td>
@@ -3403,7 +3409,7 @@ class clsTbsPlugin {
       </tr>
       <tr>
         <td align="left" valign="top"><a href="#html_field_prm_comm" class="opt-name">comm</a></td>
-        <td align="left" valign="top">Alias of <a href="#html_field_prm_comm" class="opt-name">enlarge</a>.</td>
+        <td align="left" valign="top">Deprecated, alias of <a href="#html_field_prm_comm" class="opt-name">enlarge</a>.</td>
       </tr>
       <tr>
         <td align="left" valign="top"><a href="#html_field_prm_noerr" class="opt-name">noerr</a></td>
@@ -3418,8 +3424,12 @@ class clsTbsPlugin {
         <td align="left" valign="top">Executes the Php script.</td>
       </tr>
       <tr>
-        <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_field_prm_getbody" class="opt-name">getbody</a></td>
+        <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_field_prm_getpart" class="opt-name">getpart</a></td>
         <td align="left" valign="top">Use with <span class="opt-name">file</span> or <span class="opt-name">script</span>. Insert only a part of the subtemplate. </td>
+      </tr>
+      <tr>
+        <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_field_prm_getbody" class="opt-name">getbody</a></td>
+        <td align="left" valign="top">Deprecated, alias of <span class="opt-name">getpart</span>.</td>
       </tr>
       <tr>
         <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_field_prm_rename" class="opt-name">rename</a></td>
