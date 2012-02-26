@@ -364,7 +364,7 @@ a.opt-name:hover {
         <td>&nbsp;</td>
       </tr>
       <tr>
-        <td><a href="#plugins" class="title-1c">&#8226; Coding plug-ins </a></td>
+        <td><a href="#coding" class="title-1c">&#8226; Improve TBS by coding</a></td>
         <td>&nbsp;</td>
       </tr>
       <tr>
@@ -3125,13 +3125,19 @@ $data['group2'][] = array('id'=&gt;4, 'name'=&gt;'jim');</pre>
       </table>
     </div>
   </div>
-  <a name="plugins" id="plugins"></a>
-  <h2 class="pagebreak">Coding plug-ins:</h2>
+  <a name="coding" id="coding"></a>
+  <h2 class="pagebreak">Improve TBS by coding:</h2>
   <p>You can  add features to TinyButStrong using plug-ins. The <strong>database plug-ins</strong> simply enable the method MergeBlock() to recognize new types of database. The <strong>other plug-ins</strong> enable you to add features to TBS or to modify its main methods in order to make it more specialized. 
  </p>
   <p>    In both cases, a plug-in is made of a set of PHP functions or one PHP class which have to fit with a special syntax expected by TBS. Some plug-ins are proposed for download at the <a href="http://www.tinybutstrong.com">TinyButStrong web site</a>.
   </p>
-  <h3><a name="plugins_db" id="plugins_db"></a>Database plug-ins:</h3>
+  <h3><a name="coding_methods" id="plugins_db2"></a>Extended methods:</h3>
+  <div class="norm">
+    <p><span class="versioning">Versioning: Extended methods are  supported since TBS version 3.8.</span></p>
+    <p> Example:</p>
+    <p>$TBS-&gt;ExtendedMethods[''] </p>
+  </div>
+<h3><a name="plugins_db" id="plugins_db"></a>Database plug-ins:</h3>
   <div class="norm">
     <p><span class="versioning">Versioning: database plug-ins are supported since TBS version 1.8.</span></p>
     <p> A database plug-in enables the method MergeBlock() to recognize a new type of database.
