@@ -2333,7 +2333,7 @@ function meth_Merge_AutoSpe(&$Txt,&$Loc) {
 				$x .= "\r\n- plug-in [".(isset($o->Name) ? $o->Name : $pi ).'] version '.(isset($o->Version) ? $o->Version : '?' );
 			}
 			break;
-		case 'phpinfo':
+		case 'php_info':
 			ob_start();
 			phpinfo();
 			$x = ob_get_contents();

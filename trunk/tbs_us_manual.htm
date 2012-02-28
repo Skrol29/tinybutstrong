@@ -182,7 +182,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2012-02-22</td>
+        <td>2012-02-28</td>
       </tr>
     </table>
   </div>
@@ -1216,6 +1216,8 @@ The old features are still suported for compatibility, but they become deprecate
     </ul>
 <p>Example for setting VarRef to global variables :</p>
 <pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;VarRef = &amp;<span class="opt-name">$GLOBALS</span>;
+
+which is the same as:
 
 <span class="opt-name">$TBS</span>-&gt;ResetVarRef(true)<span class="opt-name"></span>;
 </pre>
@@ -2261,12 +2263,17 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
         <td align="left" valign="top" class="opt-name">onshow..error_msg</td>
         <td align="left" valign="top">Display errors that have been avoid during the time when TBS option <a href="#php_setoption" class="opt-name">noerr</a> is set to <span class="opt-value">true</span>.</td>
       </tr>
+      <tr>
+        <td align="left" valign="top" class="opt-name">onshow..php_info</td>
+        <td align="left" valign="top">Display the PhpInfo sight, the same as the PHP function phpinfo().</td>
+      </tr>
     </table>
     <p class="versioning">Versioning:<br>
       - 
-      special var fields &quot;cst&quot; and &quot;tbs_info&quot; are supported since TBS version 3.2.0.<br>
+      special var fields <span class="opt-name">cst</span> and <span class="opt-name">tbs_info</span> are supported since TBS version 3.2.0.<br>
       - 
-      &quot;error_msg&quot; is supported since TBS version 3.5.0. </p>
+      <span class="opt-name">error_msg</span> is supported since TBS version 3.5.0. <br>
+    - <span class="opt-name">php_info</span> is supported since TBS version 3.8.0 </p>
   </div>
   <h3><a name="html_block" id="html_block"></a>TBS Blocks:</h3>
   <div class="norm">
@@ -3211,21 +3218,20 @@ it whill run :<br>
 </div>
 <h3><a name="coding_block_alias" id="plugins_db3"></a>Block alias:</h3>
 <div class="norm">
-  <p>A block alias is a special entry which enables you to make a reference on other expression of Xml/Html blocks in TBS fields.<br>
-  It also enables you to make a reference to a custom PHP function for find the bounds of the block.<br>
+  <p>A block alias is a special name for a block definition, which will be replaced with another list of tags or which will call a custom function to find the block bounds.<br>
   Block alias really empower the way of defining blocks. It is useful for plug-ins or when you want to simplify the understanding of the template coder.</p>
   <p><span class="versioning">Versioning: Block alias are  supported since TBS version 3.8.</span></p>
   <p> Examples:</p>
-  <pre class="txt-code"><span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-value">'block_alias'</span>, <span class="opt-value">'row'</span>, <span class="opt-value">'tr'</span>);
-<span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-value">'block_alias'</span>, <span class="opt-value">'dblrow'</span>, <span class="opt-value">'tr+tr'</span>);
-<span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-value">'block_alias'</span>, <span class="opt-value">'my_alias'</span>, array(<span class="opt-name">$myObj</span>, <span class="opt-value">'findBounds'</span>) );
-</pre>
+  <pre class="txt-code"><span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-value">'block_alias'</span>, <span class="opt-value">'row'</span>, <span class="opt-value">'tr'</span>); // the alias replace one tag
+<span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-value">'block_alias'</span>, <span class="opt-value">'dblrow'</span>, <span class="opt-value">'tr+tr'</span>); // the alias replace several tags
+<span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-value">'block_alias'</span>, <span class="opt-value">'my_alias'</span>, array(<span class="opt-name">$myObj</span>, <span class="opt-value">'findBounds'</span>) ); // the alias call a custom function to find the bounds</pre>
   <p>Use in the template :</p>
-  <pre class="opt-html">[blk1;block=row]
-[blk2;block=dblrow]
-[blk3;block=my_alias]
+  <pre><span class="opt-html">[blk1;block=row]</span> or <span class="opt-html">[blk1;block=row+row]</span> or even <span class="opt-html">[blk1;block=th+row]</span>
+<span class="opt-html">[blk2;block=dblrow]</span>
+<span class="opt-html">[blk3;block=my_alias]</span>
   </pre>
 <h4>Defining a block alias with a function:</h4>
+<p>Example :</p>
   <pre class="txt-code">
 <span class="opt-value">class</span> clsTest {
 <span class="opt-html"> /** 
