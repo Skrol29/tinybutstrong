@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.8.0-RC2 for PHP 5
-Date     : 2012-03-02
+Version  : 3.8.0 for PHP 5
+Date     : 2012-03-04
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -530,7 +530,7 @@ public $ObjectRef = false;
 public $NoErr = false;
 public $Assigned = array();
 // Undocumented (can change at any version)
-public $Version = '3.8.0-RC2';
+public $Version = '3.8.0';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -1476,10 +1476,14 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 				$Loc->PosBeg0 = $Loc->PosBeg;
 				$Loc->PosEnd0 = $Loc->PosEnd;
 				if ($Loc->PrmLst['magnet']==='#') {
+					if (!isset($Loc->AttBeg)) {
+						$Loc->PrmLst['att'] = '.';
+						$this->f_Xml_AttFind($Txt,$Loc,true,$this->AttDelim);
+					}
 					if (isset($Loc->AttBeg)) {
 						$Loc->MagnetId = -3;
 					} else {
-						$this->meth_Misc_Alert($Loc,'parameter \'magnet=#\' cannot be processed because parameter \'att\' is not set or the attribute is not found.',true);
+						$this->meth_Misc_Alert($Loc,'parameter \'magnet=#\' cannot be processed because the corresponding attribute is not found.',true);
 					}
 				} elseif (isset($Loc->PrmLst['mtype'])) {
 					switch ($Loc->PrmLst['mtype']) {
@@ -3866,6 +3870,15 @@ static function f_Xml_AttFind(&$Txt,&$Loc,$Move=false,$AttDelim=false) {
 	$Loc->AttTagBeg = $LocO->PosBeg;
 	$Loc->AttTagEnd = $LocO->PosEnd;
 	$Loc->AttDelimChr = false;
+
+	if ($Att==='.') {
+		// this indicates that the TBS field is supposed to be inside an attribute's value
+		foreach ($LocO->PrmPos as $a=>$p ) {
+			if ( ($p[0]<$Loc->PosBeg) && ($Loc->PosEnd<$p[3]) ) $Att = $a;
+		}
+		if ($Att==='.') return false;
+	}
+		
 	$AttLC = strtolower($Att);
 	if (isset($LocO->PrmLst[$AttLC])) {
 		// The attribute is existing
@@ -3888,7 +3901,7 @@ static function f_Xml_AttFind(&$Txt,&$Loc,$Move=false,$AttDelim=false) {
 		$Loc->AttBeg = false;
 		$Loc->AttName = $Att;
 	}
-
+	
 	// Search for a delimitor
 	if (($Loc->AttDelimCnt==0) and (isset($LocO->PrmPos))) {
 		foreach ($LocO->PrmPos as $p) {

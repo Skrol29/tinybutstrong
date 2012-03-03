@@ -182,7 +182,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2012-03-02</td>
+        <td>2012-03-04</td>
       </tr>
     </table>
   </div>
@@ -1585,16 +1585,23 @@ which is the same as:
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_magnet" id="html_field_prm_magnet"></a><span class="opt-name">magnet</span>=<span class="opt-value">tag</span><br>
           <span class="txt-small">or</span><br>
-          <span class="opt-name">magnet</span>=<span class="opt-value">expr</span></td>
-        <td align="left" valign="top" class="border-sep"><p>Assign a magnet XML/HTML zone to the TBS field. A magnet tag is kept as is when the field has a value, and is deleted when the field is null or empty string. Parameter <span class="opt-name">magnet</span> supports the same syntax as parameter <a href="#html_block_prm_block" class="opt-name">block</a>, i.e. that <span class="opt-value">expr</span> must be an XML/HTML tag or a TBS <a href="#html_block_prm_extblk">extended block</a> expression.
-          </p>
+          <span class="opt-name">magnet</span>=<span class="opt-value">expr</span><br>          <span class="txt-small">or</span><br>          
+          <span class="opt-name">magnet</span>=<span class="opt-value">#</span></td>
+        <td align="left" valign="top" class="border-sep"><p>Assign a magnet XML/HTML zone to the TBS field. A magnet tag is kept as is when the field has a value, and is deleted when the field is null or empty string.</p>
+          <p> Parameter <span class="opt-name">magnet</span> supports the same syntax as parameter <a href="#html_block_prm_block" class="opt-name">block</a>, i.e. that <span class="opt-value">expr</span> must be an XML/HTML tag or a TBS <a href="#html_block_prm_extblk">extended block</a> expression.<br>
+            It 
+          also support the syntax <span class="opt-name">magnet</span>=<span class="opt-value">#</span> which means that the magnet zone is the HTML/HTML attribute wherein the TBS field is embedded.</p>
           <p>Example:</p>
           <div class="decal"><span class="opt-html">(&lt;a href=&quot;[onshow.link;magnet=a]&quot;&gt;click here&lt;/a&gt;)</span><br>
             Result for <span class="txt-code">$link='www.tbs.com'</span>: <span class="opt-html">(&lt;a href=&quot;www.tbs.com&quot;&gt;click here&lt;/a&gt;)</span><br>
           Result for <span class="txt-code">$link=''</span>: <span class="opt-html">()</span></div>
           <p>By default, the magnet XML/HTML zone should be delimited by a pair of opening-closing tags (like <span class="opt-html">&lt;a&gt;&lt;/a&gt;</span>) which first tag is placed before the TBS fields. But this can be changed using parameter <span class="opt-name">mtype</span> (see below).</p>
-          <p class="versioning"> Since TBS version 3.3.0, <a href="#html_field_prm_ope" class="opt-name">parameter ope</a> has keywords (<span class="opt-value">nif</span>, <span class="opt-value">minv</span>, <span class="opt-value">mok</span> and <span class="opt-value">mko</span>) that improve parameter <span class="opt-name">magnet</span>. <br>
-          Remark: the parameters <span class="opt-name">if then else</span> are processed before parameter <span class="opt-name">magnet.</span></p></td>
+          <h6>Remark:</h6> <p>the parameters <span class="opt-name">if</span>, <span class="opt-name">then</span>, <span class="opt-name">else</span> are processed before parameter <span class="opt-name">magnet.</span>
+          </p>
+          <p class="versioning"> Versioning:<br>
+            Since TBS version 3.3.0, <a href="#html_field_prm_ope" class="opt-name">parameter ope</a> has keywords (<span class="opt-value">nif</span>, <span class="opt-value">minv</span>, <span class="opt-value">mok</span> and <span class="opt-value">mko</span>) that improve parameter <span class="opt-name">magnet</span>. <br>
+            The sytax <span class="opt-name">magnet</span>=<span class="opt-value">#</span> without parameter <span class="opt-name">att</span> is supported since TBS version 
+        3.8.0.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_mtype" id="html_field_prm_mtype"></a><span class="opt-name">mtype</span>=<span class="opt-value">val</span></td>
