@@ -33,6 +33,7 @@ include(dirname(__FILE__).'/testcase/StrconvTestCase.php');
 include(dirname(__FILE__).'/testcase/FieldTestCase.php');
 include(dirname(__FILE__).'/testcase/BlockTestCase.php');
 include(dirname(__FILE__).'/testcase/MiscTestCase.php');
+include(dirname(__FILE__).'/testcase/SubTplTestCase.php');
 
 // launch tests
 ini_set("display_errors", "On");
@@ -46,6 +47,6 @@ $test->addTestCase(new QuoteTestCase());
 $test->addTestCase(new FrmTestCase());
 $test->addTestCase(new StrconvTestCase());
 $test->addTestCase(new MiscTestCase());
+$test->addTestCase(new SubTplTestCase());
 $test->run(new HtmlCodeCoverageReporter(array($tbsFileName, dirname(dirname(__FILE__)).'/plugins/')));
 
-?>
