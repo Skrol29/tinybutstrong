@@ -1,7 +1,7 @@
 
-TinyButStrong 1.8.0 RC1
+TinyButStrong 3.8.0
 
-Skrol29, 2012-02-22
+Skrol29, 2012-03-04
 
 Change-log:
 ===========
@@ -59,7 +59,9 @@ Change-log:
 * New special field [onshow..phpinfo]: insert the php info.
  
 * New property ExtendedMethods: enables plug-in coders to add new TBS methods (PHP 5 only)
- 
+
+* Parameter 'magnet=#' is supported even if parameter 'att' is not used.
+  
 * Parameter 'enlarge' is a new alias of parameter 'comm'
 
 * Parameter 'getpart' is a new alias of parameter 'getbody'
