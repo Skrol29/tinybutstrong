@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.8.0-RC1 for PHP 4
-Date     : 2012-02-22
+Version  : 3.8.0-RC2 for PHP 4
+Date     : 2012-03-02
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -536,7 +536,7 @@ var $ObjectRef = false;
 var $NoErr = false;
 var $Assigned = array();
 // Undocumented (can change at any version)
-var $Version = '3.8.0-RC1';
+var $Version = '3.8.0-RC2';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -551,8 +551,7 @@ var $OnLoad = true;
 var $OnShow = true;
 var $IncludePath = array();
 var $ExtendedMethods = array();
-var $TplStoreMain = array();
-var $TplStoreSub = array();
+var $TplStore = array();
 // Private
 var $_ErrMsgName = '';
 var $_LastFile = '';
@@ -1640,9 +1639,9 @@ function meth_Locator_PartAndRename(&$CurrVal, &$PrmLst) {
 
 	// Store part
 	if (isset($PrmLst['store'])) {
-		$storename = (isset($PrmLst['storename'])) ? $PrmLst['storename'] : 'getpart';
-		if (!isset($this->$TplStore[$storename])) $this->$TplStore[$storename] = '';
-		$this->$TplStore[$storename] .= $this->f_Xml_GetPart($CurrVal, $PrmLst['store'], false);
+		$storename = (isset($PrmLst['storename'])) ? $PrmLst['storename'] : 'default';
+		if (!isset($this->TplStore[$storename])) $this->TplStore[$storename] = '';
+		$this->TplStore[$storename] .= $this->f_Xml_GetPart($CurrVal, $PrmLst['store'], false);
 	}
 
 	// Get part
@@ -2314,7 +2313,7 @@ function meth_Merge_AutoSpe(&$Txt,&$Loc) {
 		case 'store':
 			if ($Loc->SubNbr==2) {
 				$SubStart = 2;
-				$x = implode('',$this->TplStore); // contatenation of all stores
+				$x = implode('',$this->TplStore); // concatenation of all stores
 			} else {
 				if (isset($this->TplStore[$Loc->SubLst[2]])) {
 					$SubStart = 3;
@@ -2323,6 +2322,7 @@ function meth_Merge_AutoSpe(&$Txt,&$Loc) {
 					$ErrMsg = 'Store named \''.$Loc->SubLst[2].'\' is not defined yet.';
 				}
 			}
+			if (!isset($Loc->PrmLst['strconv'])) {$Loc->PrmLst['strconv'] = 'no'; $Loc->PrmLst['protect'] = 'no';}
 			break;
 		case 'cst': $x = @constant($Loc->SubLst[2]); break;
 		case 'tbs_info':
@@ -2339,10 +2339,7 @@ function meth_Merge_AutoSpe(&$Txt,&$Loc) {
 			$x = ob_get_contents();
 			ob_end_clean();
 			$x = self::f_Xml_GetPart($x, '(style)+body', false);
-			if (!isset($Loc->PrmLst['strconv'])) {
-				$Loc->PrmLst['strconv'] = 'no';
-				$Loc->PrmLst['protect'] = 'no';
-			}
+			if (!isset($Loc->PrmLst['strconv'])) {$Loc->PrmLst['strconv'] = 'no'; $Loc->PrmLst['protect'] = 'no';}
 			break;
 		default:
 			$IsSupported = false;
