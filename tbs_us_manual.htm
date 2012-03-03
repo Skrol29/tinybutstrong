@@ -182,7 +182,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2012-02-28</td>
+        <td>2012-03-02</td>
       </tr>
     </table>
   </div>
@@ -312,7 +312,7 @@ a.opt-name:hover {
         <td>&nbsp;</td>
       </tr>
       <tr>
-        <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <a href="#html_field_special">Special Automatic fields</a></td>
+        <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <a href="#html_field_special">Special  automatic fields</a></td>
         <td>&nbsp;</td>
       </tr>
       <tr>
@@ -970,7 +970,7 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
     <h4>Merge automatic fields and blocks:</h4>
     <p>You can use the method  MergeField() in order to force the merge of the automatic <a href="#html_field_auto">fields</a> and <a href="#html_block_auto">blocks</a> ([onload] and [onshow]). But in this case, only the first argument should be indicated.</p>
     <p> Example: <span class="txt-code"><span class="opt-name">$TBS-&gt;</span>MergeField(<span class="opt-value">'var'</span>); </span> </p>
-    <div class="versioning">Versioning: the merge of special fields is supported since TBS version 3.0. It replaces the old method MergeSpecial() which is not supported anymore. </div>
+    <div class="versioning">Versioning: the merge of special automatic fields is supported since TBS version 3.0. It replaces the old method MergeSpecial() which is not supported anymore. </div>
   </div>
   <h3><a name="php_setoption" id="php_setoption"></a>Method SetOption():</h3>
   <div class="norm">
@@ -1016,13 +1016,13 @@ Some of the TBS options are a new way of setting <a href="#php_options_compatibi
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_noerr" id="php_setoption4"></a>noerr</span></td>
-        <td align="left" valign="top" class="border-sep"><p>Enables you to avoid all TinyButStrong error messages for next operations. Default value is <span class="opt-value">false</span>. The errors that were not displayed can however be returned with the special field <a href="#html_field_special" class="opt-name">[onshow..error_msg]</a>. Furthermore you can check the presence of error using property <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;<span class="opt-value">ErrCount</span></span> which counts  TBS errors regardless of option <span class="opt-name"> noerr</span>.</p>
+        <td align="left" valign="top" class="border-sep"><p>Enables you to avoid all TinyButStrong error messages for next operations. Default value is <span class="opt-value">false</span>. The errors that were not displayed can however be returned with the special automatoc field <a href="#html_field_special" class="opt-name">[onshow..error_msg]</a>. Furthermore you can check the presence of error using property <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;<span class="opt-value">ErrCount</span></span> which counts  TBS errors regardless of option <span class="opt-name"> noerr</span>.</p>
           <p> Option <span class="opt-name">noerr</span> is useful in two cases:</p>
           <ul>
             <li> For professional  sites put into production for whom no error message can be displayed. Take care because you will have no more indication about the good running of the merge. It is often more judicious to use parameter <a href="#html_field_prm_noerr" class="opt-name">noerr</a> which enables you to avoid messages concerning one particular TBS tag. </li>
             <li> For merges that do not accept TinyButStrong basic error messages. For example, an OpenOffice document will not open correctly if a TBS error occurs. Set option <span class="opt-name">noerr</span> to <span class="opt-value">true</span> and the field <a href="#html_field_special" class="opt-name">[onshow..error_msg]</a> to display TBS errors in a viewable place of your OpenOffice document. </li>
           </ul>
-          <p class="versioning">Versioning: Special field [onshow..error_msg] is supported since TBS version 3.5.0. </p></td>
+          <p class="versioning">Versioning: the special automatic field [onshow..error_msg] is supported since TBS version 3.5.0. </p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_automerge" id="php_setoption5"></a>auto_merge</span></td>
@@ -1673,7 +1673,8 @@ which is the same as:
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_getpart" id="html_field_prm_getbody2"></a><a name="html_field_prm_getbody" id="html_field_prm_getbody"></a><span class="opt-name">getpart</span>=<span class="opt-value">taglist</span></td>
-        <td align="left" valign="top" class="border-sep"><p>To be used with parameter <span class="opt-name">file</span> or <span class="opt-name">script</span>. Indicates that not all the file contents is loaded but only some XML/HTML parts of it defined with the  tag list. The tags of the list must be separated with plus (+), and placed between parentheses if you want the tags themselves to be retrieved with their content. If the file has several XML/HTML part of a tag, all those parts will be automatically concatenated.    	  If parameter <span class="opt-name">getpart</span> is used without value, then  the &lt;body&gt; tag is taken by default.</p>
+        <td align="left" valign="top" class="border-sep"><p>To be used with parameter <span class="opt-name">file</span> or <span class="opt-name">script</span>.<br>
+Indicates that not all the file contents is loaded but only some XML/HTML parts of it defined with the  tag list. The tags of the list must be separated with plus (+), and placed between parentheses if you want the tags themselves to be retrieved with their content. If the file has several XML/HTML part of a tag, all those parts will be automatically concatenated.    	  If parameter <span class="opt-name">getpart</span> is used without value, then  the &lt;body&gt; tag is taken by default.</p>
           <p> Example: </p>
           <div class="decal">[onload;<span class="opt-name">file</span>=<span class="opt-value">header.htm</span>;<span class="opt-name">getpart</span>=<span class="opt-value">(script)+(style)+body</span>]</div>
 <p class="versioning">Versioning:<br>
@@ -1682,6 +1683,35 @@ which is the same as:
 Parameter <span class="opt-name">getbody</span> is supported since TBS version 3.0. 
             In previous versions, it was automatically processed when using parameter file. Now it becomes explicit. <br>
             The tag list is supported since TBS version 3.5.0. Before this version, the value of getbody can be only one tag without parentheses. </p></td>
+      </tr>
+      <tr>
+        <td align="left" valign="top" class="border-sep"><a name="html_field_prm_store" id="html_field_prm_getbody3"></a><span class="opt-name">store</span>=<span class="opt-value">taglist</span></td>
+        <td align="left" valign="top" class="border-sep"><p>To be used with parameter <span class="opt-name">file</span> or <span class="opt-name">script</span>.<br>
+          It works like parameter <span class="opt-name">getpart</span> but the recovered part is buffered into a TBS store instead  of being directly displayed. This enables you to store some parts of the sub-template and display them elsewhere in the main template.<br>
+          A TBS store can be displayed using a <a href="#html_field_special">special automatic field</a> using the key <span class="opt-name">store</span> and the name of the store.<br>
+By default the name of a store is '<span class="opt-name">default</span>', but it can be changed using parameter <a href="#html_field_prm_storename" class="opt-name">storename</a>.</p>
+          <p>Parameter <span class="opt-name">store</span> is useful to use a sub-template as a component that will spread several contents in the main template.</p>
+        <p>Example: </p>
+        <pre class="decal">
+<span class="opt-html">&lt;html&gt;
+&lt;head&gt;
+  &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;
+  &lt;title&gt;The main template&lt;/title&gt;</span>
+  [<span class="opt-name">onshow</span>.<span class="opt-name">store</span>.<span class="opt-name">default</span>]
+<span class="opt-html">&lt;/head&gt;
+&lt;body&gt;</span>
+  Here is a component :
+<span class="opt-html">  &lt;div&gt;</span>
+    [<span class="opt-name">onload</span>;<span class="opt-name">file</span>=<span class="opt-value">component1.htm</span>;<span class="opt-name">getpart</span>=<span class="opt-value">body</span>;<span class="opt-name">store</span>=<span class="opt-value">(script)+(style)</span>]
+<span class="opt-html">  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</span></pre><p class="versioning">Versioning: Parameter <span class="opt-name">store</span> is supported since TBS version 3.8.0.</p></td>
+      </tr>
+      <tr>
+        <td align="left" valign="top" class="border-sep"><a name="html_field_prm_storename" id="html_field_prm_getbody5"></a><span class="opt-name">storename</span>=<span class="opt-value">name</span></td>
+        <td align="left" valign="top" class="border-sep">To be used with parameter <span class="opt-name">store</span>.
+Parameter <span class="opt-name">storename</span> changes the name of the store. See parameter <a href="#html_field_prm_store" class="opt-name">store</a>.
+<p class="versioning">Versioning: Parameter <span class="opt-name">store</span> is supported since TBS version 3.8.0.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_rename" id="html_field_prm_subtpl2"></a><span class="opt-name">rename</span> <span class="opt-value">old</span><span class="opt-name">=</span><span class="opt-value">new</span></td>
@@ -2094,26 +2124,27 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
       </tr>
     </table>
     <h4><a name="html_field_prm_order" id="html_field_prm_order"></a>Order of processing  parameters:</h4>
-    <p>When you whant to use several paremeters in the same TBS field, then it can be intersing to undertsand in which order they are processed. Each parameter is changing the  value to be merged, but the source from where the value is is taken is not changed. </p>
-    <p>Order:</p>
-    <p> 1) -&gt; Retreiving the value of the field to be merged.<br>
-      2) -&gt; Changing the value using parameters: <br>
+    <p>When you want to use several parameters in the same TBS field, then it can be interesting to understand in which order they are processed. <br>
+      TBS changes the value to be merged, without changing the original value.</p>
+    <p>Order of processes:</p>
+    <p> 1) -&gt; Retreive the value of the field to be merged.<br>
+      2) -&gt; Change the value using parameters: <br>
       &nbsp;&nbsp;&nbsp;&nbsp;2.1) -&gt; <a href="#html_field_prm_onformat" class="opt-name">onformat</a><br>
-      &nbsp;&nbsp;&nbsp;&nbsp;2.2) -&gt; <a href="#html_field_prm_ope" class="opt-name">ope</a> / plug-ins OnOperation<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;2.3) -&gt; <a href="#html_field_prm_frm" class="opt-name">frm</a> / <span class="border-sep">XML/HTML</span> or other char conversion<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;2.2) -&gt; <a href="#html_field_prm_ope" class="opt-name">ope</a> + plug-ins OnOperation<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;2.3) -&gt; <a href="#html_field_prm_frm" class="opt-name">frm</a> or <a href="#html_field_prm_strconv" class="opt-name">strconv</a> or default char conversion<br>
       &nbsp;&nbsp;&nbsp;&nbsp;2.4) -&gt; <a href="#html_field_prm_if" class="opt-name">if</a> <br>
       &nbsp;&nbsp;&nbsp;&nbsp;2.5) -&gt; <a href="#html_field_prm_file" class="opt-name">file</a><br>
       &nbsp;&nbsp;&nbsp;&nbsp;2.6) -&gt; <a href="#html_field_prm_script" class="opt-name">script</a><br>
       &nbsp;&nbsp;&nbsp;&nbsp;2.7) -&gt; <a href="#html_field_prm_script" class="opt-name">att</a><br>
       &nbsp;&nbsp;&nbsp;&nbsp;2.8) -&gt; . / <a href="#html_field_prm_ifempty" class="opt-name">ifempty</a> / <a href="#html_field_prm_magnet" class="opt-name">magnet</a><br>
-      3) -&gt; Inserting the value in the template. </p>
+      3) -&gt; Insert the value in the template. </p>
   </div>
   <h3><a name="html_field_auto" id="html_field_auto"></a>Automatic fields</h3>
   <div class="norm">
     <p>Automatic fields enable you to automatically merge PHP global variables  when some events occur. </p>
     <p> For example [<span class="opt-name">onload</span>.x] will be merged with the global variable $x  when the <a href="#php_loadtemplate">LoadTemplate()</a> method is called.</p>
     <p> Automatic fields can only merge  PHP variables <strong>when they are global</strong>. There is no way to merge a variable which is local to a function, unless you make a reference to it with a global variable, or if you merge it using <a href="#php_mergefield">MergeField()</a>.<br>
-      Automatic fields can also merge TBS special information (see <a href="#html_field_special">Special automatic fields</a>), or data of the ObjectRef property (see <a href="#php_oop">Objet Oriented Programming</a>). </p>
+      Automatic fields can also merge TBS special information (see <a href="#html_field_special">Special  automatic fields</a>), or data of the ObjectRef property (see <a href="#php_oop">Objet Oriented Programming</a>). </p>
     <p> There are three types of automatic fields:</p>
     <ul>
       <li><span class="opt-name">[onload]</span> fields, which are automatically merged  when the <a href="#php_loadtemplate">LoadTemplate()</a> method is called.</li>
@@ -2207,65 +2238,84 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
       OnLoad and OnShow are supported since TBS version 3.6.0.</span><br>
     </p>
   </div>
-  <h3><a name="html_field_special" id="html_field_special3"></a>Special automatic fields :</h3>
+  <h3><a name="html_field_special" id="html_field_special3"></a>Special  automatic fields:</h3>
   <div class="norm"> 
-    <p>A Special [var] field is a TBS Field which displays data provided by the TinyButStrong system.
-      The name of a Special [var] field has to begin with '<span class="opt-name">var..</span>', followed by a keyword in the list below.
-      The parameters for standard TBS Fields are available for Special [var] fields. </p>
+    <p>A Special automatic field is a TBS automatic field which has a special name and can display special data provided by the template engine.<br>
+      The special names can work only with <a href="#html_field_auto">automatic fields</a>. That is [<span class="opt-name">onload</span>], [<span class="opt-name">onshow</span>] and [<span class="opt-name">var</span>].<br>
+      The scpecial names always have a double dot before the key instead of one.
+      <br>
+    </p>
     <p> Example: <span class="opt-html">Date of the day : </span>[onshow.<span class="opt-name">.now</span>;frm='mm-dd-yyyy'] </p>
-    <p>      (valid for both <span class="opt-name">onload</span>, <span class="opt-name">onshow</span> et <span class="opt-name">var</span>)    </p>
+    <h5>Available keys for special automatic fields:</h5>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
-        <th>Name</th>
+        <th>Key</th>
         <th>Description</th>
+        <th>Example</th>
       </tr>
       <tr>
-        <td align="left" valign="top" class="opt-name">onshow..now</td>
+        <td align="left" valign="top" class="opt-name">now</td>
         <td align="left" valign="top">Date and hour of the server.</td>
+        <td align="left" valign="top">[onshow.<span class="opt-name">.now</span>;frm='mm-dd-yyyy']</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="opt-name">onshow..version</td>
+        <td align="left" valign="top" class="opt-name">version</td>
         <td align="left" valign="top"> The version of TinyButStrong. </td>
+        <td align="left" valign="top">[onshow.<span class="opt-name">.version</span>]</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="opt-name">onshow..script_name</td>
+        <td align="left" valign="top" class="opt-name">script_name</td>
         <td align="left" valign="top">The name of the PHP file currently executing.</td>
+        <td align="left" valign="top">&lt;form action=&quot;[onshow.<span class="opt-name">.script_name</span>]&quot;&gt;</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="opt-name">onshow..template_name</td>
+        <td align="left" valign="top" class="opt-name">template_name</td>
         <td align="left" valign="top">The name of the last loaded template file.<br>
           It is the name given to the <a href="#php_loadtemplate">LoadTemplate()</a> method.</td>
+        <td align="left" valign="top">&nbsp;</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="opt-name">onshow..template_date</td>
+        <td align="left" valign="top" class="opt-name">template_date</td>
         <td align="left" valign="top">The creation date of the last loaded template file.</td>
+        <td align="left" valign="top">&nbsp;</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="opt-name">onshow..template_path</td>
+        <td align="left" valign="top" class="opt-name">template_path</td>
         <td align="left" valign="top">The directory of the last loaded template file.<br>
           It is the directory given to the <a href="#php_loadtemplate">LoadTemplate()</a> method.</td>
+        <td align="left" valign="top">&nbsp;</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="opt-name">onshow..tplvars.*</td>
+        <td align="left" valign="top" class="opt-name">tplvars.*</td>
         <td align="left" valign="top">The value of an item set in the <a href="#php_tplvars">TplVars</a> property.<br>
           ('*' must be the key of an existing item in the array)</td>
+        <td align="left" valign="top">        [onshow.<span class="opt-name">.tplvars.title</span>]</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="opt-name">onshow..cst.*</td>
+        <td align="left" valign="top" class="opt-name">cst.*</td>
         <td align="left" valign="top">The value of a PHP constant.<br>
           (* must be the name of an existing constant) </td>
+        <td align="left" valign="top">[onshow.<span class="opt-name">.cst.PHP_VERSION</span>]</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="opt-name">onshow..tbs_info</td>
+        <td align="left" valign="top" class="opt-name">tbs_info</td>
         <td align="left" valign="top">Information about TBS and installed plug-ins. </td>
+        <td align="left" valign="top">[onshow.<span class="opt-name">.tbs_info</span>]</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="opt-name">onshow..error_msg</td>
+        <td align="left" valign="top" class="opt-name">error_msg</td>
         <td align="left" valign="top">Display errors that have been avoid during the time when TBS option <a href="#php_setoption" class="opt-name">noerr</a> is set to <span class="opt-value">true</span>.</td>
+        <td align="left" valign="top">[onshow.<span class="opt-name">.error_msg</span>]</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="opt-name">onshow..php_info</td>
+        <td align="left" valign="top" class="opt-name">php_info</td>
         <td align="left" valign="top">Display the PhpInfo sight, the same as the PHP function phpinfo().</td>
+        <td align="left" valign="top">[onshow.<span class="opt-name">.php_info</span>]</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top" class="opt-name">store.*</td>
+        <td align="left" valign="top">Display the contents aggregated in a store.</td>
+        <td align="left" valign="top">[onshow.<span class="opt-name">.store.default</span>]</td>
       </tr>
     </table>
     <p class="versioning">Versioning:<br>
@@ -2273,7 +2323,7 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
       special var fields <span class="opt-name">cst</span> and <span class="opt-name">tbs_info</span> are supported since TBS version 3.2.0.<br>
       - 
       <span class="opt-name">error_msg</span> is supported since TBS version 3.5.0. <br>
-    - <span class="opt-name">php_info</span> is supported since TBS version 3.8.0 </p>
+    - <span class="opt-name">php_info</span> and <span class="opt-name">store</span> are supported since TBS version 3.8.0 </p>
   </div>
   <h3><a name="html_block" id="html_block"></a>TBS Blocks:</h3>
   <div class="norm">
@@ -3556,6 +3606,14 @@ class clsTbsPlugin {
       <tr>
         <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_field_prm_getbody" class="opt-name">getbody</a></td>
         <td align="left" valign="top">Deprecated, alias of <span class="opt-name">getpart</span>.</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top"> <a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_field_prm_store" class="opt-name">store</a></td>
+        <td align="left" valign="top">Use with <span class="opt-name">file</span> or <span class="opt-name">script</span>. Store a part of the subtemplate in order to display it elsewhere.</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_field_prm_storename" class="opt-name">storename</a></td>
+        <td align="left" valign="top">Use with <span class="opt-name">store</span>. Change the name of the store.</td>
       </tr>
       <tr>
         <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_field_prm_rename" class="opt-name">rename</a></td>
