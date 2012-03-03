@@ -24,7 +24,7 @@ echo "<br> \r\n";
 	
 if (substr_count($Src, '_dev.php')>0) {
 	$Dst4 = str_replace('_dev.php','_php4.php',$Src);
-	$Dst5 = str_replace('_dev.php','_php5.php',$Src);
+	$Dst5 = str_replace('_dev.php','.php',$Src);
 } else {
 	$Dst4 = str_replace('.php','_php4.php',$Src);
 	$Dst5 = str_replace('.php','_php5.php',$Src);
