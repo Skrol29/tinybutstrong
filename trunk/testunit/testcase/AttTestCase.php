@@ -64,6 +64,10 @@ class AttTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("<div class=\"test1\"><span class=\"hello\">hello</span>[move;att=div#class;magnet=#] <span class=\"mr\">Mr.</span> <span class=\"patatoe\">Patatoe</span></div>", array('move'=>''), "<div><span class=\"hello\">hello</span> <span class=\"mr\">Mr.</span> <span class=\"patatoe\">Patatoe</span></div>", "test fields #31");
 		$this->assertEqualMergeFieldStrings("<div class=\"test1\"><span class=\"hello\">hello</span>[move;att=span#class;magnet=#] <span class=\"mr\">Mr.</span> <span class=\"patatoe\">Patatoe</span></div>", array('move'=>''), "<div class=\"test1\"><span>hello</span> <span class=\"mr\">Mr.</span> <span class=\"patatoe\">Patatoe</span></div>", "test fields #32");
 		$this->assertEqualMergeFieldStrings("<div class=\"test1\"><span class=\"hello\">hello</span>[move;att=+span#class;magnet=#] <span class=\"mr\">Mr.</span> <span class=\"patatoe\">Patatoe</span></div>", array('move'=>''), "<div class=\"test1\"><span class=\"hello\">hello</span> <span>Mr.</span> <span class=\"patatoe\">Patatoe</span></div>", "test fields #33");
+		if ($this->atLeastTBSVersion('3.8')) {
+			// magnet=# without parameter att
+			$this->assertEqualMergeFieldStrings("<div class=\"test1\"><span class=\"hello\">hello</span> <span class=\"[move;magnet=#]\">Mr.</span> <span class=\"patatoe\">Patatoe</span></div>", array('move'=>''), "<div class=\"test1\"><span class=\"hello\">hello</span> <span>Mr.</span> <span class=\"patatoe\">Patatoe</span></div>", "test fields #34");
+		}
 
 		// tests for 'attadd' option
 		$this->assertEqualMergeFieldStrings("<div class=\"test1\">hello[move;att=id;attadd]</div>", array('move'=>'test2'), "<div class=\"test1\" id=\"test2\">hello</div>", "test fields #34");
