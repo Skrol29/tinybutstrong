@@ -8,17 +8,17 @@ Change-log:
 
 * New property $TBS->VarRef
 
-  It is supposed to be an associative array. All autoamtic TBS fields will seacrh the values in the VarRef scope.
-  By default this property is a reference on the global variable $GLOBALS. This bring the compatibily with previous versions.
+  It is supposed to be an associative array. All automatic TBS fields (onload, onshow, var) will search the values in the VarRef scope.
+  By default this property is a reference on the global variable $GLOBALS. This bring the compatibly with previous versions.
   You can reset VarRef to an empty array using: $TBS->ResetVarRef(false)
   You can reset VarRef to $GLOBALS       using: $TBS->ResetVarRef(true)
 
 * New methods SetOption() and GetOption()
 
   For a better harmonization, most of TBS options can be set and get using SetOption() and GetOption().
-  This alos ebales you to set all options at the crration of an instance, and alos to retrieve the array of all options.
+  This also enables you to set all options at the creation of an instance, and also to retrieve the array of all options.
   For example: $TBS = new clsTinyButStrong($my_options)
-  
+ 
   Supported options are:
 
   Key             Default value
@@ -32,7 +32,7 @@ Change-log:
   'att_delim'     '"'
   'protect'       true
   'turbo_block'   true
-  'charset'       '' 
+  'charset'       ''
   'chr_open'      '['
   'chr_close'     ']'
   'tpl_frms'       array()
@@ -40,28 +40,28 @@ Change-log:
   'block_alias'   array()
   'render'        TBS_OUTPUT + TBS_EXIT
 
-* New option 'include_path' enables you to defines one or several paths for sub-templates and scripts.
+* New option 'include_path' enables you to define one or several paths for sub-templates and scripts.
 
-* New option 'block_alias' enables you to defines aliases of blocks.
+* New option 'block_alias' enables you to define aliases of blocks.
 
-* New option 'tpl_frms' enables you to defines aliases of blocks.
+* New option 'tpl_frms' enables you to define template formats.
  
 * New data source supported in native: Zend DB Adapter
  
-* Parameter 'frm' now supports the thousand seperator with several characters. Useful for Html entites for example.
+* Parameter 'frm' now supports the thousand separator with several characters. Useful for Html entities for example.
 
 * New values supported by parameter "ope": upper, lower, upper1, upperw, utf8
  
 * New parameters 'store' and 'storename':
   They enable you to bufferize the content of a sub-templates in a store, that you can replace anywhere in the main template using [onshow..store].
-  Usefull for developping sub-templates as components.
+  Usefull for developing sub-templates as components.
  
 * New special field [onshow..phpinfo]: insert the php info.
  
 * New property ExtendedMethods: enables plug-in coders to add new TBS methods (PHP 5 only)
 
 * Parameter 'magnet=#' is supported even if parameter 'att' is not used.
-  
+ 
 * Parameter 'enlarge' is a new alias of parameter 'comm'
 
 * Parameter 'getpart' is a new alias of parameter 'getbody'
@@ -75,5 +75,3 @@ Fixed bugs:
 * using parameter getbody: Notice: Trying to get property of non-object in ...\tbs_class.php on line 3775
 
 * with PHP 4 (who use it?): PDO::FETCH_ASSOC is not recognized
-
- 
