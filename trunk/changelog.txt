@@ -1,77 +1,12 @@
 
-TinyButStrong 3.8.0
+TinyButStrong 3.8.1
 
-Skrol29, 2012-03-04
+Skrol29, 2012-04-01
 
 Change-log:
 ===========
 
-* New property $TBS->VarRef
+PHP 5.4 :
+Unexpected PHP error [Array to string conversion] severity [E_NOTICE] in [D:\Users\Qwerty\Dev HTML\Site Dev\svn_TinyButStrong\trunk\tbs_class.php line 72]
 
-  It is supposed to be an associative array. All automatic TBS fields (onload, onshow, var) will search the values in the VarRef scope.
-  By default this property is a reference on the global variable $GLOBALS. This bring the compatibly with previous versions.
-  You can reset VarRef to an empty array using: $TBS->ResetVarRef(false)
-  You can reset VarRef to $GLOBALS       using: $TBS->ResetVarRef(true)
-
-* New methods SetOption() and GetOption()
-
-  For a better harmonization, most of TBS options can be set and get using SetOption() and GetOption().
-  This also enables you to set all options at the creation of an instance, and also to retrieve the array of all options.
-  For example: $TBS = new clsTinyButStrong($my_options)
- 
-  Supported options are:
-
-  Key             Default value
-  -----------     -------------
-  'var_prefix'    ''
-  'fct_prefix'    ''
-  'noerr'         false
-  'auto_merge'    true
-  'onload'        true
-  'onshow'        true
-  'att_delim'     '"'
-  'protect'       true
-  'turbo_block'   true
-  'charset'       ''
-  'chr_open'      '['
-  'chr_close'     ']'
-  'tpl_frms'       array()
-  'include_path'  array()
-  'block_alias'   array()
-  'render'        TBS_OUTPUT + TBS_EXIT
-
-* New option 'include_path' enables you to define one or several paths for sub-templates and scripts.
-
-* New option 'block_alias' enables you to define aliases of blocks.
-
-* New option 'tpl_frms' enables you to define template formats.
- 
-* New data source supported in native: Zend DB Adapter
- 
-* Parameter 'frm' now supports the thousand separator with several characters. Useful for Html entities for example.
-
-* New values supported by parameter "ope": upper, lower, upper1, upperw, utf8
- 
-* New parameters 'store' and 'storename':
-  They enable you to bufferize the content of a sub-templates in a store, that you can replace anywhere in the main template using [onshow..store].
-  Usefull for developing sub-templates as components.
- 
-* New special field [onshow..phpinfo]: insert the php info.
- 
-* New property ExtendedMethods: enables plug-in coders to add new TBS methods (PHP 5 only)
-
-* Parameter 'magnet=#' is supported even if parameter 'att' is not used.
- 
-* Parameter 'enlarge' is a new alias of parameter 'comm'
-
-* Parameter 'getpart' is a new alias of parameter 'getbody'
-
-* Parameter 'strconv' is a new alias of parameter 'htmlconv'
-
-Fixed bugs:
-
-* A string [] appears in the contents when parameter "att" is used with a "parentgrp" block.
-
-* using parameter getbody: Notice: Trying to get property of non-object in ...\tbs_class.php on line 3775
-
-* with PHP 4 (who use it?): PDO::FETCH_ASSOC is not recognized
+Unexpected PHP error [Array to string conversion] severity [E_NOTICE] in [D:\Users\Qwerty\Dev HTML\Site Dev\svn_TinyButStrong\trunk\tbs_class.php line 1369]
