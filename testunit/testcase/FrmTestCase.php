@@ -42,7 +42,7 @@ class FrmTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("{[a;frm=0,000.00%]}", array('a'=>3128.495),  "{312,849.50%}", "test pourcent with thousand separator");
 
 		// number format with text parts
-		$this->assertEqualMergeFieldStrings("{[a;frm='0 000,00 €']}", array('a'=>3128.495),  "{3 128,50 €}", "test number with text parts (not using symbols)");
+		$this->assertEqualMergeFieldStrings("{[a;frm='0 000,00 â‚¬']}", array('a'=>3128.495),  "{3 128,50 â‚¬}", "test number with text parts (not using symbols)");
 
 		// unexpected values
 		$this->assertEqualMergeFieldStrings("{[a;frm=0.00]}", array('a'=>false),  "{}", "test unexpected values: false");
@@ -152,12 +152,12 @@ class FrmTestCase extends TBSUnitTestCase {
 		*/
 	
 		// one format
-		$this->createTBSInstance("{[onload;tplfrms;money=0 000,00€]}{[a;frm=money]}");
-		$this->assertEqualMergeFieldStrings($this->tbs->Source, array('a'=>3128.495), "{}{3 128,50€}", "test template formats (one)");
+		$this->createTBSInstance("{[onload;tplfrms;money=0 000,00â‚¬]}{[a;frm=money]}");
+		$this->assertEqualMergeFieldStrings($this->tbs->Source, array('a'=>3128.495), "{}{3 128,50â‚¬}", "test template formats (one)");
 
 		// several formats
-		$this->createTBSInstance("{[onload;tplfrms;money=0 000,00€;dt=dd/mm/yyyy;int=000000.]}{[a;frm=money]|[a;frm=int]|[d;frm=dt]}");
-		$this->assertEqualMergeFieldStrings($this->tbs->Source, array('a'=>3128.495, 'd'=>'2011-02-03' ), "{}{3 128,50€|003128|03/02/2011}", "test template formats (several)");
+		$this->createTBSInstance("{[onload;tplfrms;money=0 000,00â‚¬;dt=dd/mm/yyyy;int=000000.]}{[a;frm=money]|[a;frm=int]|[d;frm=dt]}");
+		$this->assertEqualMergeFieldStrings($this->tbs->Source, array('a'=>3128.495, 'd'=>'2011-02-03' ), "{}{3 128,50â‚¬|003128|03/02/2011}", "test template formats (several)");
 		
 	}
 

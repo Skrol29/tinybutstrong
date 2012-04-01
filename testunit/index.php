@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(E_ALL & ~E_USER_NOTICE);
+error_reporting(E_ALL & ~E_USER_NOTICE & ~E_STRICT);
 
 // include classes required for unit tests
 @require_once(dirname(__FILE__).'/simpletest/unit_tester.php');
@@ -11,7 +11,7 @@ error_reporting(E_ALL & ~E_USER_NOTICE);
 if (version_compare(PHP_VERSION,'5.0')<0)
 	$tbsFileName = dirname(dirname(__FILE__)).'/tbs_class_php4.php';
 else
-	$tbsFileName = dirname(dirname(__FILE__)).'/tbs_class_php5.php';
+	$tbsFileName = dirname(dirname(__FILE__)).'/tbs_class.php';
 @require_once($tbsFileName);
 @require_once(dirname(dirname(__FILE__)).'/plugins/tbs_plugin_html.php');
 @require_once(dirname(dirname(__FILE__)).'/plugins/tbs_plugin_bypage.php');

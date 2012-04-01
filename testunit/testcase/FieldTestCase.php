@@ -55,7 +55,7 @@ class FieldTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("<b>[a.b]</b>", array('a'=>array('b'=>'c')), "<b>c</b>", "merge non empty field #5");
 		$this->assertEqualMergeFieldStrings("<b>[a.test]</b>", array('a'=>$this), "<b>toto</b>", "merge non empty field #6");
 		$this->assertEqualMergeFieldStrings("<b>[a]</b>", array('a'=>'&'), "<b>&amp;</b>", "merge non empty field #7");
-		$this->assertEqualMergeFieldStrings("<b>[a]</b>", array('a'=>'noël à la crême où ça'), "<b>noël à la crême où ça</b>", "merge non empty field #8");
+		$this->assertEqualMergeFieldStrings("<b>[a]</b>", array('a'=>'noÃ«l Ã  la crÃªme oÃ¹ Ã§a'), "<b>noÃ«l Ã  la crÃªme oÃ¹ Ã§a</b>", "merge non empty field #8");
 
 		// test existing fields merge order
 		$this->assertEqualMergeFieldStrings("<b>[[a]]</b>", array('a'=>'c', 'b'=>'a', 'c'=>'b'), "<b>b</b>", "merge field order #1");
