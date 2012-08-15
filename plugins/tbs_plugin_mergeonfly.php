@@ -3,7 +3,7 @@
 /*
 ********************************************************
 TinyButStrong Plug-in: Merge On Fly
-Version 1.1.0, on 2012-08-13, by Skrol29
+Version 1.1.1, on 2012-08-15, by Skrol29
 ********************************************************
 */
 
@@ -16,7 +16,7 @@ class tbsMergeOnFly {
 		$this->PackSize = $PackSize;
 		$this->Encaps = 0; // encapsualtion level of blocks
 		$this->IsActivated = false;
-		$this->Debug = true;
+		$this->Debug = false;
 		$this->CountSubRecords = false;
 		return array('OnCommand','BeforeMergeBlock','OnMergeSection','AfterMergeBlock');
 	}
