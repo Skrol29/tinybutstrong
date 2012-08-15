@@ -143,6 +143,16 @@ a.opt-name:hover {
 }
 .versioning {
 	background-color: #EAEAEA;
+	margin: 12px 0 12px 0;
+	padding: 0 0 2px 0;
+}
+.versioning > p {
+	/* <p> inside a class "versioning" */
+	margin: 0;
+}
+.list-mini {
+	margin: 0;
+	padding-left: 20px;
 }
 .blockzone {
 	border: 1px dotted #666666;
@@ -182,7 +192,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2012-03-04</td>
+        <td>2012-08-14</td>
       </tr>
     </table>
   </div>
@@ -517,13 +527,16 @@ include_once(<span class="opt-value">'tbs_class.php'</span>);
 <span class="opt-name">$TBS2</span> = new clsTinyButStrong(<span class="opt-value"> array('chr_open'=&gt;</span><span class="opt-value">'{', 'chr_close'=&gt;'}')</span> ); <span class="opt-html">// TBS tags will be like {var.x} instead of [var.x]</span>
 <span class="opt-name">$TBS3</span> = new clsTinyButStrong(<span class="opt-value"> array('var_prefix'=&gt;</span><span class="opt-value">'tbs_fct_')</span> );<span class="opt-html"> &nbsp;&nbsp;&nbsp;      // TBS will display only PHP global variables beginning with 'tbs_var_</span>'
 <span class="opt-name">$TBS4</span> = new clsTinyButStrong(<span class="opt-value"> array('fct_prefix'=&gt;</span><span class="opt-value">'tbs_fct_') </span>);<span class="opt-html">          // TBS will call only PHP function beginning with 'tbs_fct_'</span></pre>
-  <p class="versioning">Versioning:<br>
-    Before TBS version 3.8.0, the syntax to create a new TBS object was: <br>
-    &nbsp;&nbsp;&nbsp;<span class="txt-code"><span class="opt-name">$TBS</span> = new clsTinyButStrong({string <span class="opt-name">chr_delim</span> {, string <span class="opt-name">var_prefix</span> {, string <span class="opt-name">fct_prefix</span>}}});</span><br>
-    where: <br>
-    -<span class="opt-name"> chr_delim</span> is the concatenation of (the option <a href="#php_setoption_chr_open" class="opt-name">chr_open</a> + the string ',' +  the option <a href="#php_setoption_chr_close" class="opt-name">chr_close</a>). For example: '{,}'<br>
-    - <span class="opt-name">var_prefix</span> is the value for the option <a href="#php_setoption_var_prefix" class="opt-name">var_prefix</a><br>
-    - <span class="opt-name">fct_prefix</span> is the value for the option <a href="#php_setoption_fct_prefix" class="opt-name">fct_prefix</a></p>
+  <div class="versioning">
+    <p>Versioning:</p>
+    <p>Before TBS version 3.8.0, the syntax to create a new TBS object was:<br>
+      &nbsp;&nbsp;&nbsp;<span class="txt-code"><span class="opt-name">$TBS</span> = new clsTinyButStrong({string <span class="opt-name">chr_delim</span> {, string <span class="opt-name">var_prefix</span> {, string <span class="opt-name">fct_prefix</span>}}});</span><br>
+    where: </p>
+    <ul class="list-mini">
+    <li><span class="opt-name"> chr_delim</span> is the concatenation of (the option <a href="#php_setoption_chr_open" class="opt-name">chr_open</a> + the string ',' +  the option <a href="#php_setoption_chr_close" class="opt-name">chr_close</a>). For example: '{,}'</li>
+    <li><span class="opt-name">var_prefix</span> is the value for the option <a href="#php_setoption_var_prefix" class="opt-name">var_prefix</a></li>
+    <li><span class="opt-name">fct_prefix</span> is the value for the option <a href="#php_setoption_fct_prefix" class="opt-name">fct_prefix</a></li>
+    </ul>
   </div>
   <h3><a name="php_loadtemplate" id="php_loadtemplate"></a>method LoadTemplate():</h3>
   <div class="norm">
@@ -779,7 +792,7 @@ include_once(<span class="opt-value">'tbs_class.php'</span>);
         <p>The argument <span class="opt-name">Source</span> has to be equal to <span class="opt-value">'assigned'</span> or be omitted. 
           The block is merged with the arguments defined in the property <a href="#php_assigned">Assigned</a>. </p>
         <p> Example : <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b1'</span>);</span></p>
-        <div class="versioning">Versioning: the keyword  'assigned' is supported since TBS version 3.5. </div>
+        <p class="versioning">Versioning: the keyword  'assigned' is supported since TBS version 3.5. </p>
       </div>
       <h5>&bull; Text</h5>
       <div class="decal">
@@ -903,19 +916,25 @@ include_once(<span class="opt-value">'tbs_class.php'</span>);
       <tr>
         <td align="left" valign="top" class="opt-name">DefTags</td>
         <td align="left" valign="top">Optional. The default value is<span class="txt-code"><em><span style="color:#0033CC"> true</span></em></span>. By default, the method  GetBlockSource() returns the source of the block including its definition tags. If you'd like those tags to be deleted, then force the argument <span class="opt-name">DefTags</span> to <em><span style="color:#0033CC">false</span></em>. If the block is defined with a <a href="#html_block">simplified syntax</a> then the definition tags will not be deleted anyway because they are also Field tags.<br>
-          <div class="versioning">Versioning: this argument is supported since TBS version 3.0.</div></td>
+          <p class="versioning">Versioning: this argument is supported since TBS version 3.0.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="opt-name">ReplaceWith</td>
         <td align="left" valign="top">Optional. Default value is <em><span style="color:#0033CC">false</span></em>.        If this argument is a string then 
           the block source is replaced with it in the template. You can use <span class="opt-name">ReplaceWith</span> = <span class="opt-value">''</span> (empty string) in order to delete the block source from the template.<br>
-          <div class="versioning">Versioning: this argument is supported since TBS version 3.05.</div></td>
+          <p class="versioning">Versioning: this argument is supported since TBS version 3.05.</p></td>
       </tr>
     </table>
     <span class="txt-code"> </span><br>
     This method enables you to get the source of a block in order to manually handle the merging.<br>
     After that, if you need to replace the block with text, you can use the <a href="#php_mergeblock">MergeBlock()</a> method with the '<span class="opt-value">text</span>' parameter.<br>
-    <div class="versioning">Versioning: Since TBS 3.05 if <span class="opt-name">AsArray</span> is <span class="opt-type">false</span> then the method returns block with all its sections ; before TBS 3.05 it return only the first section. Since TBS 3.05 if <span class="opt-name">AsArray</span> is <span class="opt-type">true</span> and the block is not found then the  method returns <span class="opt-type">false</span> ; before TBS 3.05 it return an empty Array.</div>
+    <div class="versioning">
+      <p>Versioning:</p>
+      <ul class="list-mini">
+        <li> Since TBS 3.05 if <span class="opt-name">AsArray</span> is <span class="opt-type">false</span> then the method returns block with all its sections. Before TBS 3.05 it return only the first section.</li>
+        <li>Since TBS 3.05 if <span class="opt-name">AsArray</span> is <span class="opt-type">true</span> and the block is not found then the  method returns <span class="opt-type">false</span>. Before TBS 3.05 it return an empty Array.</li>
+      </ul>
+    </div>
   </div>
   <h3><a name="php_mergefield" id="php_mergefield"></a>method MergeField():</h3>
   <div class="norm">
@@ -970,7 +989,7 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
     <h4>Merge automatic fields and blocks:</h4>
     <p>You can use the method  MergeField() in order to force the merge of the automatic <a href="#html_field_auto">fields</a> and <a href="#html_block_auto">blocks</a> ([onload] and [onshow]). But in this case, only the first argument should be indicated.</p>
     <p> Example: <span class="txt-code"><span class="opt-name">$TBS-&gt;</span>MergeField(<span class="opt-value">'var'</span>); </span> </p>
-    <div class="versioning">Versioning: the merge of special automatic fields is supported since TBS version 3.0. It replaces the old method MergeSpecial() which is not supported anymore. </div>
+    <p class="versioning">Versioning: the merge of special automatic fields is supported since TBS version 3.0. It replaces the old method MergeSpecial() which is not supported anymore. </p>
   </div>
   <h3><a name="php_setoption" id="php_setoption"></a>Method SetOption():</h3>
   <div class="norm">
@@ -1039,11 +1058,12 @@ Some of the TBS options are a new way of setting <a href="#php_options_compatibi
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_att_delim" id="php_setoption10"></a>att_delim</span></td>
         <td align="left" valign="top" class="border-sep"> <p>This option  tells which is string delimiter to be choosen by parameter  <a href="#html_field_prm_att" class="opt-name">att</a> when a new Xml/Html attribute has to be created. </p>
-        <p> The supportde values are :<br>
-         - &quot; (double-quote),<br>
-         -
-' (simple_quote),<br>
-- <span class="opt-value">false</span> (whill choose the first attribute delimiter found). </p></td>
+        The supported values are :
+        <ul class="list-mini">
+          <li>&quot; (double-quote),</li>
+          <li> ' (simple_quote),</li>
+          <li><span class="opt-value">false</span> (whill choose the first attribute delimiter found). </li>
+        </ul></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_protect" id="php_setoption9"></a>protect</span></td>
@@ -1177,7 +1197,7 @@ The old features are still suported for compatibility, but they become deprecate
     <p>Return the value of a TBS option.</p>
     <p> Syntax: <span class="txt-code"><span class="opt-name"><span class="opt-type">mixed</span> $TBS</span>-&gt;GetOption(<span class="opt-type"><span class="opt-value">string</span></span> $option_name)</span></p>
     <p>For supported options names, see method <a href="#php_setoption" class="opt-name">SetOption()</a>.</p>
-    <div class="versioning">Versioning:  methods GetOption() is supported since TBS version 3.8.0. </div>
+    <p class="versioning">Versioning:  methods GetOption() is supported since TBS version 3.8.0. </p>
   </div>
   <h3><a name="php_plugin" id="php_plugin"></a>Method PlugIn():</h3>
   <div class="norm">
@@ -1202,7 +1222,7 @@ The old features are still suported for compatibility, but they become deprecate
       <li> A plug-in is installed relatively to a  TBS instance (a variable $TBS for example). If you are using a second TBS instance (for example <span class="opt-name">$TBS2</span>) then you will also need to install the plug-in on this instance. </li>
       <li> A plug-in is installed automatically when you call one of its commands using the method  PlugIn() (se above). </li>
     </ul>
-    <div class="versioning">Versioning: the method PlugIn()  is supported since TBS version 3.0. </div>
+    <p class="versioning">Versioning: the method PlugIn()  is supported since TBS version 3.0. </p>
   </div>
   <h3><a name="php_varref" id="php_assigned2"></a>Property VarRef:</h3>
   <div class="norm">
@@ -1273,7 +1293,7 @@ which is the same as:
       <li> An assignment with <span class="opt-value">'auto'</span>=&gt;<span class="opt-value">'onload'</span> will be merged, of course, only if it is defined before calling the  LoadTemplate() method.</li>
       <li> You can pass some arguments by <a href="http://www.php.net/manual/en/language.references.php">reference</a> for you assignments. This is particularly  useful for PHP 4 which is passing object with a copy by default. </li>
     </ul>
-    <div class="versioning">Versioning: property  Assigned is supported since TBS version 3.5. </div>
+    <p class="versioning">Versioning: property  Assigned is supported since TBS version 3.5. </p>
   </div>
   <h3><a name="php_source" id="php_source"></a>property Source:</h3>
   <div class="norm">
@@ -1598,10 +1618,14 @@ which is the same as:
           <p>By default, the magnet XML/HTML zone should be delimited by a pair of opening-closing tags (like <span class="opt-html">&lt;a&gt;&lt;/a&gt;</span>) which first tag is placed before the TBS fields. But this can be changed using parameter <span class="opt-name">mtype</span> (see below).</p>
           <h6>Remark:</h6> <p>the parameters <span class="opt-name">if</span>, <span class="opt-name">then</span>, <span class="opt-name">else</span> are processed before parameter <span class="opt-name">magnet.</span>
           </p>
-          <p class="versioning"> Versioning:<br>
-            Since TBS version 3.3.0, <a href="#html_field_prm_ope" class="opt-name">parameter ope</a> has keywords (<span class="opt-value">nif</span>, <span class="opt-value">minv</span>, <span class="opt-value">mok</span> and <span class="opt-value">mko</span>) that improve parameter <span class="opt-name">magnet</span>. <br>
-            The sytax <span class="opt-name">magnet</span>=<span class="opt-value">#</span> without parameter <span class="opt-name">att</span> is supported since TBS version 
-        3.8.0.</p></td>
+          <div class="versioning"> 
+            <p>Versioning:</p>
+            <ul class="list-mini">
+              <li>              Since TBS version 3.3.0, <a href="#html_field_prm_ope" class="opt-name">parameter ope</a> has keywords (<span class="opt-value">nif</span>, <span class="opt-value">minv</span>, <span class="opt-value">mok</span> and <span class="opt-value">mko</span>) that improve parameter <span class="opt-name">magnet</span>.</li>
+              <li>                The sytax <span class="opt-name">magnet</span>=<span class="opt-value">#</span> without parameter <span class="opt-name">att</span> is supported since TBS version 
+                3.8.0.</li>
+            </ul>
+        </div></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_mtype" id="html_field_prm_mtype"></a><span class="opt-name">mtype</span>=<span class="opt-value">val</span></td>
@@ -1653,9 +1677,13 @@ which is the same as:
           <p>are strictly identical to: </p>
           <div class="decal"><span class="opt-html">xxx</span> [<span class="opt-name">myfield</span>]<span class="opt-html"> yyy </span></div>
           <p><span class="opt-html"></span> This parameter is particularly useful for the template designing when you are using a Visual HTML Editor (such as Dreamweaver or FrontPage). </p>
-          <p class="versioning">Versioning:<br>
-            Parameter <span class="opt-name">enlarge</span> is supported since TBS version 3.8.0. It is an alias of parameter <span class="opt-name">comm</span> which was misnamed and becomes deprecated.<br>
-          Parameter <span class="opt-name">comm</span> is available for other XML/HTML tags since TBS 3.0.</p></td>
+          <div class="versioning">
+            <p>Versioning:</p>
+            <ul class="list-mini">
+              <li>              Parameter <span class="opt-name">enlarge</span> is supported since TBS version 3.8.0. It is an alias of parameter <span class="opt-name">comm</span> which was misnamed and becomes deprecated.</li>
+              <li>                Parameter <span class="opt-name">comm</span> is available for other XML/HTML tags since TBS 3.0.</li>
+            </ul>
+          </div></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_noerr"></a><span class="opt-name">noerr</span></td>
@@ -1684,12 +1712,16 @@ which is the same as:
 Indicates that not all the file contents is loaded but only some XML/HTML parts of it defined with the  tag list. The tags of the list must be separated with plus (+), and placed between parentheses if you want the tags themselves to be retrieved with their content. If the file has several XML/HTML part of a tag, all those parts will be automatically concatenated.    	  If parameter <span class="opt-name">getpart</span> is used without value, then  the &lt;body&gt; tag is taken by default.</p>
           <p> Example: </p>
           <div class="decal">[onload;<span class="opt-name">file</span>=<span class="opt-value">header.htm</span>;<span class="opt-name">getpart</span>=<span class="opt-value">(script)+(style)+body</span>]</div>
-<p class="versioning">Versioning:<br>
-  Parameter <span class="opt-name">getgetpart</span> is supported since TBS version 3.8.0. 
-             It is an alias of parameter <span class="opt-name">getbody</span> which was misnamed and becomes deprecated. <br>
-Parameter <span class="opt-name">getbody</span> is supported since TBS version 3.0. 
-            In previous versions, it was automatically processed when using parameter file. Now it becomes explicit. <br>
-            The tag list is supported since TBS version 3.5.0. Before this version, the value of getbody can be only one tag without parentheses. </p></td>
+<div class="versioning">
+  <p>Versioning:</p>
+  <ul class="list-mini">
+    <li>    Parameter <span class="opt-name">getgetpart</span> is supported since TBS version 3.8.0. 
+      It is an alias of parameter <span class="opt-name">getbody</span> which was misnamed and becomes deprecated.</li>
+    <li>      Parameter <span class="opt-name">getbody</span> is supported since TBS version 3.0. 
+      In previous versions, it was automatically processed when using parameter file. Now it becomes explicit.</li>
+    <li>      The tag list is supported since TBS version 3.5.0. Before this version, the value of getbody can be only one tag without parentheses. </li>
+  </ul>
+</div></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_store" id="html_field_prm_getbody3"></a><span class="opt-name">store</span>=<span class="opt-value">taglist</span></td>
@@ -1890,12 +1922,13 @@ Parameter <span class="opt-name">storename</span> changes the name of the store.
               <tr>
                 <td width="50" valign="top" class="opt-value">max:n</td>
                 <td>Limit the text string to a maximum of <span class="opt-value">n</span> characters. If the string is cut, then its end is replaced with dot lines '...'.<br>
-                  <span class="decal">Example:							[onshow.caption;<span class="opt-name">ope</span>=<span class="opt-value">max:10</span>]</span><br>
-                  - Add parameter <span class="opt-name">maxhtml</span> to indicate that the value before merging can contain Html characters. <br>
-                  - Add parameter <span class="opt-name">maxutf8</span> to indicate that the value before merging can contain UTF8 characters. <span class="versioning">Versionning: maxutf8 is supported since TBS version 3.5.2.</span><br>
-                  - Add parameter <span class="opt-name">maxend</span> to change the cutting symbol.<br>
-                  <span class="decal">Example:
-                  [onshow.caption;<span class="opt-name">ope</span>=<span class="opt-value">max:10</span>;<span class="opt-name">maxhtml</span>;<span class="opt-name">maxend</span>=<span class="opt-value">'+'</span>]</span></td>
+                  Example:							[onshow.caption;<span class="opt-name">ope</span>=<span class="opt-value">max:10</span>]
+                  <ul class="list-mini">
+                    <li> Add parameter <span class="opt-name">maxhtml</span> to indicate that the value before merging can contain Html characters.</li>
+                    <li> Add parameter <span class="opt-name">maxutf8</span> to indicate that the value before merging can contain UTF8 characters. <span class="versioning">Versionning: maxutf8 is supported since TBS version 3.5.2.</span></li>
+                    <li> Add parameter <span class="opt-name">maxend</span> to change the cutting symbol.</li>
+                  </ul>                  Example:
+                  [onshow.caption;ope=max:10;maxhtml;maxend='+']</td>
               </tr>
               <tr>
                 <td valign="top" class="opt-value">mod:n</td>
@@ -1962,11 +1995,14 @@ Parameter <span class="opt-name">storename</span> changes the name of the store.
               </tr>
             </table>
           </div>
-          <p class="versioning">Versioning:<br>
-            - 
-            Parameter ope   is supported since TBS version 3.0. 
-            It replaces parameter max which doesn't exist since this version.<br>
-            - Multiple operations and 'mul&quot; and &quot;div&quot; are supported since TBS version 3.2.0 </p></td>
+          <div class="versioning">
+            <p>Versioning:</p>
+            <ul class="list-mini">
+              <li>              Parameter ope   is supported since TBS version 3.0. 
+                It replaces parameter max which doesn't exist since this version.</li>
+              <li> Multiple operations and 'mul&quot; and &quot;div&quot; are supported since TBS version 3.2.0.</li>
+            </ul>
+          </div></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_frm" id="html_field_prm_frm"></a>frm</span>=<span class="opt-value">format</span></td>
@@ -2019,11 +2055,15 @@ Parameter <span class="opt-name">storename</span> changes the name of the store.
           It is possible to protect the strings inside by putting them between double quotes (&quot;). </p>
 <p>            Examples:          </p>
           <p class="decal">[<span class="opt-value"><span class="opt-name">fld</span></span>;<span class="opt-name">frm</span>=<span class="opt-value">mm/dd/yyyy</span>] will display <span class="opt-html">12/21/2002</span><br>
-            [<span class="opt-value"><span class="opt-name">fld</span>;<span class="opt-name">frm</span>='yyyy-mm-dd hh:nn:ss'</span>] will display <span class="opt-html">2002-12-21 15:45:03</span></p><p class="versioning">Versioning:<br>
-            - Keywords ampm and AMPM are supported since TBS version 3.0.<br>
-            - Keyword hm was supported since TBS 3.0 and is deprecated an replaced with keyword rr since TBS version 3.2.0.<br>
-            - Keywords rr, r, and h are supported since TBS version 3.2.0.<br>
-            - Keyword (locale) is supported since TBS version 3.4.0.</p>
+            [<span class="opt-value"><span class="opt-name">fld</span>;<span class="opt-name">frm</span>='yyyy-mm-dd hh:nn:ss'</span>] will display <span class="opt-html">2002-12-21 15:45:03</span></p><div class="versioning">
+              <p>Versioning:</p>
+              <ul class="list-mini">
+                <li>                 Keywords <span class="opt-value">ampm</span> and <span class="opt-value">AMPM</span> are supported since TBS version 3.0.</li>
+                <li> Keyword <span class="opt-value">hm</span> was supported since TBS 3.0 and is deprecated and replaced with keyword <span class="opt-value">rr</span> since TBS version 3.2.0.</li>
+                <li> Keywords <span class="opt-value">rr</span>, <span class="opt-value">r</span>, and <span class="opt-value">h</span> are supported since TBS version 3.2.0.</li>
+                <li> Keyword <span class="opt-value">(locale)</span> is supported since TBS version 3.4.0.</li>
+              </ul>
+            </div>
           <h5>Numeric format:          
           </h5>
           <p> To define the decimal part, use an expression like '<span class="opt-value">0d0...</span>' where <span class="opt-value">'d'</span> is the decimal separator , and <span class="opt-value">'0...'</span> is a continuation of zeros corresponding to the number of decimals.<br>
@@ -2158,10 +2198,13 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
       <li><span class="opt-name">[onshow]</span> fields, which are automatically merged when the <a href="#php_show">Show()</a> method is called.</li>
       <li><span class="opt-name">[var]</span> fields, which are automatically merged when the field they are embedded in is also merged itself, but it works only if they are placed into a parameter <a href="#html_field_prm_file" class="opt-name">file</a>, <a href="#html_field_prm_script" class="opt-name">script</a>, <a href="#html_field_prm_if" class="opt-name">if</a>, <span class="opt-name">then</span>, <span class="opt-name">else</span> or <a href="#html_block_prm_when" class="opt-name">when</a>. </li>
     </ul>
-    <p class="versioning">Versioning:<br>
-      - 
-      Automatic fields <span class="opt-name">[onload]</span> and <span class="opt-name">[onshow]</span> are supported since TBS version 3.2.0. For compatibility with versions prior to  3.2.0, remaining <span class="opt-name">[var]</span> fields are still merged as if there were <span class="opt-name">[onshow]</span> fields but is it recommended to use real <span class="opt-name">[onshow]</span> fields instead.<br>
-      - <span class="opt-name">[var]</span> are processed into parameter <span class="opt-name">then</span> and <span class="opt-name">else</span> since  TBS version 2.02.</p>
+    <div class="versioning">
+      <p>Versioning:</p>
+      <ul class="list-mini">
+        <li>        Automatic fields <span class="opt-name">[onload]</span> and <span class="opt-name">[onshow]</span> are supported since TBS version 3.2.0. For compatibility with versions prior to  3.2.0, remaining <span class="opt-name">[var]</span> fields are still merged as if there were <span class="opt-name">[onshow]</span> fields but is it recommended to use real <span class="opt-name">[onshow]</span> fields instead.</li>
+        <li><span class="opt-name">[var]</span> are processed into parameter <span class="opt-name">then</span> and <span class="opt-name">else</span> since  TBS version 2.02.</li>
+      </ul>
+    </div>
     <p>Automatic fields may or may not have a sub name, like x in [onload.x], [onshow.x] or [var.x]. An automatic field without sub name will be merged with an empty string value  (''). Example: [<span class="opt-name">onload</span>;<span class="opt-name">file</span>=<span class="opt-value">header.html</span>] this field inserts a subtemplate when <a href="#php_loadtemplate">LoadTemplate()</a> method is called.</p>
     <p> An automatic field having a sub name will be merged with the corresponding global PHP variable.<br>
       If the global variable doesn't exist at this moment, then a TBS error is displayed, unless you add  parameter <a href="#html_field_prm_noerr" class="opt-name">noerr</a>.</p>
@@ -2216,7 +2259,8 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
           <td class="txt-code">$tbl[<span class="opt-value">'item3'</span>]-&gt;prop2[<span class="opt-value">'item4'</span>]</td>
         </tr>
       </table>
-      <span class="versioning">Versioning: calling methods with arguments from an automatic field is supported since TBS version 3.0.</span></div>
+      <p class="versioning">Versioning: calling methods with arguments from an automatic field is supported since TBS version 3.0.</p>
+    </div>
     <p>Note: You can also force the merge of  [var] fields or other types at anytime using the <a href="#php_mergefield">MergeField()</a> method.</p>
     <h4>Embedded automatic fields</h4>
     <p> An embedded TBS field is never merged, unless :</p>
@@ -2239,10 +2283,15 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
     <h4>Security: how to limit automatic fields usage in templates?</h4>
     <p> You can limit the automatic fields usage by defining a prefix for allowed PHP variables. For details, see <a href="#php_instanciate">create a new TBS object</a>.</p>
     <h4>Prevent from processing automatic fields [onload] and [onshow]</h4>
-    <p> Properties <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnLoad</span> and <span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnShow</span> enable you to cancel the processing of [onload] and [onshow] fields. Those properties accept only <span class="opt-value">true</span> of <span class="opt-value">false</span> values. This can be very useful especially, but not only, for some TBS plug-ins. Note that [var] fields are automatically processed even if <span class="txt-code">$TBS-&gt;OnShow = false</span>.</p>
-    <p> Example: &nbsp;&nbsp;<span class="txt-code"><span class="opt-name">$TBS</span>-&gt;<span class="opt-value">OnShow</span> = </span><span class="opt-value">false</span><span class="txt-code">;</span><br>
-      <span class="versioning">Properties 
-      OnLoad and OnShow are supported since TBS version 3.6.0.</span><br>
+    <p>TBS options <a href="#php_setoption_onload" class="opt-name">onload</a> and <a href="#php_setoption_onshow" class="opt-name">onshow</a> enable you to cancel the processing of [onload] and [onshow] fields. Those options accept only <span class="opt-value">true</span> of <span class="opt-value">false</span> values. This can be very useful especially, but not only, for some TBS plug-ins. Note that [var] fields are automatically processed even if <a href="#php_setoption_onshow" class="opt-name">onshow</a> option is set to  <span class="opt-value">false</span>. See method <a href="#php_setoption">SetOptions()</a> for more details about TBS options.</p>
+    <div class="versioning">
+    <p>Versioning:</p>
+        <ul class="list-mini">
+          <li> Options <span class="opt-name">onload</span> and <span class="opt-name">onshow</span> are supported since TBS version 3.8.0</li>
+          <li>Properties 
+            <span class="txt-code">$TBS-&gt;OnLoad</span> and <span class="txt-code">$TBS-&gt;OnShow</span> do act like the corresponding options but are deprectated. Those properties are supported since TBS version 3.6.0.</li>
+        </ul>
+    </div>
     </p>
   </div>
   <h3><a name="html_field_special" id="html_field_special3"></a>Special  automatic fields:</h3>
@@ -2325,12 +2374,15 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
         <td align="left" valign="top">[onshow.<span class="opt-name">.store.default</span>]</td>
       </tr>
     </table>
-    <p class="versioning">Versioning:<br>
-      - 
-      special var fields <span class="opt-name">cst</span> and <span class="opt-name">tbs_info</span> are supported since TBS version 3.2.0.<br>
-      - 
-      <span class="opt-name">error_msg</span> is supported since TBS version 3.5.0. <br>
-    - <span class="opt-name">php_info</span> and <span class="opt-name">store</span> are supported since TBS version 3.8.0 </p>
+    <div class="versioning">
+      <p>Versioning:</p>
+      <ul class="list-mini">
+        <li>         
+          special var fields <span class="opt-name">cst</span> and <span class="opt-name">tbs_info</span> are supported since TBS version 3.2.0.</li>
+        <li><span class="opt-name">error_msg</span> is supported since TBS version 3.5.0.</li>
+        <li><span class="opt-name">php_info</span> and <span class="opt-name">store</span> are supported since TBS version 3.8.0.</li>
+      </ul>
+    </div>
   </div>
   <h3><a name="html_block" id="html_block"></a>TBS Blocks:</h3>
   <div class="norm">
@@ -2342,7 +2394,9 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
     <p> Examples: </p>
     <div class="decal"> - [<span class="opt-name">Block1</span>.<span class="opt-name">ColA</span>]   This field will display the value of column <span class="opt-name">ColA</span> when block <span class="opt-name">Block1</span> is merged. <br>
       - [<span class="opt-name">Blokc1</span>.<span class="opt-name">ColB</span>;<span class="opt-name">frm</span>=<span class="opt-value">'dd-mm-yyyy'</span>] Another field but with a TBS parameter. </div>
-    <p><span class="versioning">Since TBS version 3.5.0 column names with spaces are accepted.</span></p>
+    <p>
+      <p class="versioning">Since TBS version 3.5.0 column names with spaces are accepted.</p>
+    </p>
     <p><em>Remark:</em> when two separated blocks have the same name, then they will be considered has two sections of the same block. All content placed between those two sections of a block  will be <strong>ignored and deleted</strong> during the merging. See <a href="#html_block_section">sections of blocks</a> to know more about sections.</p>
     <h4>Block syntaxes:</h4>
     <p>There are three possible syntaxes to define a TBS block: </p>
@@ -2402,11 +2456,17 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
         <td align="left" valign="top"><span class="opt-name"><span class="opt-value"><a name="html_block_prm_block" id="html_block_prm_block"></a></span>block</span>=<span class="opt-value">tag</span><br>
           <span class="txt-small">or</span><br>
           <span class="opt-name">block</span>=<span class="opt-value">expr</span><br></td>
-        <td align="left" valign="top"><p>Define a block bounded between the opening XML/HTML tag <span class="opt-html">&lt;tag...&gt;</span> and the closing XML/HTML tag <span class="opt-html">&lt;/tag&gt;</span> which surround the TBS tag. The couple of indicated XML/HTML tags are integral part of the bloc.</p>
-          <p> Example: </p>
-          <div class="decal"><span class="opt-html">&lt;table id=&quot;tab1&quot;&gt;</span>&nbsp;<span class="blockzone"><span class="opt-html">&lt;tr&gt;&lt;td&gt;</span>[<span class="opt-name">b1</span>.<span class="opt-name">field1</span>;<span class="opt-name">block</span>=tr]<span class="opt-html">&lt;/td&gt;&lt;/tr&gt;</span></span><span class="opt-html">&lt;/table&gt;</span><br>
-            <span class="txt-small">The block is defined by the zone framed by pointillets.</span> </div>
-          <h5>Special marks:</h5>
+        <td align="left" valign="top"><p>Define a block bounded between the opening XML/HTML tag <span class="opt-html">&lt;tag...&gt;</span> and the closing XML/HTML tag <span class="opt-html">&lt;/tag&gt;</span> which surround the TBS tag. The couple of indicated XML/HTML tags are integral part of the bloc. The TBS tag can be placed inside the opening tag.<br>
+          If the tag is a single tag ending with &quot;/&quot; (sucha as <span class="opt-html">&lt;image href=&quot;img.gif&quot; /&gt;</span> ) then the block is bounded by the single tag.<br>
+        </p>
+          <p> Examples:</p>
+          <div class="decal"><span class="opt-html">&lt;table id=&quot;tab1&quot;&gt;</span>&nbsp;<span class="blockzone"><span class="opt-html">&lt;tr&gt;&lt;td&gt;</span>[<span class="opt-name">b1</span>.<span class="opt-name">column1</span>;<span class="opt-name">block</span>=tr]<span class="opt-html">&lt;/td&gt;&lt;/tr&gt;</span></span><span class="opt-html">&lt;/table&gt;</span><br>
+            <span class="txt-small">The block is defined by the zone framed by pointillets.</span></div>
+          <div class="decal"><span class="opt-html">&lt;table id=&quot;tab1&quot;&gt;</span>&nbsp;<span class="blockzone"><span class="opt-html">&lt;tr id=&quot;row-</span>[<span class="opt-html"><span class="opt-name">b1</span>.<span class="opt-name">column2</span>;<span class="opt-name">block</span></span>=tr]<span class="opt-html">&quot;&gt;&lt;td&gt;</span>[<span class="opt-name">b1</span>.<span class="opt-name">column1</span>]<span class="opt-html">&lt;/td&gt;&lt;/tr&gt;</span></span><span class="opt-html">&lt;/table&gt;</span><br>
+            <span class="txt-small">The TBS tag can be placed inside the opening tag.</span></div>
+          <div class="decal"><span class="opt-html">&lt;div id=&quot;image-list&quot;&gt;</span>&nbsp;<span class="blockzone"><span class="opt-html">&lt;image href=&quot;img/</span>[<span class="opt-html"><span class="opt-name">b1</span>.<span class="opt-name">column1</span>;<span class="opt-name">block</span></span>=image]<span class="opt-html">&quot; alt=&quot;the picture&quot; /&gt;</span></span><span class="opt-html"> &lt;/div&gt;</span><br>
+            <span class="txt-small">If the tag is a single tag ending with &quot;/&quot;  then the block is bounded by the single tag.</span></div>
+<h5>Special mark:</h5>
           <table border="0" cellspacing="0" cellpadding="4">
             <tr>
               <td width="80" valign="top"><span class="opt-name">block</span>=<span class="opt-value">_</span></td>
@@ -2414,11 +2474,11 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
             </tr>
             <tr>
               <td valign="top"><span class="opt-name">block</span>=<span class="opt-value">tag/</span></td>
-              <td valign="top">By adding character / at the end of the tag's name, TBS won't retrieve the closing tag. The block will be defined on the single opening XML/HTML tag which contains the TBS tag. This can be useful to multiply an image for example. </td>
+              <td valign="top">Deprectated. By adding character &quot;/&quot; at the end of the tag's name, TBS assume the tag is single. This syntax is ignored since TBS version 3.5.2 because TBS can recognize single tags by itself. Coding &quot;<span class="opt-name">block=image/</span>&quot; is the same as &quot;<span class="opt-name">block=image</span>&quot;.</td>
             </tr>
           </table>
-          <p class="versioning">Versioning: special marks  &quot;_&quot; and &quot;/&quot; are supported since TBS 3.1.0.</p>
-          <h5><a name="html_block_prm_extblk" id="html_block_prm_extblk"></a>Extended blocks: </h5>
+          <p class="versioning"> Versioning: Special mark  &quot;_&quot; and &quot;/&quot; are supported since TBS 3.1.0. </p>
+          <h5><a name="html_block_prm_extblk" id="html_block_prm_extblk"></a>Extended blocks:</h5>
           <p> You can extend the block's zone  (or the section's zone) beyond the simple XML/HTML tag or special marks by using the following expressions:</p>
           <p> Note that special marks (see above) can be used for extended blocks.</p>
           <p> To extend the block's zone on several successive tags: </p>
@@ -2432,7 +2492,7 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
           <p>To extend the block's zone on a tag of the same type but with a higher encapsulation level: </p>
           <div class="decal"><span class="blockzone"><span class="opt-html">&lt;div&gt; &lt;div&gt;</span> [<span class="opt-name">b1</span>.<span class="opt-name">field1</span>;<span class="opt-name">block</span>=<span class="opt-value">((div))</span>] <span class="opt-html">&lt;/div&gt; &lt;/div&gt;</span></span> <br>
             The number of bracket means le encapsulation level of the tags. </div>
-          <p class="versioning">Versioning : The Extended Blocks feature is supported since  TBS version 3.0. Before that, you had to use parameters 'extend' and 'encaps' which are not supported anymore. </p></td>
+        <p class="versioning">Versioning : The Extended Blocks feature is supported since  TBS version 3.0. Before that, you had to use parameters 'extend' and 'encaps' which are not supported anymore. </p></td>
       </tr>
     </table>
     <a name="html_block_prm" id="html_block_prm"></a>
@@ -2482,7 +2542,7 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
           Example:
           <div class="decal"><span class="txt-code">if (is_null(<span class="opt-name">$data</span>)) <span class="opt-name">$data</span> = array();<br>
             <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'b1'</span>,<span class="opt-name">$data</span>);</span></div>
-          <div class="versioning">Versioning: parameter bmagnet is supported since   TBS version 3.0.</div></td>
+          <p class="versioning">Versioning: parameter bmagnet is supported since   TBS version 3.0.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_headergrp" id="html_block_prm_headergrp"></a>headergrp</span>=<span class="opt-value">colname</span></td>
@@ -2818,7 +2878,7 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
   </div>
   <h3><a name="html_block_subauto" id="html_block_subauto"></a>Automatic subblocks:</h3>
   <div class="norm">
-    <p><span class="versioning">Automatic subblock are supported since TBS version 3.5.0.</span></p>
+    <p class="versioning">Automatic subblock are supported since TBS version 3.5.0.</p>
     <p> You can use automatic subblocks when the data of the parent block has a column which contains the ready-to-merge subdata for the subblock.  
       Set parameter <span class="opt-name">sub1</span>=<span class="opt-value">column</span> in the parent block to define the column which contain the data for the subblock. If you have several subblocks to merge in the same parent block then  use parameters <span class="opt-name">sub2</span>, <span class="opt-name">sub3</span>, ... The name of the subblock must be the same as the parent block followed by the suffix <span class="opt-name">_sub1</span>, (or <span class="opt-name">_sub2</span>, <span class="opt-name">_sub3</span>, ...)</p>
     <p> The data of the parent block must have a column which contains the data of the subblock. Supported data types are:</p>
@@ -3254,7 +3314,7 @@ $data['group2'][] = array('id'=&gt;4, 'name'=&gt;'jim');</pre>
   <h3><a name="coding_extended_methods" id="plugins_db2"></a>Extended methods:</h3>
   <div class="norm">
     <p>Extended methods are custom methods that you can add to a TinyButStrong instance. This can be usefull for a plug-in for example.</p>
-    <p><span class="versioning">Versioning: Extended methods are  supported since TBS version 3.8. The feature needs PHP 5.0 or higher.</span></p>
+    <p class="versioning">Versioning: Extended methods are  supported since TBS version 3.8. The feature needs PHP 5.0 or higher.</p>
     <p> Examples:</p>
     <p>
 If you define:<br>
@@ -3277,7 +3337,7 @@ it whill run :<br>
 <div class="norm">
   <p>A block alias is a special name for a block definition, which will be replaced with another list of tags or which will call a custom function to find the block bounds.<br>
   Block alias really empower the way of defining blocks. It is useful for plug-ins or when you want to simplify the understanding of the template coder.</p>
-  <p><span class="versioning">Versioning: Block alias are  supported since TBS version 3.8.</span></p>
+  <p class="versioning">Versioning: Block alias are  supported since TBS version 3.8.</p>
   <p> Examples:</p>
   <pre class="txt-code"><span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-value">'block_alias'</span>, <span class="opt-value">'row'</span>, <span class="opt-value">'tr'</span>); // the alias replace one tag
 <span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-value">'block_alias'</span>, <span class="opt-value">'dblrow'</span>, <span class="opt-value">'tr+tr'</span>); // the alias replace several tags
@@ -3300,7 +3360,7 @@ it whill run :<br>
   * @param string  $Txt The source of the template
   * @param integer $Pos The position of the TBS field in $Txt
   * @param boolean $Forward The direction of the search
-  * @param integer $LevelStop 
+  * @param mixed   $LevelStop Encapsulation level in a block of the same type. Ignore this in your code if your block type does not support self-encapsulation. 
   * @return integer
   */</span>
 	<span class="opt-value">function</span> findBound($Tag, $Txt, $Pos, $Forward, $LevelStop) {
@@ -3386,7 +3446,7 @@ class clsTbsPlugin {
   </div>
   <h3><a name="plugins_tbs" id="plugins_tbs"></a>Other plug-ins:</h3>
   <div class="norm">
-    <p><span class="zone-normal"><span class="versioning">Versioning:  plug-ins are supported since TBS version 3.0.</span></span></p>
+    <p class="versioning">Versioning:  plug-ins are supported since TBS version 3.0.</p>
     <h4><span class="zone-normal">Coding a plug-in using a PHP class:</span></h4>
     <h5>&bull; Plug-in's key:</h5>
     <p><span class="zone-normal"> Each plug-in has a plug-in key which is  the name of its Php class. This key must be given to the method <a href="#php_plugin">PlugIn()</a> when you use it. Thus, it is recommended to  define a PHP constant for the plug-in's key (see example below).</span></p>
