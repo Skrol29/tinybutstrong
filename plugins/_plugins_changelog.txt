@@ -1,3 +1,9 @@
+2012-08-14
+
+  Plug-in MergeOnFly version 1.1.0 :
+   - Did not display the end of the template when the block has automatic sub-blocs.
+   - New argument: CountSubRecords
+
 2008-02-29
 
   Plug-in NavBar version 1.0.6 : fixes a bug on endpoint management when parameter 'pagemin' is set to 0.
