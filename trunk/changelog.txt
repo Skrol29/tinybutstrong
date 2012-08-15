@@ -10,3 +10,5 @@ PHP 5.4 :
 Unexpected PHP error [Array to string conversion] severity [E_NOTICE] in [D:\Users\Qwerty\Dev HTML\Site Dev\svn_TinyButStrong\trunk\tbs_class.php line 72]
 
 Unexpected PHP error [Array to string conversion] severity [E_NOTICE] in [D:\Users\Qwerty\Dev HTML\Site Dev\svn_TinyButStrong\trunk\tbs_class.php line 1369]
+
+Plugin MergeOnFly

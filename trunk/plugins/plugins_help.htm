@@ -114,7 +114,7 @@ a.opt-name:hover {
 </head>
 <body bgcolor="#FFFFFF">
 <div align="center"><span class="title-1 title-1c">Help for  TBS plug-ins of the standard distribution</span><br>
-	<span class="txt-small">by Skrol29, 2008-02-29 </span></div>
+	<span class="txt-small">by Skrol29, 2012-08-14 </span></div>
 <br>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
@@ -723,7 +723,7 @@ Example:
 <br>
 <br>
 </div>
-<div><a name="plugin_mergeonfly" id="plugin_mergeonfly"></a><span class="title-2">Plug-in MergeOnFly</span> <span class="versioning"> version 1.0.5</span></div>
+<div><a name="plugin_mergeonfly" id="plugin_mergeonfly"></a><span class="title-2">Plug-in MergeOnFly</span> <span class="versioning"> version 1.1.0</span></div>
 <div class="norm">This plug-in enables the MergeBlock() method to display data on  fly. This means that the result of the merge will be displayed progressively  during the execution of MergeBlock(). At the end of the MergeBlock(), only the part of the template after the block will remain. You steel have to use the Show() method for this ending part. <br>
   Notice: when you call the plug-in command, it activates the OnFly mode only for one  MergeBlock() call. Other MergBlock() calls won't have the OnFly mode until you call the plug-in just before them.<br>
       <br>
@@ -733,7 +733,7 @@ Example:
 <br>
 <span class="title-1b">Installation mode:</span> automatic when the plug-in command is called for the first time.<br>
 <br>
-<span class="title-1b">Command syntax:</span> <span class="txt-code"><span class="opt-name"></span></span><span class="txt-code"><span class="opt-name">$TBS</span>-&gt;PlugIn(TBS_ONFLY, <span class="opt-type">int </span><span class="opt-name">PackSize</span>)<br>
+<span class="title-1b">Command syntax:</span> <span class="txt-code"><span class="opt-name"></span></span><span class="txt-code"><span class="opt-name">$TBS</span>-&gt;PlugIn(TBS_ONFLY, <span class="opt-type">int </span><span class="opt-name">PackSize</span> [, <span class="opt-type">boolean </span><span class="opt-name">CountSubRecord</span>=false])<br>
 </span><span class="txt-code"><br>
 </span>
 <table border="0" cellpadding="5" cellspacing="0">
@@ -744,6 +744,10 @@ Example:
   <tr>
     <td align="left" valign="top" class="opt-name">PackSize</td>
     <td align="left" valign="top">Number of records to display at a time. </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" class="opt-name">CountSubRecord</td>
+    <td align="left" valign="top"><span class="opt-value">true</span> if the merged block have sub-blocks and you'd like sub-records to be counted for the <span class="opt-name">PackSize</span>. Defult value is <span class="opt-value">false</span>.</td>
   </tr>
 </table>
 <br>
