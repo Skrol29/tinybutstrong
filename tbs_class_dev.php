@@ -4279,5 +4279,3 @@ static function f_Xml_FindNewLine(&$Txt,$PosBeg,$Forward,$IsRef) {
 }
 
 }
-
-?>
