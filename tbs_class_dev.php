@@ -4,7 +4,7 @@
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
 Version  : 3.8.1 for PHP 4
-Date     : 2012-04-01
+Date     : 2012-08-15
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -76,7 +76,7 @@ var $OnDataPi = false;
 
 public function DataAlert($Msg) {
 	if (is_array($this->TBS->_CurrBlock)) {
-		return $this->TBS->meth_Misc_Alert('when merging block "'.implode(',',$this->TBS->_CurrBlock)."'",$Msg);
+		return $this->TBS->meth_Misc_Alert('when merging block "'.implode(',',$this->TBS->_CurrBlock).'"',$Msg);
 	} else {
 		return $this->TBS->meth_Misc_Alert('when merging block '.$this->TBS->_ChrOpen.$this->TBS->_CurrBlock.$this->TBS->_ChrClose,$Msg);
 	}
