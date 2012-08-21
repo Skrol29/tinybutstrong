@@ -192,7 +192,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2012-08-14</td>
+        <td>2012-08-22</td>
       </tr>
     </table>
   </div>
@@ -1583,7 +1583,7 @@ which is the same as:
           <p> Example:</p>
           <div class="decal"><span class="opt-html">&lt;div class=&quot;style1&quot;&gt;</span>[<span class="opt-name">onshow.x</span>;<span class="opt-name">att</span>=<span class="opt-value">class</span>;<span class="opt-name">attadd</span>]<br>
             in this example, if we have <span class="txt-code">$x='style2'</span> then we obtain <span class="opt-html">&lt;div class=&quot;style1 style2&quot;&gt;</span></div>
-          <p>There is no way for now to simply concatenate the field's value with the previous attribute's value. But instead, you can use parameter <a href="html_field_prm_ope" class="opt-name">ope</a>=<span class="opt-value">msk</span> in order to apply a mask to the field's value.</p>
+          <p>There is no way for now to simply concatenate the field's value with the previous attribute's value. But instead, you can use parameter <a href="#html_field_prm_ope" class="opt-name">ope</a>=<span class="opt-value">msk</span> in order to apply a mask to the field's value.</p>
           <p> Example: </p>
           <div class="decal"><span class="opt-html">&lt;div class=&quot;old&quot;&gt;</span>[<span class="opt-name">onshow.z</span>;<span class="opt-name">att</span>=<span class="opt-value">class</span>;<span class="opt-name">ope</span>=<span class="opt-value">msk:style*</span>]<br>
             in this example, if we have <span class="txt-code">$z='2'</span> then we obtain <span class="opt-html">&lt;div class=&quot;style2&quot;&gt;</span></div>
@@ -2196,7 +2196,7 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
     <ul>
       <li><span class="opt-name">[onload]</span> fields, which are automatically merged  when the <a href="#php_loadtemplate">LoadTemplate()</a> method is called.</li>
       <li><span class="opt-name">[onshow]</span> fields, which are automatically merged when the <a href="#php_show">Show()</a> method is called.</li>
-      <li><span class="opt-name">[var]</span> fields, which are automatically merged when the field they are embedded in is also merged itself, but it works only if they are placed into a parameter <a href="#html_field_prm_file" class="opt-name">file</a>, <a href="#html_field_prm_script" class="opt-name">script</a>, <a href="#html_field_prm_if" class="opt-name">if</a>, <span class="opt-name">then</span>, <span class="opt-name">else</span> or <a href="#html_block_prm_when" class="opt-name">when</a>. </li>
+      <li><span class="opt-name">[var]</span> fields, which are automatically merged only if they are embedded into parameter  <a href="#html_field_prm_file" class="opt-name">file</a>, <a href="#html_field_prm_script" class="opt-name">script</a>, <a href="#html_field_prm_if" class="opt-name">if</a>, <span class="opt-name">then</span>, <span class="opt-name">else</span> or <a href="#html_block_prm_when" class="opt-name">when</a>. Thus placed, they are merged when their parent are merged.</li>
     </ul>
     <div class="versioning">
       <p>Versioning:</p>
