@@ -192,7 +192,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2012-10-12</td>
+        <td>2012-10-29</td>
       </tr>
     </table>
   </div>
@@ -890,10 +890,10 @@ include_once(<span class="opt-value">'tbs_class.php'</span>);
     <ol>
       <li> Merge [onshow] <a href="#html_field_auto">fields</a> and <a href="#html_block_auto">blocks</a>,</li>
       <li>Merge [var] <a href="#html_field_auto">fields</a> (for compatibility with  version prior to 3.2.0), </li>
-      <li> Display the result (this action can be cancelled by <a href="#php_render">Render</a> property/argument),</li>
-      <li> End the script (this action can be cancelled by <a href="#php_render">Render</a> property/argument).</li>
+      <li> Display the result (this action can be cancelled by defining another <a href="#php_setoption_render">Render</a> in the options or in the argument),</li>
+      <li> End the script (this action can be cancelled by defining another <a href="#php_setoption_render">Render</a> in the options or in the argument).</li>
     </ol>
-    <p> The <a href="#php_render">Render</a> property/argument allows to adjust the behavior of the Show() method. See the <a href="#php_render">Render</a> property for more information.</p>
+    <p> The <a href="#php_setoption_render">Render</a>  allows to adjust the behavior of the Show() method. See the <a href="#php_setoption_render">Render</a> option for more information.</p>
   </div>
   <h3><a name="php_getblocksource" id="php_getblocksource"></a>method GetBlockSource():</h3>
   <div class="norm">
@@ -1773,7 +1773,7 @@ Parameter <span class="opt-name">storename</span> changes the name of the store.
           <table width="100%" border="0" cellpadding="2" cellspacing="0" >
             <tr>
               <td width="10" valign="top">*</td>
-              <td>Take care that in your script <strong> variables will be obsiously local instead of global</strong>. This is because the script is called from a TBS method. In order to define or reach global variables in your script, you have to use the Php instruction <a href="http://fr.php.net/global" target="_blank">global</a> or the array <span class="txt-code">$GLOBAL</span>.</td>
+              <td>Take care that in your script <strong> variables will be obsiously local instead of global</strong>. This is because the script is called from a TBS method. In order to define or reach global variables in your script, you have to use the Php instruction <a href="http://www.php.net/global" target="_blank">global</a> or the array <span class="txt-code">$GLOBAL</span>.</td>
             </tr>
             <tr id="v202_locvar">
               <td valign="top">*</td>
@@ -2047,7 +2047,7 @@ Parameter <span class="opt-name">storename</span> changes the name of the store.
             <tr>
               <td valign="top" class="opt-value">(locale)</td>
               <td>Display locale day and month's names. 
-                The locale language can be set using the PHP function <span class="txt-code"><a href="http://php.net/setlocale" target="_blank">setlocale()</a></span>. It works only if locale parameters have been set on the server. For PHP reasons, in locale mode <span class="opt-value">xx</span> does not work and <span class="opt-value">d</span> does like <span class="opt-value">dd</span>. </td>
+                The locale language can be set using the PHP function <span class="txt-code"><a href="http://www.php.net/setlocale" target="_blank">setlocale()</a></span>. It works only if locale parameters have been set on the server. For PHP reasons, in locale mode <span class="opt-value">xx</span> does not work and <span class="opt-value">d</span> does like <span class="opt-value">dd</span>. </td>
             </tr>
           </table>
           <br>
