@@ -192,7 +192,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2012-10-29</td>
+        <td>2013-02-10</td>
       </tr>
     </table>
   </div>
@@ -2899,9 +2899,14 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
             </table></td>
         </tr>
       </table>
-      <p><span class="txt-small">Corresponding PHP code:</span><br>
-        <span class="txt-code">&nbsp;$TBS-&gt;MergeBlock('<span class="opt-value">body</span>',$cnx_id,'<span class="opt-value">SELECT name,spokenlg FROM t_body</span>)</span><br>
-      </p>
+      <p><span class="txt-small">Corresponding PHP code:</span><pre class="txt-code">
+<span class="opt-name">$data</span> = array(
+  array('<span class="opt-value">name</span>'=&gt;'<span class="opt-value">Peter</span>', '<span class="opt-value">spokenlg</span>'=&gt;array( '<span class="opt-value">US</span>', '<span class="opt-value">FR</span>' ) ),
+  array('<span class="opt-value">name</span>'=&gt;'<span class="opt-value">Paul</span>',  '<span class="opt-value">spokenlg</span>'=&gt;array( '<span class="opt-value">US</span>' ) ),
+  array('<span class="opt-value">name</span>'=&gt;'<span class="opt-value">Jack</span>',  '<span class="opt-value">spokenlg</span>'=&gt;array( '<span class="opt-value">FR</span>', '<span class="opt-value">ES</span>', '<span class="opt-value">IT</span>') ),
+);
+<span class="opt-name">$TBS</span>-&gt;MergeBlock('<span class="opt-value">body</span>', <span class="opt-name">$data</span>);
+</pre>
       <p><span class="txt-small">Result of the merge:</span> </p>
       <table width="400" cellpadding="2" cellspacing="0" class="border-2">
         <tr>
