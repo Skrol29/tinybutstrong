@@ -44,9 +44,9 @@ body,td,th {
 
 <body>
 <h1>TbsZip - a zip modifier for PHP</h1>
-<div>version 2.11, 2012-02-14, by Skrol29<br />
+<div>version 2.12, 2013-03-14, by Skrol29<br />
   document 
-  updated on 2012-02-14</div>
+  updated on 2013-03-14</div>
 <ol>
   <li><a href="#intro">Introduction</a></li>
   <li><a href="#features">Features</a></li>
@@ -106,8 +106,9 @@ $zip-&gt;Close(); <span class="versioning">// close the current archive</span>
     <th valign="top"><strong>Description</strong></th>
   </tr>
   <tr>
-    <td valign="top" class="code">Open($ArchFile)</td>
-    <td valign="top"> Open an original Zip archive (it can be an Open Office document, an MS Office document or any other Zip archive).</td>
+    <td valign="top" class="code">Open($ArchFile, $UseIncludePath=false)</td>
+    <td valign="top"> Open an original Zip archive (it can be an LibreOffice document, an MS Office document or any other Zip archive).<br />
+    <span class="versioning">Versioning: argument $UseIncludePath is supported since TbsZip version 2.12</span></td>
   </tr>
   <tr>
     <td valign="top" class="code">CreateNew()</td>
@@ -229,6 +230,9 @@ $zip-&gt;Close(); <span class="versioning">// close the current archive</span>
   </tr>
 </table>
 <h2><a name="change" id="intro6"></a>6. Change log</h2>
+<p>Version 2.12, 2013-03-14<br />
+-   bug fixed: may corrupt other zipped files when changing a file in an archive that have Special Spanning information without the expected signature.<br />
+- minor  enhancement: new argument $UseIncludePath.</p>
 <p>Version 2.11, 2011-02-14<br />
 -   bug fixed: method FileCancelModif() doesn't cancel added files.</p>
 Version 2.10, 2011-08-13<br />
