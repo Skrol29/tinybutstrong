@@ -1,7 +1,8 @@
 <?php
 
 /*
-TbsZip version 2.12-beta (2013-03-16)
+TbsZip version 2.12
+Date    : 2013-03-16
 Author  : Skrol29 (email: http://www.tinybutstrong.com/onlyyou.html)
 Licence : LGPL
 This class is independent from any other classes and has been originally created for the OpenTbs plug-in

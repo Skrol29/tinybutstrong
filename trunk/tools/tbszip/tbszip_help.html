@@ -44,9 +44,9 @@ body,td,th {
 
 <body>
 <h1>TbsZip - a zip modifier for PHP</h1>
-<div>version 2.12, 2013-03-14, by Skrol29<br />
+<div>version 2.12, 2013-03-16, by Skrol29<br />
   document 
-  updated on 2013-03-14</div>
+  updated on 2013-03-18</div>
 <ol>
   <li><a href="#intro">Introduction</a></li>
   <li><a href="#features">Features</a></li>
@@ -230,36 +230,64 @@ $zip-&gt;Close(); <span class="versioning">// close the current archive</span>
   </tr>
 </table>
 <h2><a name="change" id="intro6"></a>6. Change log</h2>
-<p>Version 2.12, 2013-03-14<br />
--   bug fixed: may corrupt other zipped files when changing a file in an archive that have Special Spanning information without the expected signature.<br />
-- minor  enhancement: new argument $UseIncludePath.</p>
-<p>Version 2.11, 2011-02-14<br />
--   bug fixed: method FileCancelModif() doesn't cancel added files.</p>
-Version 2.10, 2011-08-13<br />
--   bug fixed: PHP warning <span class="warning">&quot;Notice: Undefined variable: AddDataLen...&quot;</span> happens when deleting a file whitout adding any file.
-<p>Version 2.9, 2011-07-22<br />
--   bug fixed: a minor bug on FileRead when the asked file does not exists.</p>
-<p>Version 2.8, 2011-06-08<br />
-  -   bug fixed: PHP warning <span class="warning">&quot;Warning: fclose(): 10 is not a valid stream resource&quot;</span> may happen when closing an archive twice.</p>
-<p>Version 2.7, 2011-06-07<br />
--   bug fixed: PHP error <span class="warning">&quot;supplied argument is not a valid stream resource&quot;</span> or <span class="warning">&quot;Undefined property: clsOpenTBS::$OutputHandle&quot;</span> may happen when using method Flush().</p>
-Version 2.6, 2011-06-07<br />
-- minor  enhancement: now raise a TbsZip error if <span class="value">Flush()</span> attempts to overwrite a locked file.
-<p>Version 2.5, 2011-05-12  <br />
-  - minor  bug fixed: strict compatibility with PHP 5 (no PHP warning with error reporting E_STRICT)</p>
-<p>  Version 2.4, 2011-03-25  <br />
-  - minor  bug fixed: the new created archive using <span class="value">Flush()</span> was not unlocked at the end of the flush. The clsTbsZip instance had still an handle on it.<br />
-  - minor  enhancement: now raise a TbsZip error if <span class="value">Flush()</span> attempts to overwrite the current archive.<br />
-  - minor  enhancement: property <span class="value">DisplayError</span> is set to true by default.<br />
+<p>Version 2.12, 2013-03-16</p>
+<ul>
+  <li> bug fixed: may produce a corrupted archive when the original was using data descriptors without the signature.</li>
+  <li> minor  enhancement: new argument $UseIncludePath.</li>
+  <li>minor  enhancement: debug mode is smarter .</li>
+</ul>
+<p>Version 2.11, 2011-02-14</p>
+<ul>
+  <li>    bug fixed: method FileCancelModif() doesn't cancel added files.</li>
+</ul>
+<p>Version 2.10, 2011-08-13
 </p>
-<p> Version 2.3, 2010-11-29<br />
-- minor  bug fixed:  an archive created with both methods <span class="value">CreateNew()</span> and <span class="value">Flush(TBSZIP_DOWNLOAD)</span> could be truncated because the final size of the archive was badly estimated.</p>
-<p> Version 2.2, 2010-10-28<br />
-- major bug fixed: some added or modified files can be saved in the archive with a wrong CRC control code. This could make  softwares to consider the file or the archive as corrupted. Only few CRC codes are wrongly saved, thus the bug is rare and can seem to appear randomly.</p>
-<p> Version 2.1, 2010-07-01<br />
-  - bug fixed: when adding a new file in the archive, the time of the file was wrong (date was ok)<br />
-  - TbsZip now changes the date and time of a file in the archive when the file content is replaced<br />
-  - new method <span class="value">CreateNew()</span></p>
+<ul>
+  <li>    bug fixed: PHP warning <span class="warning">&quot;Notice: Undefined variable: AddDataLen...&quot;</span> happens when deleting a file whitout adding any file.
+  </li>
+</ul>
+<p>Version 2.9, 2011-07-22</p>
+<ul>
+  <li> bug fixed: a minor bug on FileRead when the asked file does not exists.</li>
+</ul>
+<p>Version 2.8, 2011-06-08</p>
+<ul>
+  <li> bug fixed: PHP warning <span class="warning">&quot;Warning: fclose(): 10 is not a valid stream resource&quot;</span> may happen when closing an archive twice.</li>
+</ul>
+<p>Version 2.7, 2011-06-07</p>
+<ul>
+  <li> bug fixed: PHP error <span class="warning">&quot;supplied argument is not a valid stream resource&quot;</span> or <span class="warning">&quot;Undefined property: clsOpenTBS::$OutputHandle&quot;</span> may happen when using method Flush().</li>
+</ul>
+<p>Version 2.6, 2011-06-07
+</p>
+<ul>
+  <li> minor  enhancement: now raise a TbsZip error if <span class="value">Flush()</span> attempts to overwrite a locked file.
+  </li>
+</ul>
+<p>Version 2.5, 2011-05-12  </p>
+<ul>
+  <li> minor  bug fixed: strict compatibility with PHP 5 (no PHP warning with error reporting E_STRICT)</li>
+</ul>
+<p>  Version 2.4, 2011-03-25  </p>
+<ul>
+  <li> minor  bug fixed: the new created archive using <span class="value">Flush()</span> was not unlocked at the end of the flush. The clsTbsZip instance had still an handle on it.</li>
+  <li> minor  enhancement: now raise a TbsZip error if <span class="value">Flush()</span> attempts to overwrite the current archive.</li>
+  <li> minor  enhancement: property <span class="value">DisplayError</span> is set to true by default. </li>
+</ul>
+<p> Version 2.3, 2010-11-29</p>
+<ul>
+  <li> minor  bug fixed:  an archive created with both methods <span class="value">CreateNew()</span> and <span class="value">Flush(TBSZIP_DOWNLOAD)</span> could be truncated because the final size of the archive was badly estimated.</li>
+</ul>
+<p> Version 2.2, 2010-10-28</p>
+<ul>
+  <li> major bug fixed: some added or modified files can be saved in the archive with a wrong CRC control code. This could make  softwares to consider the file or the archive as corrupted. Only few CRC codes are wrongly saved, thus the bug is rare and can seem to appear randomly.</li>
+</ul>
+<p> Version 2.1, 2010-07-01</p>
+<ul>
+  <li> bug fixed: when adding a new file in the archive, the time of the file was wrong (date was ok)</li>
+  <li> TbsZip now changes the date and time of a file in the archive when the file content is replaced</li>
+  <li> new method <span class="value">CreateNew()</span></li>
+</ul>
 <h2><a name="misc" id="intro5"></a>7. Contact and license</h2>
 <p>Author: <a href="http://www.tinybutstrong.com/onlyyou.html">Skrol29</a></p>
 <p>License: <a href="http://www.gnu.org/licenses/lgpl.html">LGLP</a></p>
