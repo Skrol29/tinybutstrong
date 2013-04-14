@@ -1,8 +1,8 @@
 <?php
 
 /*
-TbsZip version 2.12
-Date    : 2013-03-16
+TbsZip version 2.13
+Date    : 2013-04-14
 Author  : Skrol29 (email: http://www.tinybutstrong.com/onlyyou.html)
 Licence : LGPL
 This class is independent from any other classes and has been originally created for the OpenTbs plug-in
@@ -395,6 +395,32 @@ class clsTbsZip {
 
 	}
 
+	/**
+	 * Return the state of the file.
+	 * @return {string} 'u'=unchanged, 'm'=modified, 'd'=deleted, 'a'=added, false=unknown
+	 */
+	function FileGetState($NameOrIdx) {
+		
+		$idx = $this->FileGetIdx($NameOrIdx);
+		if ($idx===false) {
+			$idx = $this->FileGetIdxAdd($NameOrIdx);
+			if ($idx===false) {
+				return false;
+			} else {
+				return 'a';
+			}
+		} elseif (isset($this->ReplInfo[$idx])) {
+			if ($this->ReplInfo[$idx]===false) {
+				return 'd';
+			} else {
+				return 'm';
+			}
+		} else {
+			return 'u';
+		}
+		
+	}
+	
 	function FileCancelModif($NameOrIdx, $ReplacedAndDeleted=true) {
 	// cancel added, modified or deleted modifications on a file in the archive
 	// return the number of cancels
