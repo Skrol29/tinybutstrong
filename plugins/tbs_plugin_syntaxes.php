@@ -13,7 +13,7 @@ Version 1.6 , on 2011-02-10, by Skrol29: direct commands
 define('TBS_THIS_PLUGIN','clsTbsThisPlugIn');
 
 // Constants for direct commands (direct commands are supported since TBS version 3.6.2)
-// Direct command must be a string wich is prefixed by the name of the class followed by a dot (.).
+// Direct command must be a string which is prefixed by the name of the class followed by a dot (.).
 define('TBS_THIS_COMMAND1','clsTbsThisPlugIn.command1');
 define('TBS_THIS_COMMAND2','clsTbsThisPlugIn.command1');
 
@@ -24,7 +24,7 @@ define('TBS_THIS_COMMAND2','clsTbsThisPlugIn.command1');
 class clsTbsThisPlugIn {
 
 	// Property $this->TBS is automatically set by TinyButStrong when the Plug-In is installed.
-	// More preciselly, it's added after the instanciation of the plug-in's class, and before the call to method OnInstall().
+	// More precisely, it's added after the instantiation  of the plug-in's class, and before the call to method OnInstall().
 	// You can use this property inside all the following methods.
 
 	function OnInstall() {
@@ -105,11 +105,12 @@ class clsTbsThisPlugIn {
 
 	function OnCacheField($BlockName,&$Loc,&$Txt,$PrmProc) {
 		// Executed each time a TBS field is found during the block analysis and about to be cached.
-		// No merging is processed here, only parameter att. This event is supported since TBS version 3.6.0.
+		// No merging is processed here. But parameter att is processed just after event OnCacheField() occurs on the field.
+		// This event is supported since TBS version 3.6.0.
 		// $BlockName: name of the block currently merged
 		// $Loc:       the TBS field object just found
 		// $Txt:       undocumented.
-		// $PrmProc:   an array that contains paremeters that will be processed before the field is cached (denpends only of the TBS version)
+		// $PrmProc:   an array that contains parameters that will be processed before the field is cached (depends only of the TBS version)
 	}
 
 	function BeforeMergeBlock(&$TplSource,&$BlockBeg,&$BlockEnd,$PrmLst,&$DataSrc,&$LocR) {
