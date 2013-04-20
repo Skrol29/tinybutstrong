@@ -192,7 +192,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2013-02-10</td>
+        <td>2013-04-20</td>
       </tr>
     </table>
   </div>
@@ -1139,6 +1139,12 @@ Some of the TBS options are a new way of setting <a href="#php_options_compatibi
               <td align="left" valign="top">Indicates that PHP terminate all script at the end of Show(). TBS uses the PHP function <a href="http://www.php.net/manual/en/function.exit.php">exit</a>.</td>
             </tr>
           </table></td>
+      </tr>
+      <tr>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_methods_allowed" id="php_setoption19"></a>methods_allowed</span></td>
+        <td align="left" valign="top" class="border-sep"><p>Allow methods in <a href="#html_field_auto">automatic fields</a>. The default value is <span class="opt-value">false</span>. If you set this option to <span class="opt-value">true</span>, then and automatic fields can call methods of its sub items. It is a security point to not allow methods by default on automatic fields because all global variables can be called by automatic fields until <a href="#php_varref">VarRef</a> is redefined.</p>
+        <p> Example of automatic field calling a method: [onshow.my_objet.my_method]</p>
+        <p class="versioning">Versioning: option 'methods_allowed' is supported since TBS version 3.8.2. </p></td>
       </tr>
     </table>
     <h4><span class="opt-name"><a name="php_options_compatibility" id="php_setoption16"></a></span>Compatibility with previous TBS versions:</h4>
