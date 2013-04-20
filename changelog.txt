@@ -1,3 +1,15 @@
+TinyButStrong 3.8.2
+
+Skrol29, 2013-04-20
+
+Change-log:
+===========
+
+- Explicit error message when a colmun is missing for a grouping paremeter (headergrp, footergrp, splittergrp)
+
+- Add option methods_allowed
+
+------------------------------------
 
 TinyButStrong 3.8.1
 
