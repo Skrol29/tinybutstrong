@@ -44,9 +44,9 @@ body,td,th {
 
 <body>
 <h1>TbsZip - a zip modifier for PHP</h1>
-<div>version 2.12, 2013-03-16, by Skrol29<br />
+<div>version 2.13, 2013-04-21, by Skrol29<br />
   document 
-  updated on 2013-03-18</div>
+  updated on 2013-04-21</div>
 <ol>
   <li><a href="#intro">Introduction</a></li>
   <li><a href="#features">Features</a></li>
@@ -165,6 +165,32 @@ $zip-&gt;Close(); <span class="versioning">// close the current archive</span>
     <td valign="top"> Cancel  add, delete and replacements in the archive for the given file name. Return the number of cancels.</td>
   </tr>
   <tr>
+    <td valign="top" class="code">FileGetState($NameOrIdx)</td>
+    <td valign="top"><p>Return a string that represents the state of the file in the archive:</p>
+      <table border="0" cellspacing="0" cellpadding="3">
+        <tr>
+          <td class="value">'u'</td>
+          <td>Unchanged</td>
+        </tr>
+        <tr>
+          <td class="value">'m'</td>
+          <td>Modified</td>
+        </tr>
+        <tr>
+          <td class="value">'d'</td>
+          <td>Deleted</td>
+        </tr>
+        <tr>
+          <td class="value">'a'</td>
+          <td>Added</td>
+        </tr>
+        <tr>
+          <td class="value">false</td>
+          <td>The file is  not find in the archive </td>
+        </tr>
+    </table></td>
+  </tr>
+  <tr>
     <td valign="top" class="code">Flush($Render=TBSZIP_DOWNLOAD, $File='', $ContentType='')</td>
     <td valign="top"><p>Actually create the new archive with all modifications. External files to be inserted as sub-files are loaded during this proces and not before. They are  compressed and output on the fly and one by one without staying in the  PHP memory. No temporay files are used.</p>
       The <span class="value">$Render</span> option:
@@ -230,11 +256,15 @@ $zip-&gt;Close(); <span class="versioning">// close the current archive</span>
   </tr>
 </table>
 <h2><a name="change" id="intro6"></a>6. Change log</h2>
+<p>Version 2.13, 2013-04-14</p>
+<ul>
+  <li> new  method <span class="code">FileGetState()</span></li>
+</ul>
 <p>Version 2.12, 2013-03-16</p>
 <ul>
   <li> bug fixed: may produce a corrupted archive when the original was using data descriptors without the signature.</li>
   <li> minor  enhancement: new argument $UseIncludePath.</li>
-  <li>minor  enhancement: debug mode is smarter .</li>
+  <li>minor  enhancement: debug mode is smarter.</li>
 </ul>
 <p>Version 2.11, 2011-02-14</p>
 <ul>
