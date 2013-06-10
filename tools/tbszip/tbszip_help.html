@@ -44,9 +44,9 @@ body,td,th {
 
 <body>
 <h1>TbsZip - a zip modifier for PHP</h1>
-<div>version 2.13, 2013-04-21, by Skrol29<br />
+<div>version 2.14, 2013-06-11, by Skrol29<br />
   document 
-  updated on 2013-04-21</div>
+  updated on 2013-06-11</div>
 <ol>
   <li><a href="#intro">Introduction</a></li>
   <li><a href="#features">Features</a></li>
@@ -108,7 +108,9 @@ $zip-&gt;Close(); <span class="versioning">// close the current archive</span>
   <tr>
     <td valign="top" class="code">Open($ArchFile, $UseIncludePath=false)</td>
     <td valign="top"> Open an original Zip archive (it can be an LibreOffice document, an MS Office document or any other Zip archive).<br />
-    <span class="versioning">Versioning: argument $UseIncludePath is supported since TbsZip version 2.12</span></td>
+    <span class="versioning">Versioning:<br />
+    -  since TbsZip version 2.14, $ArchFile can be a PHP file handle<br />
+- argument $UseIncludePath is supported since TbsZip version 2.12</span></td>
   </tr>
   <tr>
     <td valign="top" class="code">CreateNew()</td>
@@ -256,6 +258,10 @@ $zip-&gt;Close(); <span class="versioning">// close the current archive</span>
   </tr>
 </table>
 <h2><a name="change" id="intro6"></a>6. Change log</h2>
+<p>Version 2.14, 2013-06-11</p>
+<ul>
+  <li>can open an archive from a PHP file handle</li>
+</ul>
 <p>Version 2.13, 2013-04-14</p>
 <ul>
   <li> new  method <span class="code">FileGetState()</span></li>
