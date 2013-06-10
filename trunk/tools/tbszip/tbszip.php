@@ -1,8 +1,8 @@
 <?php
 
 /*
-TbsZip version 2.13
-Date    : 2013-04-14
+TbsZip version 2.14
+Date    : 2013-06-11
 Author  : Skrol29 (email: http://www.tinybutstrong.com/onlyyou.html)
 Licence : LGPL
 This class is independent from any other classes and has been originally created for the OpenTbs plug-in
@@ -42,10 +42,16 @@ class clsTbsZip {
 		if (!isset($this->Meth8Ok)) $this->__construct();  // for PHP 4 compatibility
 		$this->Close(); // close handle and init info
 		$this->Error = false;
-		$this->ArchFile = $ArchFile;
 		$this->ArchIsNew = false;
-		// open the file
-		$this->ArchHnd = fopen($ArchFile, 'rb', $UseIncludePath);
+		$this->ArchIsStream = (is_resource($ArchFile) && (get_resource_type($ArchFile)=='stream'));
+		if ($this->ArchIsStream) {
+			$this->ArchFile = 'from_stream.zip';
+			$this->ArchHnd = $ArchFile;
+		} else {
+			// open the file
+			$this->ArchFile = $ArchFile;
+			$this->ArchHnd = fopen($ArchFile, 'rb', $UseIncludePath);
+		}
 		$ok = !($this->ArchHnd===false);
 		if ($ok) $ok = $this->CentralDirRead();
 		return $ok;
@@ -182,10 +188,10 @@ class clsTbsZip {
 				$idx++;
 			}
 		}
-		
+
 		$nl = "\r\n";
 		echo "<pre>";
-		
+
 		echo "-------------------------------".$nl;
 		echo "End of Central Directory record".$nl;
 		echo "-------------------------------".$nl;
@@ -206,7 +212,7 @@ class clsTbsZip {
 		}
 
 		echo "</pre>";
-		
+
 	}
 
 	function DebugArray($arr) {
@@ -219,7 +225,7 @@ class clsTbsZip {
 		}
 		return $arr;
 	}
-	
+
 	function FileExists($NameOrIdx) {
 		return ($this->FileGetIdx($NameOrIdx)!==false);
 	}
@@ -293,7 +299,7 @@ class clsTbsZip {
 	// read the file header (and maybe the data ) in the archive, assuming the cursor in at a new file position
 
 		$b = $this->_ReadData(30);
-		
+
 		$x = $this->_GetHex($b,0,4);
 		if ($x!=='h:04034b50') return $this->RaiseError("Signature of Local File Header #".$idx." (data section) expected but not found at position ".$this->_TxtPos(ftell($this->ArchHnd)-30).".");
 
@@ -335,7 +341,7 @@ class clsTbsZip {
 		} else {
 			$this->_MoveTo($len, SEEK_CUR);
 		}
-		
+
 		// Description information
 		$desc_ok = ($x['purp'][2+3]=='1');
 		if ($desc_ok) {
@@ -400,7 +406,7 @@ class clsTbsZip {
 	 * @return {string} 'u'=unchanged, 'm'=modified, 'd'=deleted, 'a'=added, false=unknown
 	 */
 	function FileGetState($NameOrIdx) {
-		
+
 		$idx = $this->FileGetIdx($NameOrIdx);
 		if ($idx===false) {
 			$idx = $this->FileGetIdxAdd($NameOrIdx);
@@ -418,9 +424,9 @@ class clsTbsZip {
 		} else {
 			return 'u';
 		}
-		
+
 	}
-	
+
 	function FileCancelModif($NameOrIdx, $ReplacedAndDeleted=true) {
 	// cancel added, modified or deleted modifications on a file in the archive
 	// return the number of cancels
@@ -774,7 +780,7 @@ class clsTbsZip {
 		// Return the human readable position in both decimal and hexa
 		return $pos." (h:".dechex($pos).")";
 	}
-	
+
 	function _DataOuputAddedFile($Idx, $PosLoc) {
 
 		$Ref =& $this->AddInfo[$Idx];
@@ -906,6 +912,9 @@ class clsTbsZip {
 
 		if ($this->ArchIsNew) {
 			$Len = strlen($this->CdInfo['bin']);
+		} elseif ($this->ArchIsStream) {
+			$x = fstat($this->ArchHnd);
+			$Len = $x['size'];
 		} else {
 			$Len = filesize($this->ArchFile);
 		}
