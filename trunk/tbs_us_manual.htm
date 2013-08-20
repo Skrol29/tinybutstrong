@@ -192,7 +192,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2013-04-20</td>
+        <td>2013-08-20</td>
       </tr>
     </table>
   </div>
@@ -836,7 +836,7 @@ include_once(<span class="opt-value">'tbs_class.php'</span>);
           The block is merged like it was a <span class="opt-name"> <a href="#html_conditional_section">conditional blocks</a> onload</span> and <span class="opt-name">onshow</span>. The block is not merged with data, and so it must have no linked TBS field. Each block section needs a parameter <span class="opt-name">when</span> or a parameter <span class="opt-name">default</span>. See <a href="#html_conditional_section">conditional blocks</a> for more details. </p>
         <p> Example: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'bz'</span>,<span class="opt-value">'cond'</span>);</span></p>
       </div>
-      <h5>&bull; Array</h5>
+      <h5><a name="php_mergeblock_array" id="php_mergeblock_mergeseveral2"></a>&bull; Array</h5>
       <div class="decal">
         <p>The argument <span class="opt-name">Source</span> has to be a PHP Array or the keyword <span class="opt-value">'array'</span>. If you use the keyword <span class="opt-value">'array'</span>, then the argument <span class="opt-name">Query</span> has to be a Php Array or a string that represents an array contained or nested in a global variable.</p>
         <p> String syntax: <span class="opt-value">'globvar[item1][item2]...'</span></p>
@@ -2996,31 +2996,37 @@ $data['group2'][] = array('id'=&gt;4, 'name'=&gt;'jim');</pre>
     <h4>Principles of the dynamic queries:</h4>
     <p>It is possible to use the MergeBlock() method with a dynamic query.
       In your template, you have to define a block by adding the parameters <span class="opt-name">p1</span>, <span class="opt-name">p2</span>, <span class="opt-name">p3</span>,... with their values.
-      The query given to the MergeBlock() method has to contain marks such as <span class="opt-value">%p1%</span>, <span class="opt-value">%p2%</span>, <span class="opt-value">%p3%</span>, ... in order to welcome the values of the parameters <span class="opt-name">p1</span>, <span class="opt-name">p2</span>, <span class="opt-name">p3</span>,... </p>
+      The parameter $query given to the <a href="#php_mergeblock" class="opt-name">MergeBlock()</a> method must be a string and has to contain marks such as <span class="opt-value">%p1%</span>, <span class="opt-value">%p2%</span>, <span class="opt-value">%p3%</span>, ... in order to welcome the values of the parameters <span class="opt-name">p1</span>, <span class="opt-name">p2</span>, <span class="opt-name">p3</span>,... </p>
+    <p>Note that you can also use a dynamic query with a PHP Array using a string that refers to a PHP Array stored in a global variable. See<a href="#php_mergeblock_array" class="opt-name"> Php data sources</a>.</p>
     <p> Each section of the block to be merged that contains a parameter <span class="opt-name">p1</span> will be computed as a separate block for which the dynamic query is re-executed. The sections of the block that have no parameter <span class="opt-name">p1</span> are combined with the previous section with a parameter <span class="opt-name">p1</span>. </p>
-    <div class="decal">Example: <br>
-      Country: France <br>
+    <div class="decal">
+      <p>Example: </p>
+      <div class="decal">
+      <p> Country: France</p>
       <table cellpadding="2" cellspacing="0" class="border-1">
         <tr>
           <td width="200" class="border-1">[blk.town;block=tr;p1='france']</td>
           <td width="100" class="border-1">[blk.country]</td>
         </tr>
       </table>
-      <br>
-      Country: USA <br>
+      <p>Country: USA</p>
       <table cellpadding="2" cellspacing="0" class="border-1">
         <tr>
           <td width="200" class="border-1">[blk.town;block=tr;p1='us']</td>
           <td width="100" class="border-1">[blk.country]</td>
         </tr>
       </table>
-      <br>
-      <span class="txt-small">Corresponding PHP code:</span><br>
-      <span class="txt-code">&nbsp;$TBS-&gt;MergeBlock('<span class="opt-value">blk</span>',$cnx_id,&quot;<span class="opt-value">SELECT town,country FROM t_geo WHERE (country='%p1%')</span>&quot;)<br>
-      <br>
-      </span><span class="txt-small">Result of the merge:<br>
-      </span><br>
-      Country: France <br>
+      </div>
+      <p>Corresponding PHP code:</p>
+      <pre class="decal">$TBS-&gt;MergeBlock('<span class="opt-value">blk</span>', $cnx_id, &quot;<span class="opt-value">SELECT town,country FROM t_geo WHERE (country='%p1%')</span>&quot;);</pre>
+      <p>Or using an Array:</p>
+<pre class="decal">global $data_town; <span class="opt-html">// the coutry code is the main key of the array</span>
+$TBS-&gt;MergeBlock('<span class="opt-value">blk</span>', '<span class="opt-value">array</span>', '<span class="opt-value">data_town[%p1%]</span>');</pre>
+      </span>
+      <p>Result of the merge:</p>
+      </p>
+      <div class="decal">
+      <p>        Country: France
       <table cellpadding="2" cellspacing="0" class="border-1">
         <tr>
           <td width="200" class="border-1">Paris</td>
@@ -3031,8 +3037,7 @@ $data['group2'][] = array('id'=&gt;4, 'name'=&gt;'jim');</pre>
           <td class="border-1">france</td>
         </tr>
       </table>
-      <br>
-      Country: USA<br>
+      <p>Country: USA      </p>
       <table cellpadding="2" cellspacing="0" class="border-1">
         <tr>
           <td width="200" class="border-1">Washington</td>
@@ -3043,6 +3048,7 @@ $data['group2'][] = array('id'=&gt;4, 'name'=&gt;'jim');</pre>
           <td class="border-1">us</td>
         </tr>
       </table>
+      </div>
     </div>
     <h4>Use with subblocks:</h4>
     <p>Dynamic queries enable you to easily build a system of a main-block with subblocks. Here is how you can do it:</p>
@@ -3051,9 +3057,11 @@ $data['group2'][] = array('id'=&gt;4, 'name'=&gt;'jim');</pre>
       <li> Link them by adding to the subblock a parameter <span class="opt-name">p1</span> whose value is a field from the main block.</li>
       <li> At the PHP side, merge the main block first, and then the subblock.</li>
     </ol>
-    <div class="decal">Example:<br>
-      <br>
-      <table width="400" cellpadding="2" cellspacing="0" class="border-2">
+    <div class="decal">
+      <p>Example:
+ </p>
+      <div class="decal">
+        <table width="400" cellpadding="2" cellspacing="0" class="border-2">
         <tr>
           <td class="border-2"><span style="color:#336699">Country:</span> [main.country;block=tr]<br>
             <table cellpadding="1" cellspacing="0" class="border-1">
@@ -3063,14 +3071,17 @@ $data['group2'][] = array('id'=&gt;4, 'name'=&gt;'jim');</pre>
             </table></td>
         </tr>
       </table>
-      <br>
-      <span class="txt-small">Corresponding PHP code:</span><br>
-      <span class="txt-code">&nbsp;$TBS-&gt;MergeBlock('<span class="opt-value">main</span>',$cnx_id,'<span class="opt-value">SELECT country,cntr_id FROM t_country</span>')</span><br>
-      <span class="txt-code">&nbsp;$TBS-&gt;MergeBlock('<span class="opt-value">sub</span>',$cnx_id,'<span class="opt-value">SELECT town FROM t_town WHERE (cntr_id=%p1%)</span>') </span><br>
-      <br>
-      <span class="txt-small">Result of the merge:</span><br>
-      <br>
-      <table width="400" cellpadding="2" cellspacing="0" class="border-2">
+    </div>
+      <p>Corresponding PHP code:</p>
+      <pre class="decal">$TBS-&gt;MergeBlock('<span class="opt-value">main</span>', $cnx_id, '<span class="opt-value">SELECT country,cntr_id FROM t_country</span>');
+$TBS-&gt;MergeBlock('<span class="opt-value">sub</span>', $cnx_id, '<span class="opt-value">SELECT town FROM t_town WHERE (cntr_id=%p1%)</span>';</pre>
+      <p> Or using an Array:</p>
+      <pre class="decal">$TBS-&gt;MergeBlock('<span class="opt-value">main</span>', $data_county);
+global $data_town; <span class="opt-html">// the coutry code is the main key of the array</span>
+$TBS-&gt;MergeBlock('<span class="opt-value">blk</span>', '<span class="opt-value">array</span>', '<span class="opt-value">data_town[%p1%]</span>');</pre>
+      <p>Result of the merge: </p>
+      <div class="decal">
+        <table width="400" cellpadding="2" cellspacing="0" class="border-2">
         <tr>
           <td class="border-2"><span style="color:#336699">Country:</span> France<br>
             <table cellpadding="1" cellspacing="0" class="border-1">
@@ -3105,6 +3116,7 @@ $data['group2'][] = array('id'=&gt;4, 'name'=&gt;'jim');</pre>
             </table></td>
         </tr>
       </table>
+</div>
     </div>
     <p>Remarks:</p>
     <ul>
