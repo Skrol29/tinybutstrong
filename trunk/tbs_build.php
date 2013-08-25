@@ -60,7 +60,7 @@ $Txt = $SrcTxt;
 $Ok = true;
 $Ok = $Ok && f_Replace($Txt, 'if (PHP_VERSION===\'4.4.1\') {$this->RecSet = $this->SrcId;} else {$this->RecSet = &$this->SrcId;} // bad bug in PHP 4.4.1', '$this->RecSet = &$this->SrcId;', 'Delete bug 1 specific to PHP 4.4.1');
 $Ok = $Ok && f_Replace($Txt, 'if (PHP_VERSION===\'4.4.1\') {$this->RecSet = $Query;} else {$this->RecSet = &$Query;}', '$this->RecSet = &$Query;', 'Delete bug 2 specific to PHP 4.4.1');
-$Ok = $Ok && f_Replace($Txt, 'if ((PHP_VERSION===\'4.4.1\') and is_array($this->TBS->VarRef[$Item0])) {$Var = $this->TBS->VarRef[$Item0];} else {$Var = &$this->TBS->VarRef[$Item0];}', '$Var = &$this->TBS->VarRef[$Item0];', 'Delete bug 3 specific to PHP 4.4.1');
+$Ok = $Ok && f_Replace($Txt, 'if ((PHP_VERSION===\'4.4.1\') && is_array($this->TBS->VarRef[$Item0])) {$Var = $this->TBS->VarRef[$Item0];} else {$Var = &$this->TBS->VarRef[$Item0];}', '$Var = &$this->TBS->VarRef[$Item0];', 'Delete bug 3 specific to PHP 4.4.1');
 $Ok = $Ok && f_Replace($Txt, '$this->CurrRec = @pg_fetch_array($this->RecSet,$this->RecNum,PGSQL_ASSOC); // warning comes when no record left.', '$this->CurrRec = pg_fetch_assoc($this->RecSet);', 'Delete a fix for PostgreSQL on PHP<4.1.0');
 $Ok = $Ok && f_Replace($Txt, "\n".'	var $', "\n".'	public $', 'Replace var declarations with public (1)');
 $Ok = $Ok && f_Replace($Txt, "\n".'var $', "\n".'public $', 'Replace var declarations with public (2)');
