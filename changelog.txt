@@ -1,3 +1,23 @@
+TinyButStrong 3.8.3
+
+Skrol29, 2013-09-07
+
+Change-log:
+===========
+
+- Bug with parameter frm : leading zero + plus prefix or suffix may not format the numbre as expected.
+  http://www.tinybutstrong.com/forum.php?thr=3208
+  
+- new way for subtemplate : use OldSubTpl
+  take care the scripts used to use echo => add a parameter for compatibility
+  
+- replace @(string) with $this->meth_Misc_ToStr() because it may cause the script to stop with certan values
+- support for DateTime objects and also objects with the magic method __toString().
+- replace or  with ||
+- replace and with &&
+
+------------------------------------
+
 TinyButStrong 3.8.2
 
 Skrol29, 2013-04-20
