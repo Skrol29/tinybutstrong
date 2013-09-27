@@ -2680,7 +2680,7 @@ function meth_Conv_Str(&$Txt,$ConvBr=true) {
 // Standard alert message provided by TinyButStrong, return False is the message is cancelled.
 function meth_Misc_Alert($Src,$Msg,$NoErrMsg=false,$SrcType=false) {
 	$this->ErrCount++;
-	if ($this->NoErr) {
+	if ($this->NoErr || (php_sapi_name==='cli') ) {
 		$t = array('','','','','');
 	} else {
 		$t = array('<br /><b>','</b>','<em>','</em>','<br />');
@@ -2702,7 +2702,9 @@ function meth_Misc_Alert($Src,$Msg,$NoErrMsg=false,$SrcType=false) {
 	if ($this->NoErr) {
 		$this->ErrMsg .= $x;
 	} else {
-		$x = str_replace($this->_ChrOpen,$this->_ChrProtect,$x);
+		if (php_sapi_name!=='cli') {
+			$x = str_replace($this->_ChrOpen,$this->_ChrProtect,$x);
+		}
 		echo $x;
 	}
 	return false;

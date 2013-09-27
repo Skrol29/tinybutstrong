@@ -51,6 +51,7 @@ $Ok = $Ok && f_Replace($Txt, 'PDO::FETCH_ASSOC', 'PDO_FETCH_ASSOC', 'Change cons
 $Ok = $Ok && f_Replace($Txt, 'Zend_Db::FETCH_ASSOC', 'Zend_Db_FETCH_ASSOC', 'Change constant "Zend_Db::FETCH_ASSOC"');
 $Ok = $Ok && f_Replace($Txt, "\ttry {"   , "\t if (true) { // try {", 'Avoid Try/Catch (1 on 2)');
 $Ok = $Ok && f_Replace($Txt, "\t} catch ", "\t //} catch "          , 'Avoid Try/Catch (2 on 2)');
+$Ok = $Ok && f_Replace($Txt, "PHP_SAPI", "php_sapi_name"          , 'Use php_sapi_name() instead of PHP_SAPI)');
 f_Update($Ok, $Dst4, $Txt);
 
 // Conversion in PHP 5
