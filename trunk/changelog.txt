@@ -5,6 +5,8 @@ Skrol29, 2013-09-07
 Change-log:
 ===========
 
+- no HTML in error message when PHP in command line (CLI)
+
 - Bug with parameter frm : leading zero + plus prefix or suffix may not format the numbre as expected.
   http://www.tinybutstrong.com/forum.php?thr=3208
   
