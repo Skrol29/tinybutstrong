@@ -1,8 +1,8 @@
 <?php
 
 /*
-TbsZip version 2.14
-Date    : 2013-06-11
+TbsZip version 2.15-beta-2013-09-30
+Date    : 2013-09-30
 Author  : Skrol29 (email: http://www.tinybutstrong.com/onlyyou.html)
 Licence : LGPL
 This class is independent from any other classes and has been originally created for the OpenTbs plug-in
@@ -96,9 +96,18 @@ class clsTbsZip {
 		$cd_pos = -22;
 		$this->_MoveTo($cd_pos, SEEK_END);
 		$b = $this->_ReadData(4);
-		if ($b!==$cd_info) return $this->RaiseError('The End of Central Rirectory Record is not found.');
-
-		$this->CdEndPos = ftell($this->ArchHnd) - 4;
+		if ($b===$cd_info) {
+			$this->CdEndPos = ftell($this->ArchHnd) - 4;
+		} else {
+			$p = $this->_FindCDEnd($cd_info);
+			//echo 'p='.var_export($p,true); exit;
+			if ($p===false) {
+				return $this->RaiseError('The End of Central Directory Record is not found.');
+			} else {
+				$this->CdEndPos = $p;
+				$this->_MoveTo($p+4);
+			}
+		}
 		$this->CdInfo = $this->CentralDirRead_End($cd_info);
 		$this->CdFileLst = array();
 		$this->CdFileNbr = $this->CdInfo['file_nbr_curr'];
@@ -167,7 +176,13 @@ class clsTbsZip {
 	}
 
 	function RaiseError($Msg) {
-		if ($this->DisplayError) echo '<strong>'.get_class($this).' ERROR :</strong> '.$Msg.'<br>'."\r\n";
+		if ($this->DisplayError) {
+			if (PHP_SAPI==='cli') {
+				echo get_class($this).' ERROR with the zip archive: '.$Msg."\r\n";
+			} else {
+				echo '<strong>'.get_class($this).' ERROR with the zip archive:</strong> '.$Msg.'<br>'."\r\n";
+			}
+		}
 		$this->Error = $Msg;
 		return false;
 	}
@@ -617,8 +632,7 @@ class clsTbsZip {
 			if (''.$File=='') $File = basename($this->ArchFile).'.zip';
 			$this->OutputHandle = @fopen($File, 'w');
 			if ($this->OutputHandle===false) {
-				$this->RaiseError('Method Flush() cannot overwrite the target file \''.$File.'\'. This may not be a valid file path or the file may be locked by another process or because of a denied permission.');
-				return false;
+				return $this->RaiseError('Method Flush() cannot overwrite the target file \''.$File.'\'. This may not be a valid file path or the file may be locked by another process or because of a denied permission.');
 			}
 		} elseif (($Render & TBSZIP_STRING)==TBSZIP_STRING) {
 			$this->OutputMode = TBSZIP_STRING;
@@ -640,6 +654,8 @@ class clsTbsZip {
 				$Len = $this->_EstimateNewArchSize();
 				if ($Len!==false) header('Content-Length: '.$Len); 
 			}
+		} else {
+			return $this->RaiseError('Method Flush is called with a unsupported render option.');
 		}
 
 		return true;
@@ -781,6 +797,34 @@ class clsTbsZip {
 		return $pos." (h:".dechex($pos).")";
 	}
 
+	/**
+	 * Search the record of end of the Central Directory.
+	 * Return the position of the record in the file.
+	 * Return false if the record is not found. The comment cannot exceed 65335 bytes (=FFFF).
+	 * The method is read backwards a block of 256 bytes and search the key in this block.
+	 */
+	function _FindCDEnd($cd_info) {
+		$nbr = 1;
+		$p = false;
+		$pos = ftell($this->ArchHnd) - 4 - 256;
+		while ( ($p===false) && ($nbr<256) ) {
+			if ($pos<=0) {
+				$pos = 0;
+				$nbr = 256; // in order to make this a last check
+			}
+			$this->_MoveTo($pos);
+			$x = $this->_ReadData(256);
+			$p = strpos($x, $cd_info);
+			if ($p===false) {
+				$nbr++;
+				$pos = $pos - 256 - 256;
+			} else {
+				return $pos + $p;
+			}
+		}
+		return false;
+	}
+	
 	function _DataOuputAddedFile($Idx, $PosLoc) {
 
 		$Ref =& $this->AddInfo[$Idx];
