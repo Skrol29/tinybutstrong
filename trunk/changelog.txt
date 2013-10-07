@@ -5,6 +5,10 @@ Skrol29, 2013-09-07
 Change-log:
 ===========
 
+- new parameter parallel
+
+- tbs_plugin_html.php 1.0.8 : select work with values containing special HTML characters
+
 - no HTML in error message when PHP in command line (CLI)
 
 - Bug with parameter frm : leading zero + plus prefix or suffix may not format the numbre as expected.

@@ -4,6 +4,7 @@
 ********************************************************
 TinyButStrong plug-in: HTML (requires TBS >= 3.3.0)
 Version 1.0.7, on 2009-09-07, by Skrol29
+Version 1.0.8, on 2013-09-30, by Skrol29
 ********************************************************
 */
 
@@ -13,7 +14,7 @@ $GLOBALS['_TBS_AutoInstallPlugIns'][] = TBS_HTML; // Auto-install
 class clsTbsPlugInHtml {
 
 function OnInstall() {
-	$this->Version = '1.0.7';
+	$this->Version = '1.0.8';
 	return array('OnOperation');
 }
 
@@ -65,6 +66,13 @@ function f_Html_MergeItems(&$Txt,$ValueLst,$PrmLst,$PosBeg,$PosEnd) {
 	} else {
 		$ValueLst = array($ValueLst);
 		$ValNbr = 1;
+	}
+
+	// Values in HTML
+	$ValueHtmlLst = array();
+	foreach ($ValueLst as $i => $v) {
+		$vh = htmlspecialchars($v);
+		if ($vh!=$v) $ValueHtmlLst[$vh] = $i;
 	}
 
 	$AddMissing = ($IsList and isset($PrmLst['addmissing']));
@@ -154,6 +162,9 @@ function f_Html_MergeItems(&$Txt,$ValueLst,$PrmLst,$PosBeg,$PosEnd) {
 				// Check the value and select the current item 
 				if ($ItemValue!==false) {
 					$x = array_search($ItemValue,$ValueLst,false);
+					if ( ($x===false) && (isset($ValueHtmlLst[$ItemValue])) ) {
+						$x = $ValueHtmlLst[$ItemValue];
+					}
 					if ($x!==false) {
 						if (!isset($ItemLoc->PrmLst[$ItemPrm])) {
 							$this->f_Html_InsertAttribute($ZoneSrc,$ItemPrmZ,$ItemLoc->PosEnd);
