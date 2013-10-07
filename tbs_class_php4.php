@@ -1896,6 +1896,24 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 					$i = ++$LocR->SectionNbr;
 					$LocR->SectionLst[$i] = &$BDef;
 				}
+			} elseif (isset($Loc->PrmLst['parallel'])) {
+				$BlockLst = $this->meth_Locator_FindParallel($Txt, $Loc->PosBeg, $Loc->PosEnd, $Loc->PrmLst['parallel']);
+				if ($BlockLst) {
+					// Store BDefs
+					foreach ($BlockLst as $i => $Blk) {
+						if ($Blk['IsRef']) {
+							$PrBDef = &$BDef;
+						} else {
+							$PrBDef = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,$Blk['Src'],array(),true);
+						}
+						$PrBDef->PosBeg = $Blk['PosBeg'];
+						$PrBDef->PosEnd = $Blk['PosEnd'];
+						$i = ++$LocR->SectionNbr;
+						$LocR->SectionLst[$i] = &$PrBDef;
+					}
+					$LocR->PosBeg = $BlockLst[0]['PosBeg'];
+					$LocR->PosEnd = $BlockLst[$LocR->SectionNbr-1]['PosEnd'];
+				}
 			} else {
 				// Normal section
 				$i = ++$LocR->SectionNbr;
@@ -1915,6 +1933,194 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 
 	return $LocR; // methods return by ref by default
 
+}
+
+function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $Parent) {
+	
+	// Define tags to recognize
+	global $_TBS_ParallelLst;
+	if (!isset($_TBS_ParallelLst)) $_TBS_ParallelLst = array();
+	if (!isset($_TBS_ParallelLst['table'])) {
+		$_TBS_ParallelLst['table'] = array(
+			'ignore' => array(
+				'!--' => true,
+				'thead' => true,
+				'thbody' => true,
+				'thfoot' => true,
+			),
+			'row' => array(
+				'tr'=>true,
+			),
+			'cell' => array(
+				'td'=>'colspan',
+				'th'=>'colspan',
+			),
+		);
+	}
+	
+	$conf = $_TBS_ParallelLst[$Parent];
+	
+	// Search parent bounds
+	$par_o = clsTinyButStrong::f_Xml_FindTag($Txt,$Parent,true ,$ZoneBeg,false,1,false);
+	if ($par_o===false) return $this->meth_Misc_Alert("Parallel", "The opening tag '$Parent' is not found.");
+	
+	$par_c = clsTinyButStrong::f_Xml_FindTag($Txt,$Parent,false,$ZoneBeg,true,-1,false);
+	if ($par_c===false) return $this->meth_Misc_Alert("Parallel", "The closing tag '$Parent' is not found.");
+	
+	$SrcPOffset = $par_o->PosEnd + 1;
+	$SrcP = substr($Txt, $SrcPOffset, $par_c->PosBeg - $SrcPOffset);
+
+	// temporary variables
+	$tagR = '';
+	$tagC = '';
+	$z = '';
+	$pRO  = false;
+	$pROe = false;
+	$pCO  = false;
+	$pCOe = false;
+	$p = false;
+	$Loc = new clsTbsLocator;
+	
+	$Rows  = array();
+	$RowIdx = 0;
+	$RefRow = false;
+	$RefCellB= false;
+	$RefCellE = false;
+	
+	// Loop on entities inside the parent entity
+	$PosR = 0;
+	// Search for the next Row Opening tag
+	while (clsTinyButStrong::f_Xml_GetNextEntityName($SrcP, $PosR, $tagR, $pRO, $p, $z)) {
+	
+		//echo "* Trouvé Row : tagR=".var_export($tagR,true).", pos=".var_export($pRO,true)."<br>\n";
+	
+		// If the tag is not a closing, a self-closing and has a name
+		if ( ($tagR!=='') && ($z!=='/') ) {
+		
+			if (isset($conf['ignore'][$tagR])) {
+				// This tag must be ignored
+				$PosR = $p;
+			} else {
+		
+				$pROe = strpos($SrcP, '>', $p)+1;
+				// Search the Row Closing tag
+				$locRE = clsTinyButStrong::f_Xml_FindTag($SrcP, $tagR, false, $pROe, true, -1, false);
+				if ($locRE===false) return $this->meth_Misc_Alert("Parallel", "locRE non trouvé, p=$p, pROe=$pROe.");
+				
+				// Inner source
+				$SrcR = substr($SrcP, $pROe, $locRE->PosBeg - $pROe -1);
+				$SrcROffset = $SrcPOffset + $pROe;
+				
+				if (isset($conf['row'][$tagR])) {
+				
+					// Now we've got the row entity, we search for cell entities
+					$Cells = array();
+					$ColNum = 1;
+					$PosC = 0;
+					$IsRef = false;
+					
+					// Loop on Cell Opening tags
+					while (clsTinyButStrong::f_Xml_GetNextEntityName($SrcR, $PosC, $tagC, $pCO, $p, $z)) {
+					
+						if ( ($z!=='/') && ($tagC!=='') && isset($conf['cell'][$tagC]) ) {
+						
+							$att = $conf['cell'][$tagC];
+							// Read parameters
+							$Loc->PrmLst = array();
+							clsTinyButStrong::f_Loc_PrmRead($SrcR,$p,true,'\'"','<','>',$Loc,$pCOe,true);
+							// Find the Cell Closing tag
+							$locCE = clsTinyButStrong::f_Xml_FindTag($SrcR, $tagC, false, $pCOe, true, -1, false);
+							if ($locCE===false) exit("locCE non trouvé,pCOe=$pCOe.");
+							// Check the cell of reference
+							$Width = (isset($Loc->PrmLst[$att])) ? intval($Loc->PrmLst[$att]) : 1;
+							$ColNumE = $ColNum + $Width -1; // Ending Cell
+							$PosBeg = $SrcROffset + $pCO;
+							$PosEnd = $SrcROffset + $locCE->PosEnd;
+							$OnZone = false;
+							if ( ($PosBeg <= $ZoneBeg) && ($ZoneBeg <= $PosEnd) && ($RefRow===false) ) {
+								$RefRow = $RowIdx;
+								$RefCellB = $ColNum;
+								$OnZone = true;
+								$IsRef = true;
+								//echo "* RefRow=".var_export($RefRow,true).", RefCellB=".var_export($RefCellB,true)."<br>\n"; 
+							}
+							if ( ($PosBeg <= $ZoneEnd) && ($ZoneEnd <= $PosEnd) ) {
+								$RefCellE = $ColNum;
+								$OnZone = true;
+								//echo "* RefRow=".var_export($RefRow,true).", RefCellE=".var_export($RefCellE,true)."<br>\n"; 
+							}
+							
+							// Save info
+							$Cell = array(
+								'_tagR' => $tagR,
+								'_tagC' => $tagC,
+								'_att' => $att,
+								'_OnZone' => $OnZone,
+								'_PrmLst' => $Loc->PrmLst,
+								'_Offset' => $SrcROffset,
+								'PosBeg' => $PosBeg,
+								'PosEnd' => $PosEnd,
+								'ColNum' => $ColNum,
+								'Width' => $Width,
+								'IsBegin' => true,
+								'IsEnd' => false,
+								'_Src' => substr($SrcR, $pCO, $locCE->PosEnd - $pCO + 1),
+							);
+							$Cells[$ColNum] = $Cell;
+							
+							// add a virtual column to say if its a ending
+							if (!isset($Cells[$ColNumE])) $Cells[$ColNumE] = array('IsBegin' => false);
+							
+							$Cells[$ColNumE]['IsEnd'] = true;
+							$Cells[$ColNumE]['PosEnd'] = $Cells[$ColNum]['PosEnd'];
+							
+							$PosC = $pCOe;
+							$ColNum += $Width;
+							
+						} else {
+							$PosC = $p;
+						}
+					}
+					
+					$Rows[$RowIdx] = array('tag'=>$tagR, 'cells' => $Cells, 'isref' => $IsRef);
+					$RowIdx++;
+					
+				}
+				
+				$PosR = $locRE->PosEnd; 	
+				
+			}
+		} else {
+			$PosR++;
+		}
+	}
+	
+	//return $Rows;
+	
+	$Blocks = array();
+	$rMax = count($Rows) -1;
+	foreach ($Rows as $r=>$Row) {
+		$Cells = $Row['cells'];
+		if (isset($Cells[$RefCellB]) && $Cells[$RefCellB]['IsBegin']) {
+			if ( isset($Cells[$RefCellE]) &&  $Cells[$RefCellE]['IsEnd'] ) {
+				$PosBeg = $Cells[$RefCellB]['PosBeg'];
+				$PosEnd = $Cells[$RefCellE]['PosEnd'];
+				$Blocks[$r] = array(
+					'PosBeg' => $PosBeg,
+					'PosEnd' => $PosEnd,
+					'IsRef'  => $Row['isref'],
+					'Src' => substr($Txt, $PosBeg, $PosEnd - $PosBeg + 1),
+				);
+			} else {
+				return $this->meth_Misc_Alert("Parallel", "À la ligne ".($r+1)." (entité ".$Row['Tag']."), la colonne de fin $RefCellE est absente ou n'est pas en fin de colonnes fusionnées.");
+			}
+		} else {
+			return $this->meth_Misc_Alert("Parallel", "À la ligne ".($r+1)." (entité ".$Row['Tag']."), la colonne de début $RefCellB est absente ou n'est pas en début de colonnes fusionnées.");
+		}
+	}
+	
+	return $Blocks;
+	
 }
 
 function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$QryPrms=false) {
@@ -2028,6 +2234,8 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$Qr
 				}
 			} elseif ($LocR->BlockFound===false) {
 				$Src->DataFetch(); // Merge first record only
+			} elseif (isset($LocR->PrmLst['parallel'])) {
+				$this->meth_Merge_BlockParallel($Txt,$LocR,$Src);
 			} else {
 				$this->meth_Merge_BlockSections($Txt,$LocR,$Src,$RecSpe);
 			}
@@ -2051,6 +2259,40 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$Qr
 		unset($Src);
 		return $NbrRecTot;
 	}
+
+}
+
+function meth_Merge_BlockParallel(&$Txt,&$LocR,&$Src) {
+
+	// Main loop
+	$Src->DataFetch();
+
+	$FirstRec = true;
+	
+	// Prepare sources
+	$BlockRes = array();
+	for ($i=1 ; $i<=$LocR->SectionNbr ; $i++) {
+		if ($i>1) {
+			// Add txt source between the BDefs
+			$BlockRes[$i] = substr($Txt, $LocR->SectionLst[$i-1]->PosEnd + 1, $LocR->SectionLst[$i]->PosBeg - $LocR->SectionLst[$i-1]->PosEnd -1); 
+		} else {
+			$BlockRes[$i] = '';
+		}
+	}
+	
+	while($Src->CurrRec!==false) {
+		// Merge the current record with all sections
+		for ($i=1 ; $i<=$LocR->SectionNbr ; $i++) {
+			$SecDef = &$LocR->SectionLst[$i];
+			$SecSrc = $this->meth_Merge_SectionNormal($SecDef,$Src);
+			$BlockRes[$i] .= $SecSrc;
+		}
+		// Next row
+		$Src->DataFetch();
+	}
+	
+	$BlockRes = implode('', $BlockRes);
+	$Txt = substr_replace($Txt,$BlockRes,$LocR->PosBeg,$LocR->PosEnd-$LocR->PosBeg+1);
 
 }
 
@@ -4331,6 +4573,34 @@ function f_Xml_FindNewLine(&$Txt,$PosBeg,$Forward,$IsRef) {
 		$p += $Inc;
 	} while (true);
 
+}
+
+function f_Xml_GetNextEntityName($Txt, $Pos, &$tag, &$PosBeg, &$p, &$z) {
+/* 
+ $tag : tag name
+ $PosBeg : position of the tag
+ $p   : position where the read has stop
+ $z   : first char after the name
+*/
+
+	$tag = '';
+	$PosBeg = strpos($Txt, '<', $Pos);
+	
+	if ($PosBeg===false) return false;
+	
+	// Read the name of the tag
+	$go = true;
+	$p = $PosBeg;
+	while ($go) {
+		$p++;
+		$z = $Txt[$p];
+		if ($go = ($z!==' ') && ($z!=="\r") && ($z!=="\n") && ($z!=='>') && ($z!=='/') ) {
+			$tag .= $z;
+		}
+	}
+	
+	return true;
+	
 }
 
 }
