@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.8.3-beta-2013-09-07 for PHP 4
-Date     : 2013-09-07
+Version  : 3.9.0-beta-2013-10-08 for PHP 4
+Date     : 2013-10-08
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -542,7 +542,7 @@ var $Assigned = array();
 var $ExtendedMethods = array();
 var $ErrCount = 0;
 // Undocumented (can change at any version)
-var $Version = '3.8.3-beta-2013-09-07';
+var $Version = '3.9.0-beta-2013-10-08';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -606,7 +606,7 @@ function clsTinyButStrong($Options=null,$VarPrefix='',$FctPrefix='') {
 	if (!isset($_TBS_UserFctLst)) $_TBS_UserFctLst = array();
 	if (!isset($_TBS_BlockAlias)) $_TBS_BlockAlias = array();
 	$this->_UserFctLst = &$_TBS_UserFctLst;
-	
+
 	// Auto-installing plug-ins
 	if (isset($_TBS_AutoInstallPlugIns)) foreach ($_TBS_AutoInstallPlugIns as $pi) $this->PlugIn(TBS_INSTALL,$pi);
 
@@ -629,6 +629,7 @@ function SetOption($o, $v=false, $d=false) {
 	if (isset($o['var_prefix'])) $this->VarPrefix = $o['var_prefix'];
 	if (isset($o['fct_prefix'])) $this->FctPrefix = $o['fct_prefix'];
 	if (isset($o['noerr'])) $this->NoErr = $o['noerr'];
+	if (isset($o['old_subtemplate'])) $this->OldSubTpl = $o['old_subtemplate'];
 	if (isset($o['auto_merge'])) {
 		$this->OnLoad = $o['auto_merge'];
 		$this->OnShow = $o['auto_merge'];
@@ -639,6 +640,7 @@ function SetOption($o, $v=false, $d=false) {
 	if (isset($o['protect'])) $this->Protect = $o['protect'];
 	if (isset($o['turbo_block'])) $this->TurboBlock = $o['turbo_block'];
 	if (isset($o['charset'])) $this->meth_Misc_Charset($o['charset']);
+
 	$UpdateChr = false;
 	if (isset($o['chr_open'])) {
 		$this->_ChrOpen = $o['chr_open'];
@@ -654,6 +656,7 @@ function SetOption($o, $v=false, $d=false) {
 	}
 	if (array_key_exists('tpl_frms',$o)) clsTinyButStrong::f_Misc_UpdateArray($GLOBALS['_TBS_FormatLst'], 'frm', $o['tpl_frms'], $d);
 	if (array_key_exists('block_alias',$o)) clsTinyButStrong::f_Misc_UpdateArray($GLOBALS['_TBS_BlockAlias'], false, $o['block_alias'], $d);
+	if (array_key_exists('parallel_conf',$o)) clsTinyButStrong::f_Misc_UpdateArray($GLOBALS['_TBS_ParallelLst'], false, $o['parallel_conf'], $d);
 	if (array_key_exists('include_path',$o)) clsTinyButStrong::f_Misc_UpdateArray($this->IncludePath, true, $o['include_path'], $d);
 	if (isset($o['render'])) $this->Render = $o['render'];
 	if (isset($o['methods_allowed'])) $this->MethodsAllowed = $o['methods_allowed'];
@@ -1937,10 +1940,14 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 
 function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $Parent) {
 	
-	// Define tags to recognize
-	global $_TBS_ParallelLst;
+	// Define configurations
+	global $_TBS_ParallelLst, $_TBS_BlockAlias;
+	
 	if (!isset($_TBS_ParallelLst)) $_TBS_ParallelLst = array();
-	if (!isset($_TBS_ParallelLst['table'])) {
+	
+	if (isset($_TBS_BlockAlias[$Parent])) $Parent = $_TBS_BlockAlias[$Parent];
+	
+	if ( ($Parent=='table')  && (!isset($_TBS_ParallelLst['table'])) ) {
 		$_TBS_ParallelLst['table'] = array(
 			'ignore' => array(
 				'!--' => true,
@@ -1958,7 +1965,10 @@ function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $Parent) {
 		);
 	}
 	
+	if (!isset($_TBS_ParallelLst[$Parent])) return $this->meth_Misc_Alert("Parallel", "The configuration for the entity '$Parent' is not found.");
+	
 	$conf = $_TBS_ParallelLst[$Parent];
+	
 	
 	// Search parent bounds
 	$par_o = clsTinyButStrong::f_Xml_FindTag($Txt,$Parent,true ,$ZoneBeg,false,1,false);
@@ -2042,12 +2052,10 @@ function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $Parent) {
 								$RefCellB = $ColNum;
 								$OnZone = true;
 								$IsRef = true;
-								//echo "* RefRow=".var_export($RefRow,true).", RefCellB=".var_export($RefCellB,true)."<br>\n"; 
 							}
 							if ( ($PosBeg <= $ZoneEnd) && ($ZoneEnd <= $PosEnd) ) {
 								$RefCellE = $ColNum;
 								$OnZone = true;
-								//echo "* RefRow=".var_export($RefRow,true).", RefCellE=".var_export($RefCellE,true)."<br>\n"; 
 							}
 							
 							// Save info
