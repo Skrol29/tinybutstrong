@@ -5,8 +5,9 @@ Skrol29, 2013-09-07
 Change-log:
 ===========
 
-- new parameter parallel
-
+- new parameter "parallel"
+  ->SetOptions('parallel_conf')
+  
 - tbs_plugin_html.php 1.0.8 : select work with values containing special HTML characters
 
 - no HTML in error message when PHP in command line (CLI)
@@ -16,6 +17,7 @@ Change-log:
   
 - new way for subtemplate : use OldSubTpl
   take care the scripts used to use echo => add a parameter for compatibility
+  ->SetOptions('old_subtemplate')
   
 - replace @(string) with $this->meth_Misc_ToStr() because it may cause the script to stop with certan values
 - support for DateTime objects and also objects with the magic method __toString().
