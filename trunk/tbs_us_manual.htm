@@ -346,6 +346,10 @@ a.opt-name:hover {
         <td>&nbsp;</td>
       </tr>
       <tr>
+        <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <a href="#html_block_parallel">Parallel merge (dynamic columns) </a></td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
         <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <a href="#html_block_serial">Serial display (in columns) </a></td>
         <td>&nbsp;</td>
       </tr>
@@ -410,7 +414,7 @@ a.opt-name:hover {
         <td>&nbsp;</td>
       </tr>
     </table>
-  </div>
+</div>
   <h2 id="introduction" class="pagebreak">Introduction:</h2>
   <p><strong>TinyButStrong</strong> (TBS) is a PHP class useful to develop an application in a clean way, separating PHP scripts and XML/HTML/Text files. With TBS, the files  are generated dynamically by merging a template with data. It is called a Template Engine. </p>
   <p> The name TBS comes from the fact that this tool contains only 8 functions and yet, it is very powerful. It allows you to merge templates with your PHP variables or your MySQL, PostgreSQL, or SQLite.</p>
@@ -2551,6 +2555,11 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
           <p class="versioning">Versioning: parameter bmagnet is supported since   TBS version 3.0.</p></td>
       </tr>
       <tr>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_parallel" id="html_block_prm_parallel"></a>parallel</span>=<span class="opt-value">configuration</span></td>
+        <td align="left" valign="top" class="border-sep">Merge the other blocks in parallel in the configuration. For example it enables you to merge colmuns in a table. See <a href="#html_block_parallel">Parrallel merge</a>.
+        <p class="versioning">Versioning: parameter parallel is supported since   TBS version 3.9.</p></td>
+      </tr>
+      <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_headergrp" id="html_block_prm_headergrp"></a>headergrp</span>=<span class="opt-value">colname</span></td>
         <td align="left" valign="top" class="border-sep">Indicates a header section that is displayed each time the value of column <span class="opt-value">colname</span> changes.<span class="opt-value"><br>
           colname</span> must be a valid column name returned by the data source.<br>
@@ -2560,11 +2569,11 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_footergrp" id="html_block_prm_footergrp"></a>footergrp</span>=<span class="opt-value">colname</span></td>
-        <td align="left" valign="top" class="border-sep">Indicates a footer section that is displayed each time the value of column <span class="opt-value">colname</span> changes. See <span class="opt-name">headergrp</span>. </td>
+        <td align="left" valign="top" class="border-sep">Indicates a footer section that is displayed each time the value of column <span class="opt-value">colname</span> changes. See <a href="#html_block_prm_headergrp" class="opt-name">headergrp</a>. </td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_splittergrp" id="html_block_prm_splittergrp"></a>splittergrp</span>=<span class="opt-value">colname</span></td>
-        <td align="left" valign="top" class="border-sep">Indicates a splitter section that is displayed each time the value of column <span class="opt-value">colname</span> changes. See <span class="opt-name">headergrp</span>. </td>
+        <td align="left" valign="top" class="border-sep">Indicates a splitter section that is displayed each time the value of column <span class="opt-value">colname</span> changes. See <a href="#html_block_prm_headergrp" class="opt-name">headergrp</a>. </td>
       </tr>
       <tr id="v202_parentgrp">
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_parentgrp" id="html_block_prm_parentgrp"></a>parentgrp</span>=<span class="opt-value">colname</span></td>
@@ -2739,6 +2748,74 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
       </tr>
     </table>
   </div>
+  <h3><a name="html_block_parallel" id="html_block_parallel"></a>Parallel merge (dynamic columns):</h3>
+  <div class="norm">
+    <p>The parralel enables you to display several records inside a block. For this, you have to use a main block and secondary blocks. </p>
+    <div class="decal">Example:<br>
+      <br>
+      <table width="200" cellpadding="4" cellspacing="0" class="border-2">
+        <tr>
+          <td class="border-2"><table width="100%" cellpadding="0" cellspacing="0" class="border-1">
+            <tr>
+              <td width="25%" height="14" class="border-1"><div align="center">Rec 1</div></td>
+              <td width="25%" class="border-1"><div align="center">Rec 2</div></td>
+              <td width="25%" class="border-1"><div align="center">Rec 3</div></td>
+              <td width="25%" class="border-1"><div align="center">Rec 4</div></td>
+            </tr>
+          </table></td>
+        </tr>
+        <tr>
+          <td class="border-2"><table width="100%" cellpadding="2" cellspacing="0" class="border-1">
+            <tr>
+              <td width="25%" class="border-1"><div align="center">Rec 5</div></td>
+              <td width="25%" class="border-1"><div align="center">Rec 6</div></td>
+              <td width="25%" class="border-1"><div align="center">Rec 7</div></td>
+              <td width="25%" class="border-1"><div align="center">Rec 8</div></td>
+            </tr>
+          </table></td>
+        </tr>
+        <tr>
+          <td class="border-2"><table width="100%" cellpadding="2" cellspacing="0" class="border-1">
+            <tr>
+              <td width="25%" class="border-1"><div align="center">Rec 9</div></td>
+              <td width="25%" class="border-1"><div align="center">...</div></td>
+              <td width="25%" class="border-1"><div align="center">...</div></td>
+              <td width="25%" class="border-1"><div align="center">...</div></td>
+            </tr>
+          </table></td>
+        </tr>
+      </table>
+      <br>
+      <span class="txt-small">In this example, main blocks are the blue lines of the table, the secondary blocks are the pink cells.</span></div>
+    <h4>&nbsp;</h4>
+    <div class="decal">Example:<br>
+      <br>
+      <table width="200" cellpadding="4" cellspacing="0" class="border-2">
+        <tr>
+          <td class="border-2"><table width="100%" cellpadding="2" cellspacing="0" class="border-1">
+            <tr>
+              <td width="25%" class="border-1"><div align="center">[bx;block=tr;serial][bx_1.txt;block=td]</div></td>
+              <td width="25%" class="border-1"><div align="center">[bx_2.txt;block=td]</div></td>
+              <td width="25%" class="border-1"><div align="center">[bx_3.txt;block=td]</div></td>
+              <td width="25%" class="border-1"><div align="center">[bx_4.txt;block=td]</div></td>
+            </tr>
+          </table></td>
+        </tr>
+        <tr>
+          <td class="border-2"><table width="100%" cellpadding="2" cellspacing="0" class="border-1">
+            <tr>
+              <td width="25%" class="border-1"><div align="center">[bx;block=tr;serial][bx_0;block=td] <strong>No records found. </strong></div></td>
+              <td width="25%" class="border-1">&nbsp;</td>
+              <td width="25%" class="border-1">&nbsp;</td>
+              <td width="25%" class="border-1">&nbsp;</td>
+            </tr>
+          </table></td>
+        </tr>
+      </table>
+    </div>
+    <p>Remark:
+      The serial display also works with <a href="#html_block_section">sections of block</a> and <a href="#html_block_subblock">dynamic queries</a>.</p>
+  </div>
   <h3><a name="html_block_serial" id="html_block_serial"></a>Serial display (in columns):</h3>
   <div class="norm">
     <p>The serial display enables you to display several records inside a block. For this, you have to use a main block and secondary blocks. </p>
@@ -2795,9 +2872,24 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
         </tr>
       </table>
       <br>
-      <span class="txt-small">The corresponding PHP is:</span><br>
-      <span class="txt-code"> &nbsp;$TBS-&gt;MergeBlock('<span style="color:#000099">bx</span>',$cnx_id,'<span style="color:#000099">SELECT txt FROM t_info ORDER BY txt</span>')</span></div>
-    <h4> Empty secondary block: </h4>
+    </div>
+    <h4>Configuration: </h4>
+    <pre class="txt-code">
+<span class="opt-name">$configuration</span> = array(
+ <span class="opt-html">// names of entities than must be ignored</span>
+ '<span class="opt-value">ignore</span>' => array('<span class="opt-value">!--</span>', '<span class="opt-value">caption</span>', '<span class="opt-value">thead</span>', '<span class="opt-value">thbody</span>', '<span class="opt-value">thfoot</span>'),
+ <span class="opt-html">// names of entities recognized as rows</span>
+ '<span class="opt-value">rows</span>'   => array('<span class="opt-value">tr</span>'),
+ <span class="opt-html">// names of entities recognized as cells, and their span attibute ('' for no span attribute)</span>
+ '<span class="opt-value">cells</span>'  => array(
+   '<span class="opt-value">td</span>' => '<span class="opt-value">colspan</span>',
+   '<span class="opt-value">th</span>' => '<span class="opt-value">colspan</span>',
+  ),
+);
+<span class="opt-name">$TBS</span>-&gt;SetOption('<span class="opt-value">parallel_conf</span>', '<span class="opt-value">table</span>',  <span class="opt-name">$configuration</span>);
+</pre>
+    <h4>&nbsp; </h4>
+    <h4>Empty secondary block: </h4>
     <p>You can specify a special secondary block that will be used to replace unused secondary blocks (without records). This &quot;Empty&quot; secondary block must have the index 0. It can either be placed inside the main block with the normal secondary block, or alone inside another <span class="opt-name">serial</span> block. The &quot;empty&quot; secondary block is optional. </p>
     <div class="decal">Example:<br>
       <br>
