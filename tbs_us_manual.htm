@@ -2699,8 +2699,8 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
     </ul>
 <h4>Normal sections:</h4>
     <p> When you define several normal sections, they will be used alternatively for each record. </p>
-    <div class="decal">Example:<br>
-      <br>
+    <div class="decal">
+      <p>Example:</p>
       <table width="200" cellpadding="2" cellspacing="0" class="border-1">
         <tr>
           <td bgcolor="#F0FCFF" class="border-1">[<span class="opt-name">b1</span>.caption;<span class="opt-name">block</span>=tr]</td>
@@ -2709,8 +2709,8 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
           <td bgcolor="#D2FFE9" class="border-1">[<span class="opt-name">b1</span>.caption;<span class="opt-name">block</span>=tr]</td>
         </tr>
       </table>
-      <br>
-      <span class="txt-small">In this example, the block named 'b1' contains two normal sections. Records will be displayed alternatively with a green background and with a blue background.</span></div>
+      <p class="txt-small">In this example, the block named 'b1' contains two normal sections. Records will be displayed alternatively with a green background and with a blue background.</p>
+    </div>
     <h4>NoData section:</h4>
     <p> The NoData section is a section displayed only if the data source has no records. There can be only one NoData section in a block. The NoData section is defined by adding the parameter <span class="opt-name">nodata</span>. </p>
 <p>Example:</p>
@@ -2750,77 +2750,94 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
   </div>
   <h3><a name="html_block_parallel" id="html_block_parallel"></a>Parallel merge (dynamic columns):</h3>
   <div class="norm">
-    <p>The parralel enables you to display several records inside a block. For this, you have to use a main block and secondary blocks. </p>
-    <div class="decal">Example:<br>
-      <br>
-      <table width="200" cellpadding="4" cellspacing="0" class="border-2">
+    <p>The parameter parrallel enables you to merge severals blocks in parrall over a parent block. It is typically used to merge dynamic columns over a table.</p>
+    <p>The value of parameter parallel must be </p>
+    <div class="decal">
+      <h4>Example:</h4>
+      <p>Template:</p>
+      <table cellpadding="3" cellspacing="0" class="border-1 decal">
         <tr>
-          <td class="border-2"><table width="100%" cellpadding="0" cellspacing="0" class="border-1">
-            <tr>
-              <td width="25%" height="14" class="border-1"><div align="center">Rec 1</div></td>
-              <td width="25%" class="border-1"><div align="center">Rec 2</div></td>
-              <td width="25%" class="border-1"><div align="center">Rec 3</div></td>
-              <td width="25%" class="border-1"><div align="center">Rec 4</div></td>
-            </tr>
-          </table></td>
-        </tr>
-        <tr>
-          <td class="border-2"><table width="100%" cellpadding="2" cellspacing="0" class="border-1">
-            <tr>
-              <td width="25%" class="border-1"><div align="center">Rec 5</div></td>
-              <td width="25%" class="border-1"><div align="center">Rec 6</div></td>
-              <td width="25%" class="border-1"><div align="center">Rec 7</div></td>
-              <td width="25%" class="border-1"><div align="center">Rec 8</div></td>
-            </tr>
-          </table></td>
-        </tr>
-        <tr>
-          <td class="border-2"><table width="100%" cellpadding="2" cellspacing="0" class="border-1">
-            <tr>
-              <td width="25%" class="border-1"><div align="center">Rec 9</div></td>
-              <td width="25%" class="border-1"><div align="center">...</div></td>
-              <td width="25%" class="border-1"><div align="center">...</div></td>
-              <td width="25%" class="border-1"><div align="center">...</div></td>
-            </tr>
-          </table></td>
-        </tr>
-      </table>
-      <br>
-      <span class="txt-small">In this example, main blocks are the blue lines of the table, the secondary blocks are the pink cells.</span></div>
-    <h4>&nbsp;</h4>
-    <div class="decal">Example:<br>
-      <br>
-      <table width="200" cellpadding="4" cellspacing="0" class="border-2">
-        <tr>
-          <td class="border-2"><table width="100%" cellpadding="2" cellspacing="0" class="border-1">
-            <tr>
-              <td width="25%" class="border-1"><div align="center">[bx;block=tr;serial][bx_1.txt;block=td]</div></td>
-              <td width="25%" class="border-1"><div align="center">[bx_2.txt;block=td]</div></td>
-              <td width="25%" class="border-1"><div align="center">[bx_3.txt;block=td]</div></td>
-              <td width="25%" class="border-1"><div align="center">[bx_4.txt;block=td]</div></td>
-            </tr>
-          </table></td>
-        </tr>
-        <tr>
-          <td class="border-2"><table width="100%" cellpadding="2" cellspacing="0" class="border-1">
-            <tr>
-              <td width="25%" class="border-1"><div align="center">[bx;block=tr;serial][bx_0;block=td] <strong>No records found. </strong></div></td>
-              <td width="25%" class="border-1">&nbsp;</td>
-              <td width="25%" class="border-1">&nbsp;</td>
-              <td width="25%" class="border-1">&nbsp;</td>
-            </tr>
-          </table></td>
-        </tr>
-      </table>
+    <td bgcolor="#DDDDDD" class="border-1">Category</td>
+    <td bgcolor="#DDDDDD" class="border-1">[b.date]</td>
+    </tr>
+  <tr>
+    <td class="border-1">With</td>
+    <td align="right" class="border-1">[b.with;block=td;parallel=table]</td>
+    </tr>
+  <tr>
+    <td class="border-1">Without</td>
+    <td align="right" class="border-1">[b.without]</td>
+    </tr>
+  <tr>
+    <td class="border-1"><strong>Total</strong></td>
+    <td align="right" class="border-1"><strong>[b.total]</strong></td>
+    </tr>
+</table>
+      <p>PHP:</p>
+      <pre class="txt-code decal">
+<span class="opt-name">$data</span> = array(
+ array('<span class="opt-value">date</span>' =&gt; '2013-10-13', '<span class="opt-value">with</span>' =&gt; 156, '<span class="opt-value">without</span>' =&gt; 128, '<span class="opt-value">total</span>' =&gt; 284),
+ array('<span class="opt-value">date</span>' =&gt; '2013-10-14', '<span class="opt-value">with</span>' =&gt; 233, '<span class="opt-value">without</span>' =&gt;  25, '<span class="opt-value">total</span>' =&gt; 284),
+ array('<span class="opt-value">date</span>' =&gt; '2013-10-15', '<span class="opt-value">with</span>' =&gt; 110, '<span class="opt-value">without</span>' =&gt; 412, '<span class="opt-value">total</span>' =&gt; 130),
+ array('<span class="opt-value">date</span>' =&gt; '2013-10-16', '<span class="opt-value">with</span>' =&gt; 258, '<span class="opt-value">without</span>' =&gt; 522, '<span class="opt-value">total</span>' =&gt; 258),
+);
+<span class="opt-name">$TBS</span>-&gt;MergeBlock('<span class="opt-value">b</span>', <span class="opt-name">$data</span>);
+</pre>
+      <p>Result:</p>
+<table cellpadding="3" cellspacing="0" class="border-1 decal">
+  <tr>
+    <td bgcolor="#DDDDDD" class="border-1">Category</td>
+    <td bgcolor="#DDDDDD" class="border-1">2013-10-13</td>
+    <td bgcolor="#DDDDDD" class="border-1">2013-10-14</td>
+    <td bgcolor="#DDDDDD" class="border-1">2013-10-15</td>
+    <td bgcolor="#DDDDDD" class="border-1">2013-10-16</td>
+  </tr>
+  <tr>
+    <td class="border-1">With</td>
+    <td align="right" class="border-1">156</td>
+    <td align="right" class="border-1">233</td>
+    <td align="right" class="border-1">110</td>
+    <td align="right" class="border-1">128</td>
+  </tr>
+  <tr>
+    <td class="border-1">Without</td>
+    <td align="right" class="border-1">128</td>
+    <td align="right" class="border-1">25</td>
+    <td align="right" class="border-1">412</td>
+    <td align="right" class="border-1">130</td>
+  </tr>
+  <tr>
+    <td class="border-1"><strong>Total</strong></td>
+    <td align="right" class="border-1"><strong>284</strong></td>
+    <td align="right" class="border-1"><strong>258</strong></td>
+    <td align="right" class="border-1"><strong>522</strong></td>
+    <td align="right" class="border-1"><strong>258</strong></td>
+  </tr>
+</table>
     </div>
     <p>Remark:
-      The serial display also works with <a href="#html_block_section">sections of block</a> and <a href="#html_block_subblock">dynamic queries</a>.</p>
+      The parallel merge doesn't work with <a href="#html_block_section">headergrp, serial mode,</a><a href="#html_block_subblock"></a>.</p>
+    <h4>Configuration: </h4>
+    <pre class="txt-code">
+<span class="opt-name">$configuration</span> = array(
+ <span class="opt-html">// names of entities than must be ignored</span>
+ '<span class="opt-value">ignore</span>' => array('<span class="opt-value">!--</span>', '<span class="opt-value">caption</span>', '<span class="opt-value">thead</span>', '<span class="opt-value">thbody</span>', '<span class="opt-value">thfoot</span>'),
+ <span class="opt-html">// names of entities recognized as rows</span>
+ '<span class="opt-value">rows</span>'   => array('<span class="opt-value">tr</span>'),
+ <span class="opt-html">// names of entities recognized as cells, and their span attibute ('' for no span attribute)</span>
+ '<span class="opt-value">cells</span>'  => array(
+   '<span class="opt-value">td</span>' => '<span class="opt-value">colspan</span>',
+   '<span class="opt-value">th</span>' => '<span class="opt-value">colspan</span>',
+  ),
+);
+<span class="opt-name">$TBS</span>-&gt;SetOption('<span class="opt-value">parallel_conf</span>', '<span class="opt-value">table</span>',  <span class="opt-name">$configuration</span>);
+    </pre>
   </div>
   <h3><a name="html_block_serial" id="html_block_serial"></a>Serial display (in columns):</h3>
   <div class="norm">
     <p>The serial display enables you to display several records inside a block. For this, you have to use a main block and secondary blocks. </p>
-    <div class="decal">Example:<br>
-      <br>
+    <div class="decal">
+      <p>Example:      </p>
       <table width="200" cellpadding="4" cellspacing="0" class="border-2">
         <tr>
           <td class="border-2"><table width="100%" cellpadding="0" cellspacing="0" class="border-1">
@@ -2853,12 +2870,12 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
             </table></td>
         </tr>
       </table>
-      <br>
-      <span class="txt-small">In this example, main blocks are the blue lines of the table, the secondary blocks are the pink cells.</span></div>
+      <p class="txt-small">In this example, main blocks are the blue lines of the table, the secondary blocks are the pink cells.</p>
+    </div>
     <h4>Syntax:</h4>
     <p>The main block and its secondary blocks are merged using only one call to the MergeBock() method. The main block must be defined using the parameter <span class="opt-name">serial</span>. The secondary blocks must be nested into the main block. The secondary block's names must be the name of the main block followed by &quot;_&quot; and a number indicating display order. </p>
-    <div class="decal">Example:<br>
-      <br>
+    <div class="decal">
+      <p>Example:      </p>
       <table width="200" cellpadding="4" cellspacing="0" class="border-2">
         <tr>
           <td class="border-2"><table width="100%" cellpadding="2" cellspacing="0" class="border-1">
@@ -2871,28 +2888,11 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
             </table></td>
         </tr>
       </table>
-      <br>
     </div>
-    <h4>Configuration: </h4>
-    <pre class="txt-code">
-<span class="opt-name">$configuration</span> = array(
- <span class="opt-html">// names of entities than must be ignored</span>
- '<span class="opt-value">ignore</span>' => array('<span class="opt-value">!--</span>', '<span class="opt-value">caption</span>', '<span class="opt-value">thead</span>', '<span class="opt-value">thbody</span>', '<span class="opt-value">thfoot</span>'),
- <span class="opt-html">// names of entities recognized as rows</span>
- '<span class="opt-value">rows</span>'   => array('<span class="opt-value">tr</span>'),
- <span class="opt-html">// names of entities recognized as cells, and their span attibute ('' for no span attribute)</span>
- '<span class="opt-value">cells</span>'  => array(
-   '<span class="opt-value">td</span>' => '<span class="opt-value">colspan</span>',
-   '<span class="opt-value">th</span>' => '<span class="opt-value">colspan</span>',
-  ),
-);
-<span class="opt-name">$TBS</span>-&gt;SetOption('<span class="opt-value">parallel_conf</span>', '<span class="opt-value">table</span>',  <span class="opt-name">$configuration</span>);
-</pre>
-    <h4>&nbsp; </h4>
-    <h4>Empty secondary block: </h4>
+<h4>Empty secondary block: </h4>
     <p>You can specify a special secondary block that will be used to replace unused secondary blocks (without records). This &quot;Empty&quot; secondary block must have the index 0. It can either be placed inside the main block with the normal secondary block, or alone inside another <span class="opt-name">serial</span> block. The &quot;empty&quot; secondary block is optional. </p>
-    <div class="decal">Example:<br>
-      <br>
+    <div class="decal">
+      <p>Example:      </p>
       <table width="200" cellpadding="4" cellspacing="0" class="border-2">
         <tr>
           <td class="border-2"><table width="100%" cellpadding="2" cellspacing="0" class="border-1">
@@ -2920,12 +2920,13 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
       The serial display also works with <a href="#html_block_section">sections of block</a> and <a href="#html_block_subblock">dynamic queries</a>.</p>
   </div>
   <h3><a name="html_block_subblock" id="html_block_subblock"></a>Subblocks:</h3>
-  <div class="norm"> A subblock is a TBS block nested into another TBS block and that  should be displayed as a separated block for each record of its parent block. <br>
-    <div class="decal"> Example:<br>
-      <br>
+  <div class="norm"> 
+    <p>A subblock is a TBS block nested into another TBS block and that  should be displayed as a separated block for each record of its parent block. </p>
+    <div class="decal"> 
+      <p>Example:</p>
       <table cellpadding="2" cellspacing="0" class="border-2">
         <tr>
-          <td class="border-2">Parent block record #1<br>
+          <td class="border-2">Parent block record #1
             <div class="decal">
               <table cellpadding="1" cellspacing="0" class="border-1">
                 <tr>
@@ -2935,10 +2936,10 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
                   <td class="border-1">Subblock record #1.2</td>
                 </tr>
               </table>
-            </div></td>
+          </div></td>
         </tr>
         <tr>
-          <td class="border-2">Parent block record #2<br>
+          <td class="border-2">Parent block record #2
             <div class="decal">
               <table cellpadding="1" cellspacing="0" class="border-1">
                 <tr>
@@ -2951,29 +2952,26 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
                   <td class="border-1">Subblock record #2.3</td>
                 </tr>
               </table>
-            </div></td>
+          </div></td>
         </tr>
         <tr>
-          <td class="border-2">Parent block record #3<br>
+          <td class="border-2">Parent block record #3
             <div class="decal">
               <table cellpadding="1" cellspacing="0" class="border-1">
                 <tr>
                   <td class="border-1">Subblock record #3.1</td>
                 </tr>
               </table>
-            </div></td>
+          </div></td>
         </tr>
       </table>
     </div>
-    <br>
-    They are two different  ways to perform subblocks with TBS:<br>
-    <br>
-    - Automatic subblock: (<span class="versioning">since TBS 3.5.0</span>) it is when the data of the parent block has a column which contains the ready-to-merge data for the subblock. Automatic subblocks are activated using parameter <span class="opt-name">sub1</span> in the parent block, and they are merged automatically during the merge of the parent block. No extra MergeBlock() are needed.<br>
-    See <a href="#html_block_subauto">Automatic subblocks</a> for more details.<br>
-    <br>
-    - Subblock with dynamic query: it is when the data of the subblocks are retrieved using a query which can change for each record of the parent block. Subblocks with dynamic queries need an extra MergeBlock() to perform the merging with their dynamic query. Parameter <span class="opt-name">p1</span> is also needed in the subblock definition in order to set the values to inject in the dynamic query.<br>
-    See <a href="#html_block_dynsb">Subblocks with dynamic queries</a> for more details. <br>
-  </div>
+    <p>They are two different  ways to perform subblocks with TBS:</p>
+    <ul>
+      <li>       Automatic subblock: (<span class="versioning">since TBS 3.5.0</span>) it is when the data of the parent block has a column which contains the ready-to-merge data for the subblock. Automatic subblocks are activated using parameter <span class="opt-name">sub1</span> in the parent block, and they are merged automatically during the merge of the parent block. No extra MergeBlock() are needed. See <a href="#html_block_subauto">Automatic subblocks</a> for more details.</li>
+      <li> Subblock with dynamic query: it is when the data of the subblocks are retrieved using a query which can change for each record of the parent block. Subblocks with dynamic queries need an extra MergeBlock() to perform the merging with their dynamic query. Parameter <span class="opt-name">p1</span> is also needed in the subblock definition in order to set the values to inject in the dynamic query.  See <a href="#html_block_dynsb">Subblocks with dynamic queries</a> for more details.    </li>
+    </ul>
+</div>
   <h3><a name="html_block_subauto" id="html_block_subauto"></a>Automatic subblocks:</h3>
   <div class="norm">
     <p class="versioning">Automatic subblock are supported since TBS version 3.5.0.</p>
