@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.9.0-beta-2013-10-11 for PHP 5
-Date     : 2013-10-11
+Version  : 3.9.0-beta-2013-10-25 for PHP 5
+Date     : 2013-10-25
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -536,7 +536,7 @@ public $Assigned = array();
 public $ExtendedMethods = array();
 public $ErrCount = 0;
 // Undocumented (can change at any version)
-public $Version = '3.9.0-beta-2013-10-11';
+public $Version = '3.9.0-beta-2013-10-25';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -1944,11 +1944,9 @@ function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $Parent) {
 	if ( ($Parent=='table')  && (!isset($_TBS_ParallelLst['table'])) ) {
 		$_TBS_ParallelLst['table'] = array(
 			'ignore' => array('!--', 'caption', 'thead', 'thbody', 'thfoot'),
+			'cols' => array('zcolumn' => 'zspan'),
 			'rows' => array('tr'),
-			'cells' => array(
-				'td'=>'colspan',
-				'th'=>'colspan',
-			),
+			'cells' => array('td'=>'colspan', 'th'=>'colspan'),
 		);
 	}
 	
@@ -1988,27 +1986,53 @@ function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $Parent) {
 	
 	// Loop on entities inside the parent entity
 	$PosR = 0;
+	
+	$mode_column = true;
+	$Cells = array();
+	$ColNum = 1;
+	$IsRef = false;
+	
 	// Search for the next Row Opening tag
-	while (self::f_Xml_GetNextEntityName($SrcP, $PosR, $tagR, $pRO, $p, $z)) {
+	while (self::f_Xml_GetNextEntityName($SrcP, $PosR, $tagR, $pRO, $p)) {
+
+		$pROe = strpos($SrcP, '>', $p) + 1;
+		$singleR = ($SrcP[$pROe-2] === '/');
 	
 		// If the tag is not a closing, a self-closing and has a name
-		if ( ($tagR!=='') && ($z!=='/') ) {
+		if ($tagR!=='') {
 		
 			if (in_array($tagR, $conf['ignore'])) {
 				// This tag must be ignored
 				$PosR = $p;
-			} else {
-		
-				$pROe = strpos($SrcP, '>', $p)+1;
+			} elseif (isset($conf['cols'][$tagR])) {
+				// Column definition that must be merged as a cell
+				if ($mode_column === false)  return $this->meth_Misc_Alert("Parallel", "There is a column definition ($tagR) after a row (".$Rows[$RowIdx-1]['tag'].").");
+				if (isset($RowType['_column'])) {
+					$RowType['_column']++;
+				} else {
+					$RowType['_column'] = 1;
+				}
+				$att = $conf['cols'][$tagR];
+				$this->meth_Locator_FindParallelCol($SrcP, $PosR, $tagR, $pRO, $p, $SrcPOffset, $RowIdx, $ZoneBeg, $ZoneEnd, $att, $Loc, $Cells, $ColNum, $IsRef, $RefCellB, $RefCellE, $RefRow);
+				
+			} elseif (!$singleR) {
+
 				// Search the Row Closing tag
 				$locRE = self::f_Xml_FindTag($SrcP, $tagR, false, $pROe, true, -1, false);
-				if ($locRE===false) return $this->meth_Misc_Alert("Parallel", "The row closing tag is not found. (p=$p, pROe=$pROe)");
+				if ($locRE===false) return $this->meth_Misc_Alert("Parallel", "The row closing tag is not found. (tagR=$tagR, p=$p, pROe=$pROe)");
 				
 				// Inner source
 				$SrcR = substr($SrcP, $pROe, $locRE->PosBeg - $pROe -1);
 				$SrcROffset = $SrcPOffset + $pROe;
 				
 				if (in_array($tagR, $conf['rows'])) {
+				
+					if ( $mode_column && isset($RowType['_column']) ) {
+						$Rows[$RowIdx] = array('tag'=>'_column', 'cells' => $Cells, 'isref' => $IsRef, 'count' => $RowType['_column']);
+						$RowIdx++;
+					}
+				
+					$mode_column = false;
 				
 					if (isset($RowType[$tagR])) {
 						$RowType[$tagR]++;
@@ -2023,55 +2047,10 @@ function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $Parent) {
 					$IsRef = false;
 					
 					// Loop on Cell Opening tags
-					while (self::f_Xml_GetNextEntityName($SrcR, $PosC, $tagC, $pCO, $p, $z)) {
-					
-						if ( ($z!=='/') && ($tagC!=='') && isset($conf['cells'][$tagC]) ) {
-						
+					while (self::f_Xml_GetNextEntityName($SrcR, $PosC, $tagC, $pCO, $p)) {
+						if (isset($conf['cells'][$tagC]) ) {
 							$att = $conf['cells'][$tagC];
-							// Read parameters
-							$Loc->PrmLst = array();
-							self::f_Loc_PrmRead($SrcR,$p,true,'\'"','<','>',$Loc,$pCOe,true);
-							// Find the Cell Closing tag
-							$locCE = self::f_Xml_FindTag($SrcR, $tagC, false, $pCOe, true, -1, false);
-							if ($locCE===false) return $this->meth_Misc_Alert("Parallel", "The cell closing tag is not found. (pCOe=$pCOe)");
-							// Check the cell of reference
-							$Width = (isset($Loc->PrmLst[$att])) ? intval($Loc->PrmLst[$att]) : 1;
-							$ColNumE = $ColNum + $Width -1; // Ending Cell
-							$PosBeg = $SrcROffset + $pCO;
-							$PosEnd = $SrcROffset + $locCE->PosEnd;
-							$OnZone = false;
-							if ( ($PosBeg <= $ZoneBeg) && ($ZoneBeg <= $PosEnd) && ($RefRow===false) ) {
-								$RefRow = $RowIdx;
-								$RefCellB = $ColNum;
-								$OnZone = true;
-								$IsRef = true;
-							}
-							if ( ($PosBeg <= $ZoneEnd) && ($ZoneEnd <= $PosEnd) ) {
-								$RefCellE = $ColNum;
-								$OnZone = true;
-							}
-							
-							// Save info
-							$Cell = array(
-								//'_tagR' => $tagR, '_tagC' => $tagC, '_att' => $att, '_OnZone' => $OnZone, '_PrmLst' => $Loc->PrmLst, '_Offset' => $SrcROffset, '_Src' => substr($SrcR, $pCO, $locCE->PosEnd - $pCO + 1),
-								'PosBeg' => $PosBeg,
-								'PosEnd' => $PosEnd,
-								'ColNum' => $ColNum,
-								'Width' => $Width,
-								'IsBegin' => true,
-								'IsEnd' => false,
-							);
-							$Cells[$ColNum] = $Cell;
-							
-							// add a virtual column to say if its a ending
-							if (!isset($Cells[$ColNumE])) $Cells[$ColNumE] = array('IsBegin' => false);
-							
-							$Cells[$ColNumE]['IsEnd'] = true;
-							$Cells[$ColNumE]['PosEnd'] = $Cells[$ColNum]['PosEnd'];
-							
-							$PosC = $locCE->PosEnd;
-							$ColNum += $Width;
-							
+							$this->meth_Locator_FindParallelCol($SrcR, $PosC, $tagC, $pCO, $p, $SrcROffset, $RowIdx, $ZoneBeg, $ZoneEnd, $att, $Loc, $Cells, $ColNum, $IsRef, $RefCellB, $RefCellE, $RefRow);
 						} else {
 							$PosC = $p;
 						}
@@ -2084,9 +2063,11 @@ function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $Parent) {
 				
 				$PosR = $locRE->PosEnd; 	
 				
+			} else {
+				$PosR = $pROe;
 			}
 		} else {
-			$PosR++;
+			$PosR = $pROe;
 		}
 	}
 	
@@ -2116,6 +2097,64 @@ function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $Parent) {
 	
 	return $Blocks;
 	
+}
+
+function meth_Locator_FindParallelCol($SrcR, &$PosC, $tagC, $pCO, $p, $SrcROffset, $RowIdx, $ZoneBeg, $ZoneEnd, &$att, &$Loc, &$Cells, &$ColNum, &$IsRef, &$RefCellB, &$RefCellE, &$RefRow) {
+
+	$pCOe = false;
+
+	// Read parameters
+	$Loc->PrmLst = array();
+	self::f_Loc_PrmRead($SrcR,$p,true,'\'"','<','>',$Loc,$pCOe,true);
+
+	$singleC = ($SrcR[$pCOe-1] === '/');
+	if ($singleC) {
+		$pCEe = $pCOe;
+	} else {
+		// Find the Cell Closing tag
+		$locCE = self::f_Xml_FindTag($SrcR, $tagC, false, $pCOe, true, -1, false);
+		if ($locCE===false) return $this->meth_Misc_Alert("Parallel", "The cell closing tag is not found. (pCOe=$pCOe)");
+		$pCEe = $locCE->PosEnd;
+	}
+	
+	// Check the cell of reference
+	$Width = (isset($Loc->PrmLst[$att])) ? intval($Loc->PrmLst[$att]) : 1;
+	$ColNumE = $ColNum + $Width -1; // Ending Cell
+	$PosBeg = $SrcROffset + $pCO;
+	$PosEnd = $SrcROffset + $pCEe;
+	$OnZone = false;
+	if ( ($PosBeg <= $ZoneBeg) && ($ZoneBeg <= $PosEnd) && ($RefRow===false) ) {
+		$RefRow = $RowIdx;
+		$RefCellB = $ColNum;
+		$OnZone = true;
+		$IsRef = true;
+	}
+	if ( ($PosBeg <= $ZoneEnd) && ($ZoneEnd <= $PosEnd) ) {
+		$RefCellE = $ColNum;
+		$OnZone = true;
+	}
+	
+	// Save info
+	$Cell = array(
+		//'_tagR' => $tagR, '_tagC' => $tagC, '_att' => $att, '_OnZone' => $OnZone, '_PrmLst' => $Loc->PrmLst, '_Offset' => $SrcROffset, '_Src' => substr($SrcR, $pCO, $locCE->PosEnd - $pCO + 1),
+		'PosBeg' => $PosBeg,
+		'PosEnd' => $PosEnd,
+		'ColNum' => $ColNum,
+		'Width' => $Width,
+		'IsBegin' => true,
+		'IsEnd' => false,
+	);
+	$Cells[$ColNum] = $Cell;
+	
+	// add a virtual column to say if its a ending
+	if (!isset($Cells[$ColNumE])) $Cells[$ColNumE] = array('IsBegin' => false);
+	
+	$Cells[$ColNumE]['IsEnd'] = true;
+	$Cells[$ColNumE]['PosEnd'] = $Cells[$ColNum]['PosEnd'];
+	
+	$PosC = $pCEe;
+	$ColNum += $Width;
+
 }
 
 function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$QryPrms=false) {
@@ -4584,7 +4623,7 @@ static function f_Xml_FindNewLine(&$Txt,$PosBeg,$Forward,$IsRef) {
 
 }
 
-static function f_Xml_GetNextEntityName($Txt, $Pos, &$tag, &$PosBeg, &$p, &$z) {
+static function f_Xml_GetNextEntityName($Txt, $Pos, &$tag, &$PosBeg, &$p) {
 /* 
  $tag : tag name
  $PosBeg : position of the tag
