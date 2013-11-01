@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.9.0-beta-2013-10-25 for PHP 4
-Date     : 2013-10-25
+Version  : 3.9.0-beta-2013-10-32 for PHP 4
+Date     : 2013-10-32
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -542,7 +542,7 @@ var $Assigned = array();
 var $ExtendedMethods = array();
 var $ErrCount = 0;
 // Undocumented (can change at any version)
-var $Version = '3.9.0-beta-2013-10-25';
+var $Version = '3.9.0-beta-2013-10-32';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -2028,7 +2028,7 @@ function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $Parent) {
 				if ($locRE===false) return $this->meth_Misc_Alert("Parallel", "The row closing tag is not found. (tagR=$tagR, p=$p, pROe=$pROe)");
 				
 				// Inner source
-				$SrcR = substr($SrcP, $pROe, $locRE->PosBeg - $pROe -1);
+				$SrcR = substr($SrcP, $pROe, $locRE->PosBeg - $pROe);
 				$SrcROffset = $SrcPOffset + $pROe;
 				
 				if (in_array($tagR, $conf['rows'])) {
