@@ -32,21 +32,35 @@ class FrmTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings('{[a;frm=$ 0,000.00 €]}', array('a'=>3128.495),  '{$ 3,128.50 €}', 'test thousand and decimal #3');
 		$this->assertEqualMergeFieldStrings('{[a;frm=$ 0.000 00 €]}', array('a'=>3128.495),  '{$ 3.128 50 €}', 'test thousand and decimal #4 wired separators');
 		
-		if ($this->atLeastTBSVersion('1.8.0')) {
+		if ($this->atLeastTBSVersion('3.8.0')) {
 			// thousand separator with several characters
 			$this->assertEqualMergeFieldStrings("{[a;frm='0&nbsp;000.00']}", array('a'=>3128.495),  "{3&nbsp;128.50}", "test thousand multichar and decimal #1");
 			$this->assertEqualMergeFieldStrings("{[a;frm='0&nbsp;000,00']}", array('a'=>3128.495),  "{3&nbsp;128,50}", "test thousand multichar and decimal #2");
 			$this->assertEqualMergeFieldStrings("{[a;frm='0<b>,</b>000.00']}", array('a'=>3128.495),  "{3<b>,</b>128.50}", "test thousand multichar and decimal #3");
 			$this->assertEqualMergeFieldStrings("{[a;frm='0<b>.</b>000 00']}", array('a'=>3128.495),  "{3<b>.</b>128 50}", "test thousand multichar and decimal #4 wired separators");
 			//$this->dumpLastSource(); // debug
+			// thousand separator with several characters & prefix & suffix
+			$this->assertEqualMergeFieldStrings('{[a;frm=\'$ 0&nbsp;000,00 €\']}', array('a'=>3128.495),  '{$ 3&nbsp;128,50 €}', "test thousand multichar and decimal #5");
 		};
 		
 		// leading zeros
 		$this->assertEqualMergeFieldStrings('{[a;frm=0000000.00]}', array('a'=>3128.495),  '{0003128.50}', 'test leading zeros');
 		
-		// same with prefix and suffix
-		$this->assertEqualMergeFieldStrings('{[a;frm=$ 0000000.00 €]}', array('a'=>3128.495),  '{$ 0003128.50 €}', 'test leading zeros (with prefix and suffix)');
 
+		// same with prefix and suffix
+		// error with TBS from 3.8.0 to 3.8.2
+		if ($this->atLeastTBSVersion('3.9')) {
+		
+			//$this->assertEqualMergeFieldStrings('{[a;frm=$ 0000000.00]}', array('a'=>3128.495),  '{$ 0003128.50}', 'test leading zeros (with prefix)');
+			//$this->assertEqualMergeFieldStrings('{[a;frm=0000000.00 €]}', array('a'=>3128.495),  '{0003128.50 €}', 'test leading zeros (with suffix)');
+			$this->assertEqualMergeFieldStrings('{[a;frm=$ 0000000.00 €]}', array('a'=>3128.495),  '{$ 0003128.50 €}', 'test leading zeros (with prefix and suffix)');
+			//$this->dumpLastSource(); // debug
+			
+			// http://www.tinybutstrong.com/forum.php?thr=3208
+			$this->assertEqualMergeFieldStrings('{[a;frm=$0000000.]}', array('a'=>2456.1426),  '{$0002456}', 'test leading zeros (with prefix, bug #3208)');
+		}
+		
+		
 		// pourcents
 		$this->assertEqualMergeFieldStrings('{[a;frm=0.00%]}', array('a'=>0.495),  '{49.50%}', 'test pourcent standard');
 		$this->assertEqualMergeFieldStrings('{[a;frm=0.00 %]}', array('a'=>0.495),  '{49.50 %}', 'test pourcent #1');

@@ -2890,15 +2890,17 @@ function meth_Merge_AutoOn(&$Txt,$Name,$TplVar,$MergeVar) {
 					if (isset($LocA->PrmLst['parallel'])) {
 						// may return false if error
 						$parallel = $this->meth_Locator_FindParallel($Txt, $LocA->PosBeg, $LocA->PosEnd, $LocA->PrmLst['parallel']);
-					}
-					if ($parallel===false) {
-						$Txt = substr_replace($Txt,'',$FldPos,$FldLen);
-					} else {
-						// delete in reverse order
-						for ($r = count($parallel)-1 ; $r >= 0 ; $r--) {
-							$p = $parallel[$r];
-							$Txt = substr_replace($Txt,'',$p['PosBeg'],$p['PosEnd']-$p['PosBeg']+1);
+						if ($parallel===false) {
+							$Txt = substr_replace($Txt,'',$FldPos,$FldLen);
+						} else {
+							// delete in reverse order
+							for ($r = count($parallel)-1 ; $r >= 0 ; $r--) {
+								$p = $parallel[$r];
+								$Txt = substr_replace($Txt,'',$p['PosBeg'],$p['PosEnd']-$p['PosBeg']+1);
+							}
 						}
+					} else {
+						$Txt = substr_replace($Txt,'',$LocA->PosBeg,$LocA->PosEnd-$LocA->PosBeg+1);
 					}
 				} else {
 					// Merge the block as if it was a field

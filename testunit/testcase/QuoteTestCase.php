@@ -15,6 +15,7 @@ class QuoteTestCase extends TBSUnitTestCase {
 	function testEmptyValue() {
 		// with an emptystring
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when [a]!='';block=b]</b>", array('a'=>''),  "", "test empty #1 (empty string)");
+		$this->dumpLastSource(); // debug
 		//$this->assertEqualMergeFieldStrings("<b>[onshow;when [a]='';block=b]</b>", array('a'=>''),  "<b></b>", "test empty #2 (empty string)"); // bug
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when '[a]'!='';block=b]</b>", array('a'=>''),  "", "test empty #3 (empty string)");
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when '[a]'='';block=b]</b>", array('a'=>''),  "<b></b>", "test empty #4 (empty string)");
