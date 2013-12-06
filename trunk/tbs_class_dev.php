@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.9.0-beta-2013-10-32 for PHP 4
-Date     : 2013-10-32
+Version  : 3.9.0-beta-2013-12-06 for PHP 4
+Date     : 2013-12-06
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -542,7 +542,7 @@ var $Assigned = array();
 var $ExtendedMethods = array();
 var $ErrCount = 0;
 // Undocumented (can change at any version)
-var $Version = '3.9.0-beta-2013-10-32';
+var $Version = '3.9.0-beta-2013-12-06';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -3421,8 +3421,8 @@ function meth_Misc_Format(&$Value,&$PrmLst) {
 		}
 		if ($Frm['PerCent']) $Value = $Value * 100;
 		$Value = number_format($Value,$Frm['DecNbr'],$Frm['DecSep'],$Frm['ThsSep']);
-		if ($Frm['ThsRpl']!==false) $Value = str_replace($Frm['ThsSep'], $Frm['ThsRpl'], $Value);
 		if ($Frm['Pad']!==false) $Value = str_pad($Value, $Frm['Pad'], '0', STR_PAD_LEFT);
+		if ($Frm['ThsRpl']!==false) $Value = str_replace($Frm['ThsSep'], $Frm['ThsRpl'], $Value);
 		$Value = substr_replace($Frm['Str'],$Value,$Frm['Pos'],$Frm['Len']);
 		return $Value;
 		break;
