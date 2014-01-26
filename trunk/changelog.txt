@@ -1,28 +1,28 @@
-TinyButStrong 3.8.3
+TinyButStrong 3.9.0
 
-Skrol29, 2013-09-07
+Skrol29, 2014-01-26
 
 Change-log:
 ===========
 
-- new parameter "parallel"
-  ->SetOptions('parallel_conf')
+New features:
+- New parameter "parallel" for merging a block in columns (or any other parallel ways).
+- New way for merging sub-template: PHP error messages are not absorbed any more.
+  This new way may not be compatible with subscripts that uses the echo command (very rare).
+  In this case you should add set option $TBS->SetOptions('old_subtemplate') for compatibility.
+
+Enhancements:
+- Error messages are in plain text instead of HTML when PHP is used in command line (CLI).
+- Now can merge DateTime objects and also objects with the magic method __toString().
+- Some code enhancements.
+  - replace or  with ||
+  - replace and with &&
   
-- tbs_plugin_html.php 1.0.8 : select work with values containing special HTML characters
-
-- no HTML in error message when PHP in command line (CLI)
-
-- Bug with parameter frm : leading zero + plus prefix or suffix may not format the number as expected.
+Fixed bugs:
+- HTML plug-in version 1.0.8: parameter "select" now works with values containing special HTML characters.
+- Parameter "frm": leading zero coming with a prefix or a suffix may not format the number as expected.
   http://www.tinybutstrong.com/forum.php?thr=3208
-  
-- new way for subtemplate : use OldSubTpl
-  take care the scripts used to use echo => add a parameter for compatibility
-  ->SetOptions('old_subtemplate')
-  
-- replace @(string) with $this->meth_Misc_ToStr() because it may cause the script to stop with certan values
-- support for DateTime objects and also objects with the magic method __toString().
-- replace or  with ||
-- replace and with &&
+- There use to have an error message about $Loc->AttForward when the entity of parameter "att" is not found.
 
 ------------------------------------
 

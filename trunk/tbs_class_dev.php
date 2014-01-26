@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.9.0-beta-2013-12-06 for PHP 4
-Date     : 2013-12-06
+Version  : 3.9.0 for PHP 4
+Date     : 2014-01-26
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -542,7 +542,7 @@ var $Assigned = array();
 var $ExtendedMethods = array();
 var $ErrCount = 0;
 // Undocumented (can change at any version)
-var $Version = '3.9.0-beta-2013-12-06';
+var $Version = '3.9.0';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -1052,28 +1052,31 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
 			if ($Loc->PosBeg>$PrevEnd) { // No embedding
 				if (isset($Loc->PrmLst['att'])) {
 					$LocSrc = substr($Txt,$Loc->PosBeg,$Loc->PosEnd-$Loc->PosBeg+1);
-					$this->f_Xml_AttFind($Txt,$Loc,true,$this->AttDelim);
-					if (isset($Loc->PrmLst['atttrue'])) {
-						$Loc->PrmLst['magnet'] = '#';
-						$Loc->PrmLst['ope'] = (isset($Loc->PrmLst['ope'])) ? $Loc->PrmLst['ope'].',attbool' : 'attbool';
-					}
-					$IsAtt = true;
-					if ($Loc->AttForward) {
-						$IsAMF = true;
-					} else {
-						if ($Loc->AttInsLen>0) {
-							for ($i=$LocNbr;$i>0;$i--) {
-								if ($LocLst[$i]->PosEnd>=$Loc->PosBeg) {
-									$NewIdx = $i;
-									$li = $LocLst[$i];
-									$li->PosBeg += $Loc->AttInsLen;
-									$li->PosEnd += $Loc->AttInsLen;
-									$LocLst[$i+1] = $li;
-								} else {
-									$i = 0;
+					if ($this->f_Xml_AttFind($Txt,$Loc,true,$this->AttDelim)) {
+						if (isset($Loc->PrmLst['atttrue'])) {
+							$Loc->PrmLst['magnet'] = '#';
+							$Loc->PrmLst['ope'] = (isset($Loc->PrmLst['ope'])) ? $Loc->PrmLst['ope'].',attbool' : 'attbool';
+						}
+						$IsAtt = true;
+						if ($Loc->AttForward) {
+							$IsAMF = true;
+						} else {
+							if ($Loc->AttInsLen>0) {
+								for ($i=$LocNbr;$i>0;$i--) {
+									if ($LocLst[$i]->PosEnd>=$Loc->PosBeg) {
+										$NewIdx = $i;
+										$li = $LocLst[$i];
+										$li->PosBeg += $Loc->AttInsLen;
+										$li->PosEnd += $Loc->AttInsLen;
+										$LocLst[$i+1] = $li;
+									} else {
+										$i = 0;
+									}
 								}
 							}
 						}
+					} else {
+						$this->meth_Misc_Alert('','TBS is not able to merge the field '.$LocSrc.' because the entity targeted by parameter \'att\' cannot be found.');
 					}
 					unset($Loc->PrmLst['att']);
 				}
