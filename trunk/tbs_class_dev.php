@@ -1953,7 +1953,7 @@ function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $Parent) {
 	if ( ($Parent=='table')  && (!isset($_TBS_ParallelLst['table'])) ) {
 		$_TBS_ParallelLst['table'] = array(
 			'ignore' => array('!--', 'caption', 'thead', 'thbody', 'thfoot'),
-			'cols' => array('zcolumn' => 'zspan'),
+			'cols' => array(),
 			'rows' => array('tr'),
 			'cells' => array('td'=>'colspan', 'th'=>'colspan'),
 		);
