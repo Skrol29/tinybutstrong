@@ -192,7 +192,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2013-10-08</td>
+        <td>2014-01-26</td>
       </tr>
     </table>
   </div>
@@ -2555,9 +2555,10 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
           <p class="versioning">Versioning: parameter bmagnet is supported since   TBS version 3.0.</p></td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_parallel" id="html_block_prm_parallel"></a>parallel</span>=<span class="opt-value">configuration</span></td>
-        <td align="left" valign="top" class="border-sep">Merge the other blocks in parallel in the configuration. For example it enables you to merge colmuns in a table. See <a href="#html_block_parallel">Parrallel merge</a>.
-        <p class="versioning">Versioning: parameter parallel is supported since   TBS version 3.9.</p></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_parallel" id="html_block_prm_parallel"></a>parallel</span>=<span class="opt-value">configuration_id</span></td>
+        <td align="left" valign="top" class="border-sep"><p>Merge a block with a parallel process for sub-blocks. This can typically   merges a table block in columns.<br>
+        By default, TinyButStrong supports the configuration id named &quot;<span class="opt-value">tbs:table</span>&quot; for merging HTML tables. But you can define your own configuration.<br>
+        See <a href="#html_block_parallel">Parallel merge</a> for examples and how to add a custom configuration.</p><p class="versioning">Versioning: parameter parallel is supported since   TBS version 3.9.0.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_headergrp" id="html_block_prm_headergrp"></a>headergrp</span>=<span class="opt-value">colname</span></td>
@@ -2750,8 +2751,8 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
   </div>
   <h3><a name="html_block_parallel" id="html_block_parallel"></a>Parallel merge (dynamic columns):</h3>
   <div class="norm">
-    <p>The parameter parrallel enables you to merge severals blocks in parrall over a parent block. It is typically used to merge dynamic columns over a table.</p>
-    <p>The value of parameter parallel must be </p>
+    <p>The parameter <span class="opt-name"><a href="#html_block_prm_parallel">parrallel</a></span> enables you to merge a block with a parallel process for sub-blocks. This can typically   merges a table block in columns.</p>
+    <p> By default, TinyButStrong supports the configuration id named &quot;<span class="opt-value">tbs:table</span>&quot; for merging HTML tables. But you can define your own configuration.</p>
     <div class="decal">
       <h4>Example:</h4>
       <p>Template:</p>
@@ -2761,12 +2762,12 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
     <td bgcolor="#DDDDDD" class="border-1">[b.date]</td>
     </tr>
   <tr>
-    <td class="border-1">With</td>
-    <td align="right" class="border-1">[b.with;block=td;parallel=table]</td>
+    <td class="border-1">Thin</td>
+    <td align="right" class="border-1">[b.thin;block=td;parallel=tbs:table]</td>
     </tr>
   <tr>
-    <td class="border-1">Without</td>
-    <td align="right" class="border-1">[b.without]</td>
+    <td class="border-1">Heavy</td>
+    <td align="right" class="border-1">[b.heavy]</td>
     </tr>
   <tr>
     <td class="border-1"><strong>Total</strong></td>
@@ -2776,10 +2777,10 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
       <p>PHP:</p>
       <pre class="txt-code decal">
 <span class="opt-name">$data</span> = array(
- array('<span class="opt-value">date</span>' =&gt; '2013-10-13', '<span class="opt-value">with</span>' =&gt; 156, '<span class="opt-value">without</span>' =&gt; 128, '<span class="opt-value">total</span>' =&gt; 284),
- array('<span class="opt-value">date</span>' =&gt; '2013-10-14', '<span class="opt-value">with</span>' =&gt; 233, '<span class="opt-value">without</span>' =&gt;  25, '<span class="opt-value">total</span>' =&gt; 284),
- array('<span class="opt-value">date</span>' =&gt; '2013-10-15', '<span class="opt-value">with</span>' =&gt; 110, '<span class="opt-value">without</span>' =&gt; 412, '<span class="opt-value">total</span>' =&gt; 130),
- array('<span class="opt-value">date</span>' =&gt; '2013-10-16', '<span class="opt-value">with</span>' =&gt; 258, '<span class="opt-value">without</span>' =&gt; 522, '<span class="opt-value">total</span>' =&gt; 258),
+ array('<span class="opt-value">date</span>' =&gt; '2013-10-13', '<span class="opt-value">thin</span>' =&gt; 156, '<span class="opt-value">heavy</span>' =&gt; 128, '<span class="opt-value">total</span>' =&gt; 284),
+ array('<span class="opt-value">date</span>' =&gt; '2013-10-14', '<span class="opt-value">thin</span>' =&gt; 233, '<span class="opt-value">heavy</span>' =&gt;  25, '<span class="opt-value">total</span>' =&gt; 284),
+ array('<span class="opt-value">date</span>' =&gt; '2013-10-15', '<span class="opt-value">thin</span>' =&gt; 110, '<span class="opt-value">heavy</span>' =&gt; 412, '<span class="opt-value">total</span>' =&gt; 130),
+ array('<span class="opt-value">date</span>' =&gt; '2013-10-16', '<span class="opt-value">thin</span>' =&gt; 258, '<span class="opt-value">heavy</span>' =&gt; 522, '<span class="opt-value">total</span>' =&gt; 258),
 );
 <span class="opt-name">$TBS</span>-&gt;MergeBlock('<span class="opt-value">b</span>', <span class="opt-name">$data</span>);
 </pre>
@@ -2793,14 +2794,14 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
     <td bgcolor="#DDDDDD" class="border-1">2013-10-16</td>
   </tr>
   <tr>
-    <td class="border-1">With</td>
+    <td class="border-1">Thin</td>
     <td align="right" class="border-1">156</td>
     <td align="right" class="border-1">233</td>
     <td align="right" class="border-1">110</td>
     <td align="right" class="border-1">128</td>
   </tr>
   <tr>
-    <td class="border-1">Without</td>
+    <td class="border-1">Heavy</td>
     <td align="right" class="border-1">128</td>
     <td align="right" class="border-1">25</td>
     <td align="right" class="border-1">412</td>
@@ -2816,21 +2817,28 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
 </table>
     </div>
     <p>Remark:
-      The parallel merge doesn't work with <a href="#html_block_section">headergrp, serial mode,</a><a href="#html_block_subblock"></a>.</p>
-    <h4>Configuration: </h4>
+      The parallel merge doesn't work with <a href="#html_block_section">headergrp and  serial mode</a><a href="#html_block_subblock"></a>.</p>
+    <h4>Define a new configuration: </h4>
     <pre class="txt-code">
 <span class="opt-name">$configuration</span> = array(
- <span class="opt-html">// names of entities than must be ignored</span>
+ <span class="opt-html">// Name of the parent entity. The process will be limited to this element and its childs.</span>
+ '<span class="opt-value">parent</span>' => '<span class="opt-value">table</span>',
+ <span class="opt-html">// Names of tags that must be simply ignored. Such start and ending tags are ignored but childs are not ignored.
+ // For elements that must be completely ignored including childs, you just have to not mentioned it in the configuration.</span>
  '<span class="opt-value">ignore</span>' => array('<span class="opt-value">!--</span>', '<span class="opt-value">caption</span>', '<span class="opt-value">thead</span>', '<span class="opt-value">thbody</span>', '<span class="opt-value">thfoot</span>'),
- <span class="opt-html">// names of entities recognized as rows</span>
+ <span class="opt-html">// Names of entities recognized as column's definitions, and their span attributes</span>.
+ <span class="opt-html">// Such entities must always be placed before the row entities.</span>
+ '<span class="opt-value">cols</span>'   => array(),
+ <span class="opt-html">// Names of entities recognized as rows.</span>
  '<span class="opt-value">rows</span>'   => array('<span class="opt-value">tr</span>'),
- <span class="opt-html">// names of entities recognized as cells, and their span attibute ('' for no span attribute)</span>
+ <span class="opt-html">// Names of entities recognized as cells, and their span attibute ('' for no span attribute).</span>
  '<span class="opt-value">cells</span>'  => array(
    '<span class="opt-value">td</span>' => '<span class="opt-value">colspan</span>',
    '<span class="opt-value">th</span>' => '<span class="opt-value">colspan</span>',
   ),
 );
-<span class="opt-name">$TBS</span>-&gt;SetOption('<span class="opt-value">parallel_conf</span>', '<span class="opt-value">table</span>',  <span class="opt-name">$configuration</span>);
+<span class="opt-html">// Save the new configuratin with its ID.</span>
+<span class="opt-name">$TBS</span>-&gt;SetOption('<span class="opt-value">parallel_conf</span>', '<span class="opt-value">tbs:table</span>',  <span class="opt-name">$configuration</span>);
     </pre>
   </div>
   <h3><a name="html_block_serial" id="html_block_serial"></a>Serial display (in columns):</h3>
@@ -3835,6 +3843,10 @@ class clsTbsPlugin {
       <tr id="v202_parentgrp_sum">
         <td align="left" valign="top"><a href="#html_block_prm_parentgrp" class="opt-name">parentgrp</a></td>
         <td align="left" valign="top">Indicates a parent section that is displayed when the value of a column changes.</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top" class="opt-name"><a href="#html_block_prm_parallel" class="opt-name">parallel</a></td>
+        <td align="left" valign="top">Indicates a configuration for merging data in columns or with any custom parallel method.</td>
       </tr>
       <tr>
         <td align="left" valign="top"><a href="#html_block_prm_serial" class="opt-name">serial</a></td>
