@@ -1150,6 +1150,11 @@ Some of the TBS options are a new way of setting <a href="#php_options_compatibi
         <p> Example of automatic field calling a method: [onshow.my_objet.my_method]</p>
         <p class="versioning">Versioning: option 'methods_allowed' is supported since TBS version 3.8.2. </p></td>
       </tr>
+      <tr>
+        <td align="left" valign="top" class="opt-name"><a name="php_setoption_methods_old_subtemplate" id="php_setoption20"></a>old_subtemplate</td>
+        <td align="left" valign="top" class="border-sep"><p>Use the old  sub-template technic of TinyButStrong 3.8.2 or lower. Since version 3.9.0 there  is a more robust technic. The old technic consists in calling PHP output  buffering. Use this option if you encounter strange behaviors with your old  code when using parameter <a href="#html_field_prm_script" class="opt-name">script</a> and <a href="#html_field_prm_subtpl" class="opt-name">subtpl</a>. This may happen only if you called  the PHP command echo() in the sub-template script, which is quite rare.</p>          
+        <p class="versioning">Versioning: option 'old_subtemplate' is supported since TBS version 3.9.0. </p></td>
+      </tr>
     </table>
     <h4><span class="opt-name"><a name="php_options_compatibility" id="php_setoption16"></a></span>Compatibility with previous TBS versions:</h4>
     <p>Some TBS options are a new way of setting old TBS features.<br>
@@ -2751,8 +2756,9 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
   </div>
   <h3><a name="html_block_parallel" id="html_block_parallel"></a>Parallel merge (dynamic columns):</h3>
   <div class="norm">
+    <p class="versioning">The parallel merge is supported since TBS version 3.9.0.</p>
     <p>The parameter <span class="opt-name"><a href="#html_block_prm_parallel">parrallel</a></span> enables you to merge a block with a parallel process for sub-blocks. This can typically   merges a table block in columns.</p>
-    <p> By default, TinyButStrong supports the configuration id named &quot;<span class="opt-value">tbs:table</span>&quot; for merging HTML tables. But you can define your own configuration.</p>
+<p> By default, TinyButStrong supports the configuration id named &quot;<span class="opt-value">tbs:table</span>&quot; for merging HTML tables. But you can define your own configuration.</p>
     <div class="decal">
       <h4>Example:</h4>
       <p>Template:</p>
@@ -2826,7 +2832,7 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
  <span class="opt-html">// Names of tags that must be simply ignored. Such start and ending tags are ignored but childs are not ignored.
  // For elements that must be completely ignored including childs, you just have to not mentioned it in the configuration.</span>
  '<span class="opt-value">ignore</span>' => array('<span class="opt-value">!--</span>', '<span class="opt-value">caption</span>', '<span class="opt-value">thead</span>', '<span class="opt-value">thbody</span>', '<span class="opt-value">thfoot</span>'),
- <span class="opt-html">// Names of entities recognized as column's definitions, and their span attributes</span>.
+ <span class="opt-html">// Names of entities recognized as column's definitions, and their span attributes</span><span class="opt-html"> ('' for no span attribute)</span>.
  <span class="opt-html">// Such entities must always be placed before the row entities.</span>
  '<span class="opt-value">cols</span>'   => array(),
  <span class="opt-html">// Names of entities recognized as rows.</span>
