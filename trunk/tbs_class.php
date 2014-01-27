@@ -1942,8 +1942,6 @@ function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $ConfId) {
 
 	if (!isset($_TBS_ParallelLst)) $_TBS_ParallelLst = array();
 
-	if (isset($_TBS_BlockAlias[$ConfId])) $ConfId = $_TBS_BlockAlias[$ConfId];
-
 	if ( ($ConfId=='tbs:table')  && (!isset($_TBS_ParallelLst['tbs:table'])) ) {
 		$_TBS_ParallelLst['tbs:table'] = array(
 			'parent' => 'table',
