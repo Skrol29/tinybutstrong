@@ -192,7 +192,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2014-01-26</td>
+        <td>2014-01-29</td>
       </tr>
     </table>
   </div>
@@ -1872,7 +1872,7 @@ Parameter <span class="opt-name">storename</span> changes the name of the store.
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_onformat" id="html_field_prm_onformat"></a><span class="opt-name">onformat</span>=<span class="opt-value">fct_name</span></td>
-        <td align="left" valign="top" class="border-sep"> <p>Indicates the name of a user Php function that will be executed at the time when the value is formated for the merge. This allows typically to modify the text to display.<br>
+        <td align="left" valign="top" class="border-sep"> <p>Indicates the name of a user Php function that will be executed just before the value is formated for the merge. This allows typically to modify the text to display. The onformat function does not replace the formating. <a href="#html_field_prm_strconv">String conversion</a> or parameter <a href="#html_field_prm_onformat" class="opt-name">frm</a> are applied just after the <span class="opt-name">onformat</span> function.<br>
           Since TBS version 3.0, it's also possible to indicate a method of a class (see <a href="#php_oop">OOP</a>).</p>
           <p> The function <span class="opt-value">fct_name</span> must have the following syntax:<br>
             <span class="txt-code">&nbsp;&nbsp;function <span class="opt-value">fct_name</span>(<span class="opt-name">$FieldName</span>,&amp;<span class="opt-name">$CurrVal</span>,{&amp;<span class="opt-name">$CurrPrm</span>,{&amp;<span class="opt-name">$TBS</span>}}) { ... }<br>
@@ -2757,8 +2757,10 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
   <h3><a name="html_block_parallel" id="html_block_parallel"></a>Parallel merge (dynamic columns):</h3>
   <div class="norm">
     <p class="versioning">The parallel merge is supported since TBS version 3.9.0.</p>
-    <p>The parameter <span class="opt-name"><a href="#html_block_prm_parallel">parrallel</a></span> enables you to merge a block with a parallel process for sub-blocks. This can typically   merges a table block in columns.</p>
-<p> By default, TinyButStrong supports the configuration id named &quot;<span class="opt-value">tbs:table</span>&quot; for merging HTML tables. But you can define your own configuration.</p>
+    <p>The parameter <span class="opt-name"><a href="#html_block_prm_parallel">parallel</a></span> enables you to merge a block with a parallel process for sub-blocks. This can typically   merges a table block in columns.</p>
+    <h4>How does it works ?</h4>
+<p>First of all you have to define a block over one or several closed cells in the same row of a table. It can be at any row of the table, it makes no difference. Then add parameter &quot;<span class="opt-name">parallel</span>=<span class="opt-value">tbs:table</span>&quot; to this block. Then TBS will merge the cells as expected for this row, but also for all the same columns of other rows in the table. The configuration &quot;<span class="opt-name">parallel</span>=<span class="opt-value">tbs:table</span>&quot; tells TBS how is structured the <span class="opt-html">&lt;table&gt;</span> element in HTML, and then it can found other cells of the same columns. TBS can even process spanned cells if it is consistent with the asked merge.</p>
+<p>By default, TinyButStrong supports the configuration  named &quot;<span class="opt-value">tbs:table</span>&quot; for merging HTML tables. But you can define your own configurations.</p>
     <div class="decal">
       <h4>Example:</h4>
       <p>Template:</p>
