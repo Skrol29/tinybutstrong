@@ -1,8 +1,8 @@
 <?php
 
 /*
-TbsZip version 2.15
-Date    : 2013-10-16
+TbsZip version 2.16
+Date    : 2014-04-08
 Author  : Skrol29 (email: http://www.tinybutstrong.com/onlyyou.html)
 Licence : LGPL
 This class is independent from any other classes and has been originally created for the OpenTbs plug-in
@@ -474,7 +474,7 @@ class clsTbsZip {
 
 	function Flush($Render=TBSZIP_DOWNLOAD, $File='', $ContentType='') {
 
-		if ( ($File!=='') && ($this->ArchFile===$File)) {
+		if ( ($File!=='') && ($this->ArchFile===$File) && ($Render==TBSZIP_FILE) ) {
 			$this->RaiseError('Method Flush() cannot overwrite the current opened archive: \''.$File.'\''); // this makes corrupted zip archives without PHP error.
 			return false;
 		}
