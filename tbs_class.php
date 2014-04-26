@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.9.0 for PHP 5
-Date     : 2014-01-26
+Version  : 3.9.1-beta-2014-04-26 for PHP 5
+Date     : 2014-04-26
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -536,7 +536,7 @@ public $Assigned = array();
 public $ExtendedMethods = array();
 public $ErrCount = 0;
 // Undocumented (can change at any version)
-public $Version = '3.9.0';
+public $Version = '3.9.1-beta-2014-04-26';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -4459,7 +4459,7 @@ static function f_Xml_FindTagStart(&$Txt,$Tag,$Opening,$PosBeg,$Forward,$Case=tr
 $Case=false can be useful for HTML.
 $Tag='' should work and found the start of the first tag.
 $Tag='/' should work and found the start of the first closing tag.
-Encapsulation levels are not feataured yet.
+Encapsulation levels are not featured yet.
 */
 
 	if ($Txt==='') return false;
@@ -4544,9 +4544,9 @@ $Opening is used only when $LevelStop=false.
 			if ($TagOk) {
 				// Check the next char
 				$x = $Txt[$PosX];
-				if (($x===' ') || ($x==="\r") || ($x==="\n") || ($x==='>') || ($Tag==='/') || ($Tag==='')) {
+				if (($x===' ') || ($x==="\r") || ($x==="\n") || ($x==='>') || ($x==='/') || ($Tag==='/') || ($Tag==='')) {
 					// Check the encapsulation count
-					if ($LevelStop===false) { // No encaplusation check
+					if ($LevelStop===false) { // No encapsulation check
 						if ($TagIsOpening!==$Opening) $TagOk = false;
 					} else { // Count the number of level
 						if ($TagIsOpening) {
