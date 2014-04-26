@@ -4245,7 +4245,8 @@ static function f_Xml_AttFind(&$Txt,&$Loc,$Move=false,$AttDelim=false) {
 		}
 		if ($Att==='.') return false;
 	}
-		
+	$Loc->AttName = $Att;
+	
 	$AttLC = strtolower($Att);
 	if (isset($LocO->PrmLst[$AttLC])) {
 		// The attribute is existing
@@ -4266,7 +4267,6 @@ static function f_Xml_AttFind(&$Txt,&$Loc,$Move=false,$AttDelim=false) {
 		// The attribute is not yet existing
 		$Loc->AttDelimCnt = 0;
 		$Loc->AttBeg = false;
-		$Loc->AttName = $Att;
 	}
 	
 	// Search for a delimitor
