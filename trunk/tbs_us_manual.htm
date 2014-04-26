@@ -192,7 +192,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2014-01-29</td>
+        <td>2014-04-26</td>
       </tr>
     </table>
   </div>
@@ -2189,17 +2189,22 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
     <p>When you want to use several parameters in the same TBS field, then it can be interesting to understand in which order they are processed. <br>
       TBS changes the value to be merged, without changing the original value.</p>
     <p>Order of processes:</p>
-    <p> 1) -&gt; Retreive the value of the field to be merged.<br>
-      2) -&gt; Change the value using parameters: <br>
-      &nbsp;&nbsp;&nbsp;&nbsp;2.1) -&gt; <a href="#html_field_prm_onformat" class="opt-name">onformat</a><br>
-      &nbsp;&nbsp;&nbsp;&nbsp;2.2) -&gt; <a href="#html_field_prm_ope" class="opt-name">ope</a> + plug-ins OnOperation<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;2.3) -&gt; <a href="#html_field_prm_frm" class="opt-name">frm</a> or <a href="#html_field_prm_strconv" class="opt-name">strconv</a> or default char conversion<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;2.4) -&gt; <a href="#html_field_prm_if" class="opt-name">if</a> <br>
-      &nbsp;&nbsp;&nbsp;&nbsp;2.5) -&gt; <a href="#html_field_prm_file" class="opt-name">file</a><br>
-      &nbsp;&nbsp;&nbsp;&nbsp;2.6) -&gt; <a href="#html_field_prm_script" class="opt-name">script</a><br>
-      &nbsp;&nbsp;&nbsp;&nbsp;2.7) -&gt; <a href="#html_field_prm_script" class="opt-name">att</a><br>
-      &nbsp;&nbsp;&nbsp;&nbsp;2.8) -&gt; . / <a href="#html_field_prm_ifempty" class="opt-name">ifempty</a> / <a href="#html_field_prm_magnet" class="opt-name">magnet</a><br>
-      3) -&gt; Insert the value in the template. </p>
+    <ol>
+      <li> Retreive the value of the field to be merged.</li>
+      <li> Change the value using parameters:
+        <ol>
+          <li><a href="#html_field_prm_onformat" class="opt-name">onformat</a></li>
+          <li><a href="#html_field_prm_ope" class="opt-name">ope</a> + plug-ins OnOperation</li>
+          <li><a href="#html_field_prm_frm" class="opt-name">frm</a> or <a href="#html_field_prm_strconv" class="opt-name">strconv</a> or default char conversion</li>
+          <li><a href="#html_field_prm_if" class="opt-name">if</a></li>
+          <li><a href="#html_field_prm_file" class="opt-name">file</a></li>
+          <li><a href="#html_field_prm_script" class="opt-name">script</a></li>
+          <li><a href="#html_field_prm_att" class="opt-name">att</a></li>
+          <li><a href="#html_field_prm_ifempty" class="opt-name">ifempty</a> or <a href="#html_field_prm_atttrue" class="opt-name">atttrue</a> or <a href="#html_field_prm_magnet" class="opt-name">magnet</a> or <a href="#html_field_prm_attadd" class="opt-name">attadd</a>, those parameters cannot work together, the first used in this list  is applied</li>
+        </ol>
+      </li>
+      <li> Insert the value in the template. </li>
+    </ol>
   </div>
   <h3><a name="html_field_auto" id="html_field_auto"></a>Automatic fields</h3>
   <div class="norm">
