@@ -192,7 +192,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2014-04-26</td>
+        <td>2014-07-09</td>
       </tr>
     </table>
   </div>
@@ -390,7 +390,7 @@ a.opt-name:hover {
         <td>&nbsp;</td>
       </tr>
       <tr>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#plugins_db">Database Plug-ins</a></td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#plugins_db">Data Reader Plug-ins</a></td>
         <td>&nbsp;</td>
       </tr>
       <tr>
@@ -2476,9 +2476,8 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
         <td align="left" valign="top"><span class="opt-name"><span class="opt-value"><a name="html_block_prm_block" id="html_block_prm_block"></a></span>block</span>=<span class="opt-value">tag</span><br>
           <span class="txt-small">or</span><br>
           <span class="opt-name">block</span>=<span class="opt-value">expr</span><br></td>
-        <td align="left" valign="top"><p>Define a block bounded between the opening XML/HTML tag <span class="opt-html">&lt;tag...&gt;</span> and the closing XML/HTML tag <span class="opt-html">&lt;/tag&gt;</span> which surround the TBS tag. The couple of indicated XML/HTML tags are integral part of the bloc. The TBS tag can be placed inside the opening tag.<br>
-          If the tag is a single tag ending with &quot;/&quot; (sucha as <span class="opt-html">&lt;image href=&quot;img.gif&quot; /&gt;</span> ) then the block is bounded by the single tag.<br>
-        </p>
+        <td align="left" valign="top"><p>Define a block bounded by the XML/HTML element, that is between the opening XML/HTML tag <span class="opt-html">&lt;tag...&gt;</span> and the closing XML/HTML tag <span class="opt-html">&lt;/tag&gt;</span> which surround the TBS tag. The couple of indicated XML/HTML tags are integral part of the bloc. The TBS tag can also be placed inside the opening tag.</p>
+          <p> If the element is a single tag ending with &quot;/&quot; (such as <span class="opt-html">&lt;image href=&quot;img.gif&quot; /&gt;</span> ) then the block is bounded by the single tag.          </p>
           <p> Examples:</p>
           <div class="decal"><span class="opt-html">&lt;table id=&quot;tab1&quot;&gt;</span>&nbsp;<span class="blockzone"><span class="opt-html">&lt;tr&gt;&lt;td&gt;</span>[<span class="opt-name">b1</span>.<span class="opt-name">column1</span>;<span class="opt-name">block</span>=tr]<span class="opt-html">&lt;/td&gt;&lt;/tr&gt;</span></span><span class="opt-html">&lt;/table&gt;</span><br>
             <span class="txt-small">The block is defined by the zone framed by pointillets.</span></div>
@@ -2493,8 +2492,12 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
               <td valign="top">Define a block on the text line which holds the TBS tag. A text line always ends with a new-line char. New lines for Windows, Linux and  Mac are supported. This feature is very useful for a template with text contents for example.</td>
             </tr>
             <tr>
+              <td valign="top"><span class="opt-name">block</span>=<span class="opt-value">/</span></td>
+              <td valign="top">Define a block on the tags containg the TBS field. TBS assumes the tags is ending with &quot;/&quot;, otherwise an error occurs.</td>
+            </tr>
+            <tr>
               <td valign="top"><span class="opt-name">block</span>=<span class="opt-value">tag/</span></td>
-              <td valign="top">Deprectated. By adding character &quot;/&quot; at the end of the tag's name, TBS assume the tag is single. This syntax is ignored since TBS version 3.5.2 because TBS can recognize single tags by itself. Coding &quot;<span class="opt-name">block=image/</span>&quot; is the same as &quot;<span class="opt-name">block=image</span>&quot;.</td>
+              <td valign="top">Deprectated. By adding character &quot;/&quot; at the end of the tag's name, TBS assumes the tag is single. This syntax is ignored since TBS version 3.5.2 because TBS can recognize single tags by itself. Coding &quot;<span class="opt-name">block=image/</span>&quot; is the same as &quot;<span class="opt-name">block=image</span>&quot;.</td>
             </tr>
           </table>
           <p class="versioning"> Versioning: Special mark  &quot;_&quot; and &quot;/&quot; are supported since TBS 3.1.0. </p>
@@ -3508,76 +3511,62 @@ it whill run :<br>
   <p>&nbsp;</p>
 </div>
 <h3></h3>
-<h3><a name="plugins_db" id="plugins_db"></a>Database plug-ins:</h3>
+<h3><a name="plugins_db" id="plugins_db"></a><a name="plugins_data_reader" id="plugins_db4"></a>Data Reader Plug-ins:</h3>
   <div class="norm">
-    <p><span class="versioning">Versioning: database plug-ins are supported since TBS version 1.8.</span></p>
-    <p> A database plug-in enables the method MergeBlock() to recognize a new type of database.
-      When you have a call such as <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-name">$BlockName</span>, <span class="opt-name">$Source</span>, <span class="opt-name">$Query</span>), the MergeBlock process is first examining <span class="opt-name">$Source</span> to see if its type is supported. </p>
-    <table border="0" cellspacing="0" cellpadding="3">
-      <tr>
-        <td valign="top">&bull;</td>
-        <td valign="top">If <span class="opt-name">$Source</span> is a type of resource known  in native by TBS, then the MergeBlock process doesn't need any plug-in help, it will retrieve  the data by its own. </td>
-      </tr>
-      <tr>
-        <td valign="top">&bull;</td>
-        <td valign="top">If <span class="opt-name">$Source</span> is an object  having a method named tbsdb_open() then the MergeBlock process  assumes that  the object  is a database plug-in and use it to retrieve the data. (See more details below)</td>
-      </tr>
-      <tr>
-        <td valign="top">&bull;</td>
-        <td valign="top">If <span class="opt-name">$Source</span> is a string beginning  with <span class="opt-value">'~'</span> then the MergeBlock process  assumes that  property <span class="opt-name">$TBS</span>-&gt;ObjectRef is a database plug-in and use it to retrieve the data. (See more details below)</td>
-      </tr>
-      <tr>
-        <td valign="top">&bull;</td>
-        <td valign="top">If <span class="opt-name">$Source</span> is something else then the MergeBlock process  is trying to found the plug-in made by user functions that correspond to the type of <span class="opt-name">$Source</span>. (See more details below)</td>
-      </tr>
-    </table>
-    <h4>Database plug-in based on user functions: </h4>
-    <p> When the MergeBlock process meet a type of value for <span class="opt-name">$Source</span> which is not supported in native, it determines the TBS Id corresponding to that type. Then it looks for the user functions corresponding to that TBS Id.</p>
-    <h5>&bull; How to determine the TBS Id:</h5>
-    <p> The TBS Id is a string identifier determined  by the argument <span class="opt-name">$Source</span>.<br>
-      If <span class="opt-name">$Source</span> is a string =&gt; the TBS Id is that string.<br>
-      If <span class="opt-name">$Source</span> is a PHP resource =&gt; the TBS Id is the name of the  resource's type.<br>
-      If <span class="opt-name">$Source</span> is an object =&gt; the TBS Id is the name of the class.<br>
-      For some convenience, if the TBS Id contains spaces (' '), it is cut. If the TBS Id contains '-', they are replaced with '_'.<br>
-      For example, a PHP variable for a Sybase connection is typed as Resource and its resource name is <span class="opt-value">'sybase-db link'</span>. The corresponding TBS Id is <span class="opt-value">'sybase_db'</span>.</p>
-    <h5>&bull; How to build the plug-in for a TBS Id:</h5>
-    <p> The plug-in is made of 3 user functions which must have specific names.
-      The following function names are made for a TBS Id which is <span class="opt-value">'tbsid'</span>. For another TBS Id, you just have to rename the functions.
-      You can found several examples of database plug-in at the <a href="http://www.tinybutstrong.com/plugins.php#plugin_db">TinyButStrong web site</a>.</p>
-    <p> Synopsis:</p>
-    <p> function <span class="tbsname">tbsdb_tbsid_open</span>(&amp;<span class="opt-name">$Source</span>, &amp;<span class="opt-name">$Query</span>) </p>
-    <div class="decal">This function is  called one time by the MergeBlock process, before the other user functions. <br>
-      It is supposed to  	use <span class="opt-name">$Source</span> and <span class="opt-name">$Query</span> to open a recordset, and return a reference of that recordset.<br>
-    </div>
-    <p>function <span class="tbsname">tbsdb_tbsid_fetch</span>(&amp;<span class="opt-name">$Rs</span> [,<span class="opt-name">$RecNum</span>]) </p>
+    <p><span class="versioning">Versioning: Data Reader plug-ins are supported since TBS version 1.8.</span></p>
+    <p>When you use  <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-name">$BlockName</span>, <span class="opt-name">$Source</span>, <span class="opt-name">$Query</span>), TBS is first examining <span class="opt-name">$Source</span> to see if it supported as a data source. </p>
+    <p>A Data Reader plug-in enables TBS to  to recognize  new data sources.</p>
+    <p>You can found several examples of Data Reader plug-in at the <a href="http://www.tinybutstrong.com/plugins.php#plugin_db">TinyButStrong web site</a>.</p>
+    <h4> Data Reader plug-in made with 3 PHP functions</h4>
+<p> Synopsis:</p>
+<pre>function <span class="tbsname">tbsdb_XXX_open</span>(&amp;<span class="opt-name">$Source</span>, &amp;<span class="opt-name">$Query</span>) </pre>
+    <div class="decal">This function is  called one time by the MergeBlock process, before the other user functions.<br>
+It is supposed to  	use <span class="opt-name">$Source</span> and <span class="opt-name">$Query</span> to open a recordset, and return a reference of that recordset.    </div>
+    <pre>function <span class="tbsname">tbsdb_XXX_fetch</span>(&amp;<span class="opt-name">$Rs</span> [,<span class="opt-name">$RecNum</span>]) </pre>
     <div class="decal">This function is  called several times by the MergeBlock process, as many times as there are data to fetch from the query. <br>
       This function should return the next record as an associative array (column name=&gt; value), or return <span class="opt-value">false</span> if there is no record left.<br>
-      <span class="opt-name">$Rs</span> is the value provided by <span class="tbsname">tbsdb_tbsid_open</span>(). It is commonly  a recordset's reference.<br>
+      <span class="opt-name">$Rs</span> is the value provided by <span class="tbsname">tbsdb_XXX_open</span>(). It is commonly  a recordset's reference.<br>
       <span class="opt-name">$RecNum</span> can be useful for some database type such as Oracle, for which the number of the record is needed to retrieve it. </div>
-    <p>function <span class="tbsname">tbsdb_tbsid_close</span>(&amp;<span class="opt-name">$Rs</span>) </p>
+    <pre>function <span class="tbsname">tbsdb_XXX_close</span>(&amp;<span class="opt-name">$Rs</span>) </pre>
     <div class="decal">This function is  called on time by the MergeBlock process, after the other user functions. <br>
       This function should close the recordset properly. <br>
-      <span class="opt-name">$Rs</span> is the value provided by <span class="tbsname">tbsdb_tbsid_open</span>(). It is commonly  a recordset's reference.</div>
-    <h4>Database plug-in based on  object:</h4>
-    <p> When the MergeBlock process meet of value for <span class="opt-name">$Source</span> which is an object, and if that object has a method named <span class="tbsname">tbsdb_open()</span>, then it assumes that the object is a database plug-in. <br>
-      The object must have at least the 3 methods <span class="tbsname">tbsdb_open()</span>, <span class="tbsname">tbsdb_fetch()</span> and <span class="tbsname">tbsdb_close()</span>. There can be other methods and properties, but those 3 methods must have the same syntax and the same feature as the user functions described above. </p>
-    <p> Synopsis:</p>
-    <pre class="decal">class clsTbsPlugin {
-  function tbsdb_open(&amp;<span class="opt-name">$Source</span>, &amp;<span class="opt-name">$Query</span>)
-  function tbsdb_fetch(&amp;<span class="opt-name">$Rs</span> [,<span class="opt-name">$RecNum</span>])
-  function tbsdb_close(&amp;<span class="opt-name">$Rs</span>)
-}</pre>
+      <span class="opt-name">$Rs</span> is the value provided by <span class="tbsname">tbsdb_XXX_open</span>(). It is commonly  a recordset's reference.</div>
+    <p>TBS will automatically use this  Data Reader plug-in for   <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-name">$BlockName</span>, <span class="opt-name">$Source</span>, <span class="opt-name">$Query</span>) when:</p>
+    <ul>
+      <li><span class="opt-name">$Source</span> is equal  the string 'XXX'.</li>
+      or
+      <li><span class="opt-name">$Source</span>  is a PHP ressource which type is named 'XXX'. Spaces are deleted and '-' are replaces with '_'.</li>
+      or
+      <li><span class="opt-name">$Source</span> is a PHP object which class is named 'XXX'.</li>
+    </ul>
+    <h4>Data Reader plug-in made with a class</h4>
+    <p> Example with a direct object:</p>
+<pre class="decal">class MyCustomClass {
+  function tbsdb_open(&amp;<span class="opt-name">$Source</span>, &amp;<span class="opt-name">$Query</span>) {...}
+  function tbsdb_fetch(&amp;<span class="opt-name">$Rs</span> ,<span class="opt-name">$RecNum</span>) {...}
+  function tbsdb_close(&amp;<span class="opt-name">$Rs</span>) {...}
+}
+<span class="opt-name">$Source</span> = new MyCustomClass();
+<span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-name">$BlockName</span>, <span class="opt-name">$Source</span>,<span class="opt-name"> $Query</span>);    </pre>
+    <p>When the MergeBlock process meet of value for <span class="opt-name">$Source</span> which is an object, and have at least 3 methods named<span class="tbsname">tbsdb_open()</span>, <span class="tbsname">tbsdb_fetch()</span> and <span class="tbsname">tbsdb_close()</span>, then it assumes that the object is a Data Reader plug-in. There can be other methods and properties, but those 3 methods must have the same syntax and the same feature as the user functions described above.</p>
     <h4>Database plug-in based on property ObjectRef:</h4>
-    <p> When the MergeBlock process meet a value for <span class="opt-name">$Source</span> which is a string beginning with '~' then it assumes that   property <span class="opt-name">$TBS-</span>&gt;ObjectRef is a database plug-in based on  object (see <a href="#php_oop">OOP</a>). The object must have the same requirements  as a database plug-in based on objet described above, but the names of the methods can be different.</p>
-    <p> Example:</p>
-    <pre class="decal"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-name">$BlockName</span>,<span class="opt-value">'~dbkey'</span>,<span class="opt-name">$Query</span>);
+    <p> Example with an objet saved in ObjectRef:</p>
+<pre class="decal">
+class MyCustomClass {
 
-class clsTbsPlugin {
-  function dbkey_open(&amp;<span class="opt-name">$Source</span>, &amp;<span class="opt-name">$Query</span>)
-  function dbkey_fetch(&amp;<span class="opt-name">$Rs</span> [,<span class="opt-name">$RecNum</span>])
-  function dbkey_close(&amp;<span class="opt-name">$Rs</span>)
-}    </pre>
-  </div>
+  function XXX_open(&amp;<span class="opt-name">$Source</span>, &amp;<span class="opt-name">$Query</span>) {...}
+  function XXX_fetch(&amp;<span class="opt-name">$Rs</span> ,<span class="opt-name">$RecNum</span>) {...}
+  function XXX_close(&amp;<span class="opt-name">$Rs</span>) {...}
+
+  function YYY_open(&amp;<span class="opt-name">$Source</span>, &amp;<span class="opt-name">$Query</span>) {...}
+  function YYY_fetch(&amp;<span class="opt-name">$Rs</span> ,<span class="opt-name">$RecNum</span>) {...}
+  function YYY_close(&amp;<span class="opt-name">$Rs</span>) {...}
+
+}
+<span class="opt-name">$TBS</span>-&gt;ObjectRef = new MyCustomClass();
+...
+<span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-name">$BlockName</span>, <span class="opt-value">'~XXX'</span>, <span class="opt-name">$Query</span>);</pre>
+  When the MergeBlock process meet a value for <span class="opt-name">$Source</span> which is a string beginning with '~' then it assumes that   property <span class="opt-name">$TBS-</span>&gt;ObjectRef is a Data Reader plug-in based on  an object (see <a href="#php_oop">OOP</a>). The object must have the same requirements  as a Data Reader plug-in based on objet described above, but the names of the methods can be different.</div>
   <h3><a name="plugins_tbs" id="plugins_tbs"></a>Other plug-ins:</h3>
   <div class="norm">
     <p class="versioning">Versioning:  plug-ins are supported since TBS version 3.0.</p>
