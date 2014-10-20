@@ -1579,8 +1579,9 @@ which is the same as:
             You can chose to place the field as an added value using parameter <a href="#html_field_prm_attadd" class="opt-name">attadd</a>.<br>
             You can complete the attribute's value by applying a mask to it using parameter <a href="#html_field_prm_ope" class="opt-name">ope</a>=<span class="opt-value">msk</span>.<br>
           You can delete the attribute in case of empty value using parameter <a href="#html_field_prm_magnet" class="opt-name">magnet</a>=<span class="opt-value">#</span>.</p>
-          <p>            Syntax for value <span class="opt-value">path</span>:      [<span class="opt-value">+</span>][<span class="opt-value">tag1+tag2+tag3+...#</span>]<span class="opt-value">attribute</span><br>
+          <p>            Syntax for value <span class="opt-value">path</span>:      <span class="opt-name">att</span>=[<span class="opt-value">+</span>][<span class="opt-value">tag1+tag2+tag3+...#</span>]<span class="opt-value">attribute</span> or <span class="opt-name">att</span>=<span class="opt-value">.</span><br>
           By default the attribute is searched before the current field. But if '<span class="opt-value">+</span>' is the first character of the path, then it is searched after. If no tag list is specified, then the attribute is looked at in the first tag met in the search direction. If a tag list is used, <span class="opt-value">tag1</span> is search first, then <span class="opt-value">tag2</span>, ... regardless of the direction of the search (before/after). You can put a tag name between one or several bracket levels in order to specify that the searched tag must embed the current field.</p>
+          <p>If you set <span class="opt-name">att</span>=<span class="opt-value">.</span> then TBS will assume that the TBS fields is already positioned inside the target attribute.</p>
           <p>            Examples:          </p>
           <div class="decal">[<span class="opt-name">onshow.x</span>;<span class="opt-name">att</span>=<span class="opt-value">class</span>] moves into attribute '<span class="opt-value">class</span>' of the first tag placed before.<br>
             [<span class="opt-name">onshow.x</span>;<span class="opt-name">att</span>=<span class="opt-value">div#class</span>] moves into attribute '<span class="opt-value">class</span>' of the first <span class="opt-html">&lt;div&gt;</span> placed before.<br>
@@ -1939,7 +1940,7 @@ Parameter <span class="opt-name">storename</span> changes the name of the store.
                 <td>Limit the text string to a maximum of <span class="opt-value">n</span> characters. If the string is cut, then its end is replaced with dot lines '...'.<br>
                   Example:							[onshow.caption;<span class="opt-name">ope</span>=<span class="opt-value">max:10</span>]
                   <ul class="list-mini">
-                    <li> Add parameter <span class="opt-name">maxhtml</span> to indicate that the value before merging can contain Html characters.</li>
+                    <li> Add parameter <span class="opt-name">maxhtml</span> to indicate that the value before merging can contain Html characters. Only characters starting with &quot;<span class="opt-name">&amp;&quot;</span> end ending with &quot;<span class="opt-name">;</span>&quot; will be considered. HTML entities are not considered as HTML characters.</li>
                     <li> Add parameter <span class="opt-name">maxutf8</span> to indicate that the value before merging can contain UTF8 characters. <span class="versioning">Versionning: maxutf8 is supported since TBS version 3.5.2.</span></li>
                     <li> Add parameter <span class="opt-name">maxend</span> to change the cutting symbol.</li>
                   </ul>                  Example:
