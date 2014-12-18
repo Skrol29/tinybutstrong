@@ -15,14 +15,17 @@ class BlockTestCase extends TBSUnitTestCase {
 	function testArrayParameter() {
 	
 		$value = array(
+			// data for block 'a'
 			'a' => array(
 				'b'=>'c',
 				'd'=>array('e'=>'f', 'g'=>'h')
 			),
+			// data for block 'A'
 			'A' => array(
 				'B'=>'C',
 				'D'=>'E'
 			),
+			// data for blocks 'C', 'D' and 'E'
 			'C,D,E' => array(0, 1, 2, 3)
 		);
 
@@ -68,6 +71,21 @@ class BlockTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeBlockStrings("<b>[a.e;block=b;when [a.#]=2]</b>", $value, "<b>f</b>", "test block with array parameter #23");
 	}
 
+	function testFieldPosition() {
+	
+		$blocks = array(
+			'a' => array(
+				array('title' => "AAA", 'id'=>21),
+				array('title' => "BBB", 'id'=>22),
+				array('title' => "CCC", 'id'=>23),
+			),
+		);
+
+		$this->assertEqualMergeBlockStrings("<p><b>[a.title;block=b]</b></p>", $blocks, "<p><b>AAA</b><b>BBB</b><b>CCC</b></p>", "test block with standard field position");
+		$this->assertEqualMergeBlockStrings("<p><b>[a.title;block=b;if 22=[a.id];then 'XXX']</b></p>", $blocks, "<p><b>AAA</b><b>XXX</b><b>CCC</b></p>", "test block with embedded field");
+		
+	}
+	
 	function testNumParameter() {
 		// $this->dumpLastSource();
 	}
