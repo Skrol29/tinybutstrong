@@ -96,20 +96,56 @@ class AttTestCase extends TBSUnitTestCase {
 	}
 
 	function testMergeBlocksWithCachedFields() {
+	
 		$data = array();
 		$data[] = array('id'=>'x', 'val'=>'1');
 		$data[] = array('id'=>'y', 'val'=>'2');
 		$data[] = array('id'=>'z', 'val'=>'3');
 		
 		// parameter att with block => test the CacheField feature
-		$this->assertEqualMergeBlockStrings('<div>[b.val;att=width][b.id;block=div]/[b.id]/[b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #1");
-		$this->assertEqualMergeBlockStrings('<div width="0">[b.val;att=width][b.id;block=div]/[b.id]/[b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #2");
-		$this->assertEqualMergeBlockStrings('<div>[b.id;block=div]/[b.val;att=width][b.id]/[b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #3");
-		$this->assertEqualMergeBlockStrings('<div width="0">[b.id;block=div]/[b.val;att=width][b.id]/[b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #4");
-		$this->assertEqualMergeBlockStrings('<div>[b.id;block=div]/[b.id]/[b.val;att=width][b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #5");
-		$this->assertEqualMergeBlockStrings('<div width="0">[b.id;block=div]/[b.id]/[b.val;att=width][b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #6");
-		$this->assertEqualMergeBlockStrings('<div>[b.id;block=div]/[b.id]/[b.id][b.val;att=width]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #7");
-		$this->assertEqualMergeBlockStrings('<div width="0">[b.id;block=div]/[b.id]/[b.id][b.val;att=width]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField #8");
+		
+		// Backward
+		$this->assertEqualMergeBlockStrings('<div>[b.val;att=width][b.id;block=div]/[b.id]/[b.id]</div>',           array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField - backward + attribute not yet exists");
+		$this->assertEqualMergeBlockStrings('<div width="0">[b.val;att=width][b.id;block=div]/[b.id]/[b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField - backward + attribute already exists");
+		
+		$this->assertEqualMergeBlockStrings('<div>[b.id;block=div]/[b.val;att=width][b.id]/[b.id]</div>',           array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField - backward + attribute not yet exists + jump 1 field");
+		$this->assertEqualMergeBlockStrings('<div width="0">[b.id;block=div]/[b.val;att=width][b.id]/[b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField - backward + attribute already exists + jump 1 field");
+		
+		$this->assertEqualMergeBlockStrings('<div>[b.id;block=div]/[b.id]/[b.val;att=width][b.id]</div>',           array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField - backward + attribute not yet exists + jump 2 fields");
+		$this->assertEqualMergeBlockStrings('<div width="0">[b.id;block=div]/[b.id]/[b.val;att=width][b.id]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField - backward + attribute already exists + jump 2 fields");
+
+		$this->assertEqualMergeBlockStrings('<div>[b.id;block=div]/[b.id]/[b.id][b.val;att=width]</div>',           array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField - backward + attribute not yet exists + jump 3 fields");
+		$this->assertEqualMergeBlockStrings('<div width="0">[b.id;block=div]/[b.id]/[b.id][b.val;att=width]</div>', array('b'=>$data), '<div width="1">x/x/x</div><div width="2">y/y/y</div><div width="3">z/z/z</div>', "test blocks CacheField - backward + attribute already exists + jump 3 fields");
+
+
+		//$this->dumpLastSource();
+
+		// Forward
+		
+		$this->assertEqualMergeBlockStrings('<div>[b.val;att=+span#width]<span>[b.id;block=div]/[b.id]/[b.id]</span></div>',           array('b'=>$data), '<div><span width="1">x/x/x</span></div><div><span width="2">y/y/y</span></div><div><span width="3">z/z/z</span></div>', "test blocks CacheField - forward + attribute not yet exists");
+		$this->assertEqualMergeBlockStrings('<div>[b.val;att=+span#width]<span width="0">[b.id;block=div]/[b.id]/[b.id]</span></div>', array('b'=>$data), '<div><span width="1">x/x/x</span></div><div><span width="2">y/y/y</span></div><div><span width="3">z/z/z</span></div>', "test blocks CacheField - forward + attribute already exists");
+		
+		/*
+		$this->assertEqualMergeBlockStrings('<div>[b.val;att=+span#width][b.id;block=div]/<span>[b.id]/[b.id]</span></div>',           array('b'=>$data), '<div>x/<span width="1">x/x</span></div><div>y/<span width="2">y/y</span></div><div>z/<span width="3">z/z</span></div>', "test blocks CacheField - forward + attribute not yet exists + jump 1 field");
+		$this->assertEqualMergeBlockStrings('<div>[b.val;att=+span#width][b.id;block=div]/<span width="0">[b.id]/[b.id]</span></div>', array('b'=>$data), '<div>x/<span width="1">x/x</span></div><div>y/<span width="2">y/y</span></div><div>z/<span width="3">z/z</span></div>', "test blocks CacheField - forward + attribute already exists + jump 1 field");
+		
+		$this->assertEqualMergeBlockStrings('<div>[b.val;att=+span#width][b.id;block=div]/[b.id]/<span>[b.id]</span></div>',           array('b'=>$data), '<div>x/x/<span width="1">x</span></div><div>y/y/<span width="2">y</span></div><div>z/z/<span width="3">z</span></div>', "test blocks CacheField - forward + attribute not yet exists + jump 2 fields");
+		$this->assertEqualMergeBlockStrings('<div>[b.val;att=+span#width][b.id;block=div]/[b.id]/<span width="0">[b.id]</span></div>', array('b'=>$data), '<div>x/x/<span width="1">x</span></div><div>y/y/<span width="2">y</span></div><div>z/z/<span width="3">z</span></div>', "test blocks CacheField - forward + attribute already exists + jump 2 fields");
+
+		$this->assertEqualMergeBlockStrings('<div>[b.val;att=+span#width][b.id;block=div]/[b.id]/[b.id]<span></span></div>',           array('b'=>$data), '<div>x/x/x<span width="1"></span></div><div>y/y/y<span width="2"></span></div><div>z/z/z<span width="3"></span></div>', "test blocks CacheField - forward + attribute not yet exists + jump 3 fields");
+		$this->assertEqualMergeBlockStrings('<div>[b.val;att=+span#width][b.id;block=div]/[b.id]/[b.id]<span width="0"></span></div>', array('b'=>$data), '<div>x/x/x<span width="1"></span></div><div>y/y/y<span width="2"></span></div><div>z/z/z<span width="3"></span></div>', "test blocks CacheField - forward + attribute already exists + jump 3 fields");
+		*/
+
+		// TinyButStrong Error : TBS is not able to merge the field [b.val;att=+span#width] because parameter 'att' makes this fied moving forward over another TBS field.
+		$this->assertErrorMergeBlockString('<div>[b.val;att=+span#width][b.id;block=div]/<span>[b.id]/[b.id]</span></div>',           array('b'=>$data), "test blocks CacheField - forward + attribute not yet exists + jump 1 field");
+		$this->assertErrorMergeBlockString('<div>[b.val;att=+span#width][b.id;block=div]/<span width="0">[b.id]/[b.id]</span></div>', array('b'=>$data), "test blocks CacheField - forward + attribute already exists + jump 1 field");
+		
+		$this->assertErrorMergeBlockString('<div>[b.val;att=+span#width][b.id;block=div]/[b.id]/<span>[b.id]</span></div>',           array('b'=>$data), "test blocks CacheField - forward + attribute not yet exists + jump 2 fields");
+		$this->assertErrorMergeBlockString('<div>[b.val;att=+span#width][b.id;block=div]/[b.id]/<span width="0">[b.id]</span></div>', array('b'=>$data), "test blocks CacheField - forward + attribute already exists + jump 2 fields");
+
+		$this->assertErrorMergeBlockString('<div>[b.val;att=+span#width][b.id;block=div]/[b.id]/[b.id]<span></span></div>',           array('b'=>$data), "test blocks CacheField - forward + attribute not yet exists + jump 3 fields");
+		$this->assertErrorMergeBlockString('<div>[b.val;att=+span#width][b.id;block=div]/[b.id]/[b.id]<span width="0"></span></div>', array('b'=>$data), "test blocks CacheField - forward + attribute already exists + jump 3 fields");
+		
 	}
 
 	function testMergeBlocksWithGroup() {
