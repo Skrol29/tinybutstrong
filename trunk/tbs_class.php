@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.9.1-beta-2014-04-26 for PHP 5
-Date     : 2014-04-26
+Version  : 3.9.1-beta-2015-01-06 for PHP 5
+Date     : 2015-01-06
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -536,7 +536,7 @@ public $Assigned = array();
 public $ExtendedMethods = array();
 public $ErrCount = 0;
 // Undocumented (can change at any version)
-public $Version = '3.9.1-beta-2014-04-26';
+public $Version = '3.9.1-beta-2015-01-06';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -1008,7 +1008,8 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
 	$Chk = true;
 	$LocLst = array();
 	$LocNbr = 0;
-
+	$Sort = false;
+	
 	if ($this->_PlugIns_Ok && isset($this->_piOnCacheField)) {
 		$pi = true;
 		$ArgLst = array(0=>$BlockName, 1=>false, 2=>&$Txt, 3=>array('att'=>true));
@@ -1022,13 +1023,17 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
 
 		$Chk = false;
 		$Pos = 0;
-		$PrevEnd = -1;
-		$PrevIsAMF = false; // AMF means Attribute Moved Forward
+		$PosEndPrec = -1;
 		while ($Loc = $this->meth_Locator_FindTbs($Txt,$BlockName,$Pos,'.')) {
 			
-			$IsAMF = false;
-			$IsAtt = false;
-			$NewIdx = false;
+			// Delete embeding fields
+			if ($Loc->PosBeg<$PosEndPrec) {
+				unset($LocLst[$LocNbr]);
+				$Chk = true;
+			}
+			
+			$LocNbr = 1 + count($LocLst);
+			$LocLst[$LocNbr] = &$Loc;
 			
 			if ($pi) {
 				$ArgLst[1] = &$Loc;
@@ -1042,68 +1047,51 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
 			} else {
 				$Loc->IsRecInfo = false;
 			}
-
-			if ($Loc->PosBeg>$PrevEnd) { // No embedding
-				if (isset($Loc->PrmLst['att'])) {
-					$LocSrc = substr($Txt,$Loc->PosBeg,$Loc->PosEnd-$Loc->PosBeg+1);
-					if ($this->f_Xml_AttFind($Txt,$Loc,true,$this->AttDelim)) {
+		
+			// Process parameter att for new added locators
+			$NewNbr = count($LocLst);
+			$nb_loc = 0;
+			$nb_att = 0;
+			for ($i=$LocNbr;$i<=$NewNbr;$i++) {
+				$li = &$LocLst[$i];
+				$nb_loc++;
+				if (isset($li->PrmLst['att'])) {
+					$LocSrc = substr($Txt,$li->PosBeg,$li->PosEnd-$li->PosBeg+1); // for error message
+					$li->CacheLst = &$LocLst; // will be unreferenced when moved
+					if ($this->f_Xml_AttFind($Txt,$li,true,$this->AttDelim)) {
+						$nb_att++;
 						if (isset($Loc->PrmLst['atttrue'])) {
-							$Loc->PrmLst['magnet'] = '#';
-							$Loc->PrmLst['ope'] = (isset($Loc->PrmLst['ope'])) ? $Loc->PrmLst['ope'].',attbool' : 'attbool';
-						}
-						$IsAtt = true;
-						if ($Loc->AttForward) {
-							$IsAMF = true;
-						} else {
-							if ($Loc->AttInsLen>0) {
-								for ($i=$LocNbr;$i>0;$i--) {
-									if ($LocLst[$i]->PosEnd>=$Loc->PosBeg) {
-										$NewIdx = $i;
-										$li = $LocLst[$i];
-										$li->PosBeg += $Loc->AttInsLen;
-										$li->PosEnd += $Loc->AttInsLen;
-										$LocLst[$i+1] = $li;
-									} else {
-										$i = 0;
-									}
-								}
-							}
+							$li->PrmLst['magnet'] = '#';
+							$li->PrmLst['ope'] = (isset($li->PrmLst['ope'])) ? $li->PrmLst['ope'].',attbool' : 'attbool';
 						}
 					} else {
 						$this->meth_Misc_Alert('','TBS is not able to merge the field '.$LocSrc.' because the entity targeted by parameter \'att\' cannot be found.');
 					}
-					unset($Loc->PrmLst['att']);
-				}
-				$LocNbr++;
-			} else {
-				// The previous tag is embedding => no increment, then previous Loc is overwrited
-				$Chk = true;
-				if ($PrevIsAMF) {
-					$l = &$LocLst[$LocNbr];
-					$this->meth_Misc_Alert('','TBS is not able to merge the field '.$LocSrc.' because parameter \'att\' makes this fied moving forward over another TBS field.');
 				}
 			}
+			
+			if ( ($nb_loc>1) || ($nb_att>0) ) $Sort = true;
 
-			$PrevIsAMF = false;
-			if ($IsAtt) {
-				$Pos = $Loc->PrevPosBeg;
-				if ($IsAMF) $PrevIsAMF = true;
+			if ($nb_att>0) {
+				$Pos = $Loc->DelPos; // continue from the original position of the loc ; a moved field has no block name so it won't be found twice if moved forward
+				$PosEndPrec = -1;
 			} elseif ($Loc->Enlarged) {
-				$Pos = $Loc->PosBeg0+1;
+				$Pos = $Loc->PosBeg0+1; // continue from the original position of the loc
+				$PosEndPrec = $Loc->PosEnd0;
 				$Loc->Enlarged = false;
 			} else {
 				$Pos = $Loc->PosBeg+1;
+				$PosEndPrec = $Loc->PosEnd;
 			}
 
-			if ($NewIdx===false) {
-				$LocLst[$LocNbr] = $Loc;
-				$PrevEnd = $Loc->PosEnd;
-			} else {
-				$LocLst[$NewIdx] = $Loc;
-				$PrevEnd = $LocLst[$LocNbr]->PosEnd;
-			}
-
+			unset($Loc);
+			
 		}
+		
+		if ($Sort) {
+			self::f_Loc_Sort($LocLst, 1);
+		}	
+
 
 	}
 
@@ -2714,7 +2702,7 @@ function meth_Merge_SectionNormal(&$BDef,&$Src) {
 			}
 		}
 
-		// Unchached locators
+		// Uncached locators
 		if ($BDef->Chk) {
 			$BlockName = &$BDef->Name;
 			$Pos = 0;
@@ -2723,7 +2711,7 @@ function meth_Merge_SectionNormal(&$BDef,&$Src) {
 
 	} else {
 
-		// Chached locators
+		// Cached locators
 		for ($i=$iMax;$i>0;$i--) {
 			if ($LocLst[$i]->PosBeg<$PosMax) {
 				if ($LocLst[$i]->IsRecInfo) {
@@ -4180,6 +4168,7 @@ static function f_Loc_Enlarge_Find($Txt, $Tag, $Fct, $Pos, $Forward, $LevelStop)
 }
 
 static function f_Loc_AttBoolean($CurrVal, $AttTrue, $AttName) {
+
 // Return the good value for a boolean attribute
 	if ($AttTrue===true) {
 		if (self::meth_Misc_ToStr($CurrVal)==='') {
@@ -4194,10 +4183,53 @@ static function f_Loc_AttBoolean($CurrVal, $AttTrue, $AttName) {
 	}
 }
 
-static function f_Xml_AttFind(&$Txt,&$Loc,$Move=false,$AttDelim=false) {
+/**
+ * Affects the positions of a list of locators regarding to a specific moving locator.
+ */
+static function f_Loc_Moving(&$LocM, &$LocLst) {
+	foreach ($LocLst as &$Loc) {
+		if ($Loc !== $LocM) {
+			if ($Loc->PosBeg >= $LocM->InsPos) {
+				$Loc->PosBeg += $LocM->InsLen;
+				$Loc->PosEnd += $LocM->InsLen;
+			}
+			if ($Loc->PosBeg > $LocM->DelPos) {
+				$Loc->PosBeg -= $LocM->DelLen;
+				$Loc->PosEnd -= $LocM->DelLen;
+			}
+		}
+	}
+	return true;
+}
+
+/**
+ * Sort the locators in the list.
+ * Apply the bubble algorithm.
+ */
+static function f_Loc_Sort(&$LocLst, $iFirst = 0) {
+	$iEnd = count($LocLst) + $iFirst;
+	for ($i = $iFirst+1 ; $i<$iEnd ; $i++) {
+		$Loc = $LocLst[$i];
+		$p = $Loc->PosBeg;
+		for ($j=$i-1; $j>=$iFirst ; $j--) {
+			if ($p < $LocLst[$j]->PosBeg) {
+				$LocLst[$j+1] = $LocLst[$j];
+				$LocLst[$j] = $Loc;
+			} else {
+				$j = -1; // quit the loop
+			}
+		}
+	}
+	return true;
+}
+
+static function f_Xml_AttFind(&$Txt,&$Loc,$Move=false,$AttDelim=false,$LocLst=false) {
 // att=div#class ; att=((div))#class ; att=+((div))#class
 
 	$Att = $Loc->PrmLst['att'];
+	unset($Loc->PrmLst['att']); // prevent from processing the field twice
+	$Loc->PrmLst['att;'] = $Att; // for debug
+
 	$p = strrpos($Att,'#');
 	if ($p===false) {
 		$TagLst = '';
@@ -4270,7 +4302,7 @@ static function f_Xml_AttFind(&$Txt,&$Loc,$Move=false,$AttDelim=false) {
 		}
 	}
 
-	if ($Move) return self::f_Xml_AttMove($Txt,$Loc,$AttDelim);
+	if ($Move) return self::f_Xml_AttMove($Txt,$Loc,$AttDelim,$LocLst);
 
 	return true;
 
@@ -4278,16 +4310,17 @@ static function f_Xml_AttFind(&$Txt,&$Loc,$Move=false,$AttDelim=false) {
 
 static function f_Xml_AttMove(&$Txt, &$Loc, $AttDelim=false) {
 
-  if ($AttDelim===false) $AttDelim = $Loc->AttDelimChr;
-  if ($AttDelim===false) $AttDelim = '"';
+	if ($AttDelim===false) $AttDelim = $Loc->AttDelimChr;
+	if ($AttDelim===false) $AttDelim = '"';
 
-	$sz = $Loc->PosEnd - $Loc->PosBeg + 1;
-	$Txt = substr_replace($Txt,'',$Loc->PosBeg,$sz); // delete the current locator
+	$DelPos = $Loc->PosBeg;
+	$DelLen = $Loc->PosEnd - $Loc->PosBeg + 1;
+	$Txt = substr_replace($Txt,'',$DelPos,$DelLen); // delete the current locator
 	if ($Loc->AttForward) {
-		$Loc->AttTagBeg += -$sz;
-		$Loc->AttTagEnd += -$sz;
+		$Loc->AttTagBeg += -$DelLen;
+		$Loc->AttTagEnd += -$DelLen;
 	} elseif ($Loc->PosBeg<$Loc->AttTagEnd) {
-		$Loc->AttTagEnd += -$sz;
+		$Loc->AttTagEnd += -$DelLen;
 	}
 
 	$InsPos = false;
@@ -4300,8 +4333,8 @@ static function f_Xml_AttMove(&$Txt, &$Loc, $AttDelim=false) {
 		$Loc->AttBeg = $InsPos + 1;
 		$Loc->AttValBeg = $InsPos + strlen($Ins1) - 1;
 	} else {
-		if ($Loc->PosEnd<$Loc->AttBeg) $Loc->AttBeg += -$sz;
-		if ($Loc->PosEnd<$Loc->AttEnd) $Loc->AttEnd += -$sz;
+		if ($Loc->PosEnd<$Loc->AttBeg) $Loc->AttBeg += -$DelLen;
+		if ($Loc->PosEnd<$Loc->AttEnd) $Loc->AttEnd += -$DelLen;
 		if ($Loc->AttValBeg===false) {
 			$InsPos = $Loc->AttEnd+1;
 			$Ins1 = '='.$AttDelim;
@@ -4313,7 +4346,7 @@ static function f_Xml_AttMove(&$Txt, &$Loc, $AttDelim=false) {
 			$Ins2 = '';
 		} else {
 			// value already existing
-			if ($Loc->PosEnd<$Loc->AttValBeg) $Loc->AttValBeg += -$sz;
+			if ($Loc->PosEnd<$Loc->AttValBeg) $Loc->AttValBeg += -$DelLen;
 			$PosBeg = $Loc->AttValBeg;
 			$PosEnd = $Loc->AttEnd;
 			if ($Loc->AttDelimCnt>0) {$PosBeg++; $PosEnd--;}
@@ -4337,9 +4370,21 @@ static function f_Xml_AttMove(&$Txt, &$Loc, $AttDelim=false) {
 	$Loc->PosBeg = $PosBeg;
 	$Loc->PosEnd = $PosEnd;
 	$Loc->AttBegM = ($Txt[$Loc->AttBeg-1]===' ') ? $Loc->AttBeg-1 : $Loc->AttBeg; // for magnet=#
-	$Loc->AttInsLen = $InsLen; // for CacheField
 
-	return min($Loc->PrevPosEnd,$Loc->PosEnd); // New position to continue the search.
+	// for CacheField
+	$Loc->InsPos = $InsPos;
+	$Loc->InsLen = $InsLen;
+	$Loc->DelPos = $DelPos;
+	if ($Loc->InsPos < $Loc->DelPos)  $Loc->DelPos += $InsLen;
+	$Loc->DelLen = $DelLen;
+
+	if (isset($Loc->CacheLst) && is_array($Loc->CacheLst)) {
+		self::f_Loc_Moving($Loc, $Loc->CacheLst);
+		unset($Loc->CacheLst);
+		$Loc->CacheLst = false;
+	};
+	
+	return true;
 
 }
 
