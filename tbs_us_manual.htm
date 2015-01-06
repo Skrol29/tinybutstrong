@@ -192,7 +192,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2014-07-09</td>
+        <td>2014-12-06</td>
       </tr>
     </table>
   </div>
@@ -3001,7 +3001,7 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
   <div class="norm">
     <p class="versioning">Automatic subblock are supported since TBS version 3.5.0.</p>
     <p> You can use automatic subblocks when the data of the parent block has a column which contains the ready-to-merge subdata for the subblock.  
-      Set parameter <span class="opt-name">sub1</span>=<span class="opt-value">column</span> in the parent block to define the column which contain the data for the subblock. If you have several subblocks to merge in the same parent block then  use parameters <span class="opt-name">sub2</span>, <span class="opt-name">sub3</span>, ... The name of the subblock must be the same as the parent block followed by the suffix <span class="opt-name">_sub1</span>, (or <span class="opt-name">_sub2</span>, <span class="opt-name">_sub3</span>, ...)</p>
+      Set parameter <span class="opt-name">sub1</span>=<span class="opt-value">column</span> in the parent block to define the column which contain the data for the subblock. If you have several subblocks to merge in the same parent block then  use parameters <span class="opt-name">sub2</span>, <span class="opt-name">sub3</span>, ... The name of the subblock must be the same as the parent block followed by the suffix <span class="opt-name">_sub1</span>, (or <span class="opt-name">_sub2</span>, <span class="opt-name">_sub3</span>, ...).    </p>
     <p> The data of the parent block must have a column which contains the data of the subblock. Supported data types are:</p>
     <ul>
       <li> a PHP array</li>
@@ -3020,7 +3020,7 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
             </table></td>
         </tr>
       </table>
-      <p><span class="txt-small">Corresponding PHP code:</span><pre class="txt-code">
+      <p class="txt-small">Corresponding PHP code:<pre class="txt-code">
 <span class="opt-name">$data</span> = array(
   array('<span class="opt-value">name</span>'=&gt;'<span class="opt-value">Peter</span>', '<span class="opt-value">spokenlg</span>'=&gt;array( '<span class="opt-value">US</span>', '<span class="opt-value">FR</span>' ) ),
   array('<span class="opt-value">name</span>'=&gt;'<span class="opt-value">Paul</span>',  '<span class="opt-value">spokenlg</span>'=&gt;array( '<span class="opt-value">US</span>' ) ),
@@ -3105,7 +3105,8 @@ $data['group2'][] = array('id'=&gt;4, 'name'=&gt;'jim');</pre>
         </tr>
       </table>
     </div>
-  </div>
+    <h4>Several levels of automatic subblocks:</h4>
+    TBS supports several levels of automatic subblock. For example you cab have blocks &quot;<span class="opt-name">b</span>&quot;, '<span class="opt-name">b_sub1</span>&quot;,  '<span class="opt-name">b_sub1_sub1</span>&quot;,  '<span class="opt-name">b_sub1_sub1_sub1</span>&quot; and so on.</div>
   <h3><a name="html_block_dynsb" id="html_block_dynsb"></a>Subblocks with dynamic queries:</h3>
   <div class="norm">
     <h4>Principles of the dynamic queries:</h4>
