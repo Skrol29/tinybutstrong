@@ -18,6 +18,9 @@ if (!file_exists($Src)) exit("File '".$Src."' is not found.");
 
 $SrcTxt = file_get_contents($Src);
 
+// Standardisation of line breaks
+f_FormatLineBreaks($SrcTxt);
+
 // Check TBS version consistency
 f_CheckVersionConsistency($SrcTxt, 'TBS', array('prefix'=>'Version  : ','suffix'=>' for PHP ','info'=>'in the header'), array('prefix'=>'$Version = \'','suffix'=>'\'','info'=>'in the property' ) );
 echo "<br> \r\n";
@@ -67,7 +70,17 @@ $Ok = $Ok && f_Replace($Txt, "\n".'	var $', "\n".'	public $', 'Replace var decla
 $Ok = $Ok && f_Replace($Txt, "\n".'var $', "\n".'public $', 'Replace var declarations with public (2)');
 $Ok = $Ok && f_Replace($Txt, ' = &new ', ' = new ', ' &new replaced with new');
 $Ok = $Ok && f_Replace($Txt, ' for PHP 4', ' for PHP 5', 'version: for PHP 5');
-$Ok = $Ok && f_Replace($Txt, 'if (version_compare(PHP_VERSION,\'4.0.6\')<0) echo \'<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is \'.PHP_VERSION.\' while TinyButStrong needs PHP version 4.0.6 or higher.\';'."\n".'if (!is_callable(\'array_key_exists\')) {'."\n".'	function array_key_exists (&$key,&$array) {return key_exists($key,$array);}'."\n".'}'."\n".'if (!is_callable(\'property_exists\')) {'."\n".'	function property_exists(&$obj,$prop) {return true;}'."\n".'}', 'if (version_compare(PHP_VERSION,\'5.0\')<0) echo \'<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is \'.PHP_VERSION.\' while TinyButStrong needs PHP version 5.0 or higher. You should try with TinyButStrong Edition for PHP 4.\';', 'check PHP version');
+
+$x = 'if (version_compare(PHP_VERSION,\'4.0.6\')<0) echo \'<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is \'.PHP_VERSION.\' while TinyButStrong needs PHP version 4.0.6 or higher.\';
+if (!is_callable(\'array_key_exists\')) {
+	function array_key_exists (&$key,&$array) {return key_exists($key,$array);}
+}
+if (!is_callable(\'property_exists\')) {
+	function property_exists(&$obj,$prop) {return true;}
+}';
+f_FormatLineBreaks($x);
+$Ok = $Ok && f_Replace($Txt, $x, 'if (version_compare(PHP_VERSION,\'5.0\')<0) echo \'<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is \'.PHP_VERSION.\' while TinyButStrong needs PHP version 5.0 or higher. You should try with TinyButStrong Edition for PHP 4.\';', 'check PHP version');
+
 $Ok = $Ok && f_Replace($Txt, 'function clsTinyButStrong','function __construct','Rename constructor');
 $Ok = $Ok && f_Replace($Txt, '			if (strcasecmp($x,substr($Txt,$p,$xl))!=0) continue; // For PHP 4 only'."\n", '', 'Avoid special check for strrpos()');
 f_Update($Ok, $Dst5, $Txt);
@@ -141,4 +154,10 @@ function f_TextBetween($Txt, $str1, $str2) {
 	$p2 = strpos($Txt, $str2, $p1);
 	if ($p2===false) return false;
 	return substr($Txt, $p1, $p2-$p1 );
+}
+
+function f_FormatLineBreaks(&$txt) {
+	$txt = str_replace("\r\n", "\n", $txt);
+    $txt = str_replace("\n\r", "\n", $txt);
+    $txt = str_replace("\r", "\n", $txt);
 }
