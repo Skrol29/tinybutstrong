@@ -6,14 +6,24 @@ Beta 2014-09-20
 * Parameter "att" does not find the self-closing tag if there is no space before "/>". Example :<input/>
 * "Notice: Undefined property: clsTbsLocator::$AttName" can occurs if parameter "atttrue" is used for an attribute which is not already present in the target element.
 
+* Parameter "ope=upperw" works only with lower case characters.
+
 == New features ==
 
-* 
+* Define block with muliplier. Example: "block=3*tr" (totest)
+
 == Enhancements ==
 
-* 
+* Parameter "parallel=tbs:table" now supports <tbody>, <tfoot>, <colgroup> and <col>. <col> elements must be closed.
 
+* Support de GetOption('parallel_conf') (totest)
+* Support de GetOption('block_alias')   (totest)
 
+* Better management of fields moved in a set of other fields, when using parameter "att".
+  (internal property CacheLst).
+
+------------------------------------
+  
 TinyButStrong 3.9.0
 
 Skrol29, 2014-01-26

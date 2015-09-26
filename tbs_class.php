@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.9.1-beta-2015-01-06 for PHP 5
-Date     : 2015-01-06
+Version  : 3.9.1-beta-2015-09-26 for PHP 5
+Date     : 2015-09-26
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -536,7 +536,7 @@ public $Assigned = array();
 public $ExtendedMethods = array();
 public $ErrCount = 0;
 // Undocumented (can change at any version)
-public $Version = '3.9.1-beta-2015-01-06';
+public $Version = '3.9.1-beta-2015-09-26';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -658,7 +658,7 @@ function SetOption($o, $v=false, $d=false) {
 
 function GetOption($o) {
 	if ($o==='all') {
-		$x = explode(',', 'var_prefix,fct_prefix,noerr,auto_merge,onload,onshow,att_delim,protect,turbo_block,charset,chr_open,chr_close,tpl_frms,block_alias,include_path,render');
+		$x = explode(',', 'var_prefix,fct_prefix,noerr,auto_merge,onload,onshow,att_delim,protect,turbo_block,charset,chr_open,chr_close,tpl_frms,block_alias,parallel_conf,include_path,render');
 		$r = array();
 		foreach ($x as $o) $r[$o] = $this->GetOption($o);
 		return $r;
@@ -684,6 +684,8 @@ function GetOption($o) {
 	if ($o==='include_path') return $this->IncludePath;
 	if ($o==='render') return $this->Render;
 	if ($o==='methods_allowed') return $this->MethodsAllowed;
+	if ($o==='parallel_conf') return $GLOBALS['_TBS_ParallelLst'];
+	if ($o==='block_alias') return $GLOBALS['_TBS_BlockAlias'];
 	return $this->meth_Misc_Alert('with GetOption() method','option \''.$o.'\' is not supported.');;
 }
 
@@ -1374,7 +1376,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 			case 15: $CurrVal = ($Loc->OpeUtf8) ? mb_convert_case($CurrVal, MB_CASE_UPPER, 'UTF-8') : strtoupper($CurrVal); break;
 			case 16: $CurrVal = ($Loc->OpeUtf8) ? mb_convert_case($CurrVal, MB_CASE_LOWER, 'UTF-8') : strtolower($CurrVal); break;
 			case 17: $CurrVal = ucfirst($CurrVal); break;
-			case 18: $CurrVal = ($Loc->OpeUtf8) ? mb_convert_case($CurrVal, MB_CASE_TITLE, 'UTF-8') : ucwords($CurrVal); break;
+			case 18: $CurrVal = ($Loc->OpeUtf8) ? mb_convert_case($CurrVal, MB_CASE_TITLE, 'UTF-8') : ucwords(strtolower($CurrVal)); break;
 			}
 		}
 	}
@@ -1933,10 +1935,10 @@ function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $ConfId) {
 	if ( ($ConfId=='tbs:table')  && (!isset($_TBS_ParallelLst['tbs:table'])) ) {
 		$_TBS_ParallelLst['tbs:table'] = array(
 			'parent' => 'table',
-			'ignore' => array('!--', 'caption', 'thead', 'thbody', 'thfoot'),
+			'ignore' => array('!--', 'caption', 'thead', 'tbody', 'tfoot'),
 			'cols' => array(),
-			'rows' => array('tr'),
-			'cells' => array('td'=>'colspan', 'th'=>'colspan'),
+			'rows' => array('tr', 'colgroup'),
+			'cells' => array('td'=>'colspan', 'th'=>'colspan', 'col'=>'span'),
 		);
 	}
 
@@ -4072,7 +4074,8 @@ static function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagStr,$RetInnerSrc) {
 			$t = substr($TagStr,0,$p);
 			$TagStr = substr($TagStr,$p+1);
 		}
- 		do { // Check parentheses, relative position and single tag
+		// Check parentheses, relative position and single tag
+ 		do {
  			$t = trim($t);
 	 		$e = strlen($t) - 1; // pos of last char
 	 		if (($e>1) && ($t[0]==='(') && ($t[$e]===')')) {
@@ -4084,6 +4087,15 @@ static function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagStr,$RetInnerSrc) {
 	 			$e = false;
 	 		}
  		} while ($e!==false);
+		// Check for multiples
+		$p = strpos($t, '*');
+		if ($p!==false) {
+			$n = intval(substr($t, 0, $p));
+			$t = substr($t, $p + 1);
+			$n = max($n ,1); // prevent for error: minimum valu is 1
+			$TagStr = str_repeat($t . '+', $n-1) . $TagStr;
+		}
+		// Alias
 		if (isset($AliasLst[$t])) {
 			$a = $AliasLst[$t];
 			if (is_string($a)) {

@@ -1941,10 +1941,10 @@ function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $ConfId) {
 	if ( ($ConfId=='tbs:table')  && (!isset($_TBS_ParallelLst['tbs:table'])) ) {
 		$_TBS_ParallelLst['tbs:table'] = array(
 			'parent' => 'table',
-			'ignore' => array('!--', 'caption', 'thead', 'thbody', 'thfoot'),
+			'ignore' => array('!--', 'caption', 'thead', 'tbody', 'tfoot'),
 			'cols' => array(),
-			'rows' => array('tr'),
-			'cells' => array('td'=>'colspan', 'th'=>'colspan'),
+			'rows' => array('tr', 'colgroup'),
+			'cells' => array('td'=>'colspan', 'th'=>'colspan', 'col'=>'span'),
 		);
 	}
 
