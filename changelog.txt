@@ -14,7 +14,7 @@ Beta 2014-09-20
 
 == Enhancements ==
 
-* Parameter "parallel=tbs:table" now supports <tbody>, <tfoot>, <colgroup> and <col>. <col> elements must be closed.
+* Parameter "parallel=tbs:table" now supports <tbody>, <tfoot>, <colgroup> and <col>. <col> tags must be closed even if HTML allox unclosed tags.
 
 * Support de GetOption('parallel_conf') (totest)
 * Support de GetOption('block_alias')   (totest)

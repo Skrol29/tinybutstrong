@@ -2345,7 +2345,7 @@ function meth_Merge_BlockSections(&$Txt,&$LocR,&$Src,&$RecSpe) {
 		$piOMG = false;
 		if ($LocR->FooterFound) $Src->PrevRec = (object) null;
 	}
-  // Plug-ins
+	// Plug-ins
 	$piOMS = false;
 	if ($this->_PlugIns_Ok) {
 		if (isset($this->_piBeforeMergeBlock)) {
