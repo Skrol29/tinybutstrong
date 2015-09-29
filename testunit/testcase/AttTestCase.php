@@ -125,8 +125,9 @@ class AttTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeBlockStrings('<div>[b.val;att=+span#width]<span>[b.id;block=div]/[b.id]/[b.id]</span></div>',           array('b'=>$data), '<div><span width="1">x/x/x</span></div><div><span width="2">y/y/y</span></div><div><span width="3">z/z/z</span></div>', "test blocks CacheField - forward + attribute not yet exists");
 		$this->assertEqualMergeBlockStrings('<div>[b.val;att=+span#width]<span width="0">[b.id;block=div]/[b.id]/[b.id]</span></div>', array('b'=>$data), '<div><span width="1">x/x/x</span></div><div><span width="2">y/y/y</span></div><div><span width="3">z/z/z</span></div>', "test blocks CacheField - forward + attribute already exists");
 		
-		if ( $this->atLeastTBSVersion('3.9.1-beta') ) {
+		if ( $this->atLeastTBSVersion('3.10.0-beta') ) {
 		
+			// Paramater att can make a TBS field moving foward another of the same block
 			$this->assertEqualMergeBlockStrings('<div>[b.val;att=+span#width][b.id;block=div]/<span>[b.id]/[b.id]</span></div>',           array('b'=>$data), '<div>x/<span width="1">x/x</span></div><div>y/<span width="2">y/y</span></div><div>z/<span width="3">z/z</span></div>', "test blocks CacheField - forward + attribute not yet exists + jump 1 field");
 			//$this->dumpLastSource();
 			$this->assertEqualMergeBlockStrings('<div>[b.val;att=+span#width][b.id;block=div]/<span width="0">[b.id]/[b.id]</span></div>', array('b'=>$data), '<div>x/<span width="1">x/x</span></div><div>y/<span width="2">y/y</span></div><div>z/<span width="3">z/z</span></div>', "test blocks CacheField - forward + attribute already exists + jump 1 field");

@@ -1,4 +1,4 @@
-= Release 3.9.1 =
+= Release 3.10.0 =
 Beta 2014-09-20
 
 == Bug fixes ==
@@ -8,9 +8,15 @@ Beta 2014-09-20
 
 * Parameter "ope=upperw" works only with lower case characters.
 
+* Error message "Notice: Undefined property: clsTbsLocator::$AttName in tbs_class.php on line 1492".
+
 == New features ==
 
-* Define block with muliplier. Example: "block=3*tr" (totest)
+* Define block with multiplier. Example: "block=3*tr"
+
+* Define block with "block=(.)" or "block=." : represents the TBS field.
+
+* Define block with "!" maked the bounds of the tag to be excluded.
 
 == Enhancements ==
 

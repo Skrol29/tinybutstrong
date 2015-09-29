@@ -105,6 +105,56 @@ class BlockTestCase extends TBSUnitTestCase {
 		// double block selection should display a TBS error
 		// $this->assertErrorMergeBlockString("<p><b>[C.#;block=b][C.#;block=p]</b></p>", $value, "double block selection bug");
 	}
+	
+	function testNoBoundSyntax() {
+	
+		$blocks = array(
+			'a' => array(
+				array('title' => "AAA", 'id'=>21),
+				array('title' => "BBB", 'id'=>22),
+				array('title' => "CCC", 'id'=>23),
+			),
+		);
+
+		if ( $this->atLeastTBSVersion('3.10.0-beta') ) {
+			
+			// With NotBounds
+			$this->assertEqualMergeBlockStrings("<p><b>[a.title;block=!b]</b></p>", $blocks, "<p><b>AAABBBCCC</b></p>", "test block=!b");
+			$this->assertEqualMergeBlockStrings("<p><b>[a.title;block=(!b)]</b></p>", $blocks, "<p><b>AAABBBCCC</b></p>", "test block=(!b)");
+			$this->assertEqualMergeBlockStrings("<p><b><b>[a.title;block=((!b))]</b></b></p>", $blocks, "<p><b><b>AAA</b><b>BBB</b><b>CCC</b></b></p>", "test block=((!b))");
+			$this->assertEqualMergeBlockStrings("<p><b>[a.title;block=b+!c]</b>-<c>ok</c></p>", $blocks, "<p><b>AAA</b>-<b>BBB</b>-<b>CCC</b>-<c>ok</c></p>", "test block=b+!c");
+			$this->assertEqualMergeBlockStrings("<p><c>ok</c>-<b>[a.title;block=!c+(b)]</b></p>", $blocks, "<p><c>ok</c>-<b>AAA</b>-<b>BBB</b>-<b>CCC</b></p>", "test block=!c+(b)");
+			$this->assertEqualMergeBlockStrings("<p><c>ok</c>-[a.title;block=!c+(.)+!b]:<b>here</b></p>", $blocks, "<p><c>ok</c>-AAA:-BBB:-CCC:<b>here</b></p>", "test block=!c+(b)");
+			
+			// With dot
+			$this->assertEqualMergeBlockStrings("<p><b>[a.title;block=.]</b></p>", $blocks, "<p><b>AAABBBCCC</b></p>", "test block=.");
+			$this->assertEqualMergeBlockStrings("<p><b>[a.title;block=(.)]</b></p>", $blocks, "<p><b>AAABBBCCC</b></p>", "test block=(.)");
+			$this->assertEqualMergeBlockStrings("<p><b>[a.title;block=(.)+c]-<c>ok</c></b></p>", $blocks, "<p><b>AAA-<c>ok</c>BBB-<c>ok</c>CCC-<c>ok</c></b></p>", "test block=(.)+c");
+			$this->assertEqualMergeBlockStrings("<p><b><c>ok</c>-[a.title;block=c+(.)]</b></p>", $blocks, "<p><b><c>ok</c>-AAA<c>ok</c>-BBB<c>ok</c>-CCC</b></p>", "test block=c+(.)");
+			$this->assertEqualMergeBlockStrings("<p><b><c>ok</c>-[a.title;block=c+.]</b></p>"  , $blocks, "<p><b><c>ok</c>-AAA<c>ok</c>-BBB<c>ok</c>-CCC</b></p>", "test block=c+.");
+
+			
+		}
+		
+	}
+
+	function testMultiplierSyntax() {
+	
+		$blocks = array(
+			'a' => array(
+				array('title' => "AAA", 'id'=>21),
+				array('title' => "BBB", 'id'=>22),
+				array('title' => "CCC", 'id'=>23),
+			),
+		);
+
+		if ( $this->atLeastTBSVersion('3.10.0-beta') ) {
+			
+			$this->assertEqualMergeBlockStrings("<p><b>[a.title;block=2*b]</b><b>more</b></p>", $blocks, "<p><b>AAA</b><b>more</b><b>BBB</b><b>more</b><b>CCC</b><b>more</b></p>", "test block=2*b");
+			
+		}
+		
+	}	
+	
 }
 
-?>

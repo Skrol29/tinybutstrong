@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.9.1-beta-2015-09-26 for PHP 5
-Date     : 2015-09-26
+Version  : 3.10.0-beta-2015-10-01 for PHP 5
+Date     : 2015-10-01
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -536,7 +536,7 @@ public $Assigned = array();
 public $ExtendedMethods = array();
 public $ErrCount = 0;
 // Undocumented (can change at any version)
-public $Version = '3.9.1-beta-2015-09-26';
+public $Version = '3.10.0-beta-2015-10-01';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -2339,7 +2339,7 @@ function meth_Merge_BlockSections(&$Txt,&$LocR,&$Src,&$RecSpe) {
 		$piOMG = false;
 		if ($LocR->FooterFound) $Src->PrevRec = (object) null;
 	}
-  // Plug-ins
+	// Plug-ins
 	$piOMS = false;
 	if ($this->_PlugIns_Ok) {
 		if (isset($this->_piBeforeMergeBlock)) {
@@ -4064,6 +4064,7 @@ static function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagStr,$RetInnerSrc) {
 	$i = 0;
 	$TagFct = array();
 	$TagLst = array();
+	$TagBnd = array();
 	while ($TagStr!=='') {
 		// get next tag
 		$p = strpos($TagStr, '+');
@@ -4095,20 +4096,28 @@ static function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagStr,$RetInnerSrc) {
 			$n = max($n ,1); // prevent for error: minimum valu is 1
 			$TagStr = str_repeat($t . '+', $n-1) . $TagStr;
 		}
+		// Reference
+		if (($t==='.') && ($Ref===0)) $Ref = $i;
+		// Take of the (!) prefix
+		$b = '';
+		if (($t!=='') && ($t[0]==='!')) {
+			$t = substr($t, 1);
+			$b = '!';
+		}
 		// Alias
+		$a = false;
 		if (isset($AliasLst[$t])) {
-			$a = $AliasLst[$t];
+			$a = $AliasLst[$t]; // a string or a function
 			if (is_string($a)) {
 				if ($i>999) return false; // prevent from circular alias
-				$TagStr = ($TagStr==='') ? $a : $a.'+'.$TagStr;
-			} else {
-				$TagLst[$i] = $t;
-				$TagFct[$i] = $a;
-				$i++;
+				$TagStr = $b . $a . (($TagStr==='') ? '' : '+') . $TagStr;
+				$t = false;
 			}
-		} else {
-			$TagLst[$i] = $t;
-			$TagFct[$i] = false;
+		}
+		if ($t!==false) {
+			$TagLst[$i] = $t; // with prefix ! if specified
+			$TagFct[$i] = $a;
+			$TagBnd[$i] = ($b==='');
 			$i++;
 		}
 	}
@@ -4119,18 +4128,30 @@ static function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagStr,$RetInnerSrc) {
 	if ($LevelStop===0) $LevelStop = 1;
 
 	// First tag of reference
-	$TagO = self::f_Loc_Enlarge_Find($Txt,$TagLst[$Ref],$TagFct[$Ref],$Loc->PosBeg-1,false,$LevelStop);
-	if ($TagO===false) return false;
-	$PosBeg = $TagO->PosBeg;
-	$LevelStop += -$TagO->RightLevel; // RightLevel=1 only if the tag is single and embeds $Loc, otherwise it is 0 
-	if ($LevelStop>0) {
-		$TagC = self::f_Loc_Enlarge_Find($Txt,$TagLst[$Ref],$TagFct[$Ref],$Loc->PosEnd+1,true,-$LevelStop);
-		if ($TagC==false) return false;
-		$PosEnd = $TagC->PosEnd;
-		$InnerLim = $TagC->PosBeg;
+	if ($TagLst[$Ref] === '.') {
+		$TagO = new clsTbsLocator;
+		$TagO->PosBeg = $Loc->PosBeg;
+		$TagO->PosEnd = $Loc->PosEnd;
+		$PosBeg = $Loc->PosBeg;
+		$PosEnd = $Loc->PosEnd;
 	} else {
-		$PosEnd = $TagO->PosEnd;
-		$InnerLim = $PosEnd + 1;
+		$TagO = self::f_Loc_Enlarge_Find($Txt,$TagLst[$Ref],$TagFct[$Ref],$Loc->PosBeg-1,false,$LevelStop);
+		if ($TagO===false) return false;
+		$PosBeg = $TagO->PosBeg;
+		$LevelStop += -$TagO->RightLevel; // RightLevel=1 only if the tag is single and embeds $Loc, otherwise it is 0 
+		if ($LevelStop>0) {
+			$TagC = self::f_Loc_Enlarge_Find($Txt,$TagLst[$Ref],$TagFct[$Ref],$Loc->PosEnd+1,true,-$LevelStop);
+			if ($TagC==false) return false;
+			$PosEnd = $TagC->PosEnd;
+			$InnerLim = $TagC->PosBeg;
+			if ((!$TagBnd[$Ref]) && ($TagMax==0)) {
+				$PosBeg = $TagO->PosEnd + 1;
+				$PosEnd = $TagC->PosBeg - 1;
+			}
+		} else {
+			$PosEnd = $TagO->PosEnd;
+			$InnerLim = $PosEnd + 1;
+		}
 	}
 
 	$RetVal = true;
@@ -4145,8 +4166,11 @@ static function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagStr,$RetInnerSrc) {
 	for ($i=$Ref+1;$i<=$TagMax;$i++) {
 		$x = $TagLst[$i];
 		if (($x!=='') && ($TagC!==false)) {
-			$TagC = self::f_Loc_Enlarge_Find($Txt,$x,$TagFct[$i],$PosEnd+1,true,0);
-			if ($TagC!==false) $PosEnd = $TagC->PosEnd;
+			$level = ($TagBnd[$i]) ? 0 : 1;
+			$TagC = self::f_Loc_Enlarge_Find($Txt,$x,$TagFct[$i],$PosEnd+1,true,$level);
+			if ($TagC!==false) {
+				$PosEnd = ($TagBnd[$i]) ? $TagC->PosEnd : $TagC->PosBeg -1 ;
+			}
 		}
 	}
 
@@ -4155,8 +4179,11 @@ static function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagStr,$RetInnerSrc) {
 	for ($i=$Ref-1;$i>=0;$i--) {
 		$x = $TagLst[$i];
 		if (($x!=='') && ($TagO!==false)) {
-			$TagO = self::f_Loc_Enlarge_Find($Txt,$x,$TagFct[$i],$PosBeg-1,false,0);
-			if ($TagO!==false) $PosBeg = $TagO->PosBeg;
+			$level = ($TagBnd[$i]) ? 0 : -1;
+			$TagO = self::f_Loc_Enlarge_Find($Txt,$x,$TagFct[$i],$PosBeg-1,false,$level);
+			if ($TagO!==false) {
+				$PosBeg = ($TagBnd[$i]) ? $TagO->PosBeg : $TagO->PosEnd + 1;
+			}
 		}
 	}
 
@@ -4511,13 +4538,14 @@ static function f_Xml_GetPart(&$Txt, $TagLst, $AllIfNothing=false) {
 
 }
 
+/**
+ * Find the start of an XML tag. Used by OpenTBS.
+ * $Case=false can be useful for HTML.
+ * $Tag='' should work and found the start of the first tag.
+ * $Tag='/' should work and found the start of the first closing tag.
+ * Encapsulation levels are not featured yet.
+ */
 static function f_Xml_FindTagStart(&$Txt,$Tag,$Opening,$PosBeg,$Forward,$Case=true) {
-/* Find the start of an XML tag.
-$Case=false can be useful for HTML.
-$Tag='' should work and found the start of the first tag.
-$Tag='/' should work and found the start of the first closing tag.
-Encapsulation levels are not featured yet.
-*/
 
 	if ($Txt==='') return false;
 
@@ -4545,13 +4573,14 @@ Encapsulation levels are not featured yet.
 
 }
 
+/**
+ * This function is a smart solution to find an XML tag.
+ * It allows to ignore full opening/closing couple of tags that could be inserted before the searched tag.
+ * It allows also to pass a number of encapsulations.
+ * To ignore encapsulation and opengin/closing just set $LevelStop=false.
+ * $Opening is used only when $LevelStop=false.
+ */
 static function f_Xml_FindTag(&$Txt,$Tag,$Opening,$PosBeg,$Forward,$LevelStop,$WithPrm,$WithPos=false) {
-/* This function is a smart solution to find an XML tag.
-It allows to ignore full opening/closing couple of tags that could be inserted before the searched tag.
-It allows also to pass a number of encapsulations.
-To ignore encapsulation and opengin/closing just set $LevelStop=false.
-$Opening is used only when $LevelStop=false.
-*/
 
 	if ($Tag==='_') { // New line
 		$p = self::f_Xml_FindNewLine($Txt,$PosBeg,$Forward,($LevelStop!==0));
@@ -4589,10 +4618,12 @@ $Opening is used only when $LevelStop=false.
 
 			// Check the name of the tag
 			if (strcasecmp(substr($Txt,$Pos+1,$TagL),$Tag)==0) {
+				// It's an opening tag
 				$PosX = $Pos + 1 + $TagL; // The next char
 				$TagOk = true;
 				$TagIsOpening = true;
 			} elseif (strcasecmp(substr($Txt,$Pos+1,$TagClosingL),$TagClosing)==0) {
+				// It's a closing tag
 				$PosX = $Pos + 1 + $TagClosingL; // The next char
 				$TagOk = true;
 				$TagIsOpening = false;
