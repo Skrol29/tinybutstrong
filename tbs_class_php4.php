@@ -3,8 +3,8 @@
 ********************************************************
 TinyButStrong - Template Engine for Pro and Beginners
 ------------------------
-Version  : 3.10.0-beta-2015-10-01 for PHP 5
-Date     : 2015-10-01
+Version  : 3.10.0-beta-2015-11-07 for PHP 5
+Date     : 2015-11-07
 Web site : http://www.tinybutstrong.com
 Author   : http://www.tinybutstrong.com/onlyyou.html
 ********************************************************
@@ -542,7 +542,7 @@ var $Assigned = array();
 var $ExtendedMethods = array();
 var $ErrCount = 0;
 // Undocumented (can change at any version)
-var $Version = '3.10.0-beta-2015-10-01';
+var $Version = '3.10.0-beta-2015-11-07';
 var $Charset = '';
 var $TurboBlock = true;
 var $VarPrefix = '';
@@ -601,10 +601,11 @@ function clsTinyButStrong($Options=null,$VarPrefix='',$FctPrefix='') {
 	if (is_array($Options)) $this->SetOption($Options);
 
 	// Links to global variables (cannot be converted to static yet because of compatibility)
-	global $_TBS_FormatLst, $_TBS_UserFctLst, $_TBS_BlockAlias, $_TBS_AutoInstallPlugIns;
-	if (!isset($_TBS_FormatLst))  $_TBS_FormatLst  = array();
-	if (!isset($_TBS_UserFctLst)) $_TBS_UserFctLst = array();
-	if (!isset($_TBS_BlockAlias)) $_TBS_BlockAlias = array();
+	global $_TBS_FormatLst, $_TBS_UserFctLst, $_TBS_BlockAlias, $_TBS_AutoInstallPlugIns, $_TBS_ParallelLst;
+	if (!isset($_TBS_FormatLst))   $_TBS_FormatLst  = array();
+	if (!isset($_TBS_UserFctLst))  $_TBS_UserFctLst = array();
+	if (!isset($_TBS_BlockAlias))  $_TBS_BlockAlias = array();
+	if (!isset($_TBS_ParallelLst)) $_TBS_ParallelLst = array();
 	$this->_UserFctLst = &$_TBS_UserFctLst;
 
 	// Auto-installing plug-ins
@@ -1951,9 +1952,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $ConfId) {
 
 	// Define configurations
-	global $_TBS_ParallelLst, $_TBS_BlockAlias;
-
-	if (!isset($_TBS_ParallelLst)) $_TBS_ParallelLst = array();
+	global $_TBS_ParallelLst;
 
 	if ( ($ConfId=='tbs:table')  && (!isset($_TBS_ParallelLst['tbs:table'])) ) {
 		$_TBS_ParallelLst['tbs:table'] = array(

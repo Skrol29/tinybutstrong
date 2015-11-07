@@ -18,6 +18,8 @@ Beta 2015-10-01
 
 * Define block with "!" maked the bounds of the tag to be excluded.
 
+* New arguments $LocLst and $Pos for the event OnCacheField. It enables a plug-in to move, add or delete TBS fields.
+
 == Enhancements ==
 
 * Parameter "parallel=tbs:table" now supports <tbody>, <tfoot>, <colgroup> and <col>. <col> tags must be closed even if HTML allox unclosed tags.
@@ -26,7 +28,6 @@ Beta 2015-10-01
 * Support de GetOption('block_alias')   (totest)
 
 * Better management of fields moved in a set of other fields, when using parameter "att".
-  (internal property CacheLst).
 
 ------------------------------------
   
