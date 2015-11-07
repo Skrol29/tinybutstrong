@@ -22,7 +22,7 @@ $SrcTxt = file_get_contents($Src);
 f_FormatLineBreaks($SrcTxt);
 
 // Check TBS version consistency
-f_CheckVersionConsistency($SrcTxt, 'TBS', array('prefix'=>'Version  : ','suffix'=>' for PHP ','info'=>'in the header'), array('prefix'=>'$Version = \'','suffix'=>'\'','info'=>'in the property' ) );
+f_CheckVersionConsistency($SrcTxt, 'TBS', array('prefix'=>' * @version ','suffix'=>' for PHP ','info'=>'in the header'), array('prefix'=>'$Version = \'','suffix'=>'\'','info'=>'in the property' ) );
 echo "<br> \r\n";
 	
 if (substr_count($Src, '_dev.php')>0) {

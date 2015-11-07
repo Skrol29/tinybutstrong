@@ -1,17 +1,19 @@
 <?php
-/*
-********************************************************
-TinyButStrong - Template Engine for Pro and Beginners
-------------------------
-Version  : 3.10.0-beta-2015-11-07 for PHP 5
-Date     : 2015-11-07
-Web site : http://www.tinybutstrong.com
-Author   : http://www.tinybutstrong.com/onlyyou.html
-********************************************************
-This library is free software.
-You can redistribute and modify it even for commercial usage,
-but you must accept and respect the LPGL License version 3.
-*/
+/**
+ *
+ * TinyButStrong - Template Engine for Pro and Beginners
+ *
+ * @version 3.10.0-beta-2015-11-07 for PHP 5
+ * @date    2015-11-07
+ * @link    http://www.tinybutstrong.com Web site
+ * @author  http://www.tinybutstrong.com/onlyyou.html
+ * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
+ *
+ * This library is free software.
+ * You can redistribute and modify it even for commercial usage,
+ * but you must accept and respect the LPGL License version 3.
+ */
+
 // Check PHP version
 if (version_compare(PHP_VERSION,'5.0')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 5.0 or higher. You should try with TinyButStrong Edition for PHP 4.';
 
