@@ -16,7 +16,7 @@ Beta 2015-10-01
 
 * Define block with "block=(.)" or "block=." : represents the TBS field.
 
-* Define block with "!" maked the bounds of the tag to be excluded.
+* Define block operator "!" on first or last tag in order to exlcude them.
 
 * New arguments $LocLst and $Pos for the event OnCacheField. It enables a plug-in to move, add or delete TBS fields.
 
@@ -24,8 +24,8 @@ Beta 2015-10-01
 
 * Parameter "parallel=tbs:table" now supports <tbody>, <tfoot>, <colgroup> and <col>. <col> tags must be closed even if HTML allox unclosed tags.
 
-* Support de GetOption('parallel_conf') (totest)
-* Support de GetOption('block_alias')   (totest)
+* Support de GetOption('parallel_conf')
+* Support de GetOption('block_alias')
 
 * Better management of fields moved in a set of other fields, when using parameter "att".
 
