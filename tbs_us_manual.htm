@@ -1610,9 +1610,11 @@ which is the same as:
             [<span class="opt-name">onshow.x</span>;<span class="opt-name">att</span>=<span class="opt-value">+div#class</span>] moves into attribute '<span class="opt-value">class</span>' of the first <span class="opt-html">&lt;div&gt;</span> placed after.<br>
             [<span class="opt-name">onshow.x</span>;<span class="opt-name">att</span>=<span class="opt-value">((div))#class</span>] moves into attribute '<span class="opt-value">class</span>' of the second embedding <span class="opt-html">&lt;div&gt;</span> placed before.<br>
             [<span class="opt-name">onshow.x</span>;<span class="opt-name">att</span>=<span class="opt-value">table+div#class</span>] moves into attribute '<span class="opt-value">class</span>' of the first <span class="opt-html">&lt;div&gt;</span> after the first <span class="opt-html">&lt;table&gt;</span> placed before.</div>
-          <p>Notes:<br>
-            - Method  MergeBlock() cannot   move a TBS field  over another TBS field placed after it. This makes a TBS error to occur.<br>
-          - When the attribute has no value before the field is moved, then TBS chooses what string delimiter  to use regarding other attributes (XML/HTML accepts both (&quot;) and (')). You can force the delimiter  you need using option <a href="#php_setoption_att_delim" class="opt-name">att_delim</a>.</p>
+          <p>Notes:</p>
+          <ul>
+            <li><span class="versioning">Before  TBS version  to 3.10.0</span>, method  MergeBlock() could not  move a TBS field  over another TBS field placed after it. This makes a TBS error to occur.</li>
+            <li> When the attribute has no value before the field is moved, then TBS chooses what string delimiter  to use regarding other attributes (XML/HTML accepts both (&quot;) and (')). You can force the delimiter  you need using option <a href="#php_setoption_att_delim" class="opt-name">att_delim</a>.</li>
+          </ul>
           <p class="versioning">Versioning: Parameter <span class="opt-name">att</span> is supported since TBS version 3.5.0</p></td>
       </tr>
       <tr>

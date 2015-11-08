@@ -18,11 +18,12 @@ Skrol29, 2015-11-08
 
 * Parameter "parallel=tbs:table" now supports <tbody>, <tfoot>, <colgroup> and <col>. The <col> tags must be closed even if HTML actually allows unclosed tags.
 
-* Support de GetOption('parallel_conf')
-
-* Support de GetOption('block_alias')
-
 * Better management of fields moved in a set of other fields, when using parameter "att".
+  Paramater att can make a TBS field moving foward another of the same block.
+
+* Support GetOption('parallel_conf').
+
+* Support GetOption('block_alias').
 
 == Bug fixes ==
 
