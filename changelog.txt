@@ -6,9 +6,9 @@ Skrol29, 2015-11-08
 
 * New operator "*" for block definition syntax. Example: "block=3*tr".
 
-* New operator "!" for block definition syntax. Use it on first or last tag in order to exlcude the tag from the block bound. Example: "block=!div".
+* New operator "!" for block definition syntax. Use it on first or last tag in order to exclude the tag from the block bound. Example: "block=!div".
 
-* New marker "." for block defintion. Use it to represents the bound of the TBS field itself. Example: "block=(.)".
+* New marker "." for block definition. Use it to represents the bound of the TBS field itself. Example: "block=(.)".
 
 * New arguments $LocLst and $Pos for the event OnCacheField. It enables a plug-in to move, add or delete TBS fields.
 
@@ -19,8 +19,8 @@ Skrol29, 2015-11-08
 * Parameter "parallel=tbs:table" now supports <tbody>, <tfoot>, <colgroup> and <col>. The <col> tags must be closed even if HTML actually allows unclosed tags.
 
 * Better management of fields moved in a set of other fields, when using parameter "att".
-  Paramater att can make a TBS field moving foward another of the same block.
-
+  Parameter "att" can make a TBS field moving forward another of the same block.
+  
 * Support GetOption('parallel_conf').
 
 * Support GetOption('block_alias').
