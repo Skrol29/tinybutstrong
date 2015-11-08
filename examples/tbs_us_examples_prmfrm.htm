@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong - Example of parameter frm</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.note1 {
+	font-style: italic;
+	color: #996600;
+}
+.format1 {
+	color: #F00;
+}
+.table-example {
+	margin-left:auto;
+	margin-right:auto;
+	width:500px;
+	border:none;
+	border-width:0;
+	border-spacing:0;
+}
+.table-example td, th {
+	padding:3px;
+	text-align:left;
+}
+</style>
+</head>
+<body>
+<h1>Example of parameter <span class="text-prm">frm</span></h1>
+<div id="main-body">
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+    <p>The<span class="text-prm"> frm</span> parameter enables you to display a date-time value or numeric value using a format string.</p>
+    <h2>Date formats</h2>
+    <p>Using the current date time</p>
+    <table class="table-example">
+      <tr class="back-special2 title-section2">
+        <th style="width:50%">Format</th>
+        <th>Display</th>
+      </tr>
+      <tr class="back-special2">
+        <td>yyyy-mm-dd</td>
+        <td>[onshow..now;frm='yyyy-mm-dd']</td>
+      </tr>
+      <tr class="back-special2">
+        <td>dd/mm/yyyy</td>
+        <td>[onshow..now;frm='dd/mm/yyyy']</td>
+      </tr>
+      <tr class="back-special2">
+        <td>hh:nn:ss</td>
+        <td>[onshow..now;frm='hh:nn:ss']</td>
+      </tr>
+      <tr class="back-special2">
+        <td>dddd dd mmmm</td>
+        <td>[onshow..now;frm='dddd dd mmmm']</td>
+      </tr>
+      <tr class="back-special2">
+        <td>ddd dd mmm</td>
+        <td>[onshow..now;frm='ddd dd mmm']</td>
+      </tr>
+      <tr class="back-special2">
+        <td>mm-dd-yyyy hh:nn</td>
+        <td>[onshow..now;frm='mm-dd-yyyy hh:nn']</td>
+      </tr>
+    </table>
+    <h2>Numeric formats</h2>
+    <p>Using the Php variable $amount = 1023.2568</p>
+    <table class="table-example">
+      <tr class="back-special2 title-section2">
+        <th style="width:50%">Format</th>
+        <th>Display</th>
+      </tr>
+      <tr class="back-special2">
+        <td>$ 0,000.00</td>
+        <td>[onshow.amount;frm='$ 0,000.00']</td>
+      </tr>
+      <tr class="back-special2">
+        <td>$ 0,000. <span class="note1">(1)</span></td>
+        <td>[onshow.amount;frm='$ 0,000.']</td>
+      </tr>
+      <tr class="text-mini">
+        <td colspan="2" class="note1">(1) The dot (.) at the bottom means there is no decimal.</td>
+      </tr>
+    </table>
+    <p>Using the Php variable $rate = 0.751897</p>
+    <table class="table-example">
+      <tr class="back-special2">
+        <td style="width:50%">0.000 %</td>
+        <td>[onshow.rate;frm='0.000 %']</td>
+      </tr>
+    </table>
+    <h2>Conditional formats</h2>
+    <p>Using the Php variable $amount2 = -255.4893</p>
+    <table class="table-example">
+      <tr class="back-special2 title-section2">
+        <th style="width:50%">Format</th>
+        <th>Display</th>
+      </tr>
+      <tr class="back-special2">
+        <td>+0,000.00|<span class="format1">-0,000.00</span>|0|-</td>
+        <td>[onshow.amount2;frm='+0,000.00|<span class="format1">-0,000.00</span>|0|-']</td>
+      </tr>
+    </table>
+    <h2>Reusable formats</h2>
+    <p>Formats curr1 and rate1 are defined using parameter 'tplfrms'. [onload;tplfrms;curr1='$ 0,000.00';rate1='0.000 %']</p>
+    <table class="table-example">
+      <tr class="back-special2 title-section2">
+        <th style="width:50%">Format</th>
+        <th>Display</th>
+      </tr>
+      <tr class="back-special2">
+        <td>curr1=$ 0,000.00<br /></td>
+        <td>[onshow.amount;frm=curr1]</td>
+      </tr>
+      <tr class="back-special2">
+        <td>rate1=0.000 %<br /></td>
+        <td>[onshow.rate;frm=rate1]</td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

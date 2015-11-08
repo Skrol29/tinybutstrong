@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong - Example of parameter serial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.style0 {
+	background-color:#E4F1E4;
+}
+.style1 {
+	background-color:#C5C5E2;
+}
+.style2 {
+	background-color:#A9E2C6;
+}
+.style3 {
+	background-color:#FFD5AA;
+}
+.row0 {
+	background-color:#CACACA;
+}
+.table0 {
+	background-color:#F0F0F0;
+}
+</style>
+</head>
+<body>
+<h1>Example of parameter <span class="text-prm">serial</span></h1>
+<div id="main-body">
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+    <p>Parameter <span class="text-prm">serial</span> enables you to display several records in a main block. For that, you must use sub-blocks.</p>
+    <p> Example of parameter <span class="text-prm">serial</span> used for a multi-columns display: </p>
+    <table border="1" cellpadding="2" cellspacing="0" class="table0" style="margin-left:auto; margin-right:auto;">
+      <tr class="row0">
+        <th colspan="4" align="center"> Position / Title</th>
+      </tr>
+      <tr>
+        <td>&gt;</td>
+        <td align="center"><strong>[bx_1.rank]</strong><br />
+          <span class="text-mini">[bx_1.title;block=td]</span><br /></td>
+        <td align="center"><strong>[bx_2.rank]</strong> <br />
+          <span class="text-mini">[bx_2.title;block=td;.]</span><br /></td>
+        <td align="center"><strong>[bx_3.rank]</strong><br />
+          <span class="text-mini">[bx_3.title;block=td;.]</span><br />
+          [bx;block=tr;serial]</td>
+      </tr>
+      <tr>
+        <td valign="middle">&nbsp;</td>
+        <td colspan="2" valign="middle" class="text-mini">This line is optional, it enables you to<br />
+          define the empty cell.</td>
+        <td align="center" valign="middle" class="style0"><span class="text-mini">[bx_0;block=td]</span> <br />
+          [bx;block=tr;serial]</td>
+      </tr>
+    </table>
+    <p> Example of parameter <span class="text-prm">serial</span> used for a complex display:</p>
+    <table border="1" cellpadding="2" cellspacing="0" class="table0"  style="margin-left:auto; margin-right:auto;">
+      <tr class="row0">
+        <th colspan="2" align="center">Position / Title</th>
+      </tr>
+      <tr>
+        <td>&gt;</td>
+        <td align="center"><table width="100%" border="0" cellspacing="0" cellpadding="2">
+            <tr>
+              <td colspan="2" align="center"><table width="130" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td class="style1"><strong>[bz_1.rank]</strong> [bz_1.title;block=td]</td>
+                  </tr>
+                </table></td>
+              <td colspan="2" align="center"><table width="130" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td class="style2"><strong>[bz_3.rank]</strong> [bz_3.title;block=td;.]</td>
+                  </tr>
+                </table></td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td colspan="2" align="center"><table width="130" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td class="style3"><strong>[bz_2.rank]</strong> [bz_2.title;block=td;.]</td>
+                  </tr>
+                </table></td>
+              <td>&nbsp;</td>
+            </tr>
+          </table>
+          [bz;block=tr;serial] </td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

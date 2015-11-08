@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong - Example of magnet tags</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.cell-1 {
+	background-color:#8FC2ED;
+}
+</style>
+<script type="text/javascript">
+<!--
+// fixed by Andrea (2012)
+function f_Select(x) {
+	var url = window.location.href;
+	if (url.indexOf('?')==-1) {
+		sPrm = '?empty=';
+	} else {
+		sPrm = '&empty=';
+	}
+	if ( (url.indexOf('&empty=')==-1) && (url.indexOf('?empty=')==-1)) {
+		url = url + sPrm + x;
+	} else {
+		url = url.substring(0, url.length-1) + x;
+	}
+	window.location.href = url;
+}
+-->
+</script>
+</head>
+<body>
+<h1>Example of magnet tags</h1>
+<div id="main-body">
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+    <p>A Magnet tag is an Html tag linked to a TBS field. The Magnet tag is deleted when the field is deleted, i.e. when the field is null or empty string. A Magnet tag is defined using parameter <span class="text-prm">magnet</span>. The type of the tag (single or opening-closing) and its position are defined using parameter <span class="text-prm">mtype</span>.</p>
+    <table border="0" cellpadding="2" cellspacing="2" style="width:100%">
+      <tr valign="top">
+        <td colspan="3"><form action="" method="post" id="frm_choice">
+            <fieldset>
+              <input name="r_empty" type="radio" value="0" onclick="f_Select(0)" />
+              <!--[onshow.empty;att=input#checked;magnet=#;atttrue=0;comm] --> 
+              Non-empty values
+              <input name="r_empty" type="radio" value="1" onclick="f_Select(1)" />
+              <!--[onshow.empty;att=input#checked;magnet=#;atttrue=1;comm] --> 
+              Empty values
+            </fieldset>
+          </form></td>
+      </tr>
+      <tr valign="top">
+        <th align="left" class="title-section2" style="width:160px;">Parameter</th>
+        <th align="left" class="title-section2">Value</th>
+        <th align="left" class="title-section2" style="width:110px;">Display</th>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr valign="top">
+        <td class="text-example2">magnet=a</td>
+        <td>$url = '[onshow.url]'</td>
+        <td class="cell-1">Link: <a href="http://[onshow.url;magnet=a]">TBS Site</a></td>
+      </tr>
+      <tr valign="top">
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr valign="top">
+        <td class="text-example2">magnet=a;mtype=m+m</td>
+        <td> $url = '[onshow.url]'</td>
+        <td class="cell-1"> Link: <a href="http://[onshow.url;magnet=a;mtype=m+m]" >TBS Site</a></td>
+      </tr>
+      <tr valign="top">
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr valign="top">
+        <td class="text-example2">magnet=img;mtype=m*</td>
+        <td> $image = '[onshow.image]'</td>
+        <td style="height:20px;" class="cell-1"> Image: <img src="[onshow.image;magnet=img;mtype=m*]" width="14" height="14" alt="Smiley" /></td>
+      </tr>
+      <tr valign="top">
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr valign="top">
+        <td class="text-example2">magnet=br; mtype=*m</td>
+        <td> $line2 = '[onshow.line2]'</td>
+        <td class="cell-1"> Address:<br />
+          -------- <br />
+          [onshow.line1;magnet=br;mtype=*m]<br />
+          [onshow.line2;magnet=br;mtype=*m]<br />
+          --------</td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

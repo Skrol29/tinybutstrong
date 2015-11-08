@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Examples</title>
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="sidebar" style="text-align:left;">
+  <p class="borders01 title-table">Display:</p>
+  <ul class="choice borders01">
+    <li id="mode-result"><a href="[onshow..script_name]?e=[onshow.e]&amp;m=result">Result</a></li>
+    <li id="mode-template"><a href="[onshow..script_name]?e=[onshow.e][onshow.s;if [val]!='';then '&amp;s=[val]']&amp;m=template"> Template</a></li>
+    <li id="mode-source"><a href="[onshow..script_name]?e=[onshow.e][onshow.s;if [val]!='';then '&amp;s=[val]']&amp;m=source"> Template Source</a></li>
+    <li id="mode-php"><a href="[onshow..script_name]?e=[onshow.e]&amp;m=php">PHP programm</a></li>
+    <li>standalone <a href="/[onshow.e_script]">result</a></li>
+    <li>standalone <a href="/[onshow.e_template]">template</a></li>
+  </ul>
+  <p class="borders01 title-table">Choose an example:</p>
+  <ul class="choice borders01 back1">
+    <li id="example-hello"><a href="[onshow..script_name]?e=hello&amp;m=[onshow.m]">Hello World</a></li>
+    <li id="example-var"><a href="[onshow..script_name]?e=var&amp;m=[onshow.m]">Php variables</a></li>
+    <li id="example-prmfrm"><a href="[onshow..script_name]?e=prmfrm&amp;m=[onshow.m]">Formats</a></li>
+    <li id="example-prmatt"><a href="[onshow..script_name]?e=prmatt&amp;m=[onshow.m]">Hxml/Html attributes</a> (<span class="text-prm">att</span>)</li>
+    <li id="example-prmope"><a href="[onshow..script_name]?e=prmope&amp;m=[onshow.m]">Limited text</a> (<span class="text-prm">ope</span>)</li>
+    <li id="example-prmmagnet"><a href="[onshow..script_name]?e=prmmagnet&amp;m=[onshow.m]">Magnet tags</a> (<span class="text-prm">magnet</span>)</li>
+    <li id="example-prmcomm"><a href="[onshow..script_name]?e=prmcomm&amp;m=[onshow.m]">Special Syntax</a> (<span class="text-prm">comm</span>)</li>
+  </ul>
+  <ul class="choice borders01 back2">
+    <li id="example-dataarray">Data <a href="[onshow..script_name]?e=dataarray&amp;m=[onshow.m]">Array</a></li>
+    <li id="example-datanum">Data <a href="[onshow..script_name]?e=datanum&amp;m=[onshow.m]">Numeric</a></li>
+    <li id="example-datamysql">Data <a href="[onshow..script_name]?e=datamysql&amp;m=[onshow.m]">MySQL</a></li>
+    <li id="example-datapostgresql">Data <a href="[onshow..script_name]?e=datapostgresql&amp;m=[onshow.m]">PostgreSQL</a></li>
+    <li id="example-datasqlite">Data <a href="[onshow..script_name]?e=datasqlite&amp;m=[onshow.m]">SqLite</a></li>
+    <li id="example-blocks"><a href="[onshow..script_name]?e=blocks&amp;m=[onshow.m]">Block syntaxes</a></li>
+    <li id="example-assign"><a href="[onshow..script_name]?e=assign&amp;m=[onshow.m]">Assign data with block</a></li>
+    <li id="example-grouping"><a href="[onshow..script_name]?e=grouping&amp;m=[onshow.m]">Groupings</a> <span class="text-mini">(headers, ...)</span></li>
+    <li id="example-prmserial"><a href="[onshow..script_name]?e=prmserial&amp;m=[onshow.m]">Display in columns</a> <span class="text-mini">(<span class="text-prm">serial</span>)</span></li>
+    <li id="example-subblock"><a href="[onshow..script_name]?e=subblock&amp;m=[onshow.m]">Sub-blocks</a></li>
+  </ul>
+  <ul class="choice borders01 back3">
+    <li id="example-cond"><a href="[onshow..script_name]?e=cond&amp;m=[onshow.m]">Conditional display</a></li>
+    <li id="example-subtpl"><a href="[onshow..script_name]?e=subtpl&amp;m=[onshow.m]">Sub-templates</a></li>
+    <li id="example-event"><a href="[onshow..script_name]?e=event&amp;m=[onshow.m]">Event functions</a></li>
+    <li id="example-script"><a href="[onshow..script_name]?e=script&amp;m=[onshow.m]">Execute another script</a></li>
+    <li id="example-form"><a href="[onshow..script_name]?e=form&amp;m=[onshow.m]">Enter data in a form</a></li>
+    <li id="example-dyncol1"><a href="[onshow..script_name]?e=dyncol1&amp;m=[onshow.m]">Dynamic columns</a> <span class="text-mini">(<span class="text-prm">parallel</span>)</span></li>
+    <li id="example-dyncol0"><a href="[onshow..script_name]?e=dyncol0&amp;m=[onshow.m]">Dynamic columns</a> <span class="text-mini">(old way)</span></li>
+    <li id="example-email"><a href="[onshow..script_name]?e=email&amp;m=[onshow.m]">Emailing</a></li>
+    <li id="example-cache">Plug-in:<a href="[onshow..script_name]?e=cache&amp;m=[onshow.m]"> Cache system</a></li>
+    <li id="example-prmsel">Plug-in: <a href="[onshow..script_name]?e=prmsel&amp;m=[onshow.m]">Selecting items</a></li>
+    <li id="example-page">Plug-in: <a href="[onshow..script_name]?e=page&amp;m=[onshow.m]">Display by page</a></li>
+  </ul>
+<script type="text/javascript">
+document.getElementById('mode-[onshow.m]').className = 'itemsel';
+document.getElementById('example-[onshow.e]').className = 'itemsel';
+</script> 
+</div>
+</body>
+</html>

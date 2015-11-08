@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong - Example of Array data merge</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.moreinfo {
+	text-align: center;
+}
+</style>
+</head>
+<body>
+<h1>Example of Array data merge</h1>
+<div id="main-body">
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+    <h2>Example with a simple Array</h2>
+    <p class="moreinfo">[blk1.#] displayed lines</p>
+    <table width="200" border="1" cellpadding="2" cellspacing="0" style="margin-left:auto; margin-right:auto;">
+      <tr style="background-color:#CACACA">
+        <td><strong>Country</strong></td>
+        <td><strong>Prefix</strong></td>
+      </tr>
+      <tr style="background-color:#F0F0F0">
+        <td>[blk1.key;block=tr]</td>
+        <td>[blk1.val]</td>
+      </tr>
+      <tr style="background-color:#E6E6E6">
+        <td>[blk1.key;block=tr]</td>
+        <td>[blk1.val]</td>
+      </tr>
+      <tr style="background-color:#FFCFB9">
+        <td colspan="2">[blk1;block=tr;nodata]There is no data. </td>
+      </tr>
+    </table>
+    <h2>Example with a composed Array</h2>
+    <p class="moreinfo">[blk2.#] displayed lines</p>
+    <table width="300" border="1" cellpadding="2" cellspacing="0" style="margin-left:auto; margin-right:auto;">
+      <tr style="background-color:#CACACA">
+        <td><strong>Position</strong></td>
+        <td><strong>Nickname</strong></td>
+        <td><strong>Score</strong></td>
+        <td align="center"><strong>Date</strong></td>
+      </tr>
+      <tr style="background-color:#F0F0F0">
+        <td>[blk2.#]</td>
+        <td>[blk2.res_name;block=tr]</td>
+        <td align="right">[blk2.res_score]</td>
+        <td align="center">[blk2.res_date;frm='mm-dd-yy']</td>
+      </tr>
+      <tr style="background-color:#E6E6E6">
+        <td>[blk2.#]</td>
+        <td>[blk2.res_name;block=tr]</td>
+        <td align="right">[blk2.res_score]</td>
+        <td align="center">[blk2.res_date;frm='mm-dd-yy']</td>
+      </tr>
+      <tr style="background-color:#FFCFB9">
+        <td colspan="4">[blk2;block=tr;nodata]There is no data. </td>
+      </tr>
+    </table>
+    <h2>Example with a queried Array</h2>
+    <p class="moreinfo">[blk3.#] displayed lines</p>
+    <table width="300" border="1" cellpadding="2" cellspacing="0" style="margin-left:auto; margin-right:auto;">
+      <tr style="background-color:#CACACA">
+        <td><strong>Position</strong></td>
+        <td><strong>Nickname</strong></td>
+        <td><strong>Score</strong></td>
+        <td align="center"><strong>Date</strong></td>
+      </tr>
+      <tr style="background-color:#F0F0F0">
+        <td>[blk3.#]</td>
+        <td>[blk3.res_name;block=tr]</td>
+        <td align="right">[blk3.res_score]</td>
+        <td align="center">[blk3.res_date;frm='mm-dd-yy']</td>
+      </tr>
+      <tr style="background-color:#E6E6E6">
+        <td>[blk3.#]</td>
+        <td>[blk3.res_name;block=tr]</td>
+        <td align="right">[blk3.res_score]</td>
+        <td align="center">[blk3.res_date;frm='mm-dd-yy']</td>
+      </tr>
+      <tr style="background-color:#FFCFB9">
+        <td colspan="4">[blk3;block=tr;nodata]There is no data. </td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

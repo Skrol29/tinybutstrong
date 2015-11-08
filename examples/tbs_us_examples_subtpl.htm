@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong -  Example of sub-template</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<h1>Example of sub-template</h1>
+<div id="main-body">
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+  <p>Parameter <span class="text-prm">file</span> enables you to include a static sub-template into the main template.  Parameter <span class="text-prm">script</span>, with parameter <span class="text-prm">subtpl</span>, enable you to include a dynamic sub-template.</p>
+  <p> In this example, header and footer are static sub-templates.  
+  Headings are also static-sub-templates but they depends to a global variable ($tmpl_article). The login area is a dynamic sub-template. It is managed by a sub-script which can be run under the TBS Subtemplate Mode.</p>
+  <table border="1" cellspacing="0" cellpadding="2" style="width:500px;">
+    <tr valign="top">
+      <td colspan="2" style="background-color:#D1F3D2; height:40px;">[onload;file='tbs_us_examples_subtpl_header.htm';getbody]</td>
+    </tr>
+    <tr>
+      <td colspan="2" valign="top" style="background-color:#FFCC99;">[onload;script=tbs_us_examples_subtpl_login.php;subtpl;getbody]</td>
+    </tr>
+    <tr>
+      <td valign="top" style="background-color:#FFCCCC; width:120px;">[onload;file=[var.tmpl_menu];getbody=body]</td>
+      <td valign="top" style="background-color:#B1B1B1; height:120px;">[onload;file=[var.tmpl_article];getbody]</td>
+    </tr>
+    <tr>
+      <td colspan="2" valign="top" style="background-color:#D1F3D2">[onload;file='tbs_us_examples_subtpl_footer.htm';getbody]</td>
+    </tr>
+  </table>
+  <ul>
+    <li>See <a href="[onload.viewer]?e=subtpl&amp;s=header&amp;m=template">Header</a> sub-template</li>
+    <li>See <a href="[onload.viewer]?e=subtpl&amp;s=footer&amp;m=template">Footer</a> sub-template</li>
+    <li>See <a href="[onload.viewer]?e=subtpl&amp;s=menu&amp;m=template">Menu</a> sub-template</li>
+    <li>See <a href="[onload.viewer]?e=subtpl&amp;s=article0&amp;m=template">Main Page</a> sub-template</li>
+    <li>See <a href="[onload.viewer]?e=subtpl&amp;s=article1&amp;m=template">Heading 1</a> sub-template</li>
+    <li>See <a href="[onload.viewer]?e=subtpl&amp;s=article2&amp;m=template">Heading 2</a> sub-template</li>
+    <li>See <a href="[onload.viewer]?e=subtpl&amp;s=article3&amp;m=template">Heading 3</a> sub-template</li>
+    <li>See <a href="[onload.viewer]?e=subtpl&amp;s=login&amp;m=php">Login</a> sub-script source</li>
+    <li>See <a href="[onload.viewer]?e=subtpl&amp;s=login&amp;m=template">Login</a> sub-template</li>
+</ul>
+</div></div>
+</body>
+</html>

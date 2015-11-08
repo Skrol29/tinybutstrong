@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong - Example of dynamic columns</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.cell-0 {
+	background-color:#FF9966;
+}
+.cell-1 {
+	background-color:#DBDBDB;
+}
+.cell-2 {
+	background-color:#FFFFFF;
+}
+.cell-front {
+	background-color:#FFD8B0;
+}
+</style>
+</head>
+<body>
+<h1>Example of dynamic columns</h1>
+<div id="main-body">
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+    <p style="height:60px;">This is an old way to perform dynamic columns with TinyButStrong. Please note that since TBS vresion 3.9.0, you can perform the same feature using parameter <span class="text-prm">parallel</span>. In the current solution, there is no need of any specific parameter. You first have to merge colmuns before rows in order to have expanded columns on every futur rows. Then you have to merge rows.</p>
+    <p>In this example, the script creates a multiplication table with alternated row's color. You can change the number of columns and rows.</p>
+    <form action="[onshow..script_name]?[onshow.other_prms;noerr]" method="post" id="frm_nbr">
+      <div style="text-align:center">Number of rows:
+        <input name="nbr_row" type="text" id="nbr_row" value="[onshow.nbr_row]" size="2" maxlength="2" style="width:30px;" />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of columns:
+        <input name="nbr_col" type="text" id="nbr_col" value="[onshow.nbr_col]" size="2" maxlength="2" style="width:30px;" />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input name="btn_ok" type="submit" id="btn_ok" value="Ok" />
+      </div>
+    </form>
+    <table border="1" cellpadding="3" cellspacing="0" style="margin-left:auto; margin-right:auto;">
+      <tr>
+        <td width="60" align="center" class="cell-0">X</td>
+        <td align="center" class="cell-front">[c.key;block=td;parallel=tbs:table] </td>
+      </tr>
+      <tr>
+        <td align="center" class="cell-front">[r.$;block=tr]</td>
+        <td align="center" class="cell-1">[r.[c.val]] </td>
+      </tr>
+      <tr>
+        <td align="center" class="cell-front">[r.$;block=tr]</td>
+        <td align="center" class="cell-2">[r.[c.val]] </td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

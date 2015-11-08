@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong - Example of sub-blocks</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+<!--
+.border02 {
+	border: 2px solid #39C;
+}
+.border03 {
+	border: 2px solid #396;
+}
+.row0 {
+	background-color:#CACACA;
+}
+.row1 {
+	background-color:#F0F0F0;
+}
+.row2 {
+	background-color:#E6E6E6;
+}
+.table1 {
+	border-collapse:collapse;
+	margin-left:auto;
+	margin-right:auto;
+	width:400px; 
+}
+-->
+</style>
+</head>
+<body>
+<h1>Example of sub-blocks</h1>
+<div id="main-body">
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+    <p>This example shows two ways of making sub-blocks. The first is using an automatic sub-block. The second is using a dynamic query.</p>
+    <h2>Automatic sub-block</h2>
+    <p>You can us it when the data of the sub-block is available in a particular column of the main block.</p>
+    <table cellpadding="5" cellspacing="0" class="table1">
+      <tr align="center">
+        <td class="border03"><strong>Team:</strong> [asb.team;block=tr;sub1=matches] , <strong>Total score:</strong> [asb.total]<br />
+          <table border="1" cellpadding="2" cellspacing="0" style="width:300px;">
+            <tr align="center" class="row0">
+              <th>Position</th>
+              <th style="width:160px;">Town</th>
+              <th>Score</th>
+              <th>Date</th>
+            </tr>
+            <tr class="row1">
+              <td>[asb_sub1.#]</td>
+              <td>[asb_sub1.town;block=tr]</td>
+              <td align="center">[asb_sub1.score]</td>
+              <td align="center">[asb_sub1.date;frm='mm-dd-yyyy']</td>
+            </tr>
+            <tr class="row2">
+              <td>[asb_sub1.#]</td>
+              <td>[asb_sub1.town;block=tr]</td>
+              <td align="center">[asb_sub1.score]</td>
+              <td align="center">[asb_sub1.date;frm='mm-dd-yyyy']</td>
+            </tr>
+          </table></td>
+      </tr>
+    </table>
+    <h2> Sub-block with dynamic query</h2>
+    <p>Data for the sub-block are requested for each record of the main block. It is important to merge the main block before the subblock.<br />
+    </p>
+    <table width="400" cellpadding="5" cellspacing="0" class="table1">
+      <tr align="center">
+        <td class="border02"><strong>Team:</strong> [mb.team;block=tr] , <strong>Total score:</strong> [mb.total]<br />
+          <table border="1" cellpadding="2" cellspacing="0" style="width:300px;">
+            <tr align="center" class="row0">
+              <th>Position</th>
+              <th style="width:160px;">Town</th>
+              <th>Score</th>
+              <th>Date</th>
+            </tr>
+            <tr class="row1">
+              <td>[sb.#]</td>
+              <td>[sb.town;block=tr;p1=[mb.$]]</td>
+              <td align="center">[sb.score]</td>
+              <td align="center">[sb.date;frm='mm-dd-yyyy']</td>
+            </tr>
+            <tr class="row2">
+              <td>[sb.#]</td>
+              <td>[sb.town;block=tr]</td>
+              <td align="center">[sb.score]</td>
+              <td align="center">[sb.date;frm='mm-dd-yyyy']</td>
+            </tr>
+          </table></td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

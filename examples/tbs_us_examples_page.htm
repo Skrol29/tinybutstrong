@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong - Example of plug-in By-Page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<h1>Example of plug-in By-Page</h1>
+<div id="main-body">
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+    <p>The plug-in By-Page  enables you to display only a part of the data. There is also a plug-in Navigation Bar.</p>
+    <p> In this example, there are [onshow.RecCnt] records displayed per page of [onshow.PageSize].</p>
+    <table border="1" cellpadding="3" cellspacing="0" style="margin-left:auto; margin-right:auto; width:300px;">
+      <tr align="left" class="title-section2" style="background-color:#CACACA">
+        <td style="width:60px;">N#</td>
+        <td style="width:120px;">Product</td>
+        <td style="width:120px;">Price</td>
+      </tr>
+      <tr style="background-color:#F0F0F0">
+        <td align="center">[blk.#]</td>
+        <td>[blk.product;block=tr]</td>
+        <td align="right">[blk.price;frm='0.00']</td>
+      </tr>
+    </table>
+    <p style="text-align:center"> Number of products: [onshow.RecCnt] </p>
+    <table border="1" cellpadding="4" cellspacing="0" style="margin-left:auto; margin-right:auto">
+      <tr align="center">
+        <td><a href="[onshow..script_name]?PageNum=[nv.first;endpoint;magnet=a;mtype=m+m][onshow.other_prms;noerr]">|&lt;</a></td>
+        <td><a href="[onshow..script_name]?PageNum=[nv.prev;endpoint;magnet=a;mtype=m+m][onshow.other_prms;noerr]">&lt;</a></td>
+        <td><a href="[onshow..script_name]?PageNum=[nv.page;block=td;navsize=3;navpos=centred][onshow.other_prms;noerr]">[nv.page]</a></td>
+        <td style="background-color:#C4E1E1; font-weight:bold">[nv.page;block=td;currpage]</td>
+        <td><a href="[onshow..script_name]?PageNum=[nv.next;endpoint;magnet=a;mtype=m+m][onshow.other_prms;noerr]">&gt;</a></td>
+        <td><a href="[onshow..script_name]?PageNum=[nv.last;endpoint;magnet=a;mtype=m+m][onshow.other_prms;noerr]">&gt;|</a></td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

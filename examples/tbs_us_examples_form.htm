@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong - Example of getting data from a Form</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.msg-ok {
+	color: #063;
+	text-align:center;
+}
+.msg-err {
+	color: #F00;
+	font-weight: bold;
+	text-align:center;
+}
+.cell-1 {
+	background-color:#BBCCED;
+	height:30px;
+}
+</style>
+</head>
+<body>
+<h1>Example of getting data from a Form</h1>
+<div id="main-body">
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+    <p>This example illustrates how to handle getting and retreiving data from a Form.</p>
+    <p class="msg-err">[onshow.msg_err;magnet=p]</p>
+    <p class="msg-ok">[onshow.msg_ok;magnet=p]</p>
+    <form action="[onshow..script_name]?[onshow.other_prms;noerr]" method="post" id="frm_info">
+      <table width="300" border="1" cellpadding="0" cellspacing="0" style="margin-left:auto; margin-right:auto;">
+        <tr>
+          <td valign="middle" class="cell-1">Enter information:</td>
+        </tr>
+        <tr>
+          <td><table width="100%" border="0" cellspacing="0" cellpadding="2">
+              <tr align="left" valign="bottom" class="back-special2">
+                <td>Gender : </td>
+                <td><select name="x_type" class="normal" id="select2">
+                    <option value="[typeblk.val]">[typeblk.key;block=option]</option>
+                    <option>[onshow.x_type;ope=html;select]</option>
+                  </select></td>
+              </tr>
+              <tr align="left" valign="bottom" class="back-special2">
+                <td>Last name: </td>
+                <td><input name="x_name" type="text" class="normal" id="x_name2" value="[onshow.x_name]" /></td>
+              </tr>
+              <tr align="left" valign="bottom" class="back-special2">
+                <td>First name:</td>
+                <td><input name="x_subname" type="text" class="normal" id="x_subname2" value="[onshow.x_subname]" /></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr class="cell-1">
+          <td align="center" valign="middle"><input name="btn_save" type="submit" class="normal" id="btn_save2" value="  Validate  " /></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+</body>
+</html>

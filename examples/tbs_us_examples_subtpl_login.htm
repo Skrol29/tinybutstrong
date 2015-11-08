@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong - Example of sub-template (login)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<form action="[onshow..script_name]?[onshow.other_prms;noerr]" method="post" id="form1">
+  <fieldset style="border:none">
+    Login:
+    <input name="txt_login" type="text" id="txt_login" size="6" />
+    Password:
+    <input name="txt_password" type="text" id="txt_password" size="6" />
+    <input name="btn_ok" type="submit" id="btn_ok" value="Ok" />
+    <span style="color: #FF0000">Bad login or password.[onload;block=span;when [var.err_log]=1]</span>
+  </fieldset>
+</form>
+</body>
+</html>

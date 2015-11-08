@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong - Example of dynamic columns</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.cell-0 {
+	background-color:#FF9966;
+}
+.cell-1 {
+	background-color:#DBDBDB;
+}
+.cell-2 {
+	background-color:#FFFFFF;
+}
+.cell-front {
+	background-color:#FFD8B0;
+}
+</style>
+</head>
+<body>
+<h1>Example of dynamic columns</h1>
+<div id="main-body">
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+    <p>Creating dynamic columns with TinyButStrong is simple but a bit delicate. It doesn't need any specific parameter. But you have to think to expand columns on every rows of the basic table using a different bloc for each row. Columns must be merged before rows.</p>
+    <p>In this example, the script creates a multiplication table with alternated row's color. You can change the number of columns and rows.</p>
+    <form action="[onshow..script_name]?[onshow.other_prms;noerr]" method="post" id="frm_nbr">
+      <div style="text-align:center">Number of rows:
+        <input name="nbr_row" type="text" id="nbr_row" value="[onshow.nbr_row]" size="2" maxlength="2" style="width:30px;" />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of columns:
+        <input name="nbr_col" type="text" id="nbr_col" value="[onshow.nbr_col]" size="2" maxlength="2" style="width:30px;" />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input name="btn_ok" type="submit" id="btn_ok" value="Ok" />
+      </div>
+    </form>
+    <table border="1" cellpadding="3" cellspacing="0" style="margin-left:auto; margin-right:auto;">
+      <tr>
+        <td width="60" align="center" class="cell-0">X</td>
+        <td align="center" class="cell-front">[c0.key;block=td] </td>
+      </tr>
+      <tr>
+        <td align="center" class="cell-front">[r.$;block=tr]</td>
+        <td align="center" class="cell-1">[r.[c1.val;block=td]] </td>
+      </tr>
+      <tr>
+        <td align="center" class="cell-front">[r.$;block=tr]</td>
+        <td align="center" class="cell-2">[r.[c2.val;block=td]] </td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

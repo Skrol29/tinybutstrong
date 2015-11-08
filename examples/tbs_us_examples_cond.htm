@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong - Example of conditional blocks</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+<!--
+// fixed by Andrea (2012)
+function f_Select() {
+	var url = window.location.href;
+	var id = document.forms['frm_condition'].elements['lst_block'].value;
+	if (url.indexOf('?')==-1) {
+		sPrm = '?blk_id=';
+	} else {
+		sPrm = '&blk_id=';
+	}
+	if ( (url.indexOf('&blk_id=')==-1) && (url.indexOf('?blk_id=')==-1) ) {
+		url = url + sPrm + id;
+	} else {
+		url = url.substring(0, url.length-1) + id;
+	}
+	window.location.href = url;
+}
+-->
+</script>
+</head>
+<body>
+<h1>Example of conditional blocks</h1>
+<div id="main-body">
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+    <p>Conditional Blocks enable you to display or hide an area according to a condition.</p>
+    <table width="500" border="1" cellpadding="2" cellspacing="0" style="border-color:#006699; border-collapse:collapse; border-width:2; margin-left:auto; margin-right:auto;">
+      <tr>
+        <td align="left" valign="top" style="background-color:#99CC33"><strong>Hello, You have selected the block #1.[onload_1;block=tr;when [var.blk_id]=1]</strong></td>
+      </tr>
+      <tr>
+        <td align="left" valign="top" style="background-color:#FF9933"><em>Good, it's now the block #2 which is displayed.[onload_1;block=tr;when [var.blk_id]=2]</em></td>
+      </tr>
+      <tr>
+        <td align="left" valign="top" style="background-color:#66FFCC; color:#990000">Well, finally Conditional Blocks are very easy.[onload_1;block=tr;when [var.blk_id]=3]</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top" style="background-color:#EBEBEB">This block is displayed by default.[onload_1;block=tr;default] </td>
+      </tr>
+    </table>
+    <form action="[onshow..script_name]" method="post" id="frm_condition">
+      <div style="text-align:center;">Select a block to display:
+        <select name="lst_block" class="normal" id="lst_block" onchange="javascript:f_Select()">
+          <option value="0">&lt;select a block&gt;</option>
+          <option value="1">Block 1</option>
+          <option value="2">Block 2</option>
+          <option value="3">Block 3</option>
+          <option value="x">[onshow.blk_id;ope=html;select]</option>
+        </select>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

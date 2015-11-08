@@ -1,0 +1,17 @@
+[onload;tplvars;subject=Hello;comm=_]
+
+Dear [i.firstname] [i.lastname],
+
+Tank you for having choosen TBS Examples Copr for selecting your items.
+
+~~~~~~~~~~~~~~~ [a.#;block=begin;comm=_] ~~~~~~~~~~~~~~~
+Article #[a.#]
+----------
+Caption:    [a.caption]
+Quantity:   [a.qty]
+Unit Price: [a.uprice;frm=0.00] $
+
+~~~~~~~~~~~~~~~ [a.#;block=end;comm=_]   ~~~~~~~~~~~~~~~
+
+Have a nice day,
+TBS Examples Corp

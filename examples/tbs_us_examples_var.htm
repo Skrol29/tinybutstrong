@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong - Example of Php variable merge</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<h1>Example of Php variable merge</h1>
+<div id="main-body">
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+    <p>Automatic fields (&#91;onload] and &#91;onshow])  enable you to display a PHP variable in your  template. You can display a simple variable, or an item of an Array variable, or the property of an Object variable. There are also several parameters for TBS fields which enable you to setup the display of the data item. </p>
+    <table width="500" border="0" cellpadding="2" cellspacing="0" class="back-special2" style="margin-left:auto; margin-right:auto;">
+      <tr align="left" class="title-section2">
+        <th valign="top" style="width:200px;"> Php variable </th>
+        <th>Automatic field</th>
+      </tr>
+      <tr>
+        <td align="left" valign="top">$amount</td>
+        <td class="text-example2">$ [onshow.amount]</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">$task['monday']</td>
+        <td class="text-example2">[onshow.task.monday]</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">$obj-&gt;param</td>
+        <td class="text-example2">[onshow.obj.param]</td>
+      </tr>
+    </table>
+    <p>Special Automatic fields return data about the Template Engine.</p>
+    <table width="500" border="0" cellpadding="2" cellspacing="0" class="back-special2" style="margin-left:auto; margin-right:auto;">
+      <tr align="left" class="title-section2">
+        <th valign="top" style="width:200px;">Information</th>
+        <th>Special Automatic field</th>
+      </tr>
+      <tr>
+        <td align="left" valign="top">TinyButStrong version:</td>
+        <td class="text-example2">[onshow..version]</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top"> Name of the current PHP script:</td>
+        <td class="text-example2">[onshow..script_name]</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Name of the loaded template:</td>
+        <td class="text-example2">[onshow..template_name]</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Directory of the loaded template:</td>
+        <td class="text-example2">[onshow..template_path]</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Creation date of the loaded template:</td>
+        <td class="text-example2">[onshow..template_date;frm='dd/mm/yyyy hh:nn:ss']</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Current date-time:</td>
+        <td class="text-example2">[onshow..now;frm='dd/mm/yyyy hh:nn:ss']</td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

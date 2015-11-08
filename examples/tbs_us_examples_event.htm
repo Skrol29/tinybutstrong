@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong - Example of event function</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.cell-1 {
+	background-color:#F0F0F0;
+}
+.cell-2 {
+	background-color:#E6E6E6;
+}
+.cell-header {
+	background-color:#CACACA;
+	font-weight:bold;
+}
+</style>
+</head>
+<body>
+<h1>Example of event function</h1>
+<div id="main-body">
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+    <p>Parameters <span class="text-prm">onformat</span> and <span class="text-prm">ondata</span> allow to execute an event function each time a field or a block is merged.</p>
+    <p>In this example, the parameter ondata is used to display a colored comment using the m_event_b1() function.</p>
+    <table border="1" cellpadding="3" cellspacing="0" style="margin-left:auto; margin-right:auto;">
+      <tr class="cell-header">
+        <th>Position</th>
+        <th>Nickname</th>
+        <th>Score</th>
+        <th>Level</th>
+        <th>Date</th>
+      </tr>
+      <tr class="cell-1">
+        <td>[b1.#]</td>
+        <td>[b1.res_name;block=tr; ondata=m_event_b1]</td>
+        <td align="center">[b1.res_score]</td>
+        <td align="center">[b1.level; htmlconv=no]</td>
+        <td align="center">[b1.res_date; frm='dd/mm/yy']</td>
+      </tr>
+      <tr class="cell-2">
+        <td>[b1.#]</td>
+        <td>[b1.res_name;block=tr; ondata=m_event_b1]</td>
+        <td align="center">[b1.res_score]</td>
+        <td align="center">[b1.level; htmlconv=no]</td>
+        <td align="center">[b1.res_date ;frm='dd/mm/yy']</td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

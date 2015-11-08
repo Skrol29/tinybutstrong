@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong - Example of parameter att</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+<!--
+.style1 {
+	font-weight: bold;
+	border: 1px solid #396;
+}
+.style2 {
+	color: #039;
+	background-color: #FFC;
+}
+-->
+</style>
+</head>
+<body>
+<h1>Example of parameter <span class="text-prm">att</span></h1>
+<div id="main-body">
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+    <p>Parameter <span class="text-prm">att</span> allows to remotly modify the attributs of any XML/Html tags.<br />
+      This can be very precious when it is not easy to reach the source code of the template (OpenOffice, Ms Office 2007, Dreamweaver, ...). Or simply if you want to code an Html template which is W3C compatible.</p>
+    <table border="0" cellpadding="2" cellspacing="2">
+      <tr valign="top">
+        <td class="title-section2">Without att</td>
+        <td><span class="title-section2">Using att</span></td>
+        <td class="title-section2">Comment</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr valign="top">
+        <td><div class="style1">This text is inside a div tag.</div></td>
+        <td><div class="style1">This text is inside a div tag.[onshow.x_style;att=div#class]</div></td>
+        <td>Attribute class is replaced with <span class="style2">style2</span>.</td>
+      </tr>
+      <tr valign="top">
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr valign="top">
+        <td><div class="style1">This text is inside a div tag.</div></td>
+        <td><div class="style1">This text is inside a div tag.[onshow.x_style;att=div#class;attadd]</div></td>
+        <td>Attribute class is completed with <span class="style2">style2</span>.</td>
+      </tr>
+      <tr valign="top">
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr valign="top">
+        <td><div class="style1">This text is inside a div tag.</div></td>
+        <td><div class="style1">This text is inside a div tag.[onshow.x_nostyle;att=div#class]</div></td>
+        <td>Attribute class is deleted.</td>
+      </tr>
+      <tr valign="top">
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr valign="top">
+        <td>This text is inside a td tag.</td>
+        <td style="height:20px">This text is inside a td tag. [onshow.x_color;att=td#bgcolor]</td>
+        <td>Attribute bgcolor is created.</td>
+      </tr>
+      <tr valign="top">
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

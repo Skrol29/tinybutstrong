@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong - Example of block syntaxes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<h1>Example of Block Syntaxes</h1>
+<div id="main-body">
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+    <p>These examples illustrate the different available syntaxes for Merge-Blocks.</p>
+    <h2>Absolute Syntax</h2>
+    <p> The block is defined by a beginning TBS tag and an ending TBS tag.</p>
+    <p class="text-example2">[blk1;block=begin][blk1.val]<br />
+      [blk1;block=end]</p>
+    <h2>Relative Syntax</h2>
+    <p> The block is defined relatively to the HTML (or XML) tags that surround the TBS tag.
+      Only a single  TBS tag defines the block, instead of a couple of TBS tags. </p>
+    <table width="300" style="border-collapse:collapse;">
+      <tr>
+        <td class="row-example01 text-example2">[blk2.val][blk2;block=tr]</td>
+      </tr>
+    </table>
+    <h2>Simplified Syntax</h2>
+    <p> The bloc definition is included inside a TBS field. It's much more simple to write.</p>
+    <table width="300" style="border-collapse:collapse;">
+      <tr>
+        <td class="row-example01 text-example2">[blk3.val;block=tr]</td>
+      </tr>
+    </table>
+    <h2>On a text line</h2>
+    <p>Use the symbol  &quot;_&quot; to define a block on a simple text line, independently of  HTML tags.</p>
+    <pre class="text-example2">
+  [blk4.val;block=_]
+</pre>
+    <h2>With concatenation</h2>
+    <p>It's possible to define a block on several following HTML tags.
+      For this, you just have to indicate the tags to concatenate by separating them with &quot;+&quot;.
+      In the example below, the block is bounded by two rows.</p>
+    <table width="300" style="border-collapse:collapse;">
+      <tr>
+        <td rowspan="2" class="row-example01 text-example2" style="background-color:#C4D9FF;">&nbsp;</td>
+        <td class="row-example01 text-example2">[blk5.val;block=tr+tr]</td>
+      </tr>
+      <tr>
+        <td align="right" class="row-example01 text-example2">[blk5.val]</td>
+      </tr>
+    </table>
+    <h2>With encapsulation</h2>
+    <p>It's possible to define a block on an HTML tag of a higher level.
+      For this, you just have to set the encapsulation level using parentheses.
+      In the example below, the block is bounded by the pink row.</p>
+    <table width="300" cellpadding="4" style="border-collapse:collapse;">
+      <tr>
+        <td class="row-example02"><table width="300" style="border-collapse:collapse;">
+            <tr>
+              <td class="row-example01 text-example2">[blk6.val;block=((tr))]</td>
+            </tr>
+          </table></td>
+      </tr>
+    </table>
+    <h2>Without Block Definition</h2>
+    <p>If the block definition is omitted, then only the first record is merged.</p>
+    <p>Example: <span class="text-example2">[blk7.val]</span></p>
+  </div>
+</div>
+</body>
+</html>

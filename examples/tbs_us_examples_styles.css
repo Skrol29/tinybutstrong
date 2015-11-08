@@ -1,0 +1,156 @@
+body, td, div, p, li {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+}
+body {
+	margin: 0; /* il est conseillé de mettre à zéro la marge et le remplissage de l'élément body, pour tenir compte des différentes valeurs par défaut des navigateurs */
+	text-align: center; /* used to center the main-body <div>  */
+}
+h1 {
+	font-family: Georgia, "New Century Schoolbook", "Book Antiqua", "Times New Roman", serif;
+	font-size: 24px;
+	font-weight: bold;
+	color: #000000;
+	margin-left: 0px;
+	margin-rigth: 0px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+h2 {
+	font-family: Georgia, "New Century Schoolbook", "Book Antiqua", "Times New Roman", serif;
+	font-size: 18px;
+	font-weight: bold;
+	color: #0398ca;
+	margin: 0px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+h3 {
+	text-decoration: underline;
+	margin: 0px;
+	font-size: 11px;
+	font-weight: normal;
+}
+#main-body { /* <div> used to set the width of the content  */
+	margin: 0 auto; /* les marges automatiques (et dotées d'une largeur positive) centrent la page */
+	width: 780px;
+	text-align: left;
+}
+#example { /* the <div> that contains the exemple body */
+	text-align: left;
+	width:560px;
+	float:right; /* prevent the example contents to split and go after the sidebare */
+	margin:0;
+	padding:0;
+}
+/* Side bar */ 
+#sidebar {
+	width:200px;
+	float:left;
+	margin:0;
+	margin-right:10px;
+	padding:0;
+}
+.choice {
+	margin:0;
+	padding: 8px 8px 8px 24px;
+	list-style-type:circle; /* strange: if placed in ".choice li" then the style ".itemsel" won't change the "list-style-type" to "disc" !  */
+}
+.choice li {
+	margin:0;
+	padding:0;
+}
+#choice a:link, #choice a:visited {
+	text-decoration: none;
+}
+#choice a:hover {
+	text-decoration:underline;
+}
+.itemsel {
+	list-style-type:disc;
+	font-weight:bold;
+}
+.itemsel a:link, .itemsel a:hover, .itemsel a:visited {
+	text-decoration: none;
+}
+/* ---- */
+
+/*  */
+.back1 {	background-color: #EAF7EA;
+}
+.back2 {	background-color: #EEEEFF;
+}
+.back3 {	background-color: #FFF7DB;
+}
+.mini {
+	font-size: 10px;
+}
+.titrerubrique {
+	font-weight: bold;
+}
+.box1 { /* borders   */
+	border: 2px solid #3366CC;
+	padding: 4px;
+	text-align:center;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+}
+.box2 { /* borders */
+	border: 2px dotted #006699;
+	padding: 10px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+}
+
+
+.title-table {
+	background:#BBCCED;
+	font-weight: bold;
+}
+.text-mini {
+	font-size: 10px;
+}
+.title-section {
+	font-weight: bold;
+}
+.text-section2 {
+	font-style: italic;
+	color: #0099CC;
+}
+.text-example2 {
+	color: #006600;
+}
+.title-section2 {
+	font-weight: bold;
+	text-decoration: underline;
+}
+.back-menu { /* background for menu bar */
+	margin-bottom:0px;
+	margin-right:0px;
+	margin-top:5px;
+	margin-left: 5px;
+	background-color:#FFFFF;
+}
+.back-special2 { /* background for special zones in the examples */
+	background-color: #E5ECF9;
+}
+.text-prm {
+	color: #333399;
+}.borders01 {
+	border: 1px solid #006699;
+}
+.row-example01 {
+	padding: 2px;
+	border: 2px solid #006699;
+}
+.row-example02 {
+	padding: 2px;
+	border: 2px solid #FF6699;
+}
+.w3cinfo {
+	font-size: 9px;
+	text-align: right;
+	vertical-align:middle;
+	color: #666;
+}
