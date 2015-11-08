@@ -3,7 +3,7 @@
  *
  * TinyButStrong - Template Engine for Pro and Beginners
  *
- * @version 3.10.0-beta-2015-11-07 for PHP 5
+ * @version 3.10.0 for PHP 5
  * @date    2015-11-07
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
@@ -538,7 +538,7 @@ public $Assigned = array();
 public $ExtendedMethods = array();
 public $ErrCount = 0;
 // Undocumented (can change at any version)
-public $Version = '3.10.0-beta-2015-11-07';
+public $Version = '3.10.0';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
