@@ -192,7 +192,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2015-11-07</td>
+        <td>2015-11-08</td>
       </tr>
     </table>
   </div>
@@ -779,6 +779,22 @@ include_once(<span class="opt-value">'tbs_class.php'</span>);
         </tr>
         <tr>
           <td class="border-0">An SQLite result identifier</td>
+          <td class="border-0">-</td>
+        </tr>
+        <tr valign="top">
+          <td rowspan="3" class="border-0">SQLite3</td>
+          <td class="border-0">An <a href="http://php.net/manual/en/class.sqlite3.php">SQLite3</a> object</td>
+          <td class="border-0">An SQLite statement. You can use the optional argument <a href="#php_mergeblock" class="opt-name">QryPrms</a> in order to <a href="http://php.net/manual/en/sqlite3stmt.bindvalue.php">bind values</a>.<br>
+            <span class="txt-code">Exemple #1: array(&quot;value1&quot;, &quot;values2&quot;).<br>
+Exemple #2: array(':p1'=&gt;&quot;value1&quot;, 'p2' =&gt; &quot;value2&quot;).<br>
+ Exemple #3: array(':p1'=&gt;array(&quot;value1&quot;, SQLITE3_TEXT)).</span></td>
+        </tr>
+        <tr valign="top">
+          <td class="border-0">An <a href="http://php.net/manual/en/class.sqlite3stmt.php">SQLite3Stmt</a> object</td>
+          <td class="border-0">You can use the optional argument <a href="#php_mergeblock" class="opt-name">Query</a> in order to <a href="http://php.net/manual/en/sqlite3stmt.bindvalue.php">bind values</a>. See examples above.</td>
+        </tr>
+        <tr valign="top">
+          <td class="border-0">An <a href="http://php.net/manual/en/class.sqlite3result.php">SQLite3Result</a> object</td>
           <td class="border-0">-</td>
         </tr>
         <tr valign="top">

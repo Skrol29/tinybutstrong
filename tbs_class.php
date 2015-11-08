@@ -4,7 +4,7 @@
  * TinyButStrong - Template Engine for Pro and Beginners
  *
  * @version 3.10.0 for PHP 5
- * @date    2015-11-07
+ * @date    2015-11-08
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
  * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
@@ -130,6 +130,12 @@ public function DataPrepare(&$SrcId,&$TBS) {
 		$this->Type = 11;
 	} elseif ($SrcId instanceof Zend_Db_Adapter_Abstract) {
 		$this->Type = 12;
+	} elseif ($SrcId instanceof SQLite3) {
+		$this->Type = 13; $this->SubType = 1;
+	} elseif ($SrcId instanceof SQLite3Stmt) {
+		$this->Type = 13; $this->SubType = 2;
+	} elseif ($SrcId instanceof SQLite3Result) {
+		$this->Type = 13; $this->SubType = 3;
 	} elseif (is_object($SrcId)) {
 		$FctInfo = get_class($SrcId);
 		$FctCat = 'o';
@@ -374,6 +380,41 @@ public function DataOpen(&$Query,$QryPrms=false) {
 			$this->DataAlert('Zend_DB_Adapter error message when opening the query: '.$e->getMessage());
 		}
 		break;
+	case 13: // SQLite3
+		try {
+			if ($this->SubType==3) {
+				$this->RecSet = $this->SrcId;
+			} elseif (($this->SubType==1) && (!is_array($QryPrms))) {
+				// SQL statement without parameters
+				$this->RecSet = $this->SrcId->query($Query);
+			} else {
+				if ($this->SubType==2) {
+					$stmt = $this->SrcId;
+					$prms = $Query;
+				} else {
+					// SQL statement with parameters
+					$stmt = $this->SrcId->prepare($Query);
+					$prms = $QryPrms;
+				}
+				// bind parameters
+				if (is_array($prms)) {
+					foreach ($prms as $p => $v) {
+						if (is_numeric($p)) {
+							$p = $p + 1;
+						}
+						if (is_array($v)) {
+							$stmt->bindValue($p, $v[0], $v[1]);
+						} else {
+							$stmt->bindValue($p, $v);
+						}
+					}
+				}
+				$this->RecSet = $stmt->execute();
+			}
+		} catch (Exception $e) {
+			$this->DataAlert('SQLite3 error message when opening the query: '.$e->getMessage());
+		}
+		break;
 	}
 
 	if (($this->Type===0) || ($this->Type===9)) {
@@ -486,6 +527,9 @@ public function DataFetch() {
 	case 12: // Zend_DB_Adapater
 		$this->CurrRec = $this->RecSet->fetch(Zend_Db::FETCH_ASSOC);
 		break;
+	case 13: // SQLite3
+		$this->CurrRec = $this->RecSet->fetchArray(SQLITE3_ASSOC);
+		break;
 	}
 
 	// Set the row count
@@ -512,6 +556,11 @@ public function DataClose() {
 	case 5: $this->SrcId->tbsdb_close($this->RecSet); break;
 	case 7: pg_free_result($this->RecSet); break;
 	case 10: $this->RecSet->free(); break; // MySQLi
+	case 13: // SQLite3
+		if ($this->SubType!=3) {
+			$this->RecSet->finalize();
+		}
+		break;
 	//case 11: $this->RecSet->closeCursor(); break; // PDO
 	}
 	if ($this->RecSaving) {

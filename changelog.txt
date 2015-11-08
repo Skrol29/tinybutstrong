@@ -1,5 +1,28 @@
 = Release 3.10.0 =
-Beta 2015-10-01
+
+Skrol29, 2015-11-08
+
+== New features ==
+
+* New operator "*" for block definition syntax. Example: "block=3*tr".
+
+* New operator "!" for block definition syntax. Use it on first or last tag in order to exlcude the tag from the block bound. Example: "block=!div".
+
+* New marker "." for block defintion. Use it to represents the bound of the TBS field itself. Example: "block=(.)".
+
+* New arguments $LocLst and $Pos for the event OnCacheField. It enables a plug-in to move, add or delete TBS fields.
+
+* Native support for SQLite3.
+
+== Enhancements ==
+
+* Parameter "parallel=tbs:table" now supports <tbody>, <tfoot>, <colgroup> and <col>. The <col> tags must be closed even if HTML actually allows unclosed tags.
+
+* Support de GetOption('parallel_conf')
+
+* Support de GetOption('block_alias')
+
+* Better management of fields moved in a set of other fields, when using parameter "att".
 
 == Bug fixes ==
 
@@ -9,25 +32,6 @@ Beta 2015-10-01
 * Parameter "ope=upperw" works only with lower case characters.
 
 * Error message "Notice: Undefined property: clsTbsLocator::$AttName in tbs_class.php on line 1492".
-
-== New features ==
-
-* Define block with multiplier. Example: "block=3*tr"
-
-* Define block with "block=(.)" or "block=." : represents the TBS field.
-
-* Define block operator "!" on first or last tag in order to exlcude them.
-
-* New arguments $LocLst and $Pos for the event OnCacheField. It enables a plug-in to move, add or delete TBS fields.
-
-== Enhancements ==
-
-* Parameter "parallel=tbs:table" now supports <tbody>, <tfoot>, <colgroup> and <col>. <col> tags must be closed even if HTML allox unclosed tags.
-
-* Support de GetOption('parallel_conf')
-* Support de GetOption('block_alias')
-
-* Better management of fields moved in a set of other fields, when using parameter "att".
 
 ------------------------------------
   
