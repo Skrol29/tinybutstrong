@@ -16,6 +16,7 @@
 
 // Check PHP version
 if (version_compare(PHP_VERSION,'5.0')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 5.0 or higher. You should try with TinyButStrong Edition for PHP 4.';
+/* COMPAT#1 */
 
 // Render flags
 define('TBS_NOTHING', 0);
@@ -201,10 +202,10 @@ public function DataOpen(&$Query,$QryPrms=false) {
 	case 0: // Array
 		if (($this->SubType===1) && (is_string($Query))) $this->SubType = 2;
 		if ($this->SubType===0) {
-			$this->RecSet = &$this->SrcId;
+			$this->RecSet = &$this->SrcId; /* COMPAT#2 */
 		} elseif ($this->SubType===1) {
 			if (is_array($Query)) {
-				$this->RecSet = &$Query;
+				$this->RecSet = &$Query; /* COMPAT#3 */
 			} else {
 				$this->DataAlert('type \''.gettype($Query).'\' not supported for the Query Parameter going with \'array\' Source Type.');
 			}
@@ -228,7 +229,7 @@ public function DataOpen(&$Query,$QryPrms=false) {
 				}
 			} else {
 				if (isset($this->TBS->VarRef[$Item0])) {
-					$Var = &$this->TBS->VarRef[$Item0];
+					$Var = &$this->TBS->VarRef[$Item0]; /* COMPAT#4 */
 					$i = 1;
 				} else {
 					$i = $this->DataAlert('invalid query \''.$Query.'\' because VarRef item \''.$Item0.'\' is not found.');
@@ -503,7 +504,7 @@ public function DataFetch() {
 		$this->CurrRec = $this->SrcId->tbsdb_fetch($this->RecSet,$this->RecNum+1);
 		break;
 	case 7: // PostgreSQL
-		$this->CurrRec = pg_fetch_assoc($this->RecSet);
+		$this->CurrRec = pg_fetch_assoc($this->RecSet); /* COMPAT#5 */
 		break;
 	case 8: // SQLite
 		$this->CurrRec = sqlite_fetch_array($this->RecSet,SQLITE_ASSOC);
@@ -4627,13 +4628,14 @@ static function f_Xml_FindTagStart(&$Txt,$Tag,$Opening,$PosBeg,$Forward,$Case=tr
 		do {
 			if ($Forward) $p = strpos($Txt,$x,$p+1);  else $p = strrpos(substr($Txt,0,$p+1),$x);
 			if ($p===false) return false;
-			if (substr($Txt,$p,$xl)!==$x) continue; // For PHP 4 only
+			/* COMPAT#6 */
 			$z = substr($Txt,$p+$xl,1);
 		} while ( ($z!==' ') && ($z!=="\r") && ($z!=="\n") && ($z!=='>') && ($z!=='/') && ($Tag!=='/') && ($Tag!=='') );
 	} else {
 		do {
 			if ($Forward) $p = stripos($Txt,$x,$p+1);  else $p = strripos(substr($Txt,0,$p+1),$x);
 			if ($p===false) return false;
+			/* COMPAT#7 */
 			$z = substr($Txt,$p+$xl,1);
 		} while ( ($z!==' ') && ($z!=="\r") && ($z!=="\n") && ($z!=='>') && ($z!=='/') && ($Tag!=='/') && ($Tag!=='') );
 	}
