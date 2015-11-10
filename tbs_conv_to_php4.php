@@ -10,7 +10,7 @@
  * @date   2015-11-09 direct PHP5 -> PHP4 conversion
  */
 
-if (!isset($_GET['source'])) exit("Enter the name of a TBS development file in argument 'source' in the URL. Usually: <a href=\"".$_SERVER['SCRIPT_NAME']."?source=tbs_class.php\">?source=tbs_class.php</a>");
+if (!isset($_GET['source'])) exit("Enter the name of a TBS for PHP 5 file in argument 'source' in the URL. Usually: <a href=\"".$_SERVER['SCRIPT_NAME']."?source=tbs_class.php\">?source=tbs_class.php</a>");
 
 $Src = basename($_GET['source']);
 if (!file_exists($Src)) exit("File '".$Src."' is not found.");
