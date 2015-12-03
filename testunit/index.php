@@ -1,6 +1,10 @@
 <?php
 
 error_reporting(E_ALL & ~E_USER_NOTICE & ~E_STRICT);
+ini_set("display_errors", "On");
+set_time_limit(0);
+//ini_set('memory_limit', '256M');
+
 
 $dir_testu = dirname(__FILE__);
 $dir_tbs = dirname($dir_testu);
@@ -48,8 +52,7 @@ include($dir_testu.'/testcase/MiscTestCase.php');
 include($dir_testu.'/testcase/SubTplTestCase.php');
 
 // launch tests
-ini_set("display_errors", "On");
-set_time_limit(0);
+
 $tbs = new clsTinyButStrong();
 $test = new GroupTest('TinyButStrong v'.$tbs->Version.' (with PHP '.PHP_VERSION.')');
 $test->addTestCase(new FieldTestCase());
