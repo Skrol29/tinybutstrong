@@ -1,3 +1,18 @@
+= Release 3.10.1 =
+
+Skrol29, 2015-12-03
+
+== Bug fixes ==
+
+* Coding OnCacheField event in a plug-in: in some circumstances, moved locators may be ignored by TBS.
+  Could happen with OpenTBS when using parameter "ope=tbs:num" or a similar operator. 
+
+== Enhancements ==
+
+* Coding OnCacheField event in a plug-in: stronger way to manage embedding fields + support property DelMe.  
+  
+------------------------------------
+
 = Release 3.10.0 =
 
 Skrol29, 2015-11-08
