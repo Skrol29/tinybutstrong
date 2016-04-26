@@ -3,8 +3,8 @@
  *
  * TinyButStrong - Template Engine for Pro and Beginners
  *
- * @version 3.10.1 for PHP 5
- * @date    2015-12-03
+ * @version 3.10.1*R for PHP >=5.3
+ * @date    2016-04-27
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
  * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
@@ -15,7 +15,7 @@
  */
 
 // Check PHP version
-if (version_compare(PHP_VERSION,'5.0')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 5.0 or higher. You should try with TinyButStrong Edition for PHP 4.';
+if (version_compare(PHP_VERSION,'5.3')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 5.3 or higher. You should try with TinyButStrong Edition for PHP 4.';
 /* COMPAT#1 */
 
 // Render flags
@@ -570,6 +570,58 @@ public function DataClose() {
 		$this->RecSaving = false;
 		$this->RecSaved = true;
 	}
+}
+
+public function DataSort($order) {
+	$fields = array();
+	$sor = explode(',', $order);
+	$types = array('int' => 0, 'float' => 1, 'str' => 10, 'nat' => 11);
+	$funcs = array(
+		'intval', // int
+		'floatval', // float
+		10 => 'strcasecmp', // str
+		'strnatcasecmp', // nat
+	);
+	foreach ($sor as $sr) {
+		$tmp = array();
+		preg_match('/([\w\d]+)(?(?=\s+as\s+)\s+as\s+([\w\d]+))(?(?=\s+asc|\s+desc)\s+(asc|desc))/i', $sr, $tmp);
+		$k = trim($tmp[1]);
+		$asc = !isset($tmp[3]) || strtolower($tmp[3]) !== 'desc';
+		$type = 0;
+		if (isset($tmp[2])) {
+			$tmp[2] = strtolower($tmp[2]);
+			$type = isset($types[$tmp[2]]) ? $types[$tmp[2]] : 0;
+		}
+		$fields[$k] = array($type, $asc);
+	}
+	if (!count($fields))
+		return false;
+
+	$fn_sort = function ($a, $b) use (&$fields, &$funcs) {
+		foreach ($fields as $field => $par) {
+			$iv = $par[1] ? 1 : -1; // asc|desc
+			if (!isset($a[$field])) {
+				if (isset($b[$field]))
+					return -$iv;
+			} elseif (!isset($b[$field])) {
+				if (isset($a[$field]))
+					return $iv;
+			}
+			$fn = $funcs[$par[0]];
+			if ($par[0] <= 9) {
+				$x = call_user_func($fn, $a[$field]);
+				$y = call_user_func($fn, $b[$field]);
+				if ($x == $y) continue;
+				return $x > $y ? $iv : -$iv;
+			} else {
+				if ($a[$field] === $b[$field]) continue;
+				return call_user_func($fn, $a[$field], $b[$field]) * $iv;
+			}
+		}
+		return 0;
+	};
+	usort($this->SrcId, $fn_sort);
+	return true;
 }
 
 }
@@ -1825,7 +1877,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 
 			// Force dynamic parameter to be cachable
 			if ($Loc->PosDefBeg>=0) {
-				$dynprm = array('when','headergrp','footergrp','parentgrp');
+				$dynprm = array('when','headergrp','footergrp','parentgrp','sortby');
 				foreach($dynprm as $dp) {
 					$n = 0;
 					if ((isset($Loc->PrmLst[$dp])) && (strpos($Loc->PrmLst[$dp],$this->_ChrOpen.$BlockName)!==false)) {
@@ -2286,6 +2338,10 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$Qr
 					if ($WasP1) {	$WasP1 = false;} else {$LocR->FieldOutside = false;} // prevent from infinit loop
 				}
 			}
+		}
+
+		if ($LocR->PrmLst['sortby']) {
+			$Src->DataSort($LocR->PrmLst['sortby']);
 		}
 
 		// Merge sections
