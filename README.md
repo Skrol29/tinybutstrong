@@ -34,29 +34,43 @@ PHP:
 	    'num' => 2,
 	    'name' => 'dildodrone'
 	  ],
-	    'num' => 0,
+	    'num' => -10,
 	    'name' => 'othername'
 	];
 	$tbs->MergeBlock('myblock', $block);
 	
 template code:
 
-    Just sort by num
-    <div>[myblock.name;block=div;sortby num] - [myblock.num]</div>
-    
-  	Sort by name desc
-  	<div>[myblock.name;block=div;sortby name as str desc] - [myblock.num]</div>
-    
-    Sort by num asc and name desc
-    <div>[myblock.name;block=div;sortby num as int asc, name as nat desc] - [myblock.num]</div>
+	Just sort by num
+	<div>[myblock.name;block=div;sortby num] - [myblock.num]</div>
+	
+	Sort by name desc
+	<div>[myblock.name;block=div;sortby name as str desc] - [myblock.num]</div>
+	
+	Sort by num asc and name desc
+	<div>[myblock.name;block=div;sortby num as int asc, name as nat desc] - [myblock.num]</div>
 
-Also you can add custom compare functions: just add custom **type**:
 
-    clsTbsDataSource::$SortTypes['abs'] = array(
-        'conv' => true,	// will be compared using standard operators (> and ==)
-        'func' => 'abs'	// if 'conv'==true then values before the comparison will be converted using this callback
-    );
-    clsTbsDataSource::$SortTypes['cust'] = array(
-        'conv' => false,
-        'func' => 'myCallable'	// if 'conv'==false then values will be compared using this callable.
-    );
+
+Also you can add custom compare functions: just add custom or replace existing **type**:
+
+	clsTbsDataSource::$SortTypes['abs'] = array(
+		'conv' => true,	// will be compared using standard operators (> and ==)
+		'func' => 'abs'	// if 'conv'==true then values before the comparison will be converted using this callback
+	);
+	clsTbsDataSource::$SortTypes['cust'] = array(
+		'conv' => false,
+		'func' => 'myCallable'	// if 'conv'==false then values will be compared using this callable.
+	);
+	function myCallable($a, $b) {
+		if ($a > $b) return 1;
+		if ($a < $b) return -1;
+		return 0;
+	}
+
+Template:
+
+	Sort by absolute num
+	<div>[myblock.name;block=div;sortby num as abs] - [myblock.num]</div>
+	Sort by num using function 'myCallable'
+	<div>[myblock.name;block=div;sortby num as cust] - [myblock.num]</div>
