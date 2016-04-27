@@ -26,20 +26,13 @@ If two elements are equal when compared by the **FieldName1**, they will compare
 PHP: 
 
 	$block = [
-	  [
-	    'num' => 1,
-	    'name' => 'killedrone'
-	  ],
-	  [
-	    'num' => 2,
-	    'name' => 'dildodrone'
-	  ],
-	    'num' => -10,
-	    'name' => 'othername'
+		['num' => 1,  'name' => 'killedrone'],
+		['num' => 2,  'name' => 'dildodrone'],
+		['num' => -10,'name' => 'othername']
 	];
 	$tbs->MergeBlock('myblock', $block);
 	
-template code:
+Template:
 
 	Just sort by num
 	<div>[myblock.name;block=div;sortby num] - [myblock.num]</div>
@@ -49,6 +42,7 @@ template code:
 	
 	Sort by num asc and name desc
 	<div>[myblock.name;block=div;sortby num as int asc, name as nat desc] - [myblock.num]</div>
+
 
 
 
@@ -70,7 +64,7 @@ Also you can add custom compare functions: just add custom or replace existing *
 
 Template:
 
-	Sort by absolute num
+	Sort by unsigned num
 	<div>[myblock.name;block=div;sortby num as abs] - [myblock.num]</div>
 	Sort by num using function 'myCallable'
 	<div>[myblock.name;block=div;sortby num as cust] - [myblock.num]</div>

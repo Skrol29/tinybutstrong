@@ -99,15 +99,15 @@ public function DataPrepare(&$SrcId,&$TBS) {
 
 		$Key = get_resource_type($SrcId);
 		switch ($Key) {
-		case 'mysql link'            : $this->Type = 6; break;
+		case 'mysql link'			: $this->Type = 6; break;
 		case 'mysql link persistent' : $this->Type = 6; break;
-		case 'mysql result'          : $this->Type = 6; $this->SubType = 1; break;
-		case 'pgsql link'            : $this->Type = 7; break;
+		case 'mysql result'		  : $this->Type = 6; $this->SubType = 1; break;
+		case 'pgsql link'			: $this->Type = 7; break;
 		case 'pgsql link persistent' : $this->Type = 7; break;
-		case 'pgsql result'          : $this->Type = 7; $this->SubType = 1; break;
-		case 'sqlite database'       : $this->Type = 8; break;
+		case 'pgsql result'		  : $this->Type = 7; $this->SubType = 1; break;
+		case 'sqlite database'	   : $this->Type = 8; break;
 		case 'sqlite database (persistent)'	: $this->Type = 8; break;
-		case 'sqlite result'         : $this->Type = 8; $this->SubType = 1; break;
+		case 'sqlite result'		 : $this->Type = 8; $this->SubType = 1; break;
 		default :
 			$FctInfo = $Key;
 			$FctCat = 'r';
@@ -594,11 +594,11 @@ public function DataSort($order) {
 		$type = reset(self::$SortTypes);
 		if (isset($tmp[2])) {
 			$tmp[2] = strtolower($tmp[2]);
-            if (isset(self::$SortTypes[$tmp[2]])) {
-                $type = self::$SortTypes[$tmp[2]];
-            } else {
-                $this->DataAlert('Sorting warning: type ' . $tmp[2] . ' not found');
-            }
+			if (isset(self::$SortTypes[$tmp[2]])) {
+				$type = self::$SortTypes[$tmp[2]];
+			} else {
+				$this->DataAlert('Sorting warning: type ' . $tmp[2] . ' not found');
+			}
 		}
 		$this->SortFields[$k] = array($type, $asc);
 	}
@@ -619,15 +619,15 @@ protected function SortCompare($a, $b) {
 		if (!isset($a[$field])) {
 			if (isset($b[$field])) {
 				return -$iv;
-            } else {
-                continue;
-            }
+			} else {
+				continue;
+			}
 		} elseif (!isset($b[$field])) {
 			if (isset($a[$field])) {
 				return $iv;
-            } else {
-                continue;
-            }
+			} else {
+				continue;
+			}
 		}
 		$fn = $par[0]['func'];
 		if ($par[0]['conv']) {
