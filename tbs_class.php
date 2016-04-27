@@ -72,10 +72,10 @@ public $OnDataPrmDone = array();
 public $OnDataPi = false;
 private $SortFields = array();
 public static $SortTypes = array(
+	'nat'   => array('conv' => false, 'func' => 'strnatcasecmp'),   // default
 	'int'   => array('conv' => true,  'func' => 'intval'),
 	'float' => array('conv' => true,  'func' => 'floatval'),
 	'str'   => array('conv' => false, 'func' => 'strcasecmp'),
-	'nat'   => array('conv' => false, 'func' => 'strnatcasecmp'),
 );
 
 public function DataAlert($Msg) {
@@ -591,10 +591,14 @@ public function DataSort($order) {
 		preg_match('/([\w\d]+)(?(?=\s+as\s+)\s+as\s+([\w\d]+))(?(?=\s+asc|\s+desc)\s+(asc|desc))/i', $sr, $tmp);
 		$k = trim($tmp[1]);
 		$asc = !isset($tmp[3]) || strtolower($tmp[3]) !== 'desc';
-		$type = 0;
+		$type = reset(self::$SortTypes);
 		if (isset($tmp[2])) {
 			$tmp[2] = strtolower($tmp[2]);
-			$type = isset(self::$SortTypes[$tmp[2]]) ? self::$SortTypes[$tmp[2]] : 0;
+            if (isset(self::$SortTypes[$tmp[2]])) {
+                $type = self::$SortTypes[$tmp[2]];
+            } else {
+                $this->DataAlert('Sorting warning: type ' . $tmp[2] . ' not found');
+            }
 		}
 		$this->SortFields[$k] = array($type, $asc);
 	}
@@ -613,11 +617,17 @@ protected function SortCompare($a, $b) {
 	foreach ($this->SortFields as $field => $par) {
 		$iv = $par[1] ? 1 : -1; // asc|desc
 		if (!isset($a[$field])) {
-			if (isset($b[$field]))
+			if (isset($b[$field])) {
 				return -$iv;
+            } else {
+                continue;
+            }
 		} elseif (!isset($b[$field])) {
-			if (isset($a[$field]))
+			if (isset($a[$field])) {
 				return $iv;
+            } else {
+                continue;
+            }
 		}
 		$fn = $par[0]['func'];
 		if ($par[0]['conv']) {

@@ -16,7 +16,7 @@ Format:
 
 > [block...;_sortby **FieldName1**[ as **type**][ **order**][, FieldName2[ as type][ order][, ...]]_;...]
 
-Where **order** can be ASC or DESC; **type** can be INT, FLOAT, STR, NAT; **FieldName** - custom field that should be sorted.
+Where **order** can be ASC _(default)_ or DESC; **type** can be INT, FLOAT, STR, NAT _(default)_; **FieldName** - custom field that should be sorted.
 
 If two elements are equal when compared by the **FieldName1**, they will compared by the **FieldName2**, etc.
 
@@ -54,7 +54,7 @@ template code:
 
 Also you can add custom compare functions: just add custom or replace existing **type**:
 
-	clsTbsDataSource::$SortTypes['abs'] = array(
+	clsTbsDataSource::$SortTypes['abs'] = array(	// type name must be in lowercase
 		'conv' => true,	// will be compared using standard operators (> and ==)
 		'func' => 'abs'	// if 'conv'==true then values before the comparison will be converted using this callback
 	);
