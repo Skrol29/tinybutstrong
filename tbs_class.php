@@ -99,15 +99,15 @@ public function DataPrepare(&$SrcId,&$TBS) {
 
 		$Key = get_resource_type($SrcId);
 		switch ($Key) {
-		case 'mysql link'			: $this->Type = 6; break;
+		case 'mysql link'            : $this->Type = 6; break;
 		case 'mysql link persistent' : $this->Type = 6; break;
-		case 'mysql result'		  : $this->Type = 6; $this->SubType = 1; break;
-		case 'pgsql link'			: $this->Type = 7; break;
+		case 'mysql result'          : $this->Type = 6; $this->SubType = 1; break;
+		case 'pgsql link'            : $this->Type = 7; break;
 		case 'pgsql link persistent' : $this->Type = 7; break;
-		case 'pgsql result'		  : $this->Type = 7; $this->SubType = 1; break;
-		case 'sqlite database'	   : $this->Type = 8; break;
+		case 'pgsql result'          : $this->Type = 7; $this->SubType = 1; break;
+		case 'sqlite database'       : $this->Type = 8; break;
 		case 'sqlite database (persistent)'	: $this->Type = 8; break;
-		case 'sqlite result'		 : $this->Type = 8; $this->SubType = 1; break;
+		case 'sqlite result'         : $this->Type = 8; $this->SubType = 1; break;
 		default :
 			$FctInfo = $Key;
 			$FctCat = 'r';
