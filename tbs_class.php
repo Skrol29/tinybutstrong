@@ -3,7 +3,7 @@
  *
  * TinyButStrong - Template Engine for Pro and Beginners
  *
- * @version 3.10.1*R for PHP >=5.3
+ * @version 3.10.1*R for PHP 5.0
  * @date    2016-04-27
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
@@ -15,7 +15,7 @@
  */
 
 // Check PHP version
-if (version_compare(PHP_VERSION,'5.3')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 5.3 or higher. You should try with TinyButStrong Edition for PHP 4.';
+if (version_compare(PHP_VERSION,'5.0')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 5.0 or higher. You should try with TinyButStrong Edition for PHP 4.';
 /* COMPAT#1 */
 
 // Render flags
@@ -70,6 +70,13 @@ public $OnDataOk = false;
 public $OnDataPrm = false;
 public $OnDataPrmDone = array();
 public $OnDataPi = false;
+private $SortFields = array();
+public static $SortTypes = array(
+	'int'   => array('conv' => true,  'func' => 'intval'),
+	'float' => array('conv' => true,  'func' => 'floatval'),
+	'str'   => array('conv' => false, 'func' => 'strcasecmp'),
+	'nat'   => array('conv' => false, 'func' => 'strnatcasecmp'),
+);
 
 public function DataAlert($Msg) {
 	if (is_array($this->TBS->_CurrBlock)) {
@@ -573,15 +580,12 @@ public function DataClose() {
 }
 
 public function DataSort($order) {
-	$fields = array();
+	if ($this->Type != 0) {
+		$this->DataAlert('Sorting failed: sorting can be used only for arrays');
+		return false;
+	}
+	$this->SortFields = array();
 	$sor = explode(',', $order);
-	$types = array('int' => 0, 'float' => 1, 'str' => 10, 'nat' => 11);
-	$funcs = array(
-		'intval', // int
-		'floatval', // float
-		10 => 'strcasecmp', // str
-		'strnatcasecmp', // nat
-	);
 	foreach ($sor as $sr) {
 		$tmp = array();
 		preg_match('/([\w\d]+)(?(?=\s+as\s+)\s+as\s+([\w\d]+))(?(?=\s+asc|\s+desc)\s+(asc|desc))/i', $sr, $tmp);
@@ -590,38 +594,43 @@ public function DataSort($order) {
 		$type = 0;
 		if (isset($tmp[2])) {
 			$tmp[2] = strtolower($tmp[2]);
-			$type = isset($types[$tmp[2]]) ? $types[$tmp[2]] : 0;
+			$type = isset(self::$SortTypes[$tmp[2]]) ? self::$SortTypes[$tmp[2]] : 0;
 		}
-		$fields[$k] = array($type, $asc);
+		$this->SortFields[$k] = array($type, $asc);
 	}
-	if (!count($fields))
+	if (!count($this->SortFields)) {
+		$this->DataAlert('Sorting failed: no fields for sort');
 		return false;
-
-	$fn_sort = function ($a, $b) use (&$fields, &$funcs) {
-		foreach ($fields as $field => $par) {
-			$iv = $par[1] ? 1 : -1; // asc|desc
-			if (!isset($a[$field])) {
-				if (isset($b[$field]))
-					return -$iv;
-			} elseif (!isset($b[$field])) {
-				if (isset($a[$field]))
-					return $iv;
-			}
-			$fn = $funcs[$par[0]];
-			if ($par[0] <= 9) {
-				$x = call_user_func($fn, $a[$field]);
-				$y = call_user_func($fn, $b[$field]);
-				if ($x == $y) continue;
-				return $x > $y ? $iv : -$iv;
-			} else {
-				if ($a[$field] === $b[$field]) continue;
-				return call_user_func($fn, $a[$field], $b[$field]) * $iv;
-			}
-		}
-		return 0;
-	};
-	usort($this->SrcId, $fn_sort);
+	}
+	if (!usort($this->SrcId, array($this, 'SortCompare'))) {
+		$this->DataAlert('Sorting failed.');
+		return false;
+	}
 	return true;
+}
+
+protected function SortCompare($a, $b) {
+	foreach ($this->SortFields as $field => $par) {
+		$iv = $par[1] ? 1 : -1; // asc|desc
+		if (!isset($a[$field])) {
+			if (isset($b[$field]))
+				return -$iv;
+		} elseif (!isset($b[$field])) {
+			if (isset($a[$field]))
+				return $iv;
+		}
+		$fn = $par[0]['func'];
+		if ($par[0]['conv']) {
+			$x = call_user_func($fn, $a[$field]);
+			$y = call_user_func($fn, $b[$field]);
+			if ($x == $y) continue;
+			return $x > $y ? $iv : -$iv;
+		} else {
+			if ($a[$field] === $b[$field]) continue;
+			return call_user_func($fn, $a[$field], $b[$field]) * $iv;
+		}
+	}
+	return 0;
 }
 
 }

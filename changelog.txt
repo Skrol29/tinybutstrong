@@ -1,3 +1,13 @@
+= TinyButStrong 3.10.1R =
+
+roxblnfk, 2016-04-27
+
+== New features ==
+
+* Added sorting blocks by custom field
+  
+------------------------------------
+
 = Release 3.10.1 =
 
 Skrol29, 2015-12-03

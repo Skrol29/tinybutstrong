@@ -8,9 +8,9 @@ It has many plugins including OpenTBS.
 
 ## my adds:
 
-Now need PHP >=5.3
+Now need PHP 5.0
 
-Added sorting blocks by custom field as int, float, string or by natural algorithm
+Added sorting blocks (arrays only) by custom field as int, float, string or by natural algorithm. Can be used for subblocks 
 
 Format:
 
@@ -18,7 +18,7 @@ Format:
 
 Where **order** can be ASC or DESC; **type** can be INT, FLOAT, STR, NAT; **FieldName** - custom field that should be sorted.
 
-If two elements are equal when compared by the **FieldName1**, they are compared by the **FieldName2**, etc.
+If two elements are equal when compared by the **FieldName1**, they will compared by the **FieldName2**, etc.
 
 
 ### For example:
@@ -34,7 +34,7 @@ PHP:
 	    'num' => 2,
 	    'name' => 'dildodrone'
 	  ],
-	    'num' => 3,
+	    'num' => 0,
 	    'name' => 'othername'
 	];
 	$tbs->MergeBlock('myblock', $block);
@@ -46,6 +46,17 @@ template code:
     
   	Sort by name desc
   	<div>[myblock.name;block=div;sortby name as str desc] - [myblock.num]</div>
-  	
+    
     Sort by num asc and name desc
     <div>[myblock.name;block=div;sortby num as int asc, name as nat desc] - [myblock.num]</div>
+
+Also you can add custom compare functions: just add custom **type**:
+
+    clsTbsDataSource::$SortTypes['abs'] = array(
+        'conv' => true,	// will be compared using standard operators (> and ==)
+        'func' => 'abs'	// if 'conv'==true then values before the comparison will be converted using this callback
+    );
+    clsTbsDataSource::$SortTypes['cust'] = array(
+        'conv' => false,
+        'func' => 'myCallable'	// if 'conv'==false then values will be compared using this callable.
+    );
