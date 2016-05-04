@@ -579,6 +579,78 @@ public function DataClose() {
 	}
 }
 
+public function DataGroup($fields) {
+    if ($this->Type != 0) {
+        $this->DataAlert('Grouping failed: grouping can be used only for arrays');
+        return false;
+    }
+	$pos = strrpos(strtolower($fields), ' into ');
+    $grField = 'group';	// default field
+	if ($pos === false) {
+		$this->DataAlert('Grouping failed: field name not specified');
+	} else {
+		$str = trim(substr($fields, $pos + 6));
+		if (strlen($str) > 0) {
+			$grField = $str;
+			$fields = substr($fields, 0, $pos);
+		}
+	}
+	
+    $array = array();
+    $grps = explode(',', $fields);
+    foreach ($grps as $gr) {
+        $array[trim($gr)] = null;
+    }
+    if (isset($array[$grField])) unset($array[$grField]);
+	if (!count($array)) {
+		$this->DataAlert('Grouping failed: no fields');
+		return false;
+	}
+    $values = array();
+    $maxK = -1;
+    foreach ($this->SrcId as &$v) {
+        // find
+        $find = false;
+        if (count($values)) {
+            foreach ($values as $key => &$val) {
+                foreach ($array as $k => $arrv) {
+                    if (!isset($v[$k]) && isset($val[$k]) || $v[$k] !== $val[$k]) {
+                        continue 2;
+                    }
+                }
+                $find = $key;
+                break;
+            }
+        }
+        // fill
+        if ($find === false) {
+            $values[++$maxK] = $array;
+            foreach ($array as $k => $arrv) {
+                $values[$maxK][$k] = isset($v[$k]) ? $v[$k] : null;
+            }
+            $values[$maxK][$grField] = array(&$v);
+        } else {
+            $values[$find][$grField][] = &$v;
+        }
+        
+    }
+    unset($v, $val);
+    $this->SrcId = $values;
+    $this->RecNbr = count($values);
+    // foreach($this as $k => $v) {
+        // echo "[$k] ";
+        // if (is_array($v)) echo "array ".count($v);
+        // elseif (is_object($v)) echo 'object';
+        // elseif (is_string($v)) echo 'string('.strlen($v).')' . (strlen($v)>100 ? ' "..."' : ' "'.$v.'"');
+        // elseif (is_int($v)) echo 'int '.$v;
+        // elseif (is_bool($v)) echo 'bool '.(int)$v;
+        // else print_r($v);
+        // echo "\r\n";
+    // } die;
+    // foreach ($this->SrcId as $ak => $av) {echo "+ $ak [".count($av)."]\r\n";foreach ($av as $bk => $bv) {echo "+ - $bk [".count($bv)."]\r\n";}}die;
+    return true;
+}
+
 public function DataSort($order) {
 	if ($this->Type != 0) {
 		$this->DataAlert('Sorting failed: sorting can be used only for arrays');
@@ -1896,7 +1968,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 
 			// Force dynamic parameter to be cachable
 			if ($Loc->PosDefBeg>=0) {
-				$dynprm = array('when','headergrp','footergrp','parentgrp','sortby');
+				$dynprm = array('when','headergrp','footergrp','parentgrp','sortby','groupby');
 				foreach($dynprm as $dp) {
 					$n = 0;
 					if ((isset($Loc->PrmLst[$dp])) && (strpos($Loc->PrmLst[$dp],$this->_ChrOpen.$BlockName)!==false)) {
@@ -2359,6 +2431,9 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$Qr
 			}
 		}
 
+		if ($LocR->PrmLst['groupby']) {
+			$Src->DataGroup($LocR->PrmLst['groupby']);
+		}
 		if ($LocR->PrmLst['sortby']) {
 			$Src->DataSort($LocR->PrmLst['sortby']);
 		}

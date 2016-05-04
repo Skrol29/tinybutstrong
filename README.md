@@ -6,11 +6,13 @@ The only engine that enables W3C compliant templates.
 It has many plugins including OpenTBS.
 
 
-## my adds:
+# my adds:
 
 Now need PHP 5.0
 
 Added sorting blocks (arrays only) by custom field as int, float, string or by natural algorithm. Can be used for subblocks 
+
+## Sorting
 
 Format:
 
@@ -68,3 +70,11 @@ Template:
 	<div>[myblock.name;block=div;sortby num as abs] - [myblock.num]</div>
 	Sort by num using function 'myCallable'
 	<div>[myblock.name;block=div;sortby num as cust] - [myblock.num]</div>
+
+
+## Grouping (in progress)
+
+Format:
+
+> [block...;_groupby **FieldName1**[, FieldName2][, ...][ into **GroupName**]_;...]
+
