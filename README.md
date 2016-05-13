@@ -6,7 +6,7 @@ The only engine that enables W3C compliant templates.
 It has many plugins including OpenTBS.
 
 
-# my adds:
+# v3.11.0 adds:
 
 Added sorting blocks (arrays only) by custom field as int, float, string or by natural algorithm. Also can be used for subblocks.
 
