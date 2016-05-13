@@ -8,8 +8,6 @@ It has many plugins including OpenTBS.
 
 # my adds:
 
-Now need PHP 5.0
-
 Added sorting blocks (arrays only) by custom field as int, float, string or by natural algorithm. Also can be used for subblocks.
 
 Added regrouping in subblocks using a custom keys (arrays only).
