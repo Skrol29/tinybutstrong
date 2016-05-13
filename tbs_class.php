@@ -650,10 +650,10 @@ public function DataSort($order) {
 	foreach ($sor as $sr) {
 		$tmp = array();
 		preg_match('/([\w\d]+)(?(?=\s+as\s+)\s+as\s+([\w\d]+))(?(?=\s+asc|\s+desc)\s+(asc|desc))/i', $sr, $tmp);
-		$k = trim($tmp[1]);
+		$k = isset($tmp[1]) ? trim($tmp[1]) : '';
 		$asc = !isset($tmp[3]) || strtolower($tmp[3]) !== 'desc';
 		$type = reset(self::$SortTypes);
-		if (isset($tmp[2])) {
+		if (isset($tmp[2]) && strlen($tmp[2])) {
 			$tmp[2] = strtolower($tmp[2]);
 			if (isset(self::$SortTypes[$tmp[2]])) {
 				$type = self::$SortTypes[$tmp[2]];
@@ -2420,10 +2420,10 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$Qr
 			}
 		}
 
-		if ($LocR->PrmLst['groupby']) {
+		if (isset($LocR->PrmLst['groupby'])) {
 			$Src->DataGroup($LocR->PrmLst['groupby']);
 		}
-		if ($LocR->PrmLst['sortby']) {
+		if (isset($LocR->PrmLst['sortby'])) {
 			$Src->DataSort($LocR->PrmLst['sortby']);
 		}
 
