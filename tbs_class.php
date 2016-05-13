@@ -4,7 +4,7 @@
  * TinyButStrong - Template Engine for Pro and Beginners
  *
  * @version 3.10.1*R for PHP 5.0
- * @date    2016-04-27
+ * @date    2016-05-05
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
  * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
@@ -580,12 +580,12 @@ public function DataClose() {
 }
 
 public function DataGroup($fields) {
-    if ($this->Type != 0) {
-        $this->DataAlert('Grouping failed: grouping can be used only for arrays');
-        return false;
-    }
+	if ($this->Type != 0) {
+		$this->DataAlert('Grouping failed: grouping can be used only for arrays');
+		return false;
+	}
 	$pos = strrpos(strtolower($fields), ' into ');
-    $grField = 'group';	// default field
+	$grField = 'group';	// default field
 	if ($pos === false) {
 		$this->DataAlert('Grouping failed: field name not specified');
 	} else {
@@ -596,59 +596,48 @@ public function DataGroup($fields) {
 		}
 	}
 	
-    $array = array();
-    $grps = explode(',', $fields);
-    foreach ($grps as $gr) {
-        $array[trim($gr)] = null;
-    }
-    if (isset($array[$grField])) unset($array[$grField]);
+	$array = array();
+	$grps = explode(',', $fields);
+	foreach ($grps as $gr) {
+		$array[trim($gr)] = null;
+	}
+	if (isset($array[$grField])) unset($array[$grField]);
 	if (!count($array)) {
 		$this->DataAlert('Grouping failed: no fields');
 		return false;
 	}
-    $values = array();
-    $maxK = -1;
-    foreach ($this->SrcId as &$v) {
-        // find
-        $find = false;
-        if (count($values)) {
-            foreach ($values as $key => &$val) {
-                foreach ($array as $k => $arrv) {
-                    if (!isset($v[$k]) && isset($val[$k]) || $v[$k] !== $val[$k]) {
-                        continue 2;
-                    }
-                }
-                $find = $key;
-                break;
-            }
-        }
-        // fill
-        if ($find === false) {
-            $values[++$maxK] = $array;
-            foreach ($array as $k => $arrv) {
-                $values[$maxK][$k] = isset($v[$k]) ? $v[$k] : null;
-            }
-            $values[$maxK][$grField] = array(&$v);
-        } else {
-            $values[$find][$grField][] = &$v;
-        }
-        
-    }
-    unset($v, $val);
-    $this->SrcId = $values;
-    $this->RecNbr = count($values);
-    // foreach($this as $k => $v) {
-        // echo "[$k] ";
-        // if (is_array($v)) echo "array ".count($v);
-        // elseif (is_object($v)) echo 'object';
-        // elseif (is_string($v)) echo 'string('.strlen($v).')' . (strlen($v)>100 ? ' "..."' : ' "'.$v.'"');
-        // elseif (is_int($v)) echo 'int '.$v;
-        // elseif (is_bool($v)) echo 'bool '.(int)$v;
-        // else print_r($v);
-        // echo "\r\n";
-    // } die;
-    // foreach ($this->SrcId as $ak => $av) {echo "+ $ak [".count($av)."]\r\n";foreach ($av as $bk => $bv) {echo "+ - $bk [".count($bv)."]\r\n";}}die;
-    return true;
+	$values = array();
+	$maxK = -1;
+	foreach ($this->SrcId as &$v) {
+		// find
+		$find = false;
+		if (count($values)) {
+			foreach ($values as $key => &$val) {
+				foreach ($array as $k => $arrv) {
+					if (!isset($v[$k]) && isset($val[$k]) || $v[$k] !== $val[$k]) {
+						continue 2;
+					}
+				}
+				$find = $key;
+				break;
+			}
+		}
+		// fill
+		if ($find === false) {
+			$values[++$maxK] = $array;
+			foreach ($array as $k => $arrv) {
+				$values[$maxK][$k] = isset($v[$k]) ? $v[$k] : null;
+			}
+			$values[$maxK][$grField] = array(&$v);
+		} else {
+			$values[$find][$grField][] = &$v;
+		}
+		
+	}
+	unset($v, $val);
+	$this->SrcId = $values;
+	$this->RecNbr = count($values);
+	return true;
 }
 
 public function DataSort($order) {

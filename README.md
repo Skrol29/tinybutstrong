@@ -10,7 +10,9 @@ It has many plugins including OpenTBS.
 
 Now need PHP 5.0
 
-Added sorting blocks (arrays only) by custom field as int, float, string or by natural algorithm. Can be used for subblocks 
+Added sorting blocks (arrays only) by custom field as int, float, string or by natural algorithm. Also can be used for subblocks.
+
+Added regrouping in subblocks using a custom keys (arrays only).
 
 ## Sorting
 
@@ -72,9 +74,32 @@ Template:
 	<div>[myblock.name;block=div;sortby num as cust] - [myblock.num]</div>
 
 
-## Grouping (in progress)
+## Grouping
 
 Format:
 
 > [block...;_groupby **FieldName1**[, FieldName2][, ...][ into **GroupName**]_;...]
 
+Where **FieldName** custom field (key) that will be used for grouping. **GroupName** - key, in which the array will be recorded. "group" by default.
+
+### For example:
+
+PHP: 
+
+	$block = [
+		['player' => 'Player 1',  'level' => 1],
+		['player' => 'Player 2',  'level' => 2],
+		['player' => 'Player 3',  'level' => 2],
+		['player' => 'Player 4',  'level' => 1],
+		['player' => 'Player 5',  'level' => 2]
+	];
+	$tbs->MergeBlock('myblock', $block);
+
+Template:
+
+	<div>
+		<p>Players at the <b>Level [myblock.level;block=div;groupby level into players;sub1=players]</b>:</p>
+		<ul>
+			<li>[myblock_sub1.player;block=li]</li>
+		</ul>
+	</div>
