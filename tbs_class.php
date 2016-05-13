@@ -4,7 +4,7 @@
  * TinyButStrong - Template Engine for Pro and Beginners
  *
  * @version 3.10.1*R for PHP 5.0
- * @date    2016-04-27
+ * @date    2016-05-05
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
  * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
@@ -577,6 +577,67 @@ public function DataClose() {
 		$this->RecSaving = false;
 		$this->RecSaved = true;
 	}
+}
+
+public function DataGroup($fields) {
+	if ($this->Type != 0) {
+		$this->DataAlert('Grouping failed: grouping can be used only for arrays');
+		return false;
+	}
+	$pos = strrpos(strtolower($fields), ' into ');
+	$grField = 'group';	// default field
+	if ($pos === false) {
+		$this->DataAlert('Grouping failed: field name not specified');
+	} else {
+		$str = trim(substr($fields, $pos + 6));
+		if (strlen($str) > 0) {
+			$grField = $str;
+			$fields = substr($fields, 0, $pos);
+		}
+	}
+	
+	$array = array();
+	$grps = explode(',', $fields);
+	foreach ($grps as $gr) {
+		$array[trim($gr)] = null;
+	}
+	if (isset($array[$grField])) unset($array[$grField]);
+	if (!count($array)) {
+		$this->DataAlert('Grouping failed: no fields');
+		return false;
+	}
+	$values = array();
+	$maxK = -1;
+	foreach ($this->SrcId as &$v) {
+		// find
+		$find = false;
+		if (count($values)) {
+			foreach ($values as $key => &$val) {
+				foreach ($array as $k => $arrv) {
+					if (!isset($v[$k]) && isset($val[$k]) || $v[$k] !== $val[$k]) {
+						continue 2;
+					}
+				}
+				$find = $key;
+				break;
+			}
+		}
+		// fill
+		if ($find === false) {
+			$values[++$maxK] = $array;
+			foreach ($array as $k => $arrv) {
+				$values[$maxK][$k] = isset($v[$k]) ? $v[$k] : null;
+			}
+			$values[$maxK][$grField] = array(&$v);
+		} else {
+			$values[$find][$grField][] = &$v;
+		}
+		
+	}
+	unset($v, $val);
+	$this->SrcId = $values;
+	$this->RecNbr = count($values);
+	return true;
 }
 
 public function DataSort($order) {
@@ -1896,7 +1957,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 
 			// Force dynamic parameter to be cachable
 			if ($Loc->PosDefBeg>=0) {
-				$dynprm = array('when','headergrp','footergrp','parentgrp','sortby');
+				$dynprm = array('when','headergrp','footergrp','parentgrp','sortby','groupby');
 				foreach($dynprm as $dp) {
 					$n = 0;
 					if ((isset($Loc->PrmLst[$dp])) && (strpos($Loc->PrmLst[$dp],$this->_ChrOpen.$BlockName)!==false)) {
@@ -2359,6 +2420,9 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$Qr
 			}
 		}
 
+		if ($LocR->PrmLst['groupby']) {
+			$Src->DataGroup($LocR->PrmLst['groupby']);
+		}
 		if ($LocR->PrmLst['sortby']) {
 			$Src->DataSort($LocR->PrmLst['sortby']);
 		}
