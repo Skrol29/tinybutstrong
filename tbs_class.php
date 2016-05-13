@@ -3,8 +3,8 @@
  *
  * TinyButStrong - Template Engine for Pro and Beginners
  *
- * @version 3.10.1*R for PHP 5.0
- * @date    2016-05-05
+ * @version 3.11.0 for PHP 5.0
+ * @date    2016-05-13
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
  * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
@@ -614,7 +614,7 @@ public function DataGroup($fields) {
 		if (count($values)) {
 			foreach ($values as $key => &$val) {
 				foreach ($array as $k => $arrv) {
-					if (!isset($v[$k]) && isset($val[$k]) || $v[$k] !== $val[$k]) {
+					if (!isset($v[$k]) && isset($val[$k]) OR isset($val[$k]) && $v[$k] !== $val[$k]) {
 						continue 2;
 					}
 				}
