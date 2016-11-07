@@ -76,11 +76,11 @@ Template:
 
 Format:
 
-> [block...;_groupby **FieldName1**[ asFlag][, FieldName2[ asFlag]][, ...][ into **GroupName**]_;...]
+> [block...;_groupby **FieldName1**[ asFlags][, FieldName2[ asFlags]][, ...][ into **GroupName**]_;...]
 
 Where **FieldName** custom field (key) that will be used for grouping. **GroupName** - key, in which the array will be recorded. "group" by default.
 
-Param **asFlag** only for array types - will be grouped by each values as by separate value
+Param **asFlags** only for array types - will be grouped by each values as by separate value
 
 ### For example:
 
@@ -103,5 +103,3 @@ Template:
 			<li>[myblock_sub1.player;block=li]</li>
 		</ul>
 	</div>
-
-Added param `asFlags` for Arrays into GROUPBY fields
