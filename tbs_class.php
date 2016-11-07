@@ -579,41 +579,59 @@ public function DataClose() {
 	}
 }
 
-public function DataGroup($fields) {
+public function DataGroup($strFields) {
 	if ($this->Type != 0) {
 		$this->DataAlert('Grouping failed: grouping can be used only for arrays');
 		return false;
 	}
-	$pos = strrpos(strtolower($fields), ' into ');
+	$pos = strrpos(strtolower($strFields), ' into ');
 	$grField = 'group';	// default field
 	if ($pos === false) {
 		$this->DataAlert('Grouping failed: field name not specified');
 	} else {
-		$str = trim(substr($fields, $pos + 6));
+		$str = trim(substr($strFields, $pos + 6));
 		if (strlen($str) > 0) {
 			$grField = $str;
-			$fields = substr($fields, 0, $pos);
+			$strFields = substr($strFields, 0, $pos);
 		}
 	}
 	
-	$array = array();
-	$grps = explode(',', $fields);
+	$fields = array();
+	$fparam = array();
+	$grps = explode(',', $strFields);
 	foreach ($grps as $gr) {
-		$array[trim($gr)] = null;
+		$grpr = explode(' ', trim($gr));	# params
+		$fld = trim($grpr[0]);
+		$fields[$fld] = null;
+		$fparam[$fld] = array(
+			'asFlags' => false,
+		);
+		if (count($grpr) > 1) {
+			foreach ($grpr as $prv) {
+				$fparam[$fld][$prv] = true;
+			}
+		}
 	}
-	if (isset($array[$grField])) unset($array[$grField]);
-	if (!count($array)) {
+	if (in_array($grField, $fields)) unset($fields[$grField]);
+	if (!count($fields)) {
 		$this->DataAlert('Grouping failed: no fields');
 		return false;
 	}
 	$values = array();
 	$maxK = -1;
+	// prepare
+	foreach ($fparam as $fpk => $fpv) {
+		if ($fpv['asFlags']) {
+			// $mpSubValues[$fpk] = array_key_exists($fpk, $v) ? (array)$v[$fpk] : array();
+			unset($fields[$fpk]);	// потом
+		}
+	}
 	foreach ($this->SrcId as &$v) {
 		// find
 		$find = false;
 		if (count($values)) {
 			foreach ($values as $key => &$val) {
-				foreach ($array as $k => $arrv) {
+				foreach ($fields as $k => $arrv) {
 					if (!isset($v[$k]) && isset($val[$k]) OR isset($val[$k]) && $v[$k] !== $val[$k]) {
 						continue 2;
 					}
@@ -624,18 +642,72 @@ public function DataGroup($fields) {
 		}
 		// fill
 		if ($find === false) {
-			$values[++$maxK] = $array;
-			foreach ($array as $k => $arrv) {
+			# item with unique sortParams - add as new set
+			$values[++$maxK] = $fields;
+			foreach ($fields as $k => $arrv) {
 				$values[$maxK][$k] = isset($v[$k]) ? $v[$k] : null;
 			}
 			$values[$maxK][$grField] = array(&$v);
 		} else {
 			$values[$find][$grField][] = &$v;
 		}
-		
 	}
-	unset($v, $val);
-	$this->SrcId = $values;
+	if (isset($v)) unset($v);
+	// one by one [asFlags]
+	$resetKeys = false;
+	foreach ($fparam as $fpk => $fpv) {
+		if ($fpv['asFlags']) {
+			// $fpk - fieldName
+			# each group from current
+			for ($valKey = 0, $j = $maxK; $valKey <= $j; ++$valKey) {
+				if (!isset($values[$valKey])) continue;
+				$value = &$values[$valKey];
+				# find all unique grouply values
+				$keys = array();
+				foreach ($value[$grField] as &$el) {
+					if (!isset($el[$fpk])) {
+						$el[$fpk] = null;
+					}
+					if (!is_array($el[$fpk])) {
+						if (!in_array($el[$fpk], $keys)) {
+							$keys[] = $el[$fpk];
+						}
+					} else {
+						foreach ($el[$fpk] as $fpkv) {
+							if (!in_array($fpkv, $keys)) {
+								$keys[] = $fpkv;
+							}
+						}
+					}
+				}
+				if (isset($el)) unset($el);
+				foreach ($keys as &$key) {
+					$values[++$maxK] = array($grField => array());
+					# fill
+					foreach ($value as $inValK => &$inValV) {
+						if ($inValK === $grField) continue;
+						$values[$maxK][$inValK] = &$inValV;
+					}
+					unset($inValV);
+					$values[$maxK][$fpk] = $key;
+					# group
+					foreach ($value[$grField] as &$el) {
+						if (is_array($el[$fpk]) && in_array($key, $el[$fpk]) || !is_array($el[$fpk]) && $el[$fpk] === $key) {
+							$values[$maxK][$grField][] = &$el;
+						}
+					}
+					if (isset($el)) unset($el);
+				}
+				if (isset($key)) unset($key);
+				unset($values[$valKey]);
+				$resetKeys = true;
+			}
+			if (isset($value)) unset($value);
+		}
+		$fields[$fpk] = null;
+	}
+	
+	$this->SrcId = $resetKeys ? array_values($values) : $values;
 	$this->RecNbr = count($values);
 	return true;
 }

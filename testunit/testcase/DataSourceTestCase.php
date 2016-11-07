@@ -189,7 +189,146 @@ class DataSourceTestCase extends TBSUnitTestCase {
 				$this->fail('GROUPBY error. The function DataGroup should return false in this case. Query string: [groupby ' . $str . ']');
 				continue;
 			}
+			// if ($this->dataSrc->SrcId != $result) {
+				// print_r($result);
+				// print_r($this->dataSrc->SrcId);
+			// }
 			$this->assertEqual($this->dataSrc->SrcId, $result, 'GROUPBY error. Query string: [groupby ' . $str . ']');
+		}
+	}
+
+	function testGroupByFlags() {
+		$el1 = array('a' => 1, 'b' => 'a', 'd' => '-2', 'e' => array(1, 2,));
+		$el2 = array('a' => 1, 'b' => 'b', 'd' => '+8', 'e' => array(2, 3,));
+		$el3 = array('a' => 2, 'b' => 'b', 'd' => '+8', 'e' => array(null, 3,));
+		$el4 = array('a' => 2, 'b' => 'a', 'd' => '+8', 'e' => null);
+		$data = array(
+			$el1,
+			$el2,
+			$el3,
+			$el4,
+		);
+		// must pass
+		$variant1 = array(
+			array(
+				'e' => array(1, 2,),
+				'group' => array(
+					$el1,
+				),
+			),
+			array(
+				'e' => $el2['e'],
+				'group' => array(
+					$el2,
+				),
+			),
+			array(
+				'e' => $el3['e'],
+				'group' => array(
+					$el3,
+				),
+			),
+			array(
+				'e' => $el4['e'],
+				'group' => array(
+					$el4,
+				),
+			),
+		);
+		$variant2 = array(
+			array(
+				'e' => 1,
+				'group' => array(
+					$el1,
+				),
+			),
+			array(
+				'e' => 2,
+				'group' => array(
+					$el1,
+					$el2,
+				),
+			),
+			array(
+				'e' => 3,
+				'group' => array(
+					$el2,
+					$el3,
+				),
+			),
+			array(
+				'e' => null,
+				'group' => array(
+					$el3,
+					$el4,
+				),
+			),
+		);
+		$variant3 = array(
+			array(
+				'a' => 1,
+				'e' => 1,
+				'group' => array(
+					$el1,
+				),
+			),
+			array(
+				'a' => 1,
+				'e' => 2,
+				'group' => array(
+					$el1,
+					$el2,
+				),
+			),
+			array(
+				'a' => 1,
+				'e' => 3,
+				'group' => array(
+					$el2,
+				),
+			),
+			array(
+				'a' => 2,
+				'e' => null,
+				'group' => array(
+					$el3,
+					$el4,
+				),
+			),
+			array(
+				'a' => 2,
+				'e' => 3,
+				'group' => array(
+					$el3,
+				),
+			),
+		);
+		$results = array(
+			'e '              => $variant1,
+			'e asFlags'    => $variant2,
+			'a, e asFlags' => $variant3,
+		);
+		foreach ($results as $str => $result) {
+			$this->createTbsDataSourceInstance($data);
+			$this->tbs->NoErr = TRUE;
+			$true = $this->dataSrc->DataGroup($str);
+			if (!$true) {
+				if ($result === false) {
+					$this->pass();
+				} else {
+					$this->fail('GROUPBY FLAG error. The function DataGroup returns false. Query string: [groupby ' . $str . ']');
+				}
+				continue;
+			}
+			if ($result === false) {
+				$this->fail('GROUPBY FLAG error. The function DataGroup should return false in this case. Query string: [groupby ' . $str . ']');
+				continue;
+			}
+			// if ($this->dataSrc->SrcId != $result) {
+				// print_r($result);
+				// print_r($this->dataSrc->SrcId);
+			// }
+			$this->assertEqual($this->dataSrc->SrcId, $result, 'GROUPBY FLAG error. Query string: [groupby ' . $str . ']');
 		}
 	}
 	
