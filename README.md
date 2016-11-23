@@ -50,19 +50,7 @@ Template:
 
 Also you can add custom compare functions: just add custom or replace existing **type**:
 
-	clsTbsDataSource::$SortTypes['abs'] = array(	// type name must be in lowercase
-		'conv' => true,	// will be compared using standard operators (> and ==)
-		'func' => 'abs'	// if 'conv'==true then values before the comparison will be converted using this callback
-	);
-	clsTbsDataSource::$SortTypes['cust'] = array(
-		'conv' => false,
-		'func' => 'myCallable'	// if 'conv'==false then values will be compared using this callable.
-	);
-	function myCallable($a, $b) {
-		if ($a > $b) return 1;
-		if ($a < $b) return -1;
-		return 0;
-	}
+
 
 Template:
 
@@ -103,3 +91,21 @@ Template:
 			<li>[myblock_sub1.player;block=li]</li>
 		</ul>
 	</div>
+
+### Calculating on grouping:
+
+> [block...;groupby ...;_groupcalc **order** **FieldName1** [, **FieldName2**][ ...] into  **resultFieldName** [order fields into result] [...]_;...]
+
+Where **order** - calc-order (order **sum** available by default); **FieldName#** - fields for calc-functions; **resultFieldName** - key, in which the result will be recorded;
+
+Also you can add custom calc-order functions: just add custom or replace existing **order**:
+
+	clsTbsDataSource::$CalcOrders['sum'] = 'clsTbsDataSource::DataCalcSum'; // must be callable
+	// or
+	clsTbsDataSource::$CalcOrders['sum'] = function ($data) {
+		$result = 0;
+		foreach ($data as &$item) {
+		    $result += array_sum($item);
+		}
+		return $result;
+	};
