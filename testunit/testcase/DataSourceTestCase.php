@@ -331,6 +331,107 @@ class DataSourceTestCase extends TBSUnitTestCase {
 			$this->assertEqual($this->dataSrc->SrcId, $result, 'GROUPBY FLAG error. Query string: [groupby ' . $str . ']');
 		}
 	}
+
+	function testGroupCalc() {
+		$el1 = array('a' => 1, 'b' => 'a', 'd' => 'x', 'e' => 32);
+		$el2 = array('a' => 2, 'b' => 'a', 'd' => 'a', 'e' => 64);
+		$el3 = array('a' => 4, 'b' => 'a', 'd' => 'a', 'e' => 128);
+		$el4 = array('a' => 8, 'b' => 'x', 'd' => 'a', 'e' => 16);
+		$data = array(
+			$el1,
+			$el2,
+			$el3,
+			$el4,
+		);
+		// must pass
+		$variant1 = array(
+			array(
+				'b' => $el1['b'],
+				'group' => array(
+					$el1,
+					$el2,
+					$el3,
+				),
+				'a_sum' => 7,
+			),
+			array(
+				'b' => $el4['b'],
+				'group' => array(
+					$el4,
+				),
+				'a_sum' => 8,
+			),
+		);
+		$variant2 = array(
+			array(
+				'b' => $el1['b'],
+				'group' => 231,
+			),
+			array(
+				'b' => $el4['b'],
+				'group' => 24,
+			),
+		);
+		$variant3 = array(
+			array(
+				'b' => $el1['b'],
+				'd' => $el1['d'],
+				'group' => 33,
+			),
+			array(
+				'b' => $el2['b'],
+				'd' => $el2['d'],
+				'group' => 198,
+			),
+			array(
+				'b' => $el4['b'],
+				'd' => $el4['d'],
+				'group' => 24,
+			),
+		);
+		$results = array(
+			array (
+				'b',
+				'sum a into a_sum',
+				$variant1,
+			),
+			array (
+				'b',
+				'sum a e into group',
+				$variant2,
+			),
+			array (
+				'b, d into group',
+				'sum a,  e into group',
+				$variant3,
+			),
+		);
+		foreach ($results as $item) {
+			$groupStr = $item[0];
+			$calcStr = $item[1];
+			$result = $item[2];
+			$this->createTbsDataSourceInstance($data);
+			$this->tbs->NoErr = TRUE;
+			$true = $this->dataSrc->DataGroup($groupStr, $calcStr);
+			if (!$true) {
+				if ($result === false) {
+					$this->pass();
+				} else {
+					$this->fail("GROUPBY CALC error. The function DataGroup returns false. Query string: [groupby {$groupStr};groupcalc {$calcStr}]");
+				}
+				continue;
+			}
+			if ($result === false) {
+				$this->fail("GROUPBY CALC error. The function DataGroup should return false in this case. Query string: [groupby {$groupStr};groupcalc {$calcStr}]");
+				continue;
+			}
+//			 if ($this->dataSrc->SrcId != $result) {
+//				 print_r($result);
+//				 print_r($this->dataSrc->SrcId);
+//			 }
+			$this->assertEqual($this->dataSrc->SrcId, $result, "GROUPBY CALC error. Query string: [groupby {$groupStr};groupcalc {$calcStr}]");
+		}
+	}
 	
 }
 

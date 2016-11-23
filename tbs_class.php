@@ -55,6 +55,9 @@ class clsTbsDataSource {
 
 public $Type = false;
 public $SubType = 0;
+/**
+ * @var $SrcId mixed
+ */
 public $SrcId = false;
 public $Query = '';
 public $RecSet = false;
@@ -71,13 +74,25 @@ public $OnDataPrm = false;
 public $OnDataPrmDone = array();
 public $OnDataPi = false;
 private $SortFields = array();
-public static $SortTypes = array(
+public static $SortOrders = array(
 	'nat'   => array('conv' => false, 'func' => 'strnatcasecmp'),   // default
 	'int'   => array('conv' => true,  'func' => 'intval'),
 	'float' => array('conv' => true,  'func' => 'floatval'),
 	'str'   => array('conv' => false, 'func' => 'strcasecmp'),
 );
+public static $CalcOrders = array(
+	'sum'   => 'clsTbsDataSource::DataCalcSum',   // default
+);
 
+public static function DataCalcSum($data) {
+	$data = (array)$data;
+	$result = 0;
+	foreach ($data as &$item) {
+		$result += array_sum($item);
+	}
+	return $result;
+}
+	
 public function DataAlert($Msg) {
 	if (is_array($this->TBS->_CurrBlock)) {
 		return $this->TBS->meth_Misc_Alert('when merging block "'.implode(',',$this->TBS->_CurrBlock).'"',$Msg);
@@ -579,11 +594,12 @@ public function DataClose() {
 	}
 }
 
-public function DataGroup($strFields) {
+public function DataGroup($strFields, $strCalc = null) {
 	if ($this->Type != 0) {
 		$this->DataAlert('Grouping failed: grouping can be used only for arrays');
 		return false;
 	}
+	# prepare grouping
 	$pos = strrpos(strtolower($strFields), ' into ');
 	$grField = 'group';	// default field
 	if ($pos === false) {
@@ -595,7 +611,7 @@ public function DataGroup($strFields) {
 			$strFields = substr($strFields, 0, $pos);
 		}
 	}
-	
+	# prepare 4 grouping
 	$fields = array();
 	$fparam = array();
 	$grps = explode(',', $strFields);
@@ -619,15 +635,16 @@ public function DataGroup($strFields) {
 	}
 	$values = array();
 	$maxK = -1;
-	// prepare
+	# prepare 4 asFlags
 	foreach ($fparam as $fpk => $fpv) {
 		if ($fpv['asFlags']) {
 			// $mpSubValues[$fpk] = array_key_exists($fpk, $v) ? (array)$v[$fpk] : array();
-			unset($fields[$fpk]);	// потом
+			unset($fields[$fpk]);
 		}
 	}
+	# grouping
 	foreach ($this->SrcId as &$v) {
-		// find
+		# find
 		$find = false;
 		if (count($values)) {
 			foreach ($values as $key => &$val) {
@@ -640,7 +657,7 @@ public function DataGroup($strFields) {
 				break;
 			}
 		}
-		// fill
+		# fill
 		if ($find === false) {
 			# item with unique sortParams - add as new set
 			$values[++$maxK] = $fields;
@@ -706,6 +723,64 @@ public function DataGroup($strFields) {
 		}
 		$fields[$fpk] = null;
 	}
+	# if need calc fields
+	if ($strCalc) {
+		$m = null;
+		if (preg_match_all('/(\\b[a-z0-9\\-_]+)\\s+((?:[a-z0-9\\-_\\.]+[\\s\\,]+)+?)into\\s+([a-z0-9\\-_\\.]+)\\b/ui', $strCalc, $m, PREG_SET_ORDER)) {
+			$calcs = array();
+			# prepare calc fields
+			foreach ($m as $mk => $calcParam) {
+				$fn = strtolower($calcParam[1]);
+				if (!isset(self::$CalcOrders[$fn])) {
+					$this->DataAlert("Calculating after grouping failed: calcorder `{$fn} not found");
+					continue;
+				}
+				if (!is_callable(self::$CalcOrders[$fn])) {
+					$this->DataAlert("Calculating after grouping failed: calcorder `{$fn} is not callable");
+					continue;
+				}
+				$fields = preg_split('/[\\s\\,]+/u', $calcParam[2], -1, PREG_SPLIT_NO_EMPTY);
+				if ($fields) {
+					$calcs[] = array(
+						'fn' => $fn,
+						'fs' => $fields,
+						'to' => $calcParam[3],
+					);
+				}
+			}
+			# calculating
+			if ($calcs) {
+				foreach ($values as &$group) {
+					$vals = array();
+					# prepare data
+					foreach ($calcs as $ck => $calc) {
+						$vals[$ck] = array();
+						foreach ($group[$grField] as $sk => &$sub) {
+							$vals[$ck][$sk] = array();
+							foreach ($calc['fs'] as $f) {
+								if (array_key_exists($f, $sub)) {
+									$vals[$ck][$sk][$f] = &$sub[$f];
+								} else {
+									$vals[$ck][$sk][$f] = null;
+								}
+							}
+						}
+						if (isset($sub)) unset($sub);
+					}
+					# call calculating
+					foreach ($calcs as $ck => $calc) {
+						$group[$calc['to']] = call_user_func(self::$CalcOrders[$calc['fn']], $vals[$ck]);
+					}
+//					var_dump($group);
+//					die;
+				}
+				unset($group);
+			}
+		}
+//		var_dump($strCalc);
+//		var_dump($m);
+//		die;
+	}
 	
 	$this->SrcId = $resetKeys ? array_values($values) : $values;
 	$this->RecNbr = count($values);
@@ -724,11 +799,11 @@ public function DataSort($order) {
 		preg_match('/([\w\d]+)(?(?=\s+as\s+)\s+as\s+([\w\d]+))(?(?=\s+asc|\s+desc)\s+(asc|desc))/i', $sr, $tmp);
 		$k = isset($tmp[1]) ? trim($tmp[1]) : '';
 		$asc = !isset($tmp[3]) || strtolower($tmp[3]) !== 'desc';
-		$type = reset(self::$SortTypes);
+		$type = reset(self::$SortOrders);
 		if (isset($tmp[2]) && strlen($tmp[2])) {
 			$tmp[2] = strtolower($tmp[2]);
-			if (isset(self::$SortTypes[$tmp[2]])) {
-				$type = self::$SortTypes[$tmp[2]];
+			if (isset(self::$SortOrders[$tmp[2]])) {
+				$type = self::$SortOrders[$tmp[2]];
 			} else {
 				$this->DataAlert('Sorting warning: type ' . $tmp[2] . ' not found');
 			}
@@ -2493,7 +2568,7 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$Qr
 		}
 
 		if (isset($LocR->PrmLst['groupby'])) {
-			$Src->DataGroup($LocR->PrmLst['groupby']);
+			$Src->DataGroup($LocR->PrmLst['groupby'], isset($LocR->PrmLst['groupcalc']) ? $LocR->PrmLst['groupcalc'] : null);
 		}
 		if (isset($LocR->PrmLst['sortby'])) {
 			$Src->DataSort($LocR->PrmLst['sortby']);
