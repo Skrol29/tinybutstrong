@@ -50,19 +50,7 @@ Template:
 
 Also you can add custom compare functions: just add custom or replace existing **type**:
 
-	clsTbsDataSource::$SortTypes['abs'] = array(	// type name must be in lowercase
-		'conv' => true,	// will be compared using standard operators (> and ==)
-		'func' => 'abs'	// if 'conv'==true then values before the comparison will be converted using this callback
-	);
-	clsTbsDataSource::$SortTypes['cust'] = array(
-		'conv' => false,
-		'func' => 'myCallable'	// if 'conv'==false then values will be compared using this callable.
-	);
-	function myCallable($a, $b) {
-		if ($a > $b) return 1;
-		if ($a < $b) return -1;
-		return 0;
-	}
+
 
 Template:
 
@@ -76,13 +64,16 @@ Template:
 
 Format:
 
-> [block...;_groupby **FieldName1**[, FieldName2][, ...][ into **GroupName**]_;...]
+> [block...;_groupby **FieldName1**[ asFlags][, FieldName2[ asFlags]][, ...][ into **GroupName**]_;...]
 
-Where **FieldName** custom field (key) that will be used for grouping. **GroupName** - key, in which the array will be recorded. "group" by default.
+Where the paramenter **FieldName** is the custom field (key) that will be used for grouping.
+The parameter **GroupName** is the key in which the array will be written ("group" by default).
+
+The parameter **asFlags** implies that the elements will be grouped by each value as an individual value
 
 ### For example:
 
-PHP: 
+PHP:
 
 	$block = [
 		['player' => 'Player 1',  'level' => 1],
@@ -101,3 +92,29 @@ Template:
 			<li>[myblock_sub1.player;block=li]</li>
 		</ul>
 	</div>
+
+### Calculating when groupby:
+
+> [block...;groupby ...;_groupcalc **order** **FieldName1** [, **FieldName2**][ ...] into  **resultFieldName**]
+
+The primary parameter **order** is the name of the calculating's rule. It may be **sum** (default), **count** or custom function.
+One or more parameters **FieldName#** will be used in calculations.
+The parameter **resultFieldName** determines where (what field name) the result will be placed.
+
+You can add the custom calculating rule:
+
+	clsTbsDataSource::$CalcOrders['sum'] = 'clsTbsDataSource::DataCalcSum'; // must be callable
+	// or
+	clsTbsDataSource::$CalcOrders['sum'] = function ($data) {
+		$result = 0;
+		foreach ($data as &$item) {
+		    $result += array_sum($item);
+		}
+		return $result;
+	};
+
+## Grouping when values are objects or arrays
+
+Format:
+
+> [block...;_groupby FieldName1 [ on **key** ][ asFlags [ **flagFieldName** ]], ..., [ into GroupName]_;...]

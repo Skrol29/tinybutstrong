@@ -10,6 +10,7 @@ class TBSUnitTestCase extends UnitTestCase {
 	var $newInstance = true;
 	/**
 	 * Last instance of 'clsTbsDataSource' class.
+	 * @var $dataSrc clsTbsDataSource
 	 */
 	var $dataSrc;
 
