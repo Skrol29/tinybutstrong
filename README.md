@@ -66,13 +66,14 @@ Format:
 
 > [block...;_groupby **FieldName1**[ asFlags][, FieldName2[ asFlags]][, ...][ into **GroupName**]_;...]
 
-Where **FieldName** custom field (key) that will be used for grouping. **GroupName** - key, in which the array will be recorded. "group" by default.
+Where the paramenter **FieldName** is the custom field (key) that will be used for grouping.
+The parameter **GroupName** is the key in which the array will be written ("group" by default).
 
-Param **asFlags** only for array types - will be grouped by each values as by separate value
+The parameter **asFlags** implies that the elements will be grouped by each value as an individual value
 
 ### For example:
 
-PHP: 
+PHP:
 
 	$block = [
 		['player' => 'Player 1',  'level' => 1],
@@ -92,13 +93,15 @@ Template:
 		</ul>
 	</div>
 
-### Calculating on grouping:
+### Calculating when groupby:
 
-> [block...;groupby ...;_groupcalc **order** **FieldName1** [, **FieldName2**][ ...] into  **resultFieldName** [order fields into result] [...]_;...]
+> [block...;groupby ...;_groupcalc **order** **FieldName1** [, **FieldName2**][ ...] into  **resultFieldName**]
 
-Where **order** - calc-order (order **sum** available by default); **FieldName#** - fields for calc-functions; **resultFieldName** - key, in which the result will be recorded;
+The primary parameter **order** is the name of the calculating's rule. It may be **sum** (default), **count** or custom function.
+One or more parameters **FieldName#** will be used in calculations.
+The parameter **resultFieldName** determines where (what field name) the result will be placed.
 
-Also you can add custom calc-order functions: just add custom or replace existing **order**:
+You can add the custom calculating rule:
 
 	clsTbsDataSource::$CalcOrders['sum'] = 'clsTbsDataSource::DataCalcSum'; // must be callable
 	// or
@@ -109,3 +112,9 @@ Also you can add custom calc-order functions: just add custom or replace existin
 		}
 		return $result;
 	};
+
+## Grouping when values are objects or arrays
+
+Format:
+
+> [block...;_groupby FieldName1 [ on **key** ][ asFlags [ **flagFieldName** ]], ..., [ into GroupName]_;...]
