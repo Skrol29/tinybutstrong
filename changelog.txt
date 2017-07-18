@@ -1,3 +1,28 @@
+
+= TinyButStrong 3.11.5 =
+
+roxblnfk, 2017-06-14
+
+== New features ==
+
+* Added parameters 'on' and 'asFlags' for the 'groupby' operation.
+  Exaple: groupby Field [on Key] [asFlags [FlagField]] [into GroupField]
+* Added calculating for 'groupby' operations (basic: 'sum', 'count').
+  Exaple: [...groupby...; groupcalc count ID into LinesCount, sum Money into Money_sum]
+  
+------------------------------------
+
+= TinyButStrong 3.11.0 =
+
+roxblnfk, 2016-05-13
+
+== New features ==
+
+* Added sorting blocks by custom fields (arrays only)
+* Added regrouping blocks to subblocks by custom fields (arrays only)
+  
+------------------------------------
+
 = Release 3.10.1 =
 
 Skrol29, 2015-12-03
