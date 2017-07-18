@@ -68,6 +68,7 @@ class clsTbsDataSource {
 	public $RecSaved = false;
 	public $RecBuffer = false;
 	public $CurrRec = false;
+	/** @var $TBS clsTinyButStrong */
 	public $TBS = false;
 	public $OnDataOk = false;
 	public $OnDataPrm = false;
@@ -130,13 +131,13 @@ class clsTbsDataSource {
 
 	public function DataAlert($Msg) {
 		if (is_array($this->TBS->_CurrBlock)) {
-			return $this->TBS->meth_Misc_Alert('when merging block "'.implode(',',$this->TBS->_CurrBlock).'"',$Msg);
+			return $this->TBS->meth_Misc_Alert('when merging block "'.implode(',', $this->TBS->_CurrBlock).'"',$Msg);
 		} else {
 			return $this->TBS->meth_Misc_Alert('when merging block '.$this->TBS->_ChrOpen.$this->TBS->_CurrBlock.$this->TBS->_ChrClose,$Msg);
 		}
 	}
 
-	public function DataPrepare(&$SrcId,&$TBS) {
+	public function DataPrepare(&$SrcId, &$TBS) {
 
 		$this->SrcId = &$SrcId;
 		$this->TBS = &$TBS;
@@ -939,7 +940,7 @@ class clsTinyButStrong {
 	public $ExtendedMethods = array();
 	public $ErrCount = 0;
 // Undocumented (can change at any version)
-	public $Version = '3.10.1';
+	public $Version = '3.11.5';
 	public $Charset = '';
 	public $TurboBlock = true;
 	public $VarPrefix = '';
@@ -1150,13 +1151,14 @@ class clsTinyButStrong {
 		$P1 = false;
 		$Mode = ($DefTags) ? 3 : 2;
 		$PosBeg1 = 0;
+        $PosSep = 0;
 		while ($Loc = $this->meth_Locator_FindBlockNext($this->Source,$BlockName,$Pos,'.',$Mode,$P1,$FieldOutside)) {
 			$Nbr++;
 			$Sep = '';
 			if ($Nbr==1) {
 				$PosBeg1 = $Loc->PosBeg;
 			} elseif (!$AsArray) {
-				$Sep = substr($this->Source,$PosSep,$Loc->PosBeg-$PosSep); // part of the source between sections
+				$Sep = substr($this->Source, $PosSep, $Loc->PosBeg-$PosSep); // part of the source between sections
 			}
 			$RetVal[$Nbr] = $Sep.$Loc->BlockSrc;
 			$Pos = $Loc->PosEnd;
@@ -3532,11 +3534,11 @@ class clsTinyButStrong {
 			if ($IsObj && method_exists($FctObj,'tbsdb_open') && (!method_exists($FctObj,'+'))) { // '+' avoid a bug in PHP 5
 
 				if (!method_exists($FctObj,'tbsdb_fetch')) {
-					$ErrMsg = 'the expected method \'tbsdb_fetch\' is not found for the class '.$Cls.'.';
+					$ErrMsg = 'the expected method \'tbsdb_fetch\' is not found for the class '.get_class($FctObj).'.';
 					return false;
 				}
 				if (!method_exists($FctObj,'tbsdb_close')) {
-					$ErrMsg = 'the expected method \'tbsdb_close\' is not found for the class '.$Cls.'.';
+					$ErrMsg = 'the expected method \'tbsdb_close\' is not found for the class '.get_class($FctObj).'.';
 					return false;
 				}
 				$FctInfo = array('type'=>5);
