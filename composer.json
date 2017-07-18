@@ -1,0 +1,13 @@
+{
+    "name": "skrol29/tinybutstrong",
+    "description": "TBS is a library that enables you to dynamically create XML/HTML pages and any other files based on text source",
+    "type": "library",
+    "homepage": "http://www.tinybutstrong.com/",
+    "license": "LGPL-3.0",
+    "require": {
+        "php": "^5.0"
+    },
+    "autoload": {
+        "classmap": ["tbs_class.php"]
+    }
+}
