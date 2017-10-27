@@ -27,7 +27,7 @@ for ($row=1 ; $row<=$nbr_row ; $row++) {
 }
 
 // Expanding columns
-$TBS->MergeBlock('c',$columns);
+$TBS->MergeBlock('c0,c1,c2',$columns);
 
 // Merging rows
 $TBS->MergeBlock('r',$data);
