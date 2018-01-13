@@ -15,7 +15,7 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer require skrol29/tinybutstrong "*"
+composer require skrol29/tinybutstrong "*"
 ```
 
 or add `"skrol29/tinybutstrong": "*"` to the **require** section of your composer.json.
