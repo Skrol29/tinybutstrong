@@ -1,11 +1,18 @@
 {
-    "name": "skrol29/tinybutstrong",
-    "description": "TBS is a library that enables you to dynamically create XML/HTML pages and any other files based on text source",
+    "name": "tinybutstrong/tinybutstrong",
+    "description": "Template Engine for Pro and Beginners ",
     "type": "library",
-    "homepage": "http://www.tinybutstrong.com/",
+    "keywords": ["templating"],
+    "homepage": "http://www.tinybutstrong.com",
     "license": "LGPL-3.0",
+    "authors": [
+        {
+            "name": "Skrol29",
+            "email": "skrol29dev@gmail.com"
+        }
+    ],
     "require": {
-        "php": "^5.0 || ^7.0"
+        "php": ">=5.0"
     },
     "autoload": {
         "classmap": ["tbs_class.php"]
