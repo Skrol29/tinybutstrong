@@ -16,6 +16,6 @@ www.tinybutstrong.com/manual.php
 
 TinyButStrong in on GitHub since version 3.5.3.
 
-TinyButStrong versions 3.10.0 or later can be installed with [Composer](http://getcomposer.org/download/).
+TinyButStrong versions 3.10.1 or later can be installed with [Composer](http://getcomposer.org/download/).
 
 The package is "tinybutstrong/tinybutstrong" 
