@@ -15,7 +15,9 @@
  */
 
 // Check PHP version
-if (version_compare(PHP_VERSION,'5.0')<0) echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is '.PHP_VERSION.' while TinyButStrong needs PHP version 5.0 or higher. You should try with TinyButStrong Edition for PHP 4.';
+if (version_compare(PHP_VERSION, '5.4') < 0) {
+    echo '<br><b>TinyButStrong Error</b> (PHP Version Check) : Your PHP version is ' . PHP_VERSION . ' while TinyButStrong needs PHP version 5.4 or higher. You should try with TinyButStrong Edition for PHP 4.';
+}
 
 // Render flags
 define('TBS_NOTHING', 0);
@@ -639,7 +641,7 @@ function __construct($Options=null,$VarPrefix='',$FctPrefix='') {
 			}
 			if ($Err) $this->meth_Misc_Alert('with clsTinyButStrong() function','value \''.$Chrs.'\' is a bad tag delimitor definition.');
 		}
-	} 
+	}
 
 	// Set options
 	$this->VarRef =& $GLOBALS;
@@ -1064,7 +1066,7 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
 	$LocNbr = 0;
 	$Pos = 0;
 	$Sort = false;
-	
+
 	if ($this->_PlugIns_Ok && isset($this->_piOnCacheField)) {
 		$pi = true;
 		$ArgLst = array(0=>$BlockName, 1=>false, 2=>&$Txt, 3=>array('att'=>true), 4=>&$LocLst, 5=>&$Pos);
@@ -1079,16 +1081,16 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
 		$Chk = false;
 		$PosEndPrec = -1;
 		while ($Loc = $this->meth_Locator_FindTbs($Txt,$BlockName,$Pos,'.')) {
-			
+
 			// Delete embeding fields
 			if ($Loc->PosBeg<$PosEndPrec) {
 				unset($LocLst[$LocNbr]);
 				$Chk = true;
 			}
-			
+
 			$LocNbr = 1 + count($LocLst);
 			$LocLst[$LocNbr] = &$Loc;
-			
+
 			// Next search position : always ("original PosBeg" + 1).
 			// Must be done here because loc can be moved by the plug-in.
 			if ($Loc->Enlarged) {
@@ -1118,7 +1120,7 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
 			} else {
 				$Loc->IsRecInfo = false;
 			}
-			
+
 			// Process parameter att for new added locators.
 			$NewNbr = count($LocLst);
 			for ($i=$LocNbr;$i<=$NewNbr;$i++) {
@@ -1141,9 +1143,9 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
 			}
 
 			unset($Loc);
-			
+
 		}
-		
+
 		// Delete loc
 		/*
 		$iMax = count($LocLst);
@@ -1160,7 +1162,7 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
 			}
 		}
 		*/
-		
+
 		// Re-order loc
 		self::f_Loc_Sort($LocLst, 1);
 
@@ -1243,7 +1245,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 						$x = call_user_func_array(array(&$Value,$x),$ArgLst);
 					} else {
 						if (!isset($Loc->PrmLst['noerr'])) $this->meth_Misc_Alert($Loc,'\''.$x.'\' is a method and the current TBS settings do not allow to call methods on automatic fields.',true);
-						$x = '';	
+						$x = '';
 					}
 				} elseif (property_exists($Value,$x)) {
 					$x = &$Value->$x;
@@ -1746,7 +1748,7 @@ function meth_Locator_PartAndRename(&$CurrVal, &$PrmLst) {
 
 	// Rename or delete TBS tags names
 	if (isset($PrmLst['rename'])) {
-	
+
 		$Replace = $PrmLst['rename'];
 
 		if (is_string($Replace)) $Replace = explode(',',$Replace);
@@ -1769,7 +1771,7 @@ function meth_Locator_PartAndRename(&$CurrVal, &$PrmLst) {
 					}
 				}
 			}
-		} 
+		}
 
 	}
 
@@ -2041,7 +2043,7 @@ function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $ConfId) {
 	$RefRow = false;
 	$RefCellB= false;
 	$RefCellE = false;
-	
+
 	$RowType = array();
 
 	// Loop on entities inside the parent entity
@@ -2051,7 +2053,7 @@ function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $ConfId) {
 	$Cells = array();
 	$ColNum = 1;
 	$IsRef = false;
-	
+
 	// Search for the next Row Opening tag
 	while (self::f_Xml_GetNextEntityName($SrcP, $PosR, $tagR, $pRO, $p)) {
 
@@ -2121,7 +2123,7 @@ function meth_Locator_FindParallel(&$Txt, $ZoneBeg, $ZoneEnd, $ConfId) {
 
 				}
 
-				$PosR = $locRE->PosEnd; 
+				$PosR = $locRE->PosEnd;
 
 			} else {
 				$PosR = $pROe;
@@ -2176,7 +2178,7 @@ function meth_Locator_FindParallelCol($SrcR, &$PosC, $tagC, $pCO, $p, $SrcROffse
 		if ($locCE===false) return $this->meth_Misc_Alert("Parallel", "The cell closing tag is not found. (pCOe=$pCOe)");
 		$pCEe = $locCE->PosEnd;
 	}
-	
+
 	// Check the cell of reference
 	$Width = (isset($Loc->PrmLst[$att])) ? intval($Loc->PrmLst[$att]) : 1;
 	$ColNumE = $ColNum + $Width -1; // Ending Cell
@@ -2193,7 +2195,7 @@ function meth_Locator_FindParallelCol($SrcR, &$PosC, $tagC, $pCO, $p, $SrcROffse
 		$RefCellE = $ColNum;
 		$OnZone = true;
 	}
-	
+
 	// Save info
 	$Cell = array(
 		//'_tagR' => $tagR, '_tagC' => $tagC, '_att' => $att, '_OnZone' => $OnZone, '_PrmLst' => $Loc->PrmLst, '_Offset' => $SrcROffset, '_Src' => substr($SrcR, $pCO, $locCE->PosEnd - $pCO + 1),
@@ -2205,13 +2207,13 @@ function meth_Locator_FindParallelCol($SrcR, &$PosC, $tagC, $pCO, $p, $SrcROffse
 		'IsEnd' => false,
 	);
 	$Cells[$ColNum] = $Cell;
-	
+
 	// add a virtual column to say if its a ending
 	if (!isset($Cells[$ColNumE])) $Cells[$ColNumE] = array('IsBegin' => false);
-	
+
 	$Cells[$ColNumE]['IsEnd'] = true;
 	$Cells[$ColNumE]['PosEnd'] = $Cells[$ColNum]['PosEnd'];
-	
+
 	$PosC = $pCEe;
 	$ColNum += $Width;
 
@@ -2362,18 +2364,18 @@ function meth_Merge_BlockParallel(&$Txt,&$LocR,&$Src) {
 	$Src->DataFetch();
 
 	$FirstRec = true;
-	
+
 	// Prepare sources
 	$BlockRes = array();
 	for ($i=1 ; $i<=$LocR->SectionNbr ; $i++) {
 		if ($i>1) {
 			// Add txt source between the BDefs
-			$BlockRes[$i] = substr($Txt, $LocR->SectionLst[$i-1]->PosEnd + 1, $LocR->SectionLst[$i]->PosBeg - $LocR->SectionLst[$i-1]->PosEnd -1); 
+			$BlockRes[$i] = substr($Txt, $LocR->SectionLst[$i-1]->PosEnd + 1, $LocR->SectionLst[$i]->PosBeg - $LocR->SectionLst[$i-1]->PosEnd -1);
 		} else {
 			$BlockRes[$i] = '';
 		}
 	}
-	
+
 	while($Src->CurrRec!==false) {
 		// Merge the current record with all sections
 		for ($i=1 ; $i<=$LocR->SectionNbr ; $i++) {
@@ -2384,7 +2386,7 @@ function meth_Merge_BlockParallel(&$Txt,&$LocR,&$Src) {
 		// Next row
 		$Src->DataFetch();
 	}
-	
+
 	$BlockRes = implode('', $BlockRes);
 	$Txt = substr_replace($Txt,$BlockRes,$LocR->PosBeg,$LocR->PosEnd-$LocR->PosBeg+1);
 
@@ -3373,7 +3375,7 @@ function meth_PlugIn_SetEvent($PlugInId, $Event, $NewRef='') {
 		unset($PropRef[$PlugInId]);
 		return true;
 	}
-	
+
 	// Prepare the reference to be called
 	$PiRef = &$this->_PlugIns[$PlugInId];
 	if (is_object($PiRef)) {
@@ -3398,7 +3400,7 @@ function meth_PlugIn_SetEvent($PlugInId, $Event, $NewRef='') {
 	case 'OnFormat': $this->_piOnFrm_Ok = true; break;
 	default: $this->_PlugIns_Ok = true; break;
 	}
-		
+
 	return true;
 
 }
@@ -3837,7 +3839,7 @@ static function f_Misc_GetFile(&$Res, &$File, $LastFile='', $IncludePath=false, 
 // Load the content of a file into the text variable.
 
 	$Res = '';
-	$fd = self::f_Misc_TryFile($File, false); 
+	$fd = self::f_Misc_TryFile($File, false);
 	if ($fd===false) {
 		if (is_array($IncludePath)) {
 			foreach ($IncludePath as $d) {
@@ -4188,7 +4190,7 @@ static function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagStr,$RetInnerSrc) {
 			$i++;
 		}
 	}
-	
+
 	$TagMax = $i-1;
 
 	// Find tags that embeds the locator
@@ -4205,7 +4207,7 @@ static function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagStr,$RetInnerSrc) {
 		$TagO = self::f_Loc_Enlarge_Find($Txt,$TagLst[$Ref],$TagFct[$Ref],$Loc->PosBeg-1,false,$LevelStop);
 		if ($TagO===false) return false;
 		$PosBeg = $TagO->PosBeg;
-		$LevelStop += -$TagO->RightLevel; // RightLevel=1 only if the tag is single and embeds $Loc, otherwise it is 0 
+		$LevelStop += -$TagO->RightLevel; // RightLevel=1 only if the tag is single and embeds $Loc, otherwise it is 0
 		if ($LevelStop>0) {
 			$TagC = self::f_Loc_Enlarge_Find($Txt,$TagLst[$Ref],$TagFct[$Ref],$Loc->PosEnd+1,true,-$LevelStop);
 			if ($TagC==false) return false;
@@ -4269,7 +4271,7 @@ static function f_Loc_Enlarge_Find($Txt, $Tag, $Fct, $Pos, $Forward, $LevelStop)
 			return false;
 		} else {
 			return (object) array('PosBeg'=>$p, 'PosEnd'=>$p, 'RightLevel'=> 0); // it's a trick
-		}	
+		}
 	}
 }
 
@@ -4383,7 +4385,7 @@ static function f_Xml_AttFind(&$Txt,&$Loc,$MoveLocLst=false,$AttDelim=false,$Loc
 		if ($Att==='.') return false;
 	}
 	$Loc->AttName = $Att;
-	
+
 	$AttLC = strtolower($Att);
 	if (isset($LocO->PrmLst[$AttLC])) {
 		// The attribute is existing
@@ -4405,7 +4407,7 @@ static function f_Xml_AttFind(&$Txt,&$Loc,$MoveLocLst=false,$AttDelim=false,$Loc
 		$Loc->AttDelimCnt = 0;
 		$Loc->AttBeg = false;
 	}
-	
+
 	// Search for a delimitor
 	if (($Loc->AttDelimCnt==0) && (isset($LocO->PrmPos))) {
 		foreach ($LocO->PrmPos as $p) {
@@ -4491,7 +4493,7 @@ static function f_Xml_AttMove(&$Txt, &$Loc, $AttDelim, &$MoveLocLst) {
 		$Loc->DelLen = $DelLen;
 		self::f_Loc_Moving($Loc, $MoveLocLst);
 	}
-	
+
 	return true;
 
 }
@@ -4551,7 +4553,7 @@ static function f_Xml_GetPart(&$Txt, $TagLst, $AllIfNothing=false) {
 
 	$PosOut = strlen($Txt);
 	$Pos = 0;
-	
+
 	// Optimized search for all tag types
 	do {
 
@@ -4601,7 +4603,7 @@ static function f_Xml_GetPart(&$Txt, $TagLst, $AllIfNothing=false) {
 		}
 
 	} while ($TagMin!==false);
-	
+
 	if ($AllIfNothing && $nothing) return $Txt;
 	return $x;
 
@@ -4669,7 +4671,7 @@ static function f_Xml_FindTag(&$Txt,$Tag,$Opening,$PosBeg,$Forward,$LevelStop,$W
 	$TagL = strlen($Tag);
 	$TagClosingL = strlen($TagClosing);
 	$RightLevel = 0;
-	
+
 	do {
 
 		// Look for the next tag def
@@ -4786,7 +4788,7 @@ static function f_Xml_FindNewLine(&$Txt,$PosBeg,$Forward,$IsRef) {
 }
 
 static function f_Xml_GetNextEntityName($Txt, $Pos, &$tag, &$PosBeg, &$p) {
-/* 
+/*
  $tag : tag name
  $PosBeg : position of the tag
  $p   : position where the read has stop
@@ -4795,9 +4797,9 @@ static function f_Xml_GetNextEntityName($Txt, $Pos, &$tag, &$PosBeg, &$p) {
 
 	$tag = '';
 	$PosBeg = strpos($Txt, '<', $Pos);
-	
+
 	if ($PosBeg===false) return false;
-	
+
 	// Read the name of the tag
 	$go = true;
 	$p = $PosBeg;
@@ -4808,9 +4810,9 @@ static function f_Xml_GetNextEntityName($Txt, $Pos, &$tag, &$PosBeg, &$p) {
 			$tag .= $z;
 		}
 	}
-	
+
 	return true;
-	
+
 }
 
 }

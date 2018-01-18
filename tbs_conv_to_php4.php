@@ -1,10 +1,9 @@
 <?php
 
 /**
- *
  * While PHP 4 is too old now, some web sites unfortunately still work on PHP 4.
  * This tool simply convert the PHP 5 version into PHP 4. This is not a big job to maintain the convertibility.
- * 
+ *
  * @author Skrol29
  * @date   2010-05-27
  * @date   2015-11-09 direct PHP5 -> PHP4 conversion
@@ -72,8 +71,8 @@ $Ok = $Ok && f_Replace($Txt, ' = new ', ' = &new ', ' new replaced with &new');
 $Ok = $Ok && f_Replace($Txt, 'function __construct', 'function clsTinyButStrong', 'Rename constructor');
 
 $Ok = $Ok && f_Replace($Txt, ' for PHP 5', ' for PHP 4', 'version: for PHP 4');
-$Ok = $Ok && f_Replace($Txt, "PHP_VERSION,'5.0'", "PHP_VERSION,'4.0.6'", 'check PHP version #1');
-$Ok = $Ok && f_Replace($Txt, "TinyButStrong needs PHP version 5.0", "TinyButStrong needs PHP version 4.0.6", 'check PHP version #2');
+$Ok = $Ok && f_Replace($Txt, "PHP_VERSION,'5.4'", "PHP_VERSION,'4.0.6'", 'check PHP version #1');
+$Ok = $Ok && f_Replace($Txt, "TinyButStrong needs PHP version 5.4", "TinyButStrong needs PHP version 4.0.6", 'check PHP version #2');
 $Ok = $Ok && f_Replace($Txt, " You should try with TinyButStrong Edition for PHP 4.", "", 'check PHP version #3');
 
 f_Update($Ok, $Dst4, $Txt);
@@ -85,7 +84,7 @@ exit;
 // ----------------------------
 
 function f_Replace(&$Txt, $ReplWhat, $ReplWith, $Msg) {
-// Replace strings in the source code	
+// Replace strings in the source code
 	$NbrBefore = substr_count($Txt, $ReplWhat);
 	$Txt = str_replace($ReplWhat, $ReplWith, $Txt);
 	$NbrAfter = substr_count($Txt, $ReplWhat);
@@ -99,11 +98,10 @@ function f_Replace(&$Txt, $ReplWhat, $ReplWith, $Msg) {
 		$ResMsg = f_Color('OK','green').'. '.$NbrBefore.' founds before, '.$NbrAfter.' found after.';
 		$Ok = true;
 	}
-	
+
 	echo '- '.$Msg.': '.$ResMsg."<br> \r\n";
-	
+
 	return $Ok;
-	
 }
 
 function f_Update($Ok, $Dst, $Txt) {
@@ -128,13 +126,13 @@ function f_Update($Ok, $Dst, $Txt) {
 
 
 function f_Color($Txt, $Color,$Bold=true,$Italic=false) {
-// Return formated spanned text
+    // Return formated spanned text
 	return '<span style="color: '.$Color.'; '.(($Bold)? ' font-weight: bold;' : '').(($Italic)? ' font-style: italic;' : '').'">'.$Txt.'</span>';
 }
 
 function f_CheckVersionConsistency($SrcTxt, $Name, $v1, $v2) {
-// Check that versions mentioned in two placed in the source are striclty equal.
-// $v1 and $v2 must be arrays with keys 'prefix', 'suffix', 'info'
+    // Check that versions mentioned in two placed in the source are striclty equal.
+    // $v1 and $v2 must be arrays with keys 'prefix', 'suffix', 'info'
 	echo $Name." version consistency:<br> \r\n";
 	$v1_txt = f_TextBetween($SrcTxt, $v1['prefix'], $v1['suffix']);
 	if ($v1_txt===false) exit("Check $Name version consistency: $Name version not found ".$v1['info']);
