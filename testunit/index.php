@@ -32,12 +32,18 @@ if (version_compare(PHP_VERSION, '5.4') < 0) {
     require_once $dir_tbs . '/vendor/autoload.php';
 }
 
-
 require_once($tbsFileName);
 
 // other files required for unit tests
 require_once($dir_testu . '/include/TBSUnitTestCase.php');
-require_once($dir_testu . '/include/HtmlCodeCoverageReporter.php');
+
+if (PHP_SAPI === 'cli') { // Text output
+    require_once($dir_testu . '/include/TextCoverageReporter.php');
+    $reporter = new TextCoverageReporter();
+} else {                  // HTML output
+    require_once($dir_testu . '/include/HtmlCodeCoverageReporter.php');
+    $reporter = new HtmlCodeCoverageReporter(array($tbsFileName, $dir_plugins . DIRECTORY_SEPARATOR));
+}
 
 // include unit test classes
 include($dir_testu . '/testcase/AttTestCase.php');
@@ -63,4 +69,4 @@ $test->add(new StrconvTestCase());
 $test->add(new MiscTestCase());
 $test->add(new SubTplTestCase());
 
-$test->run(new HtmlCodeCoverageReporter(array($tbsFileName, $dir_plugins . DIRECTORY_SEPARATOR)));
+$test->run($reporter);

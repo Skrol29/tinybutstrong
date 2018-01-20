@@ -2,7 +2,7 @@
 
 class HtmlCodeCoverageReporter extends HtmlReporter {
 
-	var $code_coverage = '';
+	var $code_coverage = array();
 	var $code_coverage_include_paths = array();
 	var $code_coverage_exclude_paths = array();
 	var $character_set;
@@ -57,7 +57,7 @@ class HtmlCodeCoverageReporter extends HtmlReporter {
 	 */
 	function paintGroupStart($test_name, $size) {
 		$this->time = $this->getMicrotime();
-		HtmlReporter::paintGroupStart($test_name, $size);
+		parent::paintGroupStart($test_name, $size);
 		if (extension_loaded('xdebug'))
 			xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE); 
 	}
@@ -74,7 +74,7 @@ class HtmlCodeCoverageReporter extends HtmlReporter {
 			xdebug_stop_code_coverage();
 			ksort($this->code_coverage);
 		}
-		HtmlReporter::paintGroupEnd($test_name);
+		parent::paintGroupEnd($test_name);
 	}
 
 	/**
@@ -206,5 +206,3 @@ class HtmlCodeCoverageReporter extends HtmlReporter {
 	}
 	
 }
-
-?>
