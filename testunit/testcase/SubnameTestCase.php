@@ -105,7 +105,7 @@ class ObjTest2 {
 class SubnameTestCase extends TBSUnitTestCase {
 
 	function __construct() {
-		$this->UnitTestCase('Subname Unit Tests');
+        parent::__construct('Subname Unit Tests');
 	}
 
 	function setUp() {

@@ -9,6 +9,7 @@ set_time_limit(0);
 $dir_testu = dirname(__FILE__);
 $dir_tbs = dirname($dir_testu);
 $dir_plugins = $dir_tbs . '/plugins';
+chdir($dir_testu);
 
 if (!file_exists($dir_plugins)) {
     $dir_plugins = dirname($dir_tbs) . '/tbs_plugins';
@@ -54,12 +55,13 @@ include($dir_testu . '/testcase/FieldTestCase.php');
 include($dir_testu . '/testcase/BlockTestCase.php');
 include($dir_testu . '/testcase/MiscTestCase.php');
 include($dir_testu . '/testcase/SubTplTestCase.php');
+include($dir_testu . '/testcase/SubnameTestCase.php');
 
 // launch tests
-
 $SimpleTest = new SimpleTest();
 $tbs = new clsTinyButStrong();
 $test = new TestSuite('TinyButStrong v' . $tbs->Version . ' (with PHP ' . PHP_VERSION . ', simpleTest ' . $SimpleTest->getVersion() . ')');
+
 $test->add(new FieldTestCase());
 $test->add(new BlockTestCase());
 $test->add(new AttTestCase());
@@ -68,5 +70,6 @@ $test->add(new FrmTestCase());
 $test->add(new StrconvTestCase());
 $test->add(new MiscTestCase());
 $test->add(new SubTplTestCase());
+$test->add(new SubnameTestCase());
 
 $test->run($reporter);
