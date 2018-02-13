@@ -1,6 +1,6 @@
 {
     "name": "tinybutstrong/tinybutstrong",
-    "description": "Template Engine for Pro and Beginners ",
+    "description": "Template Engine for Pro and Beginners",
     "type": "library",
     "keywords": ["templating"],
     "homepage": "http://www.tinybutstrong.com",
@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": ">=5.0"
+        "php": ">=5.4"
     },
     "autoload": {
         "classmap": ["tbs_class.php"]
