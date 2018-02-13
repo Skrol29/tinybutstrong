@@ -217,7 +217,7 @@ class SimpleTest {
      *    @access public
      *    @static
      */
-    function &getContext() {
+    public static function getContext() {
         static $context = false;
         if (! $context) {
             $context = new SimpleTestContext();
