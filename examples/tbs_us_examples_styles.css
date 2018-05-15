@@ -1,37 +1,7 @@
-body, td, div, p, li {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-}
-body {
-	margin: 0; /* il est conseillé de mettre à zéro la marge et le remplissage de l'élément body, pour tenir compte des différentes valeurs par défaut des navigateurs */
-	text-align: center; /* used to center the main-body <div>  */
-}
 h1 {
-	font-family: Georgia, "New Century Schoolbook", "Book Antiqua", "Times New Roman", serif;
-	font-size: 24px;
-	font-weight: bold;
-	color: #000000;
-	margin-left: 0px;
-	margin-rigth: 0px;
-	margin-top: 10px;
-	margin-bottom: 10px;
 	text-align: center;
 }
-h2 {
-	font-family: Georgia, "New Century Schoolbook", "Book Antiqua", "Times New Roman", serif;
-	font-size: 18px;
-	font-weight: bold;
-	color: #0398ca;
-	margin: 0px;
-	margin-top: 20px;
-	margin-bottom: 20px;
-}
-h3 {
-	text-decoration: underline;
-	margin: 0px;
-	font-size: 11px;
-	font-weight: normal;
-}
+
 #main-body { /* <div> used to set the width of the content  */
 	margin: 0 auto; /* les marges automatiques (et dotées d'une largeur positive) centrent la page */
 	width: 780px;
