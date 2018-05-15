@@ -19,7 +19,7 @@ $e_template = $app_folder.'tbs_us_examples_'.$e.(($s=='') ? '' : '_'.$s).'.htm';
 if (!file_exists($e_template)) $e_template = $app_folder.'tbs_us_examples_'.$e.(($s=='') ? '' : '_'.$s).'.txt'; // case of text template
 
 if ( ($e==='') || (!file_exists($e_script)) ) {
-	$e = '_welcome';
+	$e = '-welcome';
 	$e_script   = $app_folder.'tbs_us_examples__welcome.php';
 	$e_template = $app_folder.'tbs_us_examples__welcome.htm';
 }
@@ -98,21 +98,21 @@ function f_sidebar_getmerged() {
 */
 function f_source_create_html($contents) {
 	$title = 'Source code of '.$contents['file'];
-	return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+	return '<!DOCTYPE HTML>
+<html lang="en">
 <head>
 <title>TinyButStrong - '.$title.'</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8">
 <link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
-'.$contents['css'].'
+' . $contents['css'] . '
 </style>
 </head>
 <body>
-<h1>'.$title.'</h1>
+<h1>' . $title . '</h1>
 <div id="main-body"> 
   <div id="example">
-  '.$contents['main'].'
+  ' . $contents['main'] . '
   </div>
 </div>
 </body>
