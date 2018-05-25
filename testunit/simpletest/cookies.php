@@ -20,13 +20,14 @@ require_once(dirname(__FILE__) . '/url.php');
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleCookie {
-    var $_host;
-    var $_name;
-    var $_value;
-    var $_path;
-    var $_expiry;
-    var $_is_secure;
+class SimpleCookie
+{
+    public $_host;
+    public $_name;
+    public $_value;
+    public $_path;
+    public $_expiry;
+    public $_is_secure;
     
     /**
      *    Constructor. Sets the stored values.
@@ -36,7 +37,8 @@ class SimpleCookie {
      *    @param string $expiry          Expiry date as string.
      *    @param boolean $is_secure      Currently ignored.
      */
-    function SimpleCookie($name, $value = false, $path = false, $expiry = false, $is_secure = false) {
+    public function SimpleCookie($name, $value = false, $path = false, $expiry = false, $is_secure = false)
+    {
         $this->_host = false;
         $this->_name = $name;
         $this->_value = $value;
@@ -60,7 +62,8 @@ class SimpleCookie {
      *    @return boolean           True if hostname is valid.
      *    @access public
      */
-    function setHost($host) {
+    public function setHost($host)
+    {
         if ($host = $this->_truncateHost($host)) {
             $this->_host = $host;
             return true;
@@ -74,7 +77,8 @@ class SimpleCookie {
      *    @return string       Truncated hostname.
      *    @access public
      */
-    function getHost() {
+    public function getHost()
+    {
         return $this->_host;
     }
     
@@ -84,7 +88,8 @@ class SimpleCookie {
      *    @return boolean        True if the cookie would be valid
      *                           here.
      */
-    function isValidHost($host) {
+    public function isValidHost($host)
+    {
         return ($this->_truncateHost($host) === $this->getHost());
     }
     
@@ -95,7 +100,8 @@ class SimpleCookie {
      *    @return string        Domain or false on a bad host.
      *    @access private
      */
-    function _truncateHost($host) {
+    public function _truncateHost($host)
+    {
         $tlds = SimpleUrl::getAllTopLevelDomains();
         if (preg_match('/[a-z\-]+\.(' . $tlds . ')$/i', $host, $matches)) {
             return $matches[0];
@@ -110,7 +116,8 @@ class SimpleCookie {
      *    @return string       Cookie key.
      *    @access public
      */
-    function getName() {
+    public function getName()
+    {
         return $this->_name;
     }
     
@@ -120,7 +127,8 @@ class SimpleCookie {
      *    @return string       Cookie value.
      *    @access public
      */
-    function getValue() {
+    public function getValue()
+    {
         return $this->_value;
     }
     
@@ -129,7 +137,8 @@ class SimpleCookie {
      *    @return string       Valid cookie path.
      *    @access public
      */
-    function getPath() {
+    public function getPath()
+    {
         return $this->_path;
     }
     
@@ -141,11 +150,13 @@ class SimpleCookie {
      *    @return boolean           True if cookie valid here.
      *    @access public
      */
-    function isValidPath($path) {
+    public function isValidPath($path)
+    {
         return (strncmp(
                 $this->_fixPath($path),
                 $this->getPath(),
-                strlen($this->getPath())) == 0);
+                strlen($this->getPath())
+        ) == 0);
     }
     
     /**
@@ -153,7 +164,8 @@ class SimpleCookie {
      *    @return string       Expiry string.
      *    @access public
      */
-    function getExpiry() {
+    public function getExpiry()
+    {
         if (! $this->_expiry) {
             return false;
         }
@@ -171,7 +183,8 @@ class SimpleCookie {
      *                                or a cookie format date.
      *    @access public
      */
-    function isExpired($now) {
+    public function isExpired($now)
+    {
         if (! $this->_expiry) {
             return true;
         }
@@ -187,7 +200,8 @@ class SimpleCookie {
      *    @param integer $interval   In seconds.
      *    @public
      */
-    function agePrematurely($interval) {
+    public function agePrematurely($interval)
+    {
         if ($this->_expiry) {
             $this->_expiry -= $interval;
         }
@@ -198,7 +212,8 @@ class SimpleCookie {
      *    @return boolean       True if cookie needs SSL.
      *    @access public
      */
-    function isSecure() {
+    public function isSecure()
+    {
         return $this->_is_secure;
     }
     
@@ -208,7 +223,8 @@ class SimpleCookie {
      *    @param string $path            Path to fix.
      *    @access private
      */
-    function _fixPath($path) {
+    public function _fixPath($path)
+    {
         if (substr($path, 0, 1) != '/') {
             $path = '/' . $path;
         }
@@ -225,14 +241,16 @@ class SimpleCookie {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleCookieJar {
-    var $_cookies;
+class SimpleCookieJar
+{
+    public $_cookies;
     
     /**
      *    Constructor. Jar starts empty.
      *    @access public
      */
-    function SimpleCookieJar() {
+    public function SimpleCookieJar()
+    {
         $this->_cookies = array();
     }
     
@@ -242,7 +260,8 @@ class SimpleCookieJar {
      *    @param string/integer $now   Time to test expiry against.
      *    @access public
      */
-    function restartSession($date = false) {
+    public function restartSession($date = false)
+    {
         $surviving_cookies = array();
         for ($i = 0; $i < count($this->_cookies); $i++) {
             if (! $this->_cookies[$i]->getValue()) {
@@ -267,7 +286,8 @@ class SimpleCookieJar {
      *                                 age will be removed.
      *    @access public
      */
-    function agePrematurely($interval) {
+    public function agePrematurely($interval)
+    {
         for ($i = 0; $i < count($this->_cookies); $i++) {
             $this->_cookies[$i]->agePrematurely($interval);
         }
@@ -283,7 +303,8 @@ class SimpleCookieJar {
      *    @param string $expiry     Expiry date.
      *    @access public
      */
-    function setCookie($name, $value, $host = false, $path = '/', $expiry = false) {
+    public function setCookie($name, $value, $host = false, $path = '/', $expiry = false)
+    {
         $cookie = new SimpleCookie($name, $value, $path, $expiry);
         if ($host) {
             $cookie->setHost($host);
@@ -298,13 +319,15 @@ class SimpleCookieJar {
      *    @return integer                Available slot.
      *    @access private
      */
-    function _findFirstMatch($cookie) {
+    public function _findFirstMatch($cookie)
+    {
         for ($i = 0; $i < count($this->_cookies); $i++) {
             $is_match = $this->_isMatch(
                     $cookie,
                     $this->_cookies[$i]->getHost(),
                     $this->_cookies[$i]->getPath(),
-                    $this->_cookies[$i]->getName());
+                    $this->_cookies[$i]->getName()
+            );
             if ($is_match) {
                 return $i;
             }
@@ -323,7 +346,8 @@ class SimpleCookieJar {
      *                               value as a string.
      *    @access public
      */
-    function getCookieValue($host, $path, $name) {
+    public function getCookieValue($host, $path, $name)
+    {
         $longest_path = '';
         foreach ($this->_cookies as $cookie) {
             if ($this->_isMatch($cookie, $host, $path, $name)) {
@@ -347,7 +371,8 @@ class SimpleCookieJar {
      *    @return boolean              True if matched.
      *    @access private
      */
-    function _isMatch($cookie, $host, $path, $name) {
+    public function _isMatch($cookie, $host, $path, $name)
+    {
         if ($cookie->getName() != $name) {
             return false;
         }
@@ -367,7 +392,8 @@ class SimpleCookieJar {
      *    @return array               Valid name and value pairs.
      *    @access public
      */
-    function selectAsPairs($url) {
+    public function selectAsPairs($url)
+    {
         $pairs = array();
         foreach ($this->_cookies as $cookie) {
             if ($this->_isMatch($cookie, $url->getHost(), $url->getPath(), $cookie->getName())) {
@@ -377,4 +403,3 @@ class SimpleCookieJar {
         return $pairs;
     }
 }
-?>

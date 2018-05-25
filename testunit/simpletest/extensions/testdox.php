@@ -2,14 +2,16 @@
 
 class TestDoxReporter extends SimpleReporter
 {
-    var $_test_case_pattern = '/^TestOf(.*)$/';
+    public $_test_case_pattern = '/^TestOf(.*)$/';
 
-    function TestDoxReporter($test_case_pattern = '/^TestOf(.*)$/') {
+    public function TestDoxReporter($test_case_pattern = '/^TestOf(.*)$/')
+    {
         parent::SimpleScorer();
         $this->_test_case_pattern = empty($test_case_pattern) ? '/^(.*)$/' : $test_case_pattern;
     }
 
-    function paintCaseStart($test_name) {
+    public function paintCaseStart($test_name)
+    {
         preg_match($this->_test_case_pattern, $test_name, $matches);
         if (!empty($matches[1])) {
             echo $matches[1] . "\n";
@@ -18,11 +20,13 @@ class TestDoxReporter extends SimpleReporter
         }
     }
 
-    function paintCaseEnd() {
+    public function paintCaseEnd()
+    {
         echo "\n";
     }
 
-    function paintMethodStart($test_name) {
+    public function paintMethodStart($test_name)
+    {
         if (!preg_match('/^test(.*)$/i', $test_name, $matches)) {
             return;
         }
@@ -32,11 +36,13 @@ class TestDoxReporter extends SimpleReporter
         echo '- ' . strtolower(preg_replace('/([a-zA-Z])([A-Z0-9])/', '$1 $2', $test_name));
     }
 
-    function paintMethodEnd() {
+    public function paintMethodEnd()
+    {
         echo "\n";
     }
 
-    function paintFail() {
+    public function paintFail()
+    {
         echo " [FAILED]";
     }
 }

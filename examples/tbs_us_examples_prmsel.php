@@ -20,12 +20,10 @@ $TBS = new clsTinyButStrong;
 $TBS->LoadTemplate('tbs_us_examples_prmsel.htm');
 
 // List feeding
-$TBS->MergeBlock('lst1v',$item_lst);
-$TBS->MergeBlock('lst1' ,$item_lst);
-$TBS->MergeBlock('lst3v',$item_lst);
-$TBS->MergeBlock('lst3' ,$item_lst);
+$TBS->MergeBlock('lst1v', $item_lst);
+$TBS->MergeBlock('lst1', $item_lst);
+$TBS->MergeBlock('lst3v', $item_lst);
+$TBS->MergeBlock('lst3', $item_lst);
 
 // The selection of the items is done here
 $TBS->Show();
-
-?>

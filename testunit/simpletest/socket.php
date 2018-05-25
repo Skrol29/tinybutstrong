@@ -18,14 +18,16 @@ require_once(dirname(__FILE__) . '/compatibility.php');
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleStickyError {
-    var $_error = 'Constructor not chained';
+class SimpleStickyError
+{
+    public $_error = 'Constructor not chained';
 
     /**
      *    Sets the error to empty.
      *    @access public
      */
-    function SimpleStickyError() {
+    public function SimpleStickyError()
+    {
         $this->_clearError();
     }
 
@@ -34,7 +36,8 @@ class SimpleStickyError {
      *    @return boolean           True if there is an error.
      *    @access public
      */
-    function isError() {
+    public function isError()
+    {
         return ($this->_error != '');
     }
 
@@ -44,7 +47,8 @@ class SimpleStickyError {
      *                       the error message.
      *    @access public
      */
-    function getError() {
+    public function getError()
+    {
         return $this->_error;
     }
 
@@ -53,7 +57,8 @@ class SimpleStickyError {
      *    @param string       Error message to stash.
      *    @access protected
      */
-    function _setError($error) {
+    public function _setError($error)
+    {
         $this->_error = $error;
     }
 
@@ -61,7 +66,8 @@ class SimpleStickyError {
      *    Resets the error state to no error.
      *    @access protected
      */
-    function _clearError() {
+    public function _clearError()
+    {
         $this->_setError('');
     }
 }
@@ -71,11 +77,12 @@ class SimpleStickyError {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleSocket extends SimpleStickyError {
-    var $_handle;
-    var $_is_open = false;
-    var $_sent = '';
-    var $lock_size;
+class SimpleSocket extends SimpleStickyError
+{
+    public $_handle;
+    public $_is_open = false;
+    public $_sent = '';
+    public $lock_size;
 
     /**
      *    Opens a socket for reading and writing.
@@ -85,7 +92,8 @@ class SimpleSocket extends SimpleStickyError {
      *    @param integer $block_size   Size of chunk to read.
      *    @access public
      */
-    function SimpleSocket($host, $port, $timeout, $block_size = 255) {
+    public function SimpleSocket($host, $port, $timeout, $block_size = 255)
+    {
         $this->SimpleStickyError();
         if (! ($this->_handle = $this->_openSocket($host, $port, $error_number, $error, $timeout))) {
             $this->_setError("Cannot open [$host:$port] with [$error] within [$timeout] seconds");
@@ -102,7 +110,8 @@ class SimpleSocket extends SimpleStickyError {
      *    @return boolean              True if successful.
      *    @access public
      */
-    function write($message) {
+    public function write($message)
+    {
         if ($this->isError() || ! $this->isOpen()) {
             return false;
         }
@@ -127,7 +136,8 @@ class SimpleSocket extends SimpleStickyError {
      *                                     on error.
      *    @access public
      */
-    function read() {
+    public function read()
+    {
         if ($this->isError() || ! $this->isOpen()) {
             return false;
         }
@@ -144,7 +154,8 @@ class SimpleSocket extends SimpleStickyError {
      *    @return boolean           True if open.
      *    @access public
      */
-    function isOpen() {
+    public function isOpen()
+    {
         return $this->_is_open;
     }
 
@@ -154,7 +165,8 @@ class SimpleSocket extends SimpleStickyError {
      *    @return boolean           True if successful.
      *    @access public
      */
-    function close() {
+    public function close()
+    {
         $this->_is_open = false;
         return fclose($this->_handle);
     }
@@ -164,7 +176,8 @@ class SimpleSocket extends SimpleStickyError {
      *    @return string        Bytes sent only.
      *    @access public
      */
-    function getSent() {
+    public function getSent()
+    {
         return $this->_sent;
     }
 
@@ -177,7 +190,8 @@ class SimpleSocket extends SimpleStickyError {
      *    @param integer $timeout      Maximum time to wait for connection.
      *    @access protected
      */
-    function _openSocket($host, $port, &$error_number, &$error, $timeout) {
+    public function _openSocket($host, $port, &$error_number, &$error, $timeout)
+    {
         return @fsockopen($host, $port, $error_number, $error, $timeout);
     }
 }
@@ -187,7 +201,8 @@ class SimpleSocket extends SimpleStickyError {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleSecureSocket extends SimpleSocket {
+class SimpleSecureSocket extends SimpleSocket
+{
 
     /**
      *    Opens a secure socket for reading and writing.
@@ -196,7 +211,8 @@ class SimpleSecureSocket extends SimpleSocket {
      *    @param integer $timeout  Connection timeout in seconds.
      *    @access public
      */
-    function SimpleSecureSocket($host, $port, $timeout) {
+    public function SimpleSecureSocket($host, $port, $timeout)
+    {
         $this->SimpleSocket($host, $port, $timeout);
     }
 
@@ -209,8 +225,8 @@ class SimpleSecureSocket extends SimpleSocket {
      *    @param integer $timeout      Maximum time to wait for connection.
      *    @access protected
      */
-    function _openSocket($host, $port, &$error_number, &$error, $timeout) {
+    public function _openSocket($host, $port, &$error_number, &$error, $timeout)
+    {
         return parent::_openSocket("tls://$host", $port, $error_number, $error, $timeout);
     }
 }
-?>

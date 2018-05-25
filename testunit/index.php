@@ -16,10 +16,10 @@ require_once($dir_testu.'/simpletest/reporter.php');
 @require_once($dir_testu.'/simpletest/mock_objects.php');
 
 // include tbs classes
-if (version_compare(PHP_VERSION,'5.0')<0) {
-	$tbsFileName = $dir_tbs.'/tbs_class_php4.php';
+if (version_compare(PHP_VERSION, '5.0')<0) {
+    $tbsFileName = $dir_tbs.'/tbs_class_php4.php';
 } else {
-	$tbsFileName = $dir_tbs.'/tbs_class.php';
+    $tbsFileName = $dir_tbs.'/tbs_class.php';
 }
 require_once($tbsFileName);
 
@@ -50,4 +50,3 @@ $test->addTestCase(new StrconvTestCase());
 $test->addTestCase(new MiscTestCase());
 $test->addTestCase(new SubTplTestCase());
 $test->run(new HtmlCodeCoverageReporter(array($tbsFileName, $dir_tbs.'/plugins/')));
-

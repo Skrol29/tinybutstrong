@@ -7,7 +7,7 @@ http://www.tinybutstrong.com/onlyyou.html
 
 f_InfoStart('Reverse string search (backwards)');
 
-f_EchoLine('Presentation','u');
+f_EchoLine('Presentation', 'u');
 echo "
 This test compares several ways for a reverse search in a string, starting at a given offset.<br />
 Reverse search is not easy in PHP for two reasons: <br />
@@ -30,20 +30,20 @@ Methods tested:
    ------------ */
 
 f_EchoLine();
-f_EchoLine('Initialize data','u');
+f_EchoLine('Initialize data', 'u');
 
 $txt = f_GetHtml();
 $what = '<div';
 $offset = strpos($txt, 'super_conforming_strrpos');
 $res_good = 43338;
 
-f_EchoLine("Length of string: ".strlen($txt)); 
-f_EchoLine("Item seached: '".$what."'"); 
-f_EchoLine("Offset for the search = ".$offset." , extract: '".f_GiveExample($txt,$offset,50)."'..."); 
-f_EchoLine("Expected result: ".$res_good." , extract: '".f_GiveExample($txt,$res_good,50)."'..."); 
+f_EchoLine("Length of string: ".strlen($txt));
+f_EchoLine("Item seached: '".$what."'");
+f_EchoLine("Offset for the search = ".$offset." , extract: '".f_GiveExample($txt, $offset, 50)."'...");
+f_EchoLine("Expected result: ".$res_good." , extract: '".f_GiveExample($txt, $res_good, 50)."'...");
 
 f_EchoLine();
-f_EchoLine('Check results of functions','u');
+f_EchoLine('Check results of functions', 'u');
 
 $res_StrrposCut            = f_revsrch_StrrposCut($txt, $what, $offset);
 $res_StrposUntilOffset     = f_revsrch_StrposUntilOffset($txt, $what, $offset);
@@ -53,13 +53,13 @@ $res_ByChar_CharAsArray    = f_revsrch_ByChar_CharAsArray($txt, $what, $offset);
 $res_ByChar_CharAsSubstr   = f_revsrch_ByChar_CharAsSubstr($txt, $what, $offset);
 $res_ByChar_NoCharPrecheck = f_revsrch_ByChar_NoCharPrecheck($txt, $what, $offset);
 
-f_EchoLine("StrrposCut: pos=".$res_StrrposCut.f_ChechResr($res_good, $res_StrrposCut)); 
-f_EchoLine("StrposUntilOffset: pos=".$res_StrposUntilOffset.f_ChechResr($res_good, $res_StrposUntilOffset)); 
-f_EchoLine("ReverseCutStr: pos=".$res_ReverseCutStr.f_ChechResr($res_good, $res_ReverseCutStr)); 
-f_EchoLine("ReverseFullStr: pos=".$res_ReverseFullStr.f_ChechResr($res_good, $res_ReverseFullStr)); 
-f_EchoLine("ByChar_CharAsArray: pos=".$res_ByChar_CharAsArray.f_ChechResr($res_good, $res_ByChar_CharAsArray)); 
-f_EchoLine("ByChar_CharAsSubstr: pos=".$res_ByChar_CharAsSubstr.f_ChechResr($res_good, $res_ByChar_CharAsSubstr)); 
-f_EchoLine("ByChar_NoCharPrecheck: pos=".$res_ByChar_NoCharPrecheck.f_ChechResr($res_good, $res_ByChar_NoCharPrecheck)); 
+f_EchoLine("StrrposCut: pos=".$res_StrrposCut.f_ChechResr($res_good, $res_StrrposCut));
+f_EchoLine("StrposUntilOffset: pos=".$res_StrposUntilOffset.f_ChechResr($res_good, $res_StrposUntilOffset));
+f_EchoLine("ReverseCutStr: pos=".$res_ReverseCutStr.f_ChechResr($res_good, $res_ReverseCutStr));
+f_EchoLine("ReverseFullStr: pos=".$res_ReverseFullStr.f_ChechResr($res_good, $res_ReverseFullStr));
+f_EchoLine("ByChar_CharAsArray: pos=".$res_ByChar_CharAsArray.f_ChechResr($res_good, $res_ByChar_CharAsArray));
+f_EchoLine("ByChar_CharAsSubstr: pos=".$res_ByChar_CharAsSubstr.f_ChechResr($res_good, $res_ByChar_CharAsSubstr));
+f_EchoLine("ByChar_NoCharPrecheck: pos=".$res_ByChar_NoCharPrecheck.f_ChechResr($res_good, $res_ByChar_NoCharPrecheck));
 
 
 /* --------------
@@ -67,7 +67,7 @@ f_EchoLine("ByChar_NoCharPrecheck: pos=".$res_ByChar_NoCharPrecheck.f_ChechResr(
    -------------- */
 
 f_EchoLine();
-f_EchoLine('Speed measures','u');
+f_EchoLine('Speed measures', 'u');
 
 $nbr = 1000;
 $prm = array(&$txt, $what, $offset);
@@ -85,7 +85,7 @@ $b_ByChar_NoCharPrecheck = f_BenchThisFct('f_revsrch_ByChar_NoCharPrecheck', $pr
    --------------- */
 
 f_EchoLine();
-f_EchoLine('Compare results','u');
+f_EchoLine('Compare results', 'u');
 
 f_Compare("StrrposCut", $b_StrrposCut, "StrposUntilOffset", $b_StrposUntilOffset);
 f_Compare("StrrposCut", $b_StrrposCut, "ReverseCutStr", $b_ReverseCutStr);
@@ -99,246 +99,277 @@ f_Compare("StrrposCut", $b_StrrposCut, "ByChar_NoCharPrecheck", $b_ByChar_NoChar
    ------------ */
 
 f_EchoLine();
-f_EchoLine('End of tests','u');
+f_EchoLine('End of tests', 'u');
 $file = 'phpbench_reverse_str_search.php';
-f_InfoEnd('<a href="http://tinybutstrong.svn.sourceforge.net/viewvc/tinybutstrong/trunk/benches/standalone/'.$file.'?view=markup">Source code of this bench</a>. Created for the <a href="http://www.tinybutstrong.com">TinyButStrong</a> project.',false);
+f_InfoEnd('<a href="http://tinybutstrong.svn.sourceforge.net/viewvc/tinybutstrong/trunk/benches/standalone/'.$file.'?view=markup">Source code of this bench</a>. Created for the <a href="http://www.tinybutstrong.com">TinyButStrong</a> project.', false);
 exit;
 
 /* --------------------------------------------
    FUNCTIONS AND CLASSES SPECIFIC TO THIS BENCH
    -------------------------------------------- */
 
-function f_revsrch_StrrposCut($txt, $what, $offset) {
-// Reverse search based on strrpos() by cuting the haystack.
-	$p = strrpos(substr($txt,0,$offset+1), $what);
-	return $p;
+function f_revsrch_StrrposCut($txt, $what, $offset)
+{
+    // Reverse search based on strrpos() by cuting the haystack.
+    $p = strrpos(substr($txt, 0, $offset+1), $what);
+    return $p;
 }
 
-function f_revsrch_StrposUntilOffset($txt, $what, $offset) {
-// Reverse search by search forwards until the offset.
-	$p = $offset;
-	$b = -1;
-	while ( (($p=strpos($txt, $what,$b+1))!==false) && ($p<$offset) ) {
-		$b = $p; // continue to search
-	}
-	if ($b<0) {
-		return false;
-	} elseif ($p===$offset) {
-		return $offset;
-	} else {
-		return $b;
-	}
+function f_revsrch_StrposUntilOffset($txt, $what, $offset)
+{
+    // Reverse search by search forwards until the offset.
+    $p = $offset;
+    $b = -1;
+    while ((($p=strpos($txt, $what, $b+1))!==false) && ($p<$offset)) {
+        $b = $p; // continue to search
+    }
+    if ($b<0) {
+        return false;
+    } elseif ($p===$offset) {
+        return $offset;
+    } else {
+        return $b;
+    }
 }
 
-function f_revsrch_ByChar_CharAsArray($txt, $what, $offset) {
-// Reverse search by checking char by char backwards. Char by array syntax.
-	$what0 = $what[0];
-	$what_len = strlen($what);
-	$p = $offset;
-	$ok = false;
-	$cont = true;
-	do {
-		if (($txt[$p]===$what0) && (substr($txt,$p,$what_len)===$what)) {
-			$ok = true;
-			$cont = false;
-		} elseif ($p===0) {
-			$cont = false;
-		} else {
-			$p--;
-		}
-	} while ($cont);
-	if ($ok) {
-		return $p;
-	} else {
-		return false;
-	}
+function f_revsrch_ByChar_CharAsArray($txt, $what, $offset)
+{
+    // Reverse search by checking char by char backwards. Char by array syntax.
+    $what0 = $what[0];
+    $what_len = strlen($what);
+    $p = $offset;
+    $ok = false;
+    $cont = true;
+    do {
+        if (($txt[$p]===$what0) && (substr($txt, $p, $what_len)===$what)) {
+            $ok = true;
+            $cont = false;
+        } elseif ($p===0) {
+            $cont = false;
+        } else {
+            $p--;
+        }
+    } while ($cont);
+    if ($ok) {
+        return $p;
+    } else {
+        return false;
+    }
 }
 
-function f_revsrch_ByChar_CharAsSubstr($txt, $what, $offset) {
-// Reverse search by checking char by char backwards. Char by array substring.
-	$what0 = $what[0];
-	$what_len = strlen($what);
-	$p = $offset;
-	$ok = false;
-	$cont = true;
-	do {
-		if ((substr($txt,$p,1)===$what0) && (substr($txt,$p,$what_len)===$what)) {
-			$ok = true;
-			$cont = false;
-		} elseif ($p===0) {
-			$cont = false;
-		} else {
-			$p--;
-		}
-	} while ($cont);
-	if ($ok) {
-		return $p;
-	} else {
-		return false;
-	}
+function f_revsrch_ByChar_CharAsSubstr($txt, $what, $offset)
+{
+    // Reverse search by checking char by char backwards. Char by array substring.
+    $what0 = $what[0];
+    $what_len = strlen($what);
+    $p = $offset;
+    $ok = false;
+    $cont = true;
+    do {
+        if ((substr($txt, $p, 1)===$what0) && (substr($txt, $p, $what_len)===$what)) {
+            $ok = true;
+            $cont = false;
+        } elseif ($p===0) {
+            $cont = false;
+        } else {
+            $p--;
+        }
+    } while ($cont);
+    if ($ok) {
+        return $p;
+    } else {
+        return false;
+    }
 }
 
-function f_revsrch_ByChar_NoCharPrecheck($txt, $what, $offset) {
-// Reverse search by checking char by char backwards. No pre-check by char.
-	$what_len = strlen($what);
-	$p = $offset;
-	$ok = false;
-	$cont = true;
-	do {
-		if (substr($txt,$p,$what_len)===$what) {
-			$ok = true;
-			$cont = false;
-		} elseif ($p===0) {
-			$cont = false;
-		} else {
-			$p--;
-		}
-	} while ($cont);
-	if ($ok) {
-		return $p;
-	} else {
-		return false;
-	}
+function f_revsrch_ByChar_NoCharPrecheck($txt, $what, $offset)
+{
+    // Reverse search by checking char by char backwards. No pre-check by char.
+    $what_len = strlen($what);
+    $p = $offset;
+    $ok = false;
+    $cont = true;
+    do {
+        if (substr($txt, $p, $what_len)===$what) {
+            $ok = true;
+            $cont = false;
+        } elseif ($p===0) {
+            $cont = false;
+        } else {
+            $p--;
+        }
+    } while ($cont);
+    if ($ok) {
+        return $p;
+    } else {
+        return false;
+    }
 }
 
-function f_revsrch_ReverseFullStr($txt, $what, $offset) {
-// Reverse search by inverting the full strings.
-	$txt2=strrev($txt);
-	$z = strlen($txt)-1;
-	$what2=strrev($what);
-	$p = strpos($txt2, $what2, $z-$offset);
-	if ($p===false) {
-		return false;
-	} else {
-		return ($z-$p-strlen($what)+1);
-	}
+function f_revsrch_ReverseFullStr($txt, $what, $offset)
+{
+    // Reverse search by inverting the full strings.
+    $txt2=strrev($txt);
+    $z = strlen($txt)-1;
+    $what2=strrev($what);
+    $p = strpos($txt2, $what2, $z-$offset);
+    if ($p===false) {
+        return false;
+    } else {
+        return ($z-$p-strlen($what)+1);
+    }
 }
 
-function f_revsrch_ReverseCutStr($txt, $what, $offset) {
-// Reverse search by inverting the sub string.
-	$txt2=strrev(substr($txt,0,$offset+1));
-	$z = strlen($txt2)-1;
-	$what2=strrev($what);
-	$p = strpos($txt2, $what2);
-	if ($p===false) {
-		return false;
-	} else {
-		return ($z-$p-strlen($what)+1);
-	}
+function f_revsrch_ReverseCutStr($txt, $what, $offset)
+{
+    // Reverse search by inverting the sub string.
+    $txt2=strrev(substr($txt, 0, $offset+1));
+    $z = strlen($txt2)-1;
+    $what2=strrev($what);
+    $p = strpos($txt2, $what2);
+    if ($p===false) {
+        return false;
+    } else {
+        return ($z-$p-strlen($what)+1);
+    }
 }
 
-function f_GiveExample($txt,$p,$len) {
-	return substr($txt, $p, $len);
+function f_GiveExample($txt, $p, $len)
+{
+    return substr($txt, $p, $len);
 }
-function f_ChechResr($p1,$p2) {
-	return ($p1==$p2) ? ' (ok)' : ' (err)';
+function f_ChechResr($p1, $p2)
+{
+    return ($p1==$p2) ? ' (ok)' : ' (err)';
 }
 
 /* ---------------------------------
    COMMON FUNCTIONS (version 1.1)
    ---------------------------------*/
 
-function f_Nothing() {
-// used to bench a function that does nothing
-	$x = false;
-	return $x;
+function f_Nothing()
+{
+    // used to bench a function that does nothing
+    $x = false;
+    return $x;
 }
 
-function f_BenchThisFct($fct, $arg=null, $nbr = 10000) {
-// bench a function that takes zero to 5 arguments.
-	$x = false;
-	if (is_null($arg)) $arg = array();
-	$arg_nbr = count($arg);
-	$t1 = f_Timer();
-	switch ($arg_nbr) {
-		case 0: for ($i=0;$i<$nbr;$i++) $x = $fct(); break; // do not use call_user_func_array() or call_user_func() because they get time proportionally to the length of the function's name.
-		case 1: for ($i=0;$i<$nbr;$i++) $x = $fct($arg[0]); break;
-		case 2: for ($i=0;$i<$nbr;$i++) $x = $fct($arg[0], $arg[1]); break;
-		case 3: for ($i=0;$i<$nbr;$i++) $x = $fct($arg[0], $arg[1], $arg[2]); break;
-		case 4: for ($i=0;$i<$nbr;$i++) $x = $fct($arg[0], $arg[1], $arg[2], $arg[3]); break;
-		case 5: for ($i=0;$i<$nbr;$i++) $x = $fct($arg[0], $arg[1], $arg[2], $arg[3], $arg[4]); break;
-		default: exit('ERROR: more that 5 arguments are given to bench function '.$fct.'().');
-	}
-	$t2 = f_Timer();
-	$d = ($t2-$t1);
-	$av = $d/$nbr;
-	if ($av>=0.1) {
-		$av_txt = number_format($av,3,'.',',').' secconds';
-	} elseif ($av>=0.001) {
-		$av_txt = number_format(1000*$av,3,'.',',').' milli-secconds';
-	} elseif ($av>=0.000001) {
-		$av_txt = number_format(1000000*$av,3,'.',',').' micro-secconds';
-	} else {
-		$av_txt = number_format(1000000*$av,12,'.',',').' micro-secconds';
-	}
-	f_EchoLine("Bench of function '".$fct."': run ".number_format($nbr,0,'.',',')." times, average duration: ".$av_txt.".");
-	return $d;
+function f_BenchThisFct($fct, $arg=null, $nbr = 10000)
+{
+    // bench a function that takes zero to 5 arguments.
+    $x = false;
+    if (is_null($arg)) {
+        $arg = array();
+    }
+    $arg_nbr = count($arg);
+    $t1 = f_Timer();
+    switch ($arg_nbr) {
+        case 0: for ($i=0;$i<$nbr;$i++) {
+            $x = $fct();
+        } break; // do not use call_user_func_array() or call_user_func() because they get time proportionally to the length of the function's name.
+        case 1: for ($i=0;$i<$nbr;$i++) {
+            $x = $fct($arg[0]);
+        } break;
+        case 2: for ($i=0;$i<$nbr;$i++) {
+            $x = $fct($arg[0], $arg[1]);
+        } break;
+        case 3: for ($i=0;$i<$nbr;$i++) {
+            $x = $fct($arg[0], $arg[1], $arg[2]);
+        } break;
+        case 4: for ($i=0;$i<$nbr;$i++) {
+            $x = $fct($arg[0], $arg[1], $arg[2], $arg[3]);
+        } break;
+        case 5: for ($i=0;$i<$nbr;$i++) {
+            $x = $fct($arg[0], $arg[1], $arg[2], $arg[3], $arg[4]);
+        } break;
+        default: exit('ERROR: more that 5 arguments are given to bench function '.$fct.'().');
+    }
+    $t2 = f_Timer();
+    $d = ($t2-$t1);
+    $av = $d/$nbr;
+    if ($av>=0.1) {
+        $av_txt = number_format($av, 3, '.', ',').' secconds';
+    } elseif ($av>=0.001) {
+        $av_txt = number_format(1000*$av, 3, '.', ',').' milli-secconds';
+    } elseif ($av>=0.000001) {
+        $av_txt = number_format(1000000*$av, 3, '.', ',').' micro-secconds';
+    } else {
+        $av_txt = number_format(1000000*$av, 12, '.', ',').' micro-secconds';
+    }
+    f_EchoLine("Bench of function '".$fct."': run ".number_format($nbr, 0, '.', ',')." times, average duration: ".$av_txt.".");
+    return $d;
 }
 
-function f_Timer() {
-// return the currentdate-time in secondes, compatible with PHP 4 and higher
-	$x = microtime() ;
-	$p = strpos($x,' ') ;
-	if ($p===False) {
-		$x = '0.0' ;
-	} else {
-		$x = substr($x,$p+1).substr($x,1,$p) ;
-	} ;
-	return (float)$x ;
+function f_Timer()
+{
+    // return the currentdate-time in secondes, compatible with PHP 4 and higher
+    $x = microtime() ;
+    $p = strpos($x, ' ') ;
+    if ($p===false) {
+        $x = '0.0' ;
+    } else {
+        $x = substr($x, $p+1).substr($x, 1, $p) ;
+    } ;
+    return (float)$x ;
 }
 
-function f_EchoLine($txt='',$conv=true) {
-// display a line of information
-	if ($conv===true) {
-		$txt = htmlentities($txt);
-	} elseif (is_string($conv)) {
-		$txt = '<'.$conv.'>'.htmlentities($txt).'</'.$conv.'>';
-	}
-	echo $txt."<br />\r";
+function f_EchoLine($txt='', $conv=true)
+{
+    // display a line of information
+    if ($conv===true) {
+        $txt = htmlentities($txt);
+    } elseif (is_string($conv)) {
+        $txt = '<'.$conv.'>'.htmlentities($txt).'</'.$conv.'>';
+    }
+    echo $txt."<br />\r";
 }
 
-function f_Compare($a_name, $a_val, $b_name, $b_val) {
-// display the result of the comparison between two values
-	if ($a_val>$b_val) {
-		$x_val = $a_val;
-		$a_val = $b_val;
-		$b_val = $x_val;
-		$x_name = $a_name;
-		$a_name = $b_name;
-		$b_name = $x_name;
-	} 
-	f_EchoLine( '['.$a_name.'] is '.number_format($b_val/$a_val,2).' time faster than ['.$b_name.'] , that is a reduction of '.number_format(100*($b_val-$a_val)/$b_val,2).'% compared to ['.$b_name.'].' );
+function f_Compare($a_name, $a_val, $b_name, $b_val)
+{
+    // display the result of the comparison between two values
+    if ($a_val>$b_val) {
+        $x_val = $a_val;
+        $a_val = $b_val;
+        $b_val = $x_val;
+        $x_name = $a_name;
+        $a_name = $b_name;
+        $b_name = $x_name;
+    }
+    f_EchoLine('['.$a_name.'] is '.number_format($b_val/$a_val, 2).' time faster than ['.$b_name.'] , that is a reduction of '.number_format(100*($b_val-$a_val)/$b_val, 2).'% compared to ['.$b_name.'].');
 }
 
-function f_InfoStart($title) {
-// display information at the start of the test	
-	global $t_start;
-	$t_start = f_Timer();
-	
-	echo '<!DOCTYPE HTML><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>PHP Benches - '.$title.'</title></head><body>';
-	f_EchoLine('<b>PHP Benches:</b> '.htmlentities($title), false);
-	f_EchoLine('<b>PHP version:</b> '.PHP_VERSION,false);
-	f_EchoLine('<b>OS type:</b> '.PHP_OS.' ('.php_uname('s').')',false);
-	f_EchoLine();
-	
+function f_InfoStart($title)
+{
+    // display information at the start of the test
+    global $t_start;
+    $t_start = f_Timer();
+    
+    echo '<!DOCTYPE HTML><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>PHP Benches - '.$title.'</title></head><body>';
+    f_EchoLine('<b>PHP Benches:</b> '.htmlentities($title), false);
+    f_EchoLine('<b>PHP version:</b> '.PHP_VERSION, false);
+    f_EchoLine('<b>OS type:</b> '.PHP_OS.' ('.php_uname('s').')', false);
+    f_EchoLine();
 }
 
-function f_InfoEnd($signature=false,$conv=true) {
-// display information at the end of the test	
-	global $t_start;
-	$t_end = f_Timer();
-	f_EchoLine("Total duration: ".number_format($t_end-$t_start,2)." sec.");
-	if ($signature!==false) f_EchoLine($signature,$conv);
-	echo '</body></html>';
+function f_InfoEnd($signature=false, $conv=true)
+{
+    // display information at the end of the test
+    global $t_start;
+    $t_end = f_Timer();
+    f_EchoLine("Total duration: ".number_format($t_end-$t_start, 2)." sec.");
+    if ($signature!==false) {
+        f_EchoLine($signature, $conv);
+    }
+    echo '</body></html>';
 }
 
 /* ---------------------------------
    SPECIFIC TO THIS TEST
    ---------------------------------*/
 
-function f_GetHtml() {
-	
-$x = <<<MY_HTML
+function f_GetHtml()
+{
+    $x = <<<MY_HTML
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -2620,6 +2651,5 @@ The idea is to reverse both *needle and *haystack, use strpos to find the first 
 </html>
 MY_HTML;
 
- return $x;
-
+    return $x;
 }
