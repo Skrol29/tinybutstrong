@@ -22,5 +22,3 @@ $TBS->LoadTemplate('tbs_us_examples_assign.htm');
 $TBS->MergeBlock('expl_2', 'assigned');
 
 $TBS->Show();
-
-?>

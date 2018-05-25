@@ -16,7 +16,5 @@ $result[10] = array('country'=>'France', 'city'=>'Toulouse', 'winner'=>'Jaques',
 
 $TBS = new clsTinyButStrong;
 $TBS->LoadTemplate('tbs_us_examples_grouping.htm');
-$TBS->MergeBlock('blk_res',$result);
+$TBS->MergeBlock('blk_res', $result);
 $TBS->Show();
-
-?>

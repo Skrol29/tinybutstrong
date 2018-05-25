@@ -25,7 +25,7 @@ $data[3]['articles'][] = array('caption'=>'Music - Push push' , 'qty'=>1 ,'upric
 
 // prepare the body's template
 $TBS = new clsTinyButStrong;
-$TBS->LoadTemplate('tbs_us_examples_email.txt',false);
+$TBS->LoadTemplate('tbs_us_examples_email.txt', false);
 $tpl_subject = $TBS->TplVars['subject']; // retrieve the subject from the template
 $tpl_body = $TBS->Source;
 
@@ -38,22 +38,20 @@ $Mail->From = 'example@tinybutstrong.com';
 foreach ($data as $recipiant) {
 
   // merge the body
-	$TBS->Source = $tpl_body;	// initialize TBS with the body template
-	$TBS->MergeField('i', $recipiant); // merge the current recipiant
-	$TBS->MergeBlock('a', $recipiant['articles']);
-	$TBS->Show(TBS_NOTHING); // merge automatic TBS fields
-	
-	// prepare the email
-	$Mail->AddAddress($recipiant['email']);  
-	$Mail->Subject = $tpl_subject;
-	$Mail->Body = $TBS->Source;
-	
-	// send the email
-	//$Mail->Send(); // canceled because there must be no email sending in the examples, we display the messages instead
-	$txt = 'To: '.$recipiant['email']."\r\n".'Subject: '.$tpl_subject."\r\n".$Mail->Body."\r\n\r\n============================================\r\n\r\n";
-	$TBS->Source = '<html><head><link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css"></head><body><h1>Example of emailing</h1><div id="main-body"><pre>'.$txt.'</pre></div></body></html>';
-	$TBS->Show();
-	break;
+    $TBS->Source = $tpl_body;	// initialize TBS with the body template
+    $TBS->MergeField('i', $recipiant); // merge the current recipiant
+    $TBS->MergeBlock('a', $recipiant['articles']);
+    $TBS->Show(TBS_NOTHING); // merge automatic TBS fields
+    
+    // prepare the email
+    $Mail->AddAddress($recipiant['email']);
+    $Mail->Subject = $tpl_subject;
+    $Mail->Body = $TBS->Source;
+    
+    // send the email
+    //$Mail->Send(); // canceled because there must be no email sending in the examples, we display the messages instead
+    $txt = 'To: '.$recipiant['email']."\r\n".'Subject: '.$tpl_subject."\r\n".$Mail->Body."\r\n\r\n============================================\r\n\r\n";
+    $TBS->Source = '<html><head><link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css"></head><body><h1>Example of emailing</h1><div id="main-body"><pre>'.$txt.'</pre></div></body></html>';
+    $TBS->Show();
+    break;
 }
-
-?>

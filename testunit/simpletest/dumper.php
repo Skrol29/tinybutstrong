@@ -17,7 +17,8 @@ if (! defined('TYPE_MATTERS')) {
  *    @package  SimpleTest
  *    @subpackage   UnitTester
  */
-class SimpleDumper {
+class SimpleDumper
+{
     
     /**
      *    Renders a variable in a shorter form than print_r().
@@ -25,9 +26,10 @@ class SimpleDumper {
      *    @return string           Human readable string form.
      *    @access public
      */
-    function describeValue($value) {
+    public function describeValue($value)
+    {
         $type = $this->getType($value);
-        switch($type) {
+        switch ($type) {
             case "Null":
                 return "NULL";
             case "Boolean":
@@ -50,7 +52,8 @@ class SimpleDumper {
      *    @return string         Type.
      *    @access public
      */
-    function getType($value) {
+    public function getType($value)
+    {
         if (! isset($value)) {
             return "Null";
         } elseif (is_bool($value)) {
@@ -81,7 +84,8 @@ class SimpleDumper {
      *    @return string             Description of difference.
      *    @access public
      */
-    function describeDifference($first, $second, $identical = false) {
+    public function describeDifference($first, $second, $identical = false)
+    {
         if ($identical) {
             if (! $this->_isTypeMatch($first, $second)) {
                 return "with type mismatch as [" . $this->describeValue($first) .
@@ -103,7 +107,8 @@ class SimpleDumper {
      *    @return boolean            True if matches.
      *    @access private
      */
-    function _isTypeMatch($first, $second) {
+    public function _isTypeMatch($first, $second)
+    {
         return ($this->getType($first) == $this->getType($second));
     }
 
@@ -115,7 +120,8 @@ class SimpleDumper {
      *    @return string               Shortened version.
      *    @access public
      */
-    function clipString($value, $size, $position = 0) {
+    public function clipString($value, $size, $position = 0)
+    {
         $length = strlen($value);
         if ($length <= $size) {
             return $value;
@@ -138,7 +144,8 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeGenericDifference($first, $second) {
+    public function _describeGenericDifference($first, $second)
+    {
         return "as [" . $this->describeValue($first) .
                 "] does not match [" .
                 $this->describeValue($second) . "]";
@@ -153,7 +160,8 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeNullDifference($first, $second, $identical) {
+    public function _describeNullDifference($first, $second, $identical)
+    {
         return $this->_describeGenericDifference($first, $second);
     }
     
@@ -166,7 +174,8 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeBooleanDifference($first, $second, $identical) {
+    public function _describeBooleanDifference($first, $second, $identical)
+    {
         return $this->_describeGenericDifference($first, $second);
     }
     
@@ -179,7 +188,8 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeStringDifference($first, $second, $identical) {
+    public function _describeStringDifference($first, $second, $identical)
+    {
         if (is_object($second) || is_array($second)) {
             return $this->_describeGenericDifference($first, $second);
         }
@@ -200,7 +210,8 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeIntegerDifference($first, $second, $identical) {
+    public function _describeIntegerDifference($first, $second, $identical)
+    {
         if (is_object($second) || is_array($second)) {
             return $this->_describeGenericDifference($first, $second);
         }
@@ -219,7 +230,8 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeFloatDifference($first, $second, $identical) {
+    public function _describeFloatDifference($first, $second, $identical)
+    {
         if (is_object($second) || is_array($second)) {
             return $this->_describeGenericDifference($first, $second);
         }
@@ -238,7 +250,8 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeArrayDifference($first, $second, $identical) {
+    public function _describeArrayDifference($first, $second, $identical)
+    {
         if (! is_array($second)) {
             return $this->_describeGenericDifference($first, $second);
         }
@@ -257,7 +270,8 @@ class SimpleDumper {
             return "with member [$key] " . $this->describeDifference(
                     $first[$key],
                     $second[$key],
-                    $identical);
+                    $identical
+            );
         }
         return "";
     }
@@ -272,7 +286,8 @@ class SimpleDumper {
      *    @return boolean             True if matching.
      *    @access private
      */
-    function _isMatchingKeys($first, $second, $identical) {
+    public function _isMatchingKeys($first, $second, $identical)
+    {
         $first_keys = array_keys($first);
         $second_keys = array_keys($second);
         if ($identical) {
@@ -292,7 +307,8 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeResourceDifference($first, $second, $identical) {
+    public function _describeResourceDifference($first, $second, $identical)
+    {
         return $this->_describeGenericDifference($first, $second);
     }
     
@@ -305,14 +321,16 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeObjectDifference($first, $second, $identical) {
+    public function _describeObjectDifference($first, $second, $identical)
+    {
         if (! is_object($second)) {
             return $this->_describeGenericDifference($first, $second);
         }
         return $this->_describeArrayDifference(
                 get_object_vars($first),
                 get_object_vars($second),
-                $identical);
+                $identical
+        );
     }
     
     /**
@@ -324,7 +342,8 @@ class SimpleDumper {
      *                                character.
      *    @access private
      */
-    function _stringDiffersAt($first, $second) {
+    public function _stringDiffersAt($first, $second)
+    {
         if (! $first || ! $second) {
             return 0;
         }
@@ -349,7 +368,8 @@ class SimpleDumper {
      *    @access public
      *    @static
      */
-    function dump($variable) {
+    public function dump($variable)
+    {
         ob_start();
         print_r($variable);
         $formatted = ob_get_contents();
@@ -357,4 +377,3 @@ class SimpleDumper {
         return $formatted;
     }
 }
-?>

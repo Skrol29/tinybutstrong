@@ -24,18 +24,20 @@ $data[] = array('product'=>'Bagpipes'   , 'price'=>129.00);
 $data[] = array('product'=>'Ukulele'    , 'price'=>48.00);
 
 // Default value
-if (!isset($_GET)) $_GET=&$HTTP_GET_VARS;
+if (!isset($_GET)) {
+    $_GET=&$HTTP_GET_VARS;
+}
 if (isset($_GET['PageNum'])) {
-  $PageNum = $_GET['PageNum'];
+    $PageNum = $_GET['PageNum'];
 } else {
-	$PageNum = 1; 
+    $PageNum = 1;
 }
 
 // Default value
 if (isset($_GET['RecCnt'])) {
-  $RecCnt = intval($_GET['RecCnt']);
+    $RecCnt = intval($_GET['RecCnt']);
 } else {
-	$RecCnt = -1;
+    $RecCnt = -1;
 }
 
 $PageSize = 5;
@@ -44,13 +46,11 @@ $TBS = new clsTinyButStrong;
 $TBS->LoadTemplate('tbs_us_examples_page.htm');
 
 // Merge the block by page
-$TBS->PlugIn(TBS_BYPAGE,$PageSize,$PageNum,$RecCnt); // Next block will be merged suing By-Page mode.
-$RecCnt = $TBS->MergeBlock('blk',$data);
+$TBS->PlugIn(TBS_BYPAGE, $PageSize, $PageNum, $RecCnt); // Next block will be merged suing By-Page mode.
+$RecCnt = $TBS->MergeBlock('blk', $data);
 
 // Merge the Navigation Bar
-$TBS->PlugIn(TBS_NAVBAR,'nv','',$PageNum,$RecCnt,$PageSize);
+$TBS->PlugIn(TBS_NAVBAR, 'nv', '', $PageNum, $RecCnt, $PageSize);
 
 
 $TBS->Show();
-
-?>

@@ -18,13 +18,11 @@ $TBS = new clsTinyButStrong;
 $TBS->LoadTemplate('tbs_us_examples_subblock.htm');
 
 // Automatic subblock
-$TBS->MergeBlock('asb',$TeamList);
+$TBS->MergeBlock('asb', $TeamList);
 
 // Subblock with a dynamic query
-$TBS->MergeBlock('mb','array','TeamList');
-$TBS->MergeBlock('sb','array','TeamList[%p1%][matches]');
+$TBS->MergeBlock('mb', 'array', 'TeamList');
+$TBS->MergeBlock('sb', 'array', 'TeamList[%p1%][matches]');
 
 
 $TBS->Show();
-
-?>

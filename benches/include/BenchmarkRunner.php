@@ -1,48 +1,56 @@
 <?php
 
-class BenchmarkRunner {
+class BenchmarkRunner
+{
+    public function BenchmarkRunner($runningCount = 0)
+    {
+        $this->setRunningCount($runningCount);
+    }
 
-	function BenchmarkRunner($runningCount = 0) {
-		$this->setRunningCount($runningCount);
-	}
+    public function getRunningCount()
+    {
+        return $this->_runningCount;
+    }
 
-	function getRunningCount() {
-		return $this->_runningCount;
-	}
+    public function setRunningCount($value)
+    {
+        $this->_runningCount = max(1, intval($value));
+    }
 
-	function setRunningCount($value) {
-		$this->_runningCount = max(1, intval($value));
-	}
+    public function run($name, $functionName, $params = null)
+    {
+        $beginTime = $this->getMicrotime();
+        $beginMemory = $this->getMemory();
+        $this->loop($functionName, $params);
+        $endTime = $this->getMicrotime();
+        $endMemory = $this->getMemory();
+        $result = new BenchmarkResult();
+        $result->name = $name;
+        $result->runningCount = $this->getRunningCount();
+        $result->totalTime = $endTime - $beginTime;
+        $result->totalMemory = ($beginMemory!==false ? $endMemory - $beginMemory : false);
+        return $result;
+    }
 
-	function run($name, $functionName, $params = null) {
-		$beginTime = $this->getMicrotime();
-		$beginMemory = $this->getMemory();
-		$this->loop($functionName, $params);
-		$endTime = $this->getMicrotime();
-		$endMemory = $this->getMemory();
-		$result = new BenchmarkResult();
-		$result->name = $name;
-		$result->runningCount = $this->getRunningCount();
-		$result->totalTime = $endTime - $beginTime;
-		$result->totalMemory = ($beginMemory!==false ? $endMemory - $beginMemory : false);
-		return $result;
-	}
+    public function loop($functionName, $params)
+    {
+        if ($params === null) {
+            $params = array();
+        }
+        $runningCount = $this->getRunningCount();
+        for ($i=0; $i<$runningCount; $i++) {
+            call_user_func_array($functionName, $params);
+        }
+    }
 
-	function loop($functionName, $params) {
-		if ($params === null) $params = array();
-		$runningCount = $this->getRunningCount();
-		for ($i=0; $i<$runningCount; $i++)
-			call_user_func_array($functionName, $params);
-	}
+    public function getMicrotime()
+    {
+        list($usec, $sec) = explode(" ", microtime());
+        return ((float)$usec + (float)$sec);
+    }
 
-	function getMicrotime() {
-		list($usec, $sec) = explode(" ", microtime());
-		return ((float)$usec + (float)$sec);
-	}
-
-	function getMemory() {
-		return (function_exists('memory_get_usage') ? memory_get_usage() : false);
-	}
+    public function getMemory()
+    {
+        return (function_exists('memory_get_usage') ? memory_get_usage() : false);
+    }
 }
-
-?>

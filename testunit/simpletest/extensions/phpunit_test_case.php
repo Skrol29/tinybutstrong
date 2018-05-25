@@ -19,14 +19,16 @@
      *    @package		SimpleTest
      *    @subpackage	Extensions
      */
-    class TestCase extends SimpleTestCase {
+    class TestCase extends SimpleTestCase
+    {
         
         /**
          *    Constructor. Sets the test name.
          *    @param $label        Test name to display.
          *    @public
          */
-        function TestCase($label = false) {
+        public function TestCase($label = false)
+        {
             $this->SimpleTestCase($label);
         }
         
@@ -37,7 +39,8 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assert($condition, $message = false) {
+        public function assert($condition, $message = false)
+        {
             parent::assert(new TrueExpectation(), $condition, $message);
         }
         
@@ -49,7 +52,8 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertEquals($first, $second, $message = false) {
+        public function assertEquals($first, $second, $message = false)
+        {
             parent::assert(new EqualExpectation($first), $second, $message);
         }
         
@@ -60,9 +64,10 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertEqualsMultilineStrings($first, $second, $message = false) {
+        public function assertEqualsMultilineStrings($first, $second, $message = false)
+        {
             parent::assert(new EqualExpectation($first), $second, $message);
-        }                             
+        }
         
         /**
          *    Tests a regex match.
@@ -71,7 +76,8 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertRegexp($pattern, $subject, $message = false) {
+        public function assertRegexp($pattern, $subject, $message = false)
+        {
             parent::assert(new PatternExpectation($pattern), $subject, $message);
         }
         
@@ -81,7 +87,8 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function error($message) {
+        public function error($message)
+        {
             parent::fail("Error triggered [$message]");
         }
          
@@ -89,8 +96,8 @@
          *    Accessor for name.
          *    @public
          */
-       function name() {
+        public function name()
+        {
             return $this->getLabel();
         }
     }
-?>

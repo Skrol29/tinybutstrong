@@ -1,21 +1,24 @@
 <?php
 
-class BenchmarkReporter {
+class BenchmarkReporter
+{
+    public function paintHeader($benchName)
+    {
+    }
 
-	function paintHeader($benchName) {
-	}
+    public function paintFooter($benchName)
+    {
+    }
 
-	function paintFooter($benchName) {
-	}
+    public function paintBenchResults($resultSet)
+    {
+    }
 
-	function paintBenchResults($resultSet) {
-	}
+    public function paintCompareResults($resultSet)
+    {
+    }
 
-	function paintCompareResults($resultSet) {
-	}
-
-	function paintAll($resultSet) {
-	}
+    public function paintAll($resultSet)
+    {
+    }
 }
-
-?>

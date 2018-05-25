@@ -16,9 +16,7 @@ $all_array['type2'] = $array_type2;
 
 $TBS = new clsTinyButStrong;
 $TBS->LoadTemplate('tbs_us_examples_dataarray.htm');
-$TBS->MergeBlock('blk1',$array_type1);
-$TBS->MergeBlock('blk2',$array_type2);
-$TBS->MergeBlock('blk3','array','all_array[type2]');
+$TBS->MergeBlock('blk1', $array_type1);
+$TBS->MergeBlock('blk2', $array_type2);
+$TBS->MergeBlock('blk3', 'array', 'all_array[type2]');
 $TBS->Show();
-
-?>

@@ -27,14 +27,16 @@ if (! defined('SIMPLE_TEST')) {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class SimpleInvoker {
-    var $_test_case;
+class SimpleInvoker
+{
+    public $_test_case;
 
     /**
      *    Stashes the test case for later.
      *    @param SimpleTestCase $test_case  Test case to run.
      */
-    function SimpleInvoker(&$test_case) {
+    public function SimpleInvoker(&$test_case)
+    {
         $this->_test_case = &$test_case;
     }
 
@@ -43,7 +45,8 @@ class SimpleInvoker {
      *    @return SimpleTestCase    Test case.
      *    @access public
      */
-    function &getTestCase() {
+    public function &getTestCase()
+    {
         return $this->_test_case;
     }
 
@@ -53,7 +56,8 @@ class SimpleInvoker {
      *    @param string $method    Test method to call.
      *    @access public
      */
-    function before($method) {
+    public function before($method)
+    {
         $this->_test_case->before($method);
     }
 
@@ -63,7 +67,8 @@ class SimpleInvoker {
      *    @param string $method    Test method to call.
      *    @access public
      */
-    function invoke($method) {
+    public function invoke($method)
+    {
         $this->_test_case->setUp();
         $this->_test_case->$method();
         $this->_test_case->tearDown();
@@ -75,7 +80,8 @@ class SimpleInvoker {
      *    @param string $method    Test method to call.
      *    @access public
      */
-    function after($method) {
+    public function after($method)
+    {
         $this->_test_case->after($method);
     }
 }
@@ -86,14 +92,16 @@ class SimpleInvoker {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class SimpleInvokerDecorator {
-    var $_invoker;
+class SimpleInvokerDecorator
+{
+    public $_invoker;
 
     /**
      *    Stores the invoker to wrap.
      *    @param SimpleInvoker $invoker  Test method runner.
      */
-    function SimpleInvokerDecorator(&$invoker) {
+    public function SimpleInvokerDecorator(&$invoker)
+    {
         $this->_invoker = &$invoker;
     }
 
@@ -102,7 +110,8 @@ class SimpleInvokerDecorator {
      *    @return SimpleTestCase    Test case.
      *    @access public
      */
-    function &getTestCase() {
+    public function &getTestCase()
+    {
         return $this->_invoker->getTestCase();
     }
 
@@ -112,7 +121,8 @@ class SimpleInvokerDecorator {
      *    @param string $method    Test method to call.
      *    @access public
      */
-    function before($method) {
+    public function before($method)
+    {
         $this->_invoker->before($method);
     }
 
@@ -122,7 +132,8 @@ class SimpleInvokerDecorator {
      *    @param string $method    Test method to call.
      *    @access public
      */
-    function invoke($method) {
+    public function invoke($method)
+    {
         $this->_invoker->invoke($method);
     }
 
@@ -132,8 +143,8 @@ class SimpleInvokerDecorator {
      *    @param string $method    Test method to call.
      *    @access public
      */
-    function after($method) {
+    public function after($method)
+    {
         $this->_invoker->after($method);
     }
 }
-?>

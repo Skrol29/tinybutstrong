@@ -14,5 +14,3 @@ $name8 = 'Greta Garbo';
 $TBS = new clsTinyButStrong;
 $TBS->LoadTemplate('tbs_us_examples_prmope.htm');
 $TBS->Show();
-
-?>

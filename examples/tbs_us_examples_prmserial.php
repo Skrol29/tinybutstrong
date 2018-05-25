@@ -15,8 +15,6 @@ $recset[] = array('title'=>'Us, you and I'    , 'rank'=>'J');
 
 $TBS = new clsTinyButStrong;
 $TBS->LoadTemplate('tbs_us_examples_prmserial.htm');
-$TBS->MergeBlock('bx',$recset);
-$TBS->MergeBlock('bz',$recset);
+$TBS->MergeBlock('bx', $recset);
+$TBS->MergeBlock('bz', $recset);
 $TBS->Show();
-
-?>
