@@ -1,3 +1,12 @@
+= Release 3.11.0 =
+
+* $TBS->GetAttValue() enables to read a current attribute in an HTML or XML element where a TBS fields is placed.
+* parameter 'combo' enables to define a set of parameters to be reused.
+* (todo) parameter 'attstop' cancel the att search if this entity is found.
+* (todo) $TBS->StrReplace(array($what=>$with)) // literal
+         $TBS->StrReplace(array($what=>$with), true); // fields
+         $TBS->StrReplace(array($what=>$with), $BlocName); // block's fields
+
 = Release 3.10.1 =
 
 Skrol29, 2015-12-03
