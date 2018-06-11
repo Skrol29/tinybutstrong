@@ -3500,8 +3500,8 @@ function meth_Misc_Format(&$Value,&$PrmLst) {
 			$Value = $this->meth_Misc_ToStr($Value);
 		}
 		if (is_string($Value)) {
-			if ($Value==='') return '';
-			$x = strtotime($Value);
+			if ($Value === '') return '';
+			$x = ctype_digit($Value) ? (int)$Value : strtotime($Value);
 			if (($x===-1) || ($x===false)) {
 				if (!is_numeric($Value)) $Value = 0;
 			} else {
