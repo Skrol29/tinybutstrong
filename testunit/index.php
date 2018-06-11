@@ -8,13 +8,6 @@ set_time_limit(0);
 
 $dir_testu = dirname(__FILE__);
 $dir_tbs = dirname($dir_testu);
-$dir_plugins = $dir_tbs . '/plugins';
-if (!file_exists($dir_plugins)) {
-	$dir_plugins = dirname($dir_tbs) . '/tbs_plugins';
-}
-if (!file_exists($dir_plugins)) {
-	exit("Plug-ins directory not found. Abort.");
-}
 
 // include classes required for unit tests
 // "@" is in order to avoid Deprecated warnings
@@ -29,13 +22,6 @@ if (version_compare(PHP_VERSION,'5.0')<0) {
 	$tbsFileName = $dir_tbs.'/tbs_class.php';
 }
 require_once($tbsFileName);
-require_once($dir_plugins.'/tbs_plugin_html.php');
-require_once($dir_plugins.'/tbs_plugin_bypage.php');
-require_once($dir_plugins.'/tbs_plugin_cache.php');
-require_once($dir_plugins.'/tbs_plugin_mergeonfly.php');
-require_once($dir_plugins.'/tbs_plugin_navbar.php');
-// @require_once($dir_plugins.'/tbs_plugin_ref.php');
-// @require_once($dir_plugins.'/tbs_plugin_syntaxes.php');
 
 // other files required for unit tests
 require_once($dir_testu.'/include/TBSUnitTestCase.php');
