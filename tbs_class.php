@@ -3501,7 +3501,7 @@ function meth_Misc_Format(&$Value,&$PrmLst) {
 		}
 		if (is_string($Value)) {
 			if ($Value === '') return '';
-			$x = ctype_digit($Value) ? (int)$Value : strtotime($Value);
+			$x = strlen($Value) > 8 && ctype_digit($Value) ? (int)$Value : strtotime($Value);
 			if (($x===-1) || ($x===false)) {
 				if (!is_numeric($Value)) $Value = 0;
 			} else {
