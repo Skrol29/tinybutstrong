@@ -200,7 +200,7 @@ a.opt-name:hover {
     <h1>TinyButStrong Documentation</h1>
     <div class="txt-tiny">version 3.10</div>
     <div style="margin-top:10px;">Template Engine for Pro and Beginners<br>
-      for PHP 5</div>
+      for PHP 5 and 7</div>
   </div>
   <h2>Table of Contents:</h2>
   <div class="norm">
@@ -2097,11 +2097,12 @@ Parameter <span class="opt-name">storename</span> changes the name of the store.
             [<span class="opt-value"><span class="opt-name">fld</span>;<span class="opt-name">frm</span>='yyyy-mm-dd hh:nn:ss'</span>] will display <span class="opt-html">2002-12-21 15:45:03</span></p>
 <p>Interpretation of merged values:</p>
           <ul class="list-mini">
-            <li>If the data item is a PHP numerical value, then it is considered as a Unix timestamp.</li>
-            <li>If the data item is a PHP string value, then it is considered as a formatted date-time and will be converted into timestamp using <a href="http://php.net/manual/en/function.strtotime.php">strtotime()</a>.</li>
-            <li>If the data item is a PHP object value, then it will be converted into string<a href="http://php.net/manual/en/function.strtotime.php"></a>.</li>
-            <li>Other values will not be formatted and will be displayed after being converted into string.          </li>
+            <li>If the PHP type of the data item is <em>numerical</em>, then it is considered as a Unix timestamp.</li>
+            <li>If the PHP type of the data item is <em>string</em>, then it is first considered as a formatted date-time and will be converted into timestamp using <a href="http://php.net/manual/en/function.strtotime.php">strtotime()</a>. In case of failure, the original string value will be considered as a timestamp.</li>
+            <li>If the PHP type of the data item is <em>object</em>, then, then it will be converted into string<a href="http://php.net/manual/en/function.strtotime.php"></a>.</li>
+            <li>Other PHP types will not be formatted and will be displayed converted into string.</li>
           </ul>
+          <p>It is recommended to use parameter <span class="opt-name">frm</span> with date-time value that use a non-ambiguous   string representation, such as &quot;yyyy-mm-dd hh:nn:ss&quot;. Most of PHP driver for Database System return  date-time values and timestamp values is this format.</p>
           <div class="versioning">
           <p>Versioning:</p>
               <ul class="list-mini">
@@ -2110,7 +2111,7 @@ Parameter <span class="opt-name">storename</span> changes the name of the store.
                 <li> Keywords <span class="opt-value">rr</span>, <span class="opt-value">r</span>, and <span class="opt-value">h</span> are supported since TBS version 3.2.0.</li>
                 <li> Keyword <span class="opt-value">(locale)</span> is supported since TBS version 3.4.0.</li>
               </ul>
-          </div>
+        </div>
           <h5>Numeric format:          
           </h5>
           <p> To define the decimal part, use an expression like '<span class="opt-value">0d0...</span>' where <span class="opt-value">'d'</span> is the decimal separator , and <span class="opt-value">'0...'</span> is a continuation of zeros corresponding to the number of decimals.<br>
