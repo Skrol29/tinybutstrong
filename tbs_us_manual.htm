@@ -192,7 +192,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2017-11-07</td>
+        <td>2018-06-11</td>
       </tr>
     </table>
   </div>
@@ -200,7 +200,7 @@ a.opt-name:hover {
     <h1>TinyButStrong Documentation</h1>
     <div class="txt-tiny">version 3.10</div>
     <div style="margin-top:10px;">Template Engine for Pro and Beginners<br>
-      for PHP 5</div>
+      for PHP 5 and 7</div>
   </div>
   <h2>Table of Contents:</h2>
   <div class="norm">
@@ -1515,11 +1515,11 @@ which is the same as:
         <td align="left" valign="top" class="opt-name">param1</td>
         <td align="left" valign="top"> Optional. One or more parameters from the list below and separated with ';'.<br>
           Some parameters can be set to a value using the equal sign '='.<br>
-          <span class="decal">Example: <span class="opt-name">frm</span>=<span class="opt-value">0.00</span></span><br>
+          <span class="decal">Example: <a href="#html_field_prm_frm" class="opt-name">frm</a>=<span class="opt-value">0.00</span></span><br>
           If the value contains spaces, semicolons or quotes, then you can use single quotes as delimiters.<br>
-          <span class="decal">Example: <span class="opt-name">frm</span>=<span class="opt-value">'0 000.00'</span></span><br>
+          <span class="decal">Example:<a href="#html_field_prm_frm" class="opt-name"> frm</a>=<span class="opt-value">'0 000.00'</span></span><br>
           To specify a literal single quote, escape it with a  second single quotes. <br>
-          <span class="decal">Example: <span class="opt-name">ifempty</span>=<span class="opt-value">'hello that''s me'</span></span><br>
+          <span class="decal">Example: <a href="#html_field_prm_ifempty" class="opt-name">ifempty</a>=<span class="opt-value">'hello that''s me'</span></span><br>
           <br>
           A parameter can contain embedded TBS fields, but only under special circumstances:<br>
           - the embedded field is merged before the parent field,<br>
@@ -2090,20 +2090,28 @@ Parameter <span class="opt-name">storename</span> changes the name of the store.
                 The locale language can be set using the PHP function <span class="txt-code"><a href="http://www.php.net/setlocale" target="_blank">setlocale()</a></span>. It works only if locale parameters have been set on the server. For PHP reasons, in locale mode <span class="opt-value">xx</span> does not work and <span class="opt-value">d</span> does like <span class="opt-value">dd</span>. </td>
             </tr>
           </table>
-          <br>
           <p>Other characters are kept.
           It is possible to protect the strings inside by putting them between double quotes (&quot;). </p>
 <p>            Examples:          </p>
           <p class="decal">[<span class="opt-value"><span class="opt-name">fld</span></span>;<span class="opt-name">frm</span>=<span class="opt-value">mm/dd/yyyy</span>] will display <span class="opt-html">12/21/2002</span><br>
-            [<span class="opt-value"><span class="opt-name">fld</span>;<span class="opt-name">frm</span>='yyyy-mm-dd hh:nn:ss'</span>] will display <span class="opt-html">2002-12-21 15:45:03</span></p><div class="versioning">
-              <p>Versioning:</p>
+            [<span class="opt-value"><span class="opt-name">fld</span>;<span class="opt-name">frm</span>='yyyy-mm-dd hh:nn:ss'</span>] will display <span class="opt-html">2002-12-21 15:45:03</span></p>
+<p>Interpretation of merged values:</p>
+          <ul class="list-mini">
+            <li>If the PHP type of the data item is <em>numerical</em>, then it is considered as a Unix timestamp.</li>
+            <li>If the PHP type of the data item is <em>string</em>, then it is first considered as a formatted date-time and will be converted into timestamp using <a href="http://php.net/manual/en/function.strtotime.php">strtotime()</a>. In case of failure, the original string value will be considered as a timestamp.</li>
+            <li>If the PHP type of the data item is <em>object</em>, then, then it will be converted into string<a href="http://php.net/manual/en/function.strtotime.php"></a>.</li>
+            <li>Other PHP types will not be formatted and will be displayed converted into string.</li>
+          </ul>
+          <p>It is recommended to use parameter <span class="opt-name">frm</span> with date-time value that use a non-ambiguous   string representation, such as &quot;yyyy-mm-dd hh:nn:ss&quot;. Most of PHP driver for Database System return  date-time values and timestamp values is this format.</p>
+          <div class="versioning">
+          <p>Versioning:</p>
               <ul class="list-mini">
                 <li>                 Keywords <span class="opt-value">ampm</span> and <span class="opt-value">AMPM</span> are supported since TBS version 3.0.</li>
                 <li> Keyword <span class="opt-value">hm</span> was supported since TBS 3.0 and is deprecated and replaced with keyword <span class="opt-value">rr</span> since TBS version 3.2.0.</li>
                 <li> Keywords <span class="opt-value">rr</span>, <span class="opt-value">r</span>, and <span class="opt-value">h</span> are supported since TBS version 3.2.0.</li>
                 <li> Keyword <span class="opt-value">(locale)</span> is supported since TBS version 3.4.0.</li>
               </ul>
-            </div>
+        </div>
           <h5>Numeric format:          
           </h5>
           <p> To define the decimal part, use an expression like '<span class="opt-value">0d0...</span>' where <span class="opt-value">'d'</span> is the decimal separator , and <span class="opt-value">'0...'</span> is a continuation of zeros corresponding to the number of decimals.<br>
@@ -3775,7 +3783,7 @@ class MyCustomClass {
       </tr>
       <tr>
         <td align="left" valign="top"><a href="#html_field_prm_magnet" class="opt-name">magnet</a></td>
-        <td align="left" valign="top">If the value is empty, then delete surrounding tags.</td>
+        <td align="left" valign="top">If the value is empty, then delete surrounding element.</td>
       </tr>
       <tr>
         <td align="left" valign="top"><a href="#html_field_prm_attadd" class="opt-name">&nbsp;&nbsp;&nbsp;</a><a href="#html_field_prm_mtype" class="opt-name">mtype</a></td>
@@ -3873,6 +3881,10 @@ class MyCustomClass {
       <tr>
         <td align="left" valign="top"><a href="#html_block_prm_nodata" class="opt-name">nodata</a></td>
         <td align="left" valign="top">Indicates the section that is displayed when there is no data in the data source.</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top"><a href="#html_block_prm_bmagnet" class="opt-name">bmagnet</a></td>
+        <td align="left" valign="top">If there is no data, then delete the surrounding element.</td>
       </tr>
       <tr>
         <td align="left" valign="top"><a href="#html_block_prm_headergrp" class="opt-name">headergrp</a></td>
