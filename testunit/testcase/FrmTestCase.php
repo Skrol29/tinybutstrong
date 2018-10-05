@@ -142,6 +142,17 @@ class FrmTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>true),  "{1}", "test unexpected values: true"); // TBS performs an implicite conversion from true to string
 		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>''),  "{}", "test unexpected values: empty string");
 		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>0),  "{".date('Y-m-d H:i:s', 0)."}", "test unexpected values: 0"); // 0 is a timsetamp for the start of unix dates
+
+		// timestamp as string
+		$strStamp = '1234560000';
+		$result = date('Y-m-d H:i:s', (int)$strStamp);
+		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>$strStamp),  "{" . $result . "}", "test unexpected values: {$result}");
+		$strStamp = '2011120500';
+		$result = date('Y-m-d H:i:s', (int)$strStamp);
+		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>$strStamp),  "{" . $result . "}", "test unexpected values: {$result}");
+		$strStamp = '20111205 123456';
+		$result = '2011-12-05 12:34:56';
+		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>$strStamp),  "{" . $result . "}", "test unexpected values: {$result}");
 	}
 
 	function testConditionalFormats() {
