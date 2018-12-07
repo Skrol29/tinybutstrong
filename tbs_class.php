@@ -1250,7 +1250,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 				}
 			} elseif (is_object($Value)) {
 				$ArgLst = $this->f_Misc_CheckArgLst($x);
-				if (method_exists($Value,$x)) {
+                if (method_exists($Value,$x) or method_exists($Value,'__call')) {
 					if ($this->MethodsAllowed || !in_array(strtok($Loc->FullName,'.'),array('onload','onshow','var')) ) {
 						$x = call_user_func_array(array(&$Value,$x),$ArgLst);
 					} else {
