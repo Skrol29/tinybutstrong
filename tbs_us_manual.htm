@@ -192,13 +192,13 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2018-06-11</td>
+        <td>2019-01-24</td>
       </tr>
     </table>
   </div>
   <div style="margin:auto; width:500px; text-align:center;">
     <h1>TinyButStrong Documentation</h1>
-    <div class="txt-tiny">version 3.10</div>
+    <div class="txt-tiny">version 3.11</div>
     <div style="margin-top:10px;">Template Engine for Pro and Beginners<br>
       for PHP 5 and 7</div>
   </div>
@@ -272,6 +272,14 @@ a.opt-name:hover {
       <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_getoption"><span class="txt-small">method</span> GetOption()</a></td>
         <td>get  TBS options</td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_replacefields"><span class="txt-small">method</span> ReplaceFields()</a></td>
+        <td>replace simple  fields with long fields</td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_getattvalue"><span class="txt-small">method</span> GetAttValue()</a></td>
+        <td>&nbsp;</td>
       </tr>
       <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_plugin"><span class="txt-small">method</span> PlugIn()</a></td>
@@ -1125,8 +1133,26 @@ Some of the TBS options are a new way of setting <a href="#php_options_compatibi
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_tpl_frms" id="php_setoption13"></a>tpl_frms</span></td>
-        <td align="left" valign="top" class="border-sep">Enables you to define formats in the template that you can reuse for parameter <a href="#html_field_prm_frm" class="opt-name">frm</a>. It is the same feature as parameter <a href="#html_field_prm_tplfrms" class="opt-name">tplfrms</a>, but option<a href="#php_setoption_tpl_frms" class="opt-name"> tpl_frms</a> is defined in the PHP side, while parameter <a href="#html_field_prm_tplfrms" class="opt-name">tplfrms</a> is defined in the template side.<br>
+        <td align="left" valign="top" class="border-sep">Enables you to define formats in the template that you can reuse for parameter <a href="#html_field_prm_frm" class="opt-name">frm</a>. It is the same feature as parameter <a href="#html_field_prm_tplfrms" class="opt-name">tplfrms</a>, but option<a href="#php_setoption_tpl_frms" class="opt-name"> tpl_frms</a> is defined in the PHP side, while parameter <a href="#html_field_prm_tplfrms" class="opt-name">tplfrms</a> is defined in the template side.
         You can manage this option using the <a href="#php_setoption_syntax_array">syntax for options that are array</a>.</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_prm_combo" id="php_setoption22"></a>prm_combo</span></td>
+        <td align="left" valign="top" class="border-sep"><p>Enables you to define a set of parameters that can be applied at the template side using parameter <a href="#html_field_prm_combo" class="opt-name">combo</a>.<br>
+          Argument  <span class="txt-code">$item</span> must be the name of the combo.<br>
+          Argument  <span class="txt-code">$value</span> must be an associative array of parameters (param =&gt; value).</p>
+          <p>A combo definition can use parameter <a href="#html_field_prm_combo" class="opt-name">combo</a>.<br>
+          In order to define a set parameters with several <a href="#html_field_prm_if" class="opt-name">if</a> and <a href="#html_field_prm_then" class="opt-name">then</a>, you can to set one 'if' and one 'then' key associated to an array of values instead of a single value.</p>
+          <p>Examples:</p>
+          <pre class="decal txt-code"><span class="opt-html">// simple example</span><span class="opt-name">
+$TBS</span>-&gt;SetOption(<span class="opt-name">'prm_combo'</span>, <span class="opt-value">'my_combo_1'</span>, array(<span class="opt-name">'att'</span>=&gt;<span class="opt-value">'div#data-date'</span>, <span class="opt-name">'frm'</span>=&gt;<span class="opt-value">'yyyy-mm-dd'</span>, <span class="opt-name">'magnet'</span>=&gt;<span class="opt-value">'div'</span>, <span class="opt-name">'enlarge'</span>=&gt;<span class="opt-value">'span'</span>));
+
+<span class="opt-html">// example using a parameter that is supposed to have no value (value true used instead)</span>
+<span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-name">'prm_combo'</span>, <span class="opt-value">'my_combo_2'</span>, array(<span class="opt-name">'noerr'</span>=&gt;<span class="opt-value">true</span>, <span class="opt-name"></span><span class="opt-name">'magnet'</span>=&gt;<span class="opt-value">'div'</span><span class="opt-value"></span>));
+
+/<span class="opt-html">/ example using multiple if/then parameters</span>
+<span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-name">'prm_combo'</span>, <span class="opt-value">'my_combo_2'</span>, array(<span class="opt-name">'if'</span>=&gt;array(<span class="opt-value">'[val]=1'</span>, <span class="opt-value">'[val]=2'</span>, <span class="opt-value">'[val]=3'</span>), <span class="opt-name">'then'</span>=&gt;array(<span class="opt-value">'One'</span>, <span class="opt-value">'Two'</span>, <span class="opt-value">'Three'</span>), <span class="opt-name">'else'</span>=&gt;'More');</pre>
+<p class="versioning">Versioning: option 'prm_combo' is supported since TBS version 3.11.0.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_include_path" id="php_setoption14"></a>include_path</span></td>
@@ -1229,6 +1255,7 @@ The old features are still suported for compatibility, but they become deprecate
       </tr>
     </table>
   </div>
+  
   <h3><a name="php_getoption" id="php_getoption"></a>Method GetOption():</h3>
   <div class="norm">
     <p>Return the value of a TBS option.</p>
@@ -1236,6 +1263,76 @@ The old features are still suported for compatibility, but they become deprecate
     <p>For supported options names, see method <a href="#php_setoption" class="opt-name">SetOption()</a>.</p>
     <p class="versioning">Versioning:  methods GetOption() is supported since TBS version 3.8.0. </p>
   </div>
+
+  <h3><a name="php_replacefields" id="php_replacefields"></a>Method ReplaceFields():</h3>
+  <div class="norm">
+    <p>Replace a set of simple TBS fields in the template with new definitions prepared at the PHP side. Note than this function does not merges any field ; it only replaces the definition of fields.</p>
+    <p>This is useful when you miss some place in the template for  certain fields ; and also to delete some fields.</p>
+<p> Syntax: <span class="txt-code"><span class="opt-name"><span class="opt-type">mixed</span> $TBS</span>-&gt;ReplaceFields(<span class="opt-type opt-value">array</span> $fields [, <span class="opt-type opt-value">string</span> $block_name])</span></p>
+    <table border="0" cellpadding="5" cellspacing="0">
+      <tr>
+        <th>Argument</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td align="left" valign="top" class="opt-name"><span class="txt-code">$fields</span></td>
+        <td align="left" valign="top">An associative where keys are the names of the simple TBS tags to replace in the template ; and values are the new definition of the field.<br>
+          The new definition of the field can be either :<br>
+          - an array of TBS parameters, with the same principle as <a href="#php_setoption_prm_combo">SetOption('prm_combo')</a><br>
+          - a string that will replace the full TBS field's definition.</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top" class="opt-name"><span class="txt-code"> $block_name</span></td>
+        <td align="left" valign="top">(optional) A block's name to add as prefix of all field's names (only if the new definition is an array of parameter)</td>
+      </tr>
+    </table>
+    <p>In the template, the simple TBS fields to replace must have no parameters. Fields with parameters won't be replaced.</p>
+    <p>If the new definition of the field is an array of parameter, then the field's name is unchanged unless you use the special parameter <span class="opt-name">'name'</span>.</p>
+    <p>Example: </p>
+    <pre class="decal txt-code"><span class="opt-name"><span class="opt-html">// [s1] will be replaced with [s1;enlarge=div;magnet=table;frm=0.00;noerr</span>]
+<span class="opt-html">// [s2] will be replaced with [onshow.x2;frm=0.00</span>]
+<span class="opt-html">// [s3] will be replaced with [onshow.x3;noerr</span>]
+<span class="opt-html">// [s4] will be deleted</span>
+$TBS</span>-&gt;ReplaceFields( array(
+<span class="opt-value">  's1'</span> =&gt; array(<span class="opt-name">'enlarge'</span> =&gt; <span class="opt-value">'div'</span>, <span class="opt-name">'magnet'</span> =&gt; <span class="opt-value">'table'</span>, <span class="opt-name">'frm'</span> =&gt; <span class="opt-value">'0.00'</span>, <span class="opt-name">'noerr'</span> =&gt; true),
+  <span class="opt-value">'s2'</span> =&gt; array(<span class="opt-name">'name'</span> =&gt; <span class="opt-value">'onshow.x2'</span>, <span class="opt-name">'frm'</span> =&gt; <span class="opt-value">'0.00'</span>),
+  <span class="opt-value">'s3'</span> =&gt; <span class="opt-value">'[onshow.x3;noerr]'</span>,
+  <span class="opt-value">'s4'</span> =&gt; <span class="opt-value">''</span>,
+));
+</pre>
+    <p class="versioning">Versioning:  methods ReplaceFields() is supported since TBS version 3.11.0. </p>
+  </div>
+
+  <h3><a name="php_getattvalue" id="php_getattvalue"></a>Method GetAttValue():</h3>
+  <div class="norm">
+    <p>Return the value of an XML/HTML attribute in the template.    </p>
+    <p> Syntax: <span class="txt-code"><span class="opt-name"><span class="opt-type">mixed</span> $TBS</span>-&gt;GetAttValue(<span class="opt-type opt-value">string</span> $field_name [, <span class="opt-type opt-value">boolean</span> $delete])</span></p>
+    <table border="0" cellpadding="5" cellspacing="0">
+      <tr>
+        <th>Argument</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td align="left" valign="top" class="opt-name"><span class="txt-code">$field_name</span></td>
+        <td align="left" valign="top">The name of a TBS field in the template  which must have parameter <a href="#html_field_prm_all" class="opt-name">att</a>.</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top" class="opt-name"><span class="txt-code">$delete</span></td>
+        <td align="left" valign="top">(Optional) <span class="opt-value">True</span> by default. Indicate if the TBS field must be deleted after it is found.</td>
+      </tr>
+    </table>
+    <p>The function will first search the TBS field with the given name, and then found the attribute targeted with its' parameter <a href="#html_field_prm_all" class="opt-name">att</a>.</p>
+    <p>The function searches for the first field found and then it stops. The TBS fields deleted if <span class="txt-code opt-name">$delete</span> is true, and it let as is if <span class="txt-code opt-name">$delete</span> is false.</p>
+    <p>The function return:</p>
+    <ul>
+      <li>the value's attribute as a string,</li>
+      <li><span class="txt-code opt-value">true</span> if the attribute is a boolean attribute (that is without value),</li>
+      <li><span class="txt-code opt-value">null</span> if the TBS field is not found or if it's parameter <a href="#html_field_prm_all" class="opt-name">att</a> is not found,</li>
+      <li><span class="txt-code opt-value">false</span> if the XML/HTML element is not found or if the asked attribute is not found.</li>
+    </ul>
+<p class="versioning">Versioning:  methods GetAttValue() is supported since TBS version 3.11.0. </p>
+  </div>
+  
   <h3><a name="php_plugin" id="php_plugin"></a>Method PlugIn():</h3>
   <div class="norm">
     <p>Enables you to call a <a href="#plugins_tbs">TBS plug-in</a>'s command, or to install a TBS plug-in.</p>
@@ -2198,6 +2295,20 @@ Parameter <span class="opt-name">storename</span> changes the name of the store.
               </tr>
             </table>
           </div></td>
+      </tr>
+      <tr>
+        <td align="left" valign="top" class="border-sep"><a name="html_field_prm_combo" id="html_field_prm_locale2"></a><span class="opt-name">combo=<span class="opt-value">names</span></span></td>
+        <td align="left" valign="top" class="border-sep"><p>Apply  combo's parameters. A combo is a set of parameters that have been previously defined at the PHP side using method <a href="#php_setoption" class="txt-code">SetOption('prm_combo')</a>.</p>
+          <p> Any other explicit parameters in the TBS field will override  parameters coming from the combo.</p>
+          <p>You can apply several combo by separating names with coma (,).</p>
+          <p> Combo are useful to make reusable set of parameters, or to shorten a 
+            TBS tag when parameter are too long for the template. See also method <a href="#php_replacefields" class="txt-code">ReplaceField()</a> in order to shorten fields in the template.</p>
+<p>Example:</p>
+<div class="decal txt-code"> <span class="opt-html">PHP:</span><br>
+            <span class="opt-name">$TBS</span>-&gt;SetOption(<span class="opt-name">'prm_combo'</span>, <span class="opt-value">'add_date'</span>, array(<span class="opt-name">'att'</span>=&gt;<span class="opt-value">'div#data-date'</span>, <span class="opt-name">'frm'</span>=&gt;<span class="opt-value">'yyyy-mm-dd'</span>, <span class="opt-name">'magnet'</span>=&gt;<span class="opt-value">'div'</span>, <span class="opt-name">'enlarge'</span>=&gt;<span class="opt-value">'span'</span>));</div>
+<div class="decal"> <span class="opt-html">HTML</span>: [<span class="opt-name">onshow.x</span>;<span class="opt-name">combo</span>=<span class="opt-value">add_date</span>] </div><p class="versioning">
+  Versioning:  parameter combo   is supported since TBS version 3.11.0.
+</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_locale" id="html_field_prm_locale"></a><span class="opt-name">locale</span></td>
@@ -3808,6 +3919,10 @@ class MyCustomClass {
       <tr>
         <td align="left" valign="top"><a href="#html_field_prm_frm" class="opt-name">frm</a></td>
         <td align="left" valign="top">Apply a date-time or a numeric format.</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top"><a href="#html_field_prm_combo" class="opt-name">combo</a></td>
+        <td align="left" valign="top">Apply a set of predefined parameters.</td>
       </tr>
       <tr>
         <td align="left" valign="top"><a href="#html_field_prm_tplfrms" class="opt-name">tplfrms</a></td>
