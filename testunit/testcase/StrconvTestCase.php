@@ -2,7 +2,7 @@
 
 class StrconvTestCase extends TBSUnitTestCase {
 
-	function StrconvTestCase() {
+	function __construct() {
 		$this->UnitTestCase('Strconv Unit Tests');
 	}
 

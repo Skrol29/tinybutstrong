@@ -42,14 +42,14 @@ class TestOfContext extends UnitTestCase {
     }
 
     function testResourceIsSingleInstanceWithContext() {
-        $context = &new SimpleTestContext();
+        $context = new SimpleTestContext();
         $this->assertReference(
                 $context->get('DummyResource'),
                 $context->get('DummyResource'));
     }
 
     function testClearingContextResetsResources() {
-        $context = &new SimpleTestContext();
+        $context = new SimpleTestContext();
         $resource = &$context->get('DummyResource');
         $context->clear();
         $this->assertClone($resource, $context->get('DummyResource'));

@@ -2,7 +2,7 @@
 
 class BlockTestCase extends TBSUnitTestCase {
 
-	function BlockTestCase() {
+	function __construct() {
 		$this->UnitTestCase('Basic MergeBlock Unit Tests');
 	}
 
