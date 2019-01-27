@@ -2,3 +2,4 @@
 /testunit export-ignore
 /.gitattributes export-ignore
 /.gitignore export-ignore
+/tbs_conv_to_php4.php export-ignore
