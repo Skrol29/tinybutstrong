@@ -246,14 +246,15 @@ public function DataOpen(&$Query,$QryPrms=false) {
 						$Empty = true;
 					}
 				} elseif (is_object($Var)) {
-					$ArgLst = $this->TBS->f_Misc_CheckArgLst($x);
-					if (method_exists($Var,$x)) {
-						$f = array(&$Var,$x); unset($Var);
-						$Var = call_user_func_array($f,$ArgLst);
-					} elseif (property_exists(get_class($Var),$x)) {
-						if (isset($Var->$x)) $Var = &$Var->$x;
-					} elseif (isset($Var->$x)) {
-						$Var = $Var->$x; // useful for overloaded property
+					$form = $this->TBS->f_Misc_ParseFctForm($x);
+					$n = $form['name'];
+					if (method_exists($Var, $n)) {
+						$f = array(&$Var,$n); unset($Var);
+						$Var = call_user_func_array($f,$form['args']);
+					} elseif (property_exists(get_class($Var),$n)) {
+						if (isset($Var->$n)) $Var = &$Var->$n;
+					} elseif (isset($Var->$n)) {
+						$Var = $Var->$n; // useful for overloaded property
 					} else {
 						$Empty = true;
 					}
@@ -1304,20 +1305,26 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 					unset($Value); $Value = ''; break;
 				}
 			} elseif (is_object($Value)) {
-				$ArgLst = $this->f_Misc_CheckArgLst($x);
-				if (method_exists($Value,$x)) {
+				$form = $this->f_Misc_ParseFctForm($x);
+				$n = $form['name'];
+				if ( method_exists($Value,$n) || method_exists($Value,'x__call')) {
+					/*
+					var_dump($form);
+					var_dump($n);
+					var_dump($Loc); exit;
+					*/
 					if ($this->MethodsAllowed || !in_array(strtok($Loc->FullName,'.'),array('onload','onshow','var')) ) {
-						$x = call_user_func_array(array(&$Value,$x),$ArgLst);
+						$x = call_user_func_array(array(&$Value,$n),$form['args']);
 					} else {
-						if (!isset($Loc->PrmLst['noerr'])) $this->meth_Misc_Alert($Loc,'\''.$x.'\' is a method and the current TBS settings do not allow to call methods on automatic fields.',true);
+						if (!isset($Loc->PrmLst['noerr'])) $this->meth_Misc_Alert($Loc,'\''.$n.'\' is a method and the current TBS settings do not allow to call methods on automatic fields.',true);
 						$x = '';	
 					}
-				} elseif (property_exists($Value,$x)) {
-					$x = &$Value->$x;
-				} elseif (isset($Value->$x)) {
-					$x = $Value->$x; // useful for overloaded property
+				} elseif (property_exists($Value,$n)) {
+					$x = &$Value->$n;
+				} elseif (isset($Value->$n)) {
+					$x = $Value->$n; // useful for overloaded property
 				} else {
-					if (!isset($Loc->PrmLst['noerr'])) $this->meth_Misc_Alert($Loc,'item '.$x.'\' is neither a method nor a property in the class \''.get_class($Value).'\'. Overloaded properties must also be available for the __isset() magic method.',true);
+					if (!isset($Loc->PrmLst['noerr'])) $this->meth_Misc_Alert($Loc,'item '.$n.'\' is neither a method nor a property in the class \''.get_class($Value).'\'. Overloaded properties must also be available for the __isset() magic method.',true);
 					unset($Value); $Value = ''; break;
 				}
 				$Value = &$x; unset($x); $x = '';
@@ -3217,19 +3224,20 @@ function meth_Misc_UserFctCheck(&$FctInfo,$FctCat,&$FctObj,&$ErrMsg,$FctCheck=fa
 		for ($i=0;$i<=$iMax;$i++) {
 			$x = &$Lst[$i];
 			if (is_object($ObjRef)) {
-				$ArgLst = $this->f_Misc_CheckArgLst($x);
-				if (method_exists($ObjRef,$x)) {
+				$form = $this->f_Misc_ParseFctForm($x);
+				$n = $form['name'];
+				if (method_exists($ObjRef,$n)) {
 					if ($i<$iMax) {
-						$f = array(&$ObjRef,$x); unset($ObjRef);
-						$ObjRef = call_user_func_array($f,$ArgLst);
+						$f = array(&$ObjRef,$n); unset($ObjRef);
+						$ObjRef = call_user_func_array($f,$form['args']);
 					}
 				} elseif ($i===$iMax0) {
-					$ErrMsg = 'Expression \''.$FctStr.'\' is invalid because \''.$x.'\' is not a method in the class \''.get_class($ObjRef).'\'.';
+					$ErrMsg = 'Expression \''.$FctStr.'\' is invalid because \''.$n.'\' is not a method in the class \''.get_class($ObjRef).'\'.';
 					return false;
-				} elseif (isset($ObjRef->$x)) {
-					$ObjRef = &$ObjRef->$x;
+				} elseif (isset($ObjRef->$n)) {
+					$ObjRef = &$ObjRef->$n;
 				} else {
-					$ErrMsg = 'Expression \''.$FctStr.'\' is invalid because sub-item \''.$x.'\' is neither a method nor a property in the class \''.get_class($ObjRef).'\'.';
+					$ErrMsg = 'Expression \''.$FctStr.'\' is invalid because sub-item \''.$n.'\' is neither a method nor a property in the class \''.get_class($ObjRef).'\'.';
 					return false;
 				}
 			} elseif (($i<$iMax0) && is_array($ObjRef)) {
@@ -3853,16 +3861,25 @@ static function f_Misc_ConvSpe(&$Loc) {
 	}
 }
 
-static function f_Misc_CheckArgLst(&$Str) {
-	$ArgLst = array();
+/**
+ * Return the information if parsing a form which can be either a property of a function.
+ * @param  string $Str The form.
+ * @return array  Information about the form.
+ *                name:   the name of the function of the property
+ *                as_fct: true if the form is as a function
+ *                args:   arguments of the function, or empty array if it's a property
+ */
+static function f_Misc_ParseFctForm($Str) {
+	$info = array('name' => $Str, 'as_fct' => false, 'args' => array());
 	if (substr($Str,-1,1)===')') {
 		$pos = strpos($Str,'(');
 		if ($pos!==false) {
-			$ArgLst = explode(',',substr($Str,$pos+1,strlen($Str)-$pos-2));
-			$Str = substr($Str,0,$pos);
+			$info['args'] = explode(',',substr($Str,$pos+1,strlen($Str)-$pos-2));
+			$info['name'] = substr($Str,0,$pos);
+			$info['as_fct'] = true;
 		}
 	}
-	return $ArgLst;
+	return $info;
 }
 
 static function f_Misc_CheckCondition($Str) {
