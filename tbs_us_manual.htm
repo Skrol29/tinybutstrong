@@ -635,13 +635,50 @@ include_once(<span class="opt-value">'tbs_class.php'</span>);
       <p>The MergeBlock() method searches in your template for the specified TBS block name. Then, the block is repeated as many times as there are records in the data source. </p>
       <p> To display the data of a record, you have to use a linked TBS Field. A TBS Field is linked when the name of it is composed of the block's name followed by a dot and a column's or a key's name in the record set. A linked field must be inside the block.</p>
       <p> Example: </p>
-      <div class="decal"> Block's name: <span class="opt-value">block1</span><br>
-        Columns returned by the query: <span class="opt-value">field1</span>,<span class="opt-value">field2</span>,<span class="opt-value">field3</span><br>
-        Linked TBS Fields: <span class="opt-value"> [block1.field1]</span>, <span class="opt-value">[block1.field2]</span>, <span class="opt-value">[block1.field3]</span></div>
-      <p>If no block's definition is found in the template, then the MergeBlock() method will merge the first record with all linked fields found in the template.</p>
+      <table class="decal">
+      	<tr>
+        	<td>Block's name: </td>
+        	<td><span class="opt-value">block1</span></td>
+        </tr>
+      	<tr>
+      	  <td>Columns returned by the query:</td>
+      	  <td><span class="opt-value">column1</span>,<span class="opt-value"> column2, </span><span class="opt-value">column3</span></td>
+   	    </tr>
+      	<tr>
+        	<td>Linked TBS Fields:</td>
+        	<td><span class="opt-value">[block1.column1]</span>, <span class="opt-value">[block1.column2]</span>, <span class="opt-value">[block1.column3]</span></td>
+        </tr>      </table>
+      <p>If no block's definition is found in the template (that is parameter <a class="opt-name" href="#html_field_prm_block">block</a> is never used on the block's fields), then the MergeBlock() method will merge the first record with all linked fields found in the template.</p>
       <p> You can also define more advanced blocks. For more information, refer to chapter <a href="#html_block">TBS Blocks</a>.</p>
     </div>
-    <h4><a name="php_mergeblock_mergeseveral" id="php_mergeblock_mergeseveral"></a>Merging several blocks with the same data:</h4>
+    <h4><a name="php_mergeblock_subnames" id="php_mergeblock_mergeseveral3"></a>Merging subnames</h4>
+    <div class="decal">
+      <p>Assuming the value of a certain columns is an array or an object, then you can refer to items, methods or properties using subnames:</p>
+      <table class="decal">
+        <tr>
+          <td>An item of an array</td>
+          <td><span class="opt-value">[block1.field1.key1]</span></td>
+        </tr>
+        <tr>
+          <td>A property of an object:</td>
+          <td><span class="opt-value">[block1.field1.propZ]</span></td>
+        </tr>
+        <tr>
+          <td>A method of an object</td>
+          <td><span class="opt-value">[block1.field1.methA()]</span></td>
+        </tr>
+        <tr>
+          <td>A method of an object with argument :</td>
+          <td><span class="opt-value">[block1.field1.methA(arg1)]</span></td>
+        </tr>
+        <tr>
+          <td>Cascading subnames:</td>
+          <td><span class="opt-value">[block1.field1.key1.methA().PropZ]</span></td>
+        </tr>
+      </table>
+      <p>Please note that using lot of subnames can decrease performance since the parsing is <span title="">reassessed</span> on each record.</p>
+    </div>
+<h4><a name="php_mergeblock_mergeseveral" id="php_mergeblock_mergeseveral"></a>Merging several blocks with the same data:</h4>
     <div class="decal">
       <p>You can merge several blocks with the same data by indicating their names separated by commas in the <span class="opt-name">BlockName</span> parameter. In this case, the query is opened only one time, and records are buffered to feed blocks.</p>
       <p> Example: <span class="opt-name"><span class="txt-code">$TBS</span></span><span class="txt-code">-&gt;MergeBlock(<span class="opt-value">'block1,block2,block3'</span>,<span class="opt-value">'mysql'</span>,<span class="opt-value">'SELECT * FROM MyTable'</span>);</span></p>
@@ -980,7 +1017,7 @@ Sub items like <span class="opt-value txt-code">-&gt;PropZ</span> represents a p
     <p>Replaces one or several TBS Fields with a fixed value or by calling a user function. Each TBS fields having the specified base name will be merged. </p>
     <p> Since TBS version 3.0, it's also possible to indicate a method of a class (see <a href="#php_oop">OOP</a>).</p>
     <p> It is also possible to merge the special   [onload],  [onshow] and [var] (see below).</p>
-    <p> Syntax: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeField(<span class="opt-type">string </span><span class="opt-name">BaseName</span>,<span class="opt-type"> mixed</span></span><span class="txt-code"> <span class="opt-name">X</span><span class="opt-name"> </span>{,<span class="opt-type"> boolean</span> <span class="opt-name">FunctionMode</span>}{, <span class="opt-type">array</span> <span class="opt-name">DefaultPrm</span>})</span> </p>
+    <p> Syntax: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeField(<span class="opt-type">string </span><span class="opt-name">BaseName</span>,<span class="opt-type"> mixed</span></span><span class="txt-code"> <span class="opt-name">DataOrFct</span><span class="opt-name"> </span>{,<span class="opt-type"> boolean</span> <span class="opt-name">FctMode</span>}{, <span class="opt-type">array</span> <span class="opt-name">DefaultPrm</span>})</span> </p>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
         <th>Argument</th>
@@ -991,12 +1028,12 @@ Sub items like <span class="opt-value txt-code">-&gt;PropZ</span> represents a p
         <td align="left" valign="top">Base name of the TBS Fields. For example <span class="opt-value">'account'</span>.</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="opt-name">X</td>
-        <td align="left" valign="top">The value to display (or a string that represent the name of a user function if the argument <span class="opt-name">FunctionMode</span> is set to <span class="opt-value">true</span>).</td>
+        <td align="left" valign="top" class="opt-name">DataOrFct</td>
+        <td align="left" valign="top">The value to display (or a string that represent the name of a user function if the argument <span class="opt-name">FctMode</span> is set to <span class="opt-value">true</span>).</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="opt-name">FunctionMode</td>
-        <td align="left" valign="top">Indicates that the value to display is calculated by a user function. The default value is <span class="opt-value">false</span>. If this argument is set to <span class="opt-value">true</span>, then <span class="opt-name">X</span> must be a text string giving the name of the user function. This function must exist and have the syntax described below.</td>
+        <td align="left" valign="top" class="opt-name">FctMode</td>
+        <td align="left" valign="top">Default value is <span class="opt-value">false</span>. Indicates that the value to display is calculated by a user function.  If this argument is set to <span class="opt-value">true</span>, then <span class="opt-name">DataOrFct </span>must be a text string giving the name of the user function. This function must exist and have the syntax described below.</td>
       </tr>
       <tr>
         <td align="left" valign="top" class="opt-name">DefaultPrm</td>
@@ -1005,14 +1042,16 @@ Sub items like <span class="opt-value txt-code">-&gt;PropZ</span> represents a p
           </p></td>
       </tr>
     </table>
-    <h4>Merging with a value:</h4>
-    <p><span class="opt-name">X</span> can be numeric, string, an array or an object. For an array or an object, names of TBS Fields must have suffixes like <a href="#html_field_auto">automatic fields ([onload] and [onshow])</a>.</p>
+    <h4>Merging with data :</h4>
+    <p>If argument <span class="opt-name">FctMode</span> is omitted or <span class="opt-value txt-code">false</span>, then TBS assumes <span class="opt-name">DataOrFct</span> is some data. It can be a numeric, a string, an array or an object. For an array or an object, names of TBS Fields must have suffixes like <a href="#html_field_auto">automatic fields ([onload] and [onshow])</a>.</p>
     <p> Example: </p>
     <pre class="decal txt-code"><span class="opt-name">$TBS-&gt;</span>MergeField(<span class="opt-value">'account'</span>,array(<span class="opt-value">'id'</span>=&gt;<span class="opt-value">55</span>,<span class="opt-value">'name'</span>=&gt;<span class="opt-value">'Bob'</span>));</pre>
-    <div class="decal txt-small">In this example, the fields <span class="opt-value"></span>[account.id] and [account.name] will be merged.</div>
+    <div class="decal">In this example, the fields <span class="opt-html">[account.id] </span>and <span class="opt-html">[account.name]</span> will be merged.</div>
+    <p>If you have subdata, you can also use <a href="#php_mergeblock_subnames">subnames</a>.</p>
     <h4>Merging with a user function:</h4>
-    <p>TBS calls this function for each field found in the template. <br>
-      This function must have the following syntax: </p>
+    <p>If argument <span class="opt-name">FctMode</span> is <span class="opt-value txt-code">true</span>, then TBS assumes <span class="opt-name">DataOrFct</span> is the name of a global function. It can also be a method, see <a href="#php_oop">OOP</a> for more details.</p>
+    <p>TBS calls this function for each field found in the template. 
+      The function must have the following syntax: </p>
     <pre class="decal txt-code">function fct_user(<span class="opt-name">$Subname</span> [, <span class="opt-name">$PrmLst</span>]) {...}</pre>
     <p>When the function is called, its argument <span class="opt-name">$Subname</span> has for value the suffix of the field's name (example: for a field named <span class="opt-value">'ml.title'</span>, <span class="opt-name">$Subname</span> will have the value <span class="opt-value">'title')</span>. And the optional argument <span class="opt-name">$PrmLst</span> contains an associative array with the field's parameters. The function must return the value to be merged. </p>
     <p> Example: </p>
@@ -1024,7 +1063,7 @@ function m_multilanguage(<span class="opt-name">$Subname</span>) {
   <span class="opt-name">$rec</span> = mysql_fetch_array(<span class="opt-name">$rs</span>);
   return <span class="opt-name">$rec</span>[<span class="opt-value">'txt'</span>] ;
 }</pre>
-    <div class="decal txt-small">In this example, a field such as <span class="opt-value">[ml.title]</span> will be merged with the value returned by <span class="opt-value">m_multilanguage('title')</span>.</div>
+    <div class="decal">In this example, a field such as <span class="opt-html">[ml.title]</span> will be merged with the value returned by <span class="opt-value">m_multilanguage('title')</span>.</div>
     <h4>Merge automatic fields and blocks:</h4>
     <p>You can use the method  MergeField() in order to force the merge of the automatic <a href="#html_field_auto">fields</a> and <a href="#html_block_auto">blocks</a> ([onload] and [onshow]). But in this case, only the first argument should be indicated.</p>
     <p> Example: <span class="txt-code"><span class="opt-name">$TBS-&gt;</span>MergeField(<span class="opt-value">'var'</span>); </span> </p>
@@ -1616,7 +1655,7 @@ which is the same as:
       <tr>
         <td align="left" valign="top" class="opt-name">FieldName</td>
         <td align="left" valign="top">The name of the Field.<br>
-          Warning: names that begin with <span class="opt-name">onload</span>, <span class="opt-name">onshow</span> and <span class="opt-name">var.</span>are reserved for <a href="#html_field_auto">automatic fields</a>.</td>
+          Warning: names that begin with <span class="opt-name">onload</span>, <span class="opt-name">onshow</span> and <span class="opt-name">var </span>are reserved for <a href="#html_field_auto">automatic fields</a>.</td>
       </tr>
       <tr>
         <td align="left" valign="top" class="opt-name">param1</td>
@@ -2379,8 +2418,8 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
         <li><span class="opt-name">[var]</span> are processed into parameter <span class="opt-name">then</span> and <span class="opt-name">else</span> since  TBS version 2.02.</li>
       </ul>
     </div>
-    <p>Automatic fields may or may not have a sub name, like x in [onload.x], [onshow.x] or [var.x]. An automatic field without sub name will be merged with an empty string value  (''). Example: [<span class="opt-name">onload</span>;<span class="opt-name">file</span>=<span class="opt-value">header.html</span>] this field inserts a subtemplate when <a href="#php_loadtemplate">LoadTemplate()</a> method is called.</p>
-    <p> An automatic field having a sub name will be merged with the corresponding global PHP variable.<br>
+    <p>Automatic fields may or may not have a subname, like x in [onload.x], [onshow.x] or [var.x]. An automatic field without subname will be merged with an empty string value  (''). Example: [<span class="opt-name">onload</span>;<span class="opt-name">file</span>=<span class="opt-value">header.html</span>] this field inserts a subtemplate when <a href="#php_loadtemplate">LoadTemplate()</a> method is called.</p>
+    <p> An automatic field having a subname will be merged with the corresponding global PHP variable.<br>
       If the global variable doesn't exist at this moment, then a TBS error is displayed, unless you add  parameter <a href="#html_field_prm_noerr" class="opt-name">noerr</a>.</p>
     <p> Examples: </p>
     <div class="decal">[<span class="opt-name">onload</span>.x] this field will be merged with the global variable $x when <a href="#php_loadtemplate">LoadTemplate()</a> is called.<br>
@@ -3434,7 +3473,7 @@ $TBS-&gt;MergeBlock('<span class="opt-value">blk</span>', '<span class="opt-valu
         </tr>
       </table>
     </div>
-    <p>If you need to have a group of exclusive  sections, with or without a default section, you can suffix the [onload] and [onshow] bloc's names with  &quot;_&quot; followed by a sub name. </p>
+    <p>If you need to have a group of exclusive  sections, with or without a default section, you can suffix the [onload] and [onshow] bloc's names with  &quot;_&quot; followed by a subname. </p>
     <div class="decal">
       <p>Example: </p>
       <table width="400" cellpadding="2" cellspacing="0" class="border-1">
