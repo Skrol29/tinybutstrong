@@ -867,10 +867,20 @@ Exemple #2: array(':p1'=&gt;&quot;value1&quot;, 'p2' =&gt; &quot;value2&quot;).<
       </div>
       <h5><a name="php_mergeblock_array" id="php_mergeblock_mergeseveral2"></a>&bull; Array</h5>
       <div class="decal">
-        <p>The argument <span class="opt-name">Source</span> has to be a PHP Array or the keyword <span class="opt-value">'array'</span>. If you use the keyword <span class="opt-value">'array'</span>, then the argument <span class="opt-name">Query</span> has to be a Php Array or a string that represents an array contained or nested in a global variable.</p>
-        <p> String syntax: <span class="opt-value">'globvar[item1][item2]...'</span></p>
-        <p>'globvar' is the name of a global variable $globvar which must be an array.<br>
-          'item1' and 'item2' are the keys of an item or a subitem of $globvar. </p>
+        <p>The argument <span class="opt-name">Source</span> has to be a PHP Array or the keyword <span class="opt-value">'array'</span>. If you use the keyword <span class="opt-value">'array'</span>, then the argument <span class="opt-name">Query</span> has to be a Php Array or a string that represents an array contained or nested in <a href="#php_varref">VarRef</a> or <a href="#php_objectref">ObjectRef</a>.</p>
+        <p> Syntax when <span class="opt-name">Query</span> is a string:</p>
+        <ul>
+          <li> <span class="opt-value txt-code">'varref_key[key1]-&gt;PropZ[key2]-&gt;methA()[key3]...'</span><br>
+          or</li>
+          <li><span class="opt-value txt-code">'~objref_key[key1]-&gt;PropZ[key2]-&gt;methA()[key3]...'</span></li>
+        </ul>
+        <p>In the first syntax, <span class="opt-value txt-code">'varref_key'</span> is  a key under <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;VarRef</span>. (Thus VarRef must be an associated array). By default <span class="txt-code">$TBS-&gt;VarRef</span> is a reference on <span class="opt-name">$GLOBAL</span>. See property <a href="#php_varref">VarRef</a> for more details.<br>
+  In the second syntax, <span class="opt-value txt-code">'objref_key'</span> is  a key under <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;ObjectRef</span>. (Thus ObjectRef must be an associated array). See property <a href="#php_objectref">ObjectRef</a> for more details.<br>
+          Sub items like [key] represents a key assuming the previous item is an associative array.<br>
+Sub items like <span class="opt-value txt-code">-&gt;methA()</span> represents a method assuming the previous item is an object. You can use argments ; for example : <span class="opt-value txt-code">-&gt;methA(arg1)</span><br>
+Sub items like <span class="opt-value txt-code">-&gt;PropZ</span> represents a property assuming the previous item is an object.<br>
+        </p>
+        <p>The final item must be an array.</p>
         <p> Example: </p>
         <pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-value">'block1'</span>,<span class="opt-value">'array'</span>,<span class="opt-value">'days[mon]'</span>);</pre>
         <div class="decal txt-small">This will merge 'block1' with the value $day['mon'] assuming it is an array. </div>
@@ -1537,7 +1547,7 @@ which is the same as:
             <td class="txt-code"><span class="opt-name">$TBS</span>-&gt;ObjectRef[<span class="opt-value">'item2'</span>]-&gt;propA</td>
           </tr>
           <tr>
-            <td>[<span class="opt-name">onshow</span>.~<span class="opt-name">item2</span>.<span class="opt-name">methX</span>]</td>
+            <td>[<span class="opt-name">onshow</span>.~<span class="opt-name">item2</span>.<span class="opt-name">methX()</span>]</td>
             <td class="txt-code">&nbsp;</td>
             <td class="txt-code"><span class="opt-name">$TBS</span>-&gt;ObjectRef[<span class="opt-value">'item2'</span>]-&gt;methX()</td>
           </tr>
