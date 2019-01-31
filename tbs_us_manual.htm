@@ -554,7 +554,7 @@ include_once(<span class="opt-value">'tbs_class.php'</span>);
   <h3><a name="php_loadtemplate" id="php_loadtemplate"></a>method LoadTemplate():</h3>
   <div class="norm">
     <p>Loads a template for the merging process. The complete contents of the file is immediately stored in the <a href="#php_source">Source</a> property of the TBS object, then [onload] <a href="#html_field_auto">fields</a> and <a href="#html_block_auto">blocks</a> are merged.    If the file is not found, then it will also be searched in the folder of the last loaded template  (<span class="versioning">since TBS version 3.2.0</span>).</p>
-    <p> Syntax: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-type">string</span> <span class="opt-name">File</span><span class="opt-name"><span style="color:#333333">{</span></span>, <span class="opt-type">string</span><span class="opt-name"> Charset<span style="color:#333333">}</span></span>)</span> </p>
+    <p> Syntax: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;LoadTemplate(<span class="opt-type">string</span> <span class="opt-name">File </span><span class="opt-name"><span style="color:#333333">[</span></span>, <span class="opt-type">string</span><span class="opt-name"> Charset <span class="opt-value"> = ''</span><span style="color:#333333">]</span></span>)</span> </p>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
         <th>Argument</th>
@@ -571,7 +571,7 @@ include_once(<span class="opt-value">'tbs_class.php'</span>);
       </tr>
     </table>
     <h4>Scope of the file path:</h4>
-    <p>If the file is nout found then its' also searched into the directory of the last loaded template, or the last loaded subtemplate.</p>
+    <p>If the file is not found then its' also searched into the directory of the last loaded template, or the last loaded subtemplate.</p>
     <p> <span class="versioning">Since TBS version 3.3.0</span>, the file also searched into the <a href="http://www.php.net/manual/en/ini.core.php#ini.include-path">include_path</a>.</p>
     <h4>Adding the file at the end of the current template:</h4>
     <p>You can use the keyword <span class="opt-value">'+'</span> for the argument <span class="opt-name">Charset</span> to have the file defined by <span class="opt-name">File</span> added to the end of the current template. The current charset will not be modified.</p>
@@ -602,7 +602,7 @@ include_once(<span class="opt-value">'tbs_class.php'</span>);
       </tr>
     </table>
     <p> You can also add a new one: '<a href="#plugins_db">database plug-ins</a>'.</p>
-    <p> Syntax: <span class="txt-code"><span class="opt-type">int</span><span class="opt-name"></span> <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-type">string</span><span class="opt-name"> BlockName</span>, <span class="opt-type">mixed</span> <span class="opt-name">Source<span style="color:#333333">{</span></span>, <span class="opt-type">string</span><span class="opt-name"> Query<span style="color:#333333">}{, <span class="opt-type">mixed</span> QryPrms}</span></span>)</span> </p>
+    <p> Syntax: <span class="txt-code"><span class="opt-type">int</span><span class="opt-name"></span> <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-type">string</span><span class="opt-name"> BlockName</span>, <span class="opt-type">mixed</span> <span class="opt-name">Source<span style="color:#333333"> [</span></span>, <span class="opt-type">string</span><span class="opt-name"> Query <span class="opt-value">= ''</span> <span style="color:#333333">[, <span class="opt-type">mixed</span> QryPrms = false]]</span></span>)</span> </p>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
         <th>Argument</th>
@@ -961,7 +961,7 @@ Sub items like <span class="opt-value txt-code">-&gt;PropZ</span> represents a p
   <h3><a name="php_show" id="php_show"></a>method Show():</h3>
   <div class="norm">
     <p>Terminates the merge. </p>
-    <p> Syntax: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;Show(<span class="opt-name"><span style="color:#333333">{</span></span><span class="opt-type">int</span><span class="opt-name"> </span><span class="opt-name">Render</span><span class="opt-name"></span><span class="opt-name"><span style="color:#333333">}</span></span>)</span></p>
+    <p> Syntax: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;Show([<span class="opt-type">int</span><span class="opt-name"> </span><span class="opt-name">Render</span><span class="opt-name"></span><span class="opt-name"><span style="color:#333333"> = false]</span></span>)</span></p>
     <p> The Show() method  performs the following actions:</p>
     <ol>
       <li> Merge [onshow] <a href="#html_field_auto">fields</a> and <a href="#html_block_auto">blocks</a>,</li>
@@ -975,7 +975,7 @@ Sub items like <span class="opt-value txt-code">-&gt;PropZ</span> represents a p
   <div class="norm">
     <p>Returns the source of a TBS Block from the template.
       If no block is found, the method returns <span class="txt-code"><em><span style="color:#0033CC">false</span></em></span>.</p>
-    <p> Syntax: <span class="txt-code"><span class="opt-type">string</span> <span class="opt-name"></span><span class="opt-name">$TBS</span>-&gt;GetBlockSource(<span class="opt-type">string </span><span class="opt-name">BlockName </span>{,<span class="opt-type"> boolean</span> <span class="opt-name">AsArray</span>}{,<span class="opt-type"> boolean</span> <span class="opt-name">DefTags</span>}{,<span class="opt-type"> mix</span> <span class="opt-name">ReplaceWith</span>})</span></p>
+    <p> Syntax: <span class="txt-code"><span class="opt-type">string</span> <span class="opt-name"></span><span class="opt-name">$TBS</span>-&gt;GetBlockSource(<span class="opt-type">string </span><span class="opt-name">BlockName </span>[,<span class="opt-type"> boolean</span> <span class="opt-name">AsArray</span> = <span class="opt-value">false</span> [,<span class="opt-type"> boolean</span> <span class="opt-name">DefTags <span class="opt-value">= true</span> </span>[,<span class="opt-type"> mix</span> <span class="opt-name">ReplaceWith</span> = <span class="opt-value">false</span>]]])</span></p>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
         <th>Argument</th>
@@ -1017,7 +1017,7 @@ Sub items like <span class="opt-value txt-code">-&gt;PropZ</span> represents a p
     <p>Replaces one or several TBS Fields with a fixed value or by calling a user function. Each TBS fields having the specified base name will be merged. </p>
     <p> Since TBS version 3.0, it's also possible to indicate a method of a class (see <a href="#php_oop">OOP</a>).</p>
     <p> It is also possible to merge the special   [onload],  [onshow] and [var] (see below).</p>
-    <p> Syntax: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeField(<span class="opt-type">string </span><span class="opt-name">BaseName</span>,<span class="opt-type"> mixed</span></span><span class="txt-code"> <span class="opt-name">DataOrFct</span><span class="opt-name"> </span>{,<span class="opt-type"> boolean</span> <span class="opt-name">FctMode</span>}{, <span class="opt-type">array</span> <span class="opt-name">DefaultPrm</span>})</span> </p>
+    <p> Syntax: <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;MergeField(<span class="opt-type">string </span><span class="opt-name">BaseName</span>,<span class="opt-type"> mixed</span></span><span class="txt-code"> <span class="opt-name">DataOrFct</span><span class="opt-name"> </span>[,<span class="opt-type"> boolean</span> <span class="opt-name">FctMode <span class="opt-value">= false</span> </span>[, <span class="opt-type">array</span> <span class="opt-name">DefaultPrm</span> = <span class="opt-value">false </span>]])</span> </p>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
         <th>Argument</th>
@@ -1047,7 +1047,7 @@ Sub items like <span class="opt-value txt-code">-&gt;PropZ</span> represents a p
     <p> Example: </p>
     <pre class="decal txt-code"><span class="opt-name">$TBS-&gt;</span>MergeField(<span class="opt-value">'account'</span>,array(<span class="opt-value">'id'</span>=&gt;<span class="opt-value">55</span>,<span class="opt-value">'name'</span>=&gt;<span class="opt-value">'Bob'</span>));</pre>
     <div class="decal">In this example, the fields <span class="opt-html">[account.id] </span>and <span class="opt-html">[account.name]</span> will be merged.</div>
-    <p>If you have subdata, you can also use <a href="#php_mergeblock_subnames">subnames</a>.</p>
+    <p>If you have subdata, MergeField also support <a href="#php_mergeblock_subnames">subnames</a>.</p>
     <h4>Merging with a user function:</h4>
     <p>If argument <span class="opt-name">FctMode</span> is <span class="opt-value txt-code">true</span>, then TBS assumes <span class="opt-name">DataOrFct</span> is the name of a global function. It can also be a method, see <a href="#php_oop">OOP</a> for more details.</p>
     <p>TBS calls this function for each field found in the template. 
@@ -1317,7 +1317,7 @@ The old features are still suported for compatibility, but they become deprecate
   <div class="norm">
     <p>Replace a set of simple TBS fields in the template with new definitions prepared at the PHP side. Note than this function does not merges any field ; it only replaces the definition of fields.</p>
     <p>This is useful when you miss some place in the template for  certain fields ; and also to delete some fields.</p>
-<p> Syntax: <span class="txt-code"><span class="opt-name"><span class="opt-type">mixed</span> $TBS</span>-&gt;ReplaceFields(<span class="opt-type opt-value">array</span> $fields [, <span class="opt-type opt-value">string</span> $block_name])</span></p>
+<p> Syntax: <span class="txt-code"><span class="opt-name"><span class="opt-type">mixed</span> $TBS</span>-&gt;ReplaceFields(<span class="opt-type opt-value">array</span> <span class="opt-name">$fields</span> [, <span class="opt-type opt-value">string</span> <span class="opt-name">$block_name</span> = <span class="opt-value">false</span>])</span></p>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
         <th>Argument</th>
@@ -1355,7 +1355,7 @@ $TBS</span>-&gt;ReplaceFields( array(
   <h3><a name="php_getattvalue" id="php_getattvalue"></a>Method GetAttValue():</h3>
   <div class="norm">
     <p>Return the value of an XML/HTML attribute in the template.    </p>
-    <p> Syntax: <span class="txt-code"><span class="opt-name"><span class="opt-type">mixed</span> $TBS</span>-&gt;GetAttValue(<span class="opt-type opt-value">string</span> $field_name [, <span class="opt-type opt-value">boolean</span> $delete])</span></p>
+    <p> Syntax: <span class="txt-code"><span class="opt-name"><span class="opt-type">mixed</span> $TBS</span>-&gt;GetAttValue(<span class="opt-type opt-value">string</span> <span class="opt-name">$field_name</span> [, <span class="opt-type opt-value">boolean</span> <span class="opt-name">$delete</span> = <span class="opt-value">true</span>])</span></p>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
         <th>Argument</th>
@@ -1363,21 +1363,21 @@ $TBS</span>-&gt;ReplaceFields( array(
       </tr>
       <tr>
         <td align="left" valign="top" class="opt-name"><span class="txt-code">$field_name</span></td>
-        <td align="left" valign="top">The name of a TBS field in the template  which must have parameter <a href="#html_field_prm_all" class="opt-name">att</a>.</td>
+        <td align="left" valign="top">The name of a TBS field in the template. The field must   have parameter <a href="#html_field_prm_all" class="opt-name">att</a>.</td>
       </tr>
       <tr>
         <td align="left" valign="top" class="opt-name"><span class="txt-code">$delete</span></td>
-        <td align="left" valign="top">(Optional) <span class="opt-value">True</span> by default. Indicate if the TBS field must be deleted after it is found.</td>
+        <td align="left" valign="top">(Optional,  <span class="opt-value txt-code">true</span> by default) Indicate if the TBS field must be deleted after it is found.</td>
       </tr>
     </table>
-    <p>The function will first search the TBS field with the given name, and then found the attribute targeted with its' parameter <a href="#html_field_prm_all" class="opt-name">att</a>.</p>
-    <p>The function searches for the first field found and then it stops. The TBS fields deleted if <span class="txt-code opt-name">$delete</span> is true, and it let as is if <span class="txt-code opt-name">$delete</span> is false.</p>
+    <p>The function will  search the first TBS field with the given name, and then search for the attribute targeted by its parameter <a href="#html_field_prm_all" class="opt-name">att</a>.</p>
+    <p>The function takes in acount only the first field that is met. The TBS field is deleted if <span class="txt-code opt-name">$delete</span> is <span class="opt-value txt-code">true</span>, but is remains unmodified in the template if <span class="txt-code opt-name">$delete</span> is <span class="opt-value txt-code">false</span>.</p>
     <p>The function return:</p>
     <ul>
       <li>the value's attribute as a string,</li>
       <li><span class="txt-code opt-value">true</span> if the attribute is a boolean attribute (that is without value),</li>
-      <li><span class="txt-code opt-value">null</span> if the TBS field is not found or if it's parameter <a href="#html_field_prm_all" class="opt-name">att</a> is not found,</li>
-      <li><span class="txt-code opt-value">false</span> if the XML/HTML element is not found or if the asked attribute is not found.</li>
+      <li><span class="txt-code opt-value">null</span> if the TBS field is not found or if it has no parameter <a href="#html_field_prm_all" class="opt-name">att</a>,</li>
+      <li><span class="txt-code opt-value">false</span> if the target XML/HTML element is not found or if the asked attribute is not found.</li>
     </ul>
 <p class="versioning">Versioning:  methods GetAttValue() is supported since TBS version 3.11.0. </p>
   </div>
