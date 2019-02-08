@@ -36,6 +36,7 @@ include($dir_testu.'/testcase/FieldTestCase.php');
 include($dir_testu.'/testcase/BlockTestCase.php');
 include($dir_testu.'/testcase/MiscTestCase.php');
 include($dir_testu.'/testcase/SubTplTestCase.php');
+include($dir_testu.'/testcase/SubnameTestCase.php');
 
 // launch tests
 
@@ -49,6 +50,7 @@ $x5 = new FrmTestCase();     $test->addTestCase($x5);
 $x6 = new StrconvTestCase(); $test->addTestCase($x6);
 $x7 = new MiscTestCase();    $test->addTestCase($x7);
 $x8 = new SubTplTestCase();  $test->addTestCase($x8);
+$x9 = new SubnameTestCase(); $test->addTestCase($x9);
 
 $xx = new HtmlCodeCoverageReporter(array($tbsFileName, $dir_tbs.'/plugins/'));
 $test->run($xx);
