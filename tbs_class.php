@@ -3,8 +3,8 @@
  *
  * TinyButStrong - Template Engine for Pro and Beginners
  *
- * @version 3.11.0-beta-3 for PHP 5 and 7
- * @date    2019-01-28
+ * @version 3.11.0-beta-4 for PHP 5 and 7
+ * @date    2019-02-07
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
  * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
@@ -248,7 +248,7 @@ public function DataOpen(&$Query,$QryPrms=false) {
 				} elseif (is_object($Var)) {
 					$form = $this->TBS->f_Misc_ParseFctForm($x);
 					$n = $form['name'];
-					if (method_exists($Var, $n)) {
+					if ( method_exists($Var, $n) || ($form['as_fct'] && method_exists($Var,'__call')) ) {
 						$f = array(&$Var,$n); unset($Var);
 						$Var = call_user_func_array($f,$form['args']);
 					} elseif (property_exists(get_class($Var),$n)) {
@@ -589,7 +589,7 @@ public $Assigned = array();
 public $ExtendedMethods = array();
 public $ErrCount = 0;
 // Undocumented (can change at any version)
-public $Version = '3.11.0-beta-3';
+public $Version = '3.11.0-beta-4';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -1307,12 +1307,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 			} elseif (is_object($Value)) {
 				$form = $this->f_Misc_ParseFctForm($x);
 				$n = $form['name'];
-				if ( method_exists($Value,$n) || method_exists($Value,'x__call')) {
-					/*
-					var_dump($form);
-					var_dump($n);
-					var_dump($Loc); exit;
-					*/
+				if ( method_exists($Value,$n) || ($form['as_fct'] && method_exists($Value,'__call')) ) {
 					if ($this->MethodsAllowed || !in_array(strtok($Loc->FullName,'.'),array('onload','onshow','var')) ) {
 						$x = call_user_func_array(array(&$Value,$n),$form['args']);
 					} else {
@@ -3226,14 +3221,18 @@ function meth_Misc_UserFctCheck(&$FctInfo,$FctCat,&$FctObj,&$ErrMsg,$FctCheck=fa
 			if (is_object($ObjRef)) {
 				$form = $this->f_Misc_ParseFctForm($x);
 				$n = $form['name'];
-				if (method_exists($ObjRef,$n)) {
-					if ($i<$iMax) {
-						$f = array(&$ObjRef,$n); unset($ObjRef);
-						$ObjRef = call_user_func_array($f,$form['args']);
+				if ($i === $iMax0) {
+					// last item is supposed to be a function's name, without parenthesis
+					if ( method_exists($ObjRef,$n)  || (method_exists($ObjRef, '__call'))) {
+						// Ok, continue. If $form['as_fct'] is true, then it will produce an error when try to call function $x
+					} else {
+						$ErrMsg = 'Expression \''.$FctStr.'\' is invalid because \''.$n.'\' is not a method in the class \''.get_class($ObjRef).'\'.';
+						return false;
 					}
-				} elseif ($i===$iMax0) {
-					$ErrMsg = 'Expression \''.$FctStr.'\' is invalid because \''.$n.'\' is not a method in the class \''.get_class($ObjRef).'\'.';
-					return false;
+				} elseif ( method_exists($ObjRef,$n) || ($form['as_fct'] && method_exists($ObjRef, 'x__call')) ) {
+					$f = array(&$ObjRef,$n);
+					unset($ObjRef);
+					$ObjRef = call_user_func_array($f,$form['args']);
 				} elseif (isset($ObjRef->$n)) {
 					$ObjRef = &$ObjRef->$n;
 				} else {

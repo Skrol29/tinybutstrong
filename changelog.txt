@@ -6,9 +6,13 @@
 * New method ReplaceFields(array($name=>$prms) [, $BlocName]) : replace simple TBS fields with new definitions of fields.
 * New parameter 'combo' : apply a set of parameters defined at the PHP side using SetOption('prm_combo').
 
+== Enhancements ==
+
+* Subnames for fields, array queries and ObjectRef path can support methods overloaded with magic function _call().
+
 == Bug fixes ==
 
-* PHP error: meth_Misc_Alert() called with a wront number of arguments
+* PHP error: one meth_Misc_Alert() called with a wrong number of arguments.
 
 = Release 3.10.1 =
 
