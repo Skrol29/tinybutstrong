@@ -13,9 +13,15 @@
 if (!isset($_GET['source'])) exit("Enter the name of a TBS for PHP 5 file in argument 'source' in the URL. Usually: <a href=\"".$_SERVER['SCRIPT_NAME']."?source=tbs_class.php\">?source=tbs_class.php</a>");
 
 $Src = basename($_GET['source']);
-if (!file_exists($Src)) exit("File '".$Src."' is not found.");
+$Path = $Src;
+if (!file_exists($Path)) {
+	$Path = '../' . $Src;
+	if (!file_exists($Path)) {
+		exit("File '".$Src."' is not found.");
+	}
+}
 
-$SrcTxt = file_get_contents($Src);
+$SrcTxt = file_get_contents($Path);
 
 // Standardisation of line breaks
 f_FormatLineBreaks($SrcTxt);
