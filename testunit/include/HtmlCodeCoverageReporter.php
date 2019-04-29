@@ -12,7 +12,7 @@ class HtmlCodeCoverageReporter extends HtmlReporter {
 	 * @param mixed $includePaths      array or string of file or dir path to include in code coverage
 	 * @param mixed $excludePaths      array or string of file or dir path to exclude from code coverage
 	 */
-	function HtmlCodeCoverageReporter($includePaths, $excludePaths = null) {
+	function __construct($includePaths, $excludePaths = null) {
 		$this->HtmlReporter();
 		if (is_array($includePaths)) {
 			foreach ($includePaths as $includePath)
@@ -197,6 +197,7 @@ class HtmlCodeCoverageReporter extends HtmlReporter {
 			" table#coverage td.high { background-color: #8ee034; color: black; text-align: center; padding: 0.1em 1em; }" .
 			" table#coverage td { background-color: #d4d7d0; color: black; text-align: left; padding: 0.1em 1em; }";
 	}
+	
 }
 
 ?>

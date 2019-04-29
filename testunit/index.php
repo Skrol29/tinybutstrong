@@ -36,18 +36,22 @@ include($dir_testu.'/testcase/FieldTestCase.php');
 include($dir_testu.'/testcase/BlockTestCase.php');
 include($dir_testu.'/testcase/MiscTestCase.php');
 include($dir_testu.'/testcase/SubTplTestCase.php');
+include($dir_testu.'/testcase/SubnameTestCase.php');
 
 // launch tests
 
 $tbs = new clsTinyButStrong();
 $test = new GroupTest('TinyButStrong v'.$tbs->Version.' (with PHP '.PHP_VERSION.')');
-$test->addTestCase(new FieldTestCase());
-$test->addTestCase(new BlockTestCase());
-$test->addTestCase(new AttTestCase());
-$test->addTestCase(new QuoteTestCase());
-$test->addTestCase(new FrmTestCase());
-$test->addTestCase(new StrconvTestCase());
-$test->addTestCase(new MiscTestCase());
-$test->addTestCase(new SubTplTestCase());
-$test->run(new HtmlCodeCoverageReporter(array($tbsFileName, $dir_tbs.'/plugins/')));
+$x1 = new FieldTestCase();   $test->addTestCase($x1);
+$x2 = new BlockTestCase();   $test->addTestCase($x2);
+$x3 = new AttTestCase();     $test->addTestCase($x3);
+$x4 = new QuoteTestCase();   $test->addTestCase($x4);
+$x5 = new FrmTestCase();     $test->addTestCase($x5);
+$x6 = new StrconvTestCase(); $test->addTestCase($x6);
+$x7 = new MiscTestCase();    $test->addTestCase($x7);
+$x8 = new SubTplTestCase();  $test->addTestCase($x8);
+$x9 = new SubnameTestCase(); $test->addTestCase($x9);
+
+$xx = new HtmlCodeCoverageReporter(array($tbsFileName, $dir_tbs.'/plugins/'));
+$test->run($xx);
 

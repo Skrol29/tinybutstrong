@@ -1,11 +1,18 @@
 = Release 3.11.0 =
 
-* $TBS->GetAttValue() enables to read a current attribute in an HTML or XML element where a TBS fields is placed.
-* parameter 'combo' enables to define a set of parameters to be reused.
-* (todo) parameter 'attstop' cancel the att search if this entity is found.
-* (todo) $TBS->StrReplace(array($what=>$with)) // literal
-         $TBS->StrReplace(array($what=>$with), true); // fields
-         $TBS->StrReplace(array($what=>$with), $BlocName); // block's fields
+== New features ==
+
+* New method GetAttValue($Name[,$delete]) : enables you to read an attribute of an HTML or XML element in the template.
+* New method ReplaceFields(array($name=>$prms) [, $BlocName]) : replace simple TBS fields with new definitions of fields.
+* New parameter 'combo' : apply a set of parameters defined at the PHP side using SetOption('prm_combo').
+
+== Enhancements ==
+
+* Subnames for fields, array queries and ObjectRef path can support methods overloaded with magic function _call().
+
+== Bug fixes ==
+
+* PHP error: one meth_Misc_Alert() called with a wrong number of arguments.
 
 = Release 3.10.1 =
 

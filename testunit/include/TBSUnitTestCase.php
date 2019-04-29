@@ -100,9 +100,11 @@ class TBSUnitTestCase extends UnitTestCase {
 	 */
 	function assertEqualMergeFieldStrings($source, $vars, $result, $message='%s') {
 		$this->createTBSInstance($source);
-		if (is_array($vars))
-			foreach ($vars as $name => $value)
+		if (is_array($vars)) {
+			foreach ($vars as $name => $value) {
 				$this->tbs->MergeField($name, $value);
+			}
+		}
 		return $this->assertEqualMergeString($result, $message);
 	}
 
@@ -126,9 +128,11 @@ class TBSUnitTestCase extends UnitTestCase {
 	function assertErrorMergeFieldString($source, $vars, $message='%s') {
 		$this->createTBSInstance($source);
 		$this->tbs->NoErr = TRUE;
-		if (is_array($vars))
-			foreach ($vars as $name => $value)
+		if (is_array($vars)) {
+			foreach ($vars as $name => $value) {
 				$this->tbs->MergeField($name, $value);
+			}
+		}
 		$this->getTBSRender();
 		return $this->assertTrue($this->tbs->ErrCount > 0, $message);
 	}
@@ -143,9 +147,11 @@ class TBSUnitTestCase extends UnitTestCase {
 	 */
 	function assertEqualMergeBlockStrings($source, $vars, $result, $message='%s') {
 		$this->createTBSInstance($source);
-		if (is_array($vars))
-			foreach ($vars as $name => $value)
+		if (is_array($vars)) {
+			foreach ($vars as $name => $value) {
 				$this->tbs->MergeBlock($name, $value);
+			}
+		}
 		return $this->assertEqualMergeString($result, $message);
 	}
 
@@ -159,9 +165,11 @@ class TBSUnitTestCase extends UnitTestCase {
 	function assertErrorMergeBlockString($source, $vars, $message='%s') {
 		$this->createTBSInstance($source);
 		$this->tbs->NoErr = TRUE;
-		if (is_array($vars))
-			foreach ($vars as $name => $value)
+		if (is_array($vars)) {
+			foreach ($vars as $name => $value) {
 				$this->tbs->MergeBlock($name, $value);
+			}
+		}
 		$this->getTBSRender();
 		return $this->assertTrue($this->tbs->ErrCount > 0, $message);
 	}
@@ -176,12 +184,36 @@ class TBSUnitTestCase extends UnitTestCase {
 	 */
 	function assertEqualMergeNumBlockStrings($source, $vars, $result, $message='%s') {
 		$this->createTBSInstance($source);
-		if (is_array($vars))
-			foreach ($vars as $name => $value)
+		if (is_array($vars)) {
+			foreach ($vars as $name => $value) {
 				$this->tbs->MergeBlock($name, 'num', $value);
+			}
+		}
+		return $this->assertEqualMergeString($result, $message);
+	}
+	
+	function assertEqualMergeArrayBlockStrings($source, $vars, $result, $message='%s') {
+		$this->createTBSInstance($source);
+		if (is_array($vars)) {
+			foreach ($vars as $name => $value) {
+				$this->tbs->MergeBlock($name, 'array', $value);
+			}
+		}
 		return $this->assertEqualMergeString($result, $message);
 	}
 
+	function assertErrorMergeArrayBlockStrings($source, $vars, $message='%s') {
+		$this->createTBSInstance($source);
+		$this->tbs->NoErr = TRUE;
+		if (is_array($vars)) {
+			foreach ($vars as $name => $value) {
+				$this->tbs->MergeBlock($name, 'array', $value);
+			}
+		}
+		$this->getTBSRender();
+		return $this->assertTrue($this->tbs->ErrCount > 0, $message);
+	}
+	
 	/**
 	 * Returns directory of HTML files to compare.
 	 */
@@ -199,9 +231,11 @@ class TBSUnitTestCase extends UnitTestCase {
 	 */
 	function assertEqualMergeFieldFiles($sourceFilename, $vars, $resultFilename, $message='%s') {
 		$this->createTBSInstance(file_get_contents($this->getTemplateDir().$sourceFilename));
-		if (is_array($vars))
-			foreach ($vars as $name => $value)
+		if (is_array($vars)) {
+			foreach ($vars as $name => $value) {
 				$this->tbs->MergeField($name, $value);
+			}
+		}
 		return $this->assertEqualMergeString(file_get_contents($this->getTemplateDir().$resultFilename), $message);
 	}
 
@@ -215,9 +249,11 @@ class TBSUnitTestCase extends UnitTestCase {
 	 */
 	function assertEqualMergeBlockFiles($sourceFilename, $vars, $resultFilename, $message='%s') {
 		$this->createTBSInstance(file_get_contents($this->getTemplateDir().$sourceFilename));
-		if (is_array($vars))
-			foreach ($vars as $name => $value)
+		if (is_array($vars)) {
+			foreach ($vars as $name => $value) {
 				$this->tbs->MergeBlock($name, $value);
+			}
+		}
 		return $this->assertEqualMergeString(file_get_contents($this->getTemplateDir().$resultFilename), $message);
 	}
 }

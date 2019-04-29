@@ -57,7 +57,7 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator {
      *    @access private
      */
     function &_createErrorQueue() {
-        $context = &SimpleTest::getContext();
+        $context = SimpleTest::getContext();
         $test = &$this->getTestCase();
         $queue = &$context->get('SimpleErrorQueue');
         $queue->setTestCase($test);
@@ -234,7 +234,7 @@ class SimpleErrorQueue {
      *    @access public
      *    @static
      */
-    function getSeverityAsString($severity) {
+    static function getSeverityAsString($severity) {
         static $map = array(
                 E_STRICT => 'E_STRICT',
                 E_ERROR => 'E_ERROR',
@@ -278,7 +278,7 @@ function SimpleTestErrorHandler($severity, $message, $filename = null, $line = n
             $label = SimpleErrorQueue::getSeverityAsString($severity);
             error_log("$label: $message in $filename on line $line");
         }
-        $context = &SimpleTest::getContext();
+        $context = SimpleTest::getContext();
         $queue = &$context->get('SimpleErrorQueue');
         $queue->add($severity, $message, $filename, $line);
         set_error_handler('SimpleTestErrorHandler');

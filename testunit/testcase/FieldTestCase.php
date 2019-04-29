@@ -9,7 +9,7 @@ class FieldTestCase extends TBSUnitTestCase {
 	var $empty = '';
 	var $test = 'toto';
 
-	function FieldTestCase() {
+	function __construct() {
 		$this->UnitTestCase('Basic MergeField Unit Tests');
 	}
 

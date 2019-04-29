@@ -2,7 +2,7 @@
 
 class FrmTestCase extends TBSUnitTestCase {
 
-	function FrmTestCase() {
+	function __construct() {
 		$this->UnitTestCase('Frm Unit Tests');
 	}
 
