@@ -49,21 +49,21 @@ h4 {
 	text-decoration: underline;
 	font-weight:normal;
 	font-size: 12px;
-	margin-top: 8;
-	margin-bottom: 6;
+	margin-top: 8px;
+	margin-bottom: 6px;
 }
 h5 {
 	font-weight: bold;
 	font-size: 12px;
-	margin-top: 3;
-	margin-bottom: 3;
+	margin-top: 3px;
+	margin-bottom: 3px;
 }
 h6 {
 	text-decoration: underline;
 	font-weight:normal;
 	font-size: 12px;
-	margin-top: 8;
-	margin-bottom: 6;
+	margin-top: 8px;
+	margin-bottom: 6px;
 }
 th {
 	text-decoration: underline;
@@ -97,7 +97,7 @@ td {
 	margin-top:0;
 }
 p {
-	margin-top:4;
+	margin-top:4px;
 }
 body {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -2032,7 +2032,7 @@ As with other parameters, string expressions can be delimited with single quotes
           <p>If the emmebed fields may contains single quotes, you need to use delimitors and to escape strings in the field's value and both expressions: </p>
           <div class="decal">[<span class="opt-name">onshow</span>.x;<span class="opt-name">strconv</span>=<span class="opt-value">esc</span>;<span class="opt-name">if</span> '[val]'=<span class="opt-value">'abc'</span>;<span class="opt-name">then</span> <span class="opt-value">'OK'</span>;<span class="opt-name">else</span> <span class="opt-value">'FAIL'</span>]<br>
           <span class="txt-small">The  field will displayed OK only if « $x == 'abc' ». </span></div>
-          <p><em></em>The expressions may contain <span class="opt-value">[var]</span> fields and other TBS fields, but you have to make sure that they are merged before the containing field is merged. Otherwise the condition will always be considered as false.</p>
+          <p>The expressions may contain <span class="opt-value">[var]</span> fields and other TBS fields, but you have to make sure that they are merged before the containing field is merged. Otherwise the condition will always be considered as false.</p>
           <p> It is also possible to define several couples of <span class="opt-name">if</span>/<span class="opt-name">then</span> in the same field. <span class="versioning">Supported since TBS version 3.0</span><br>
           Example:</p>
           <div class="decal">[<span class="opt-name">onshow</span>.x;<span class="opt-name">if</span> [val]=0;<span class="opt-name">then</span> <span class="opt-value">'ZERO'</span>;<span class="opt-name">if</span> [val]=<span class="opt-value">10</span>;<span class="opt-name">then</span> <span class="opt-value">'TEN'</span>;<span class="opt-name">if</span> [val]=2<span class="opt-value">0</span>;<span class="opt-name">then</span> <span class="opt-value">'TWENTY'</span>;<span class="opt-name">else</span> [val]]<br>
@@ -2829,9 +2829,9 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_when" id="html_block_prm_when"></a>when</span> <span class="opt-value">expr1</span><span class="opt-name">=</span><span class="opt-value">expr2</span></td>
         <td align="left" valign="top" class="border-sep">
-          Make the section conditional and define its condition. A conditional section is displayed only if its condition is verified.
+           <p>Make the section conditional and define its condition. A conditional section is displayed only if its condition is verified.</p>
           <p>
-            Supported operators are: (same as parameter <a href="#html_field_prm_if"><span class="opt-name">if/then/else</span></a> for fieds)<br>
+            Supported operators are: (same as parameter <a href="#html_field_prm_if"><span class="opt-name">if/then/else</span></a> for fieds)
           </p>
           <div class="decal">
             <table  border="0" cellpadding="0" cellspacing="2">
