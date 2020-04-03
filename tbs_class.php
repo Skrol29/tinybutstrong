@@ -3881,10 +3881,17 @@ static function f_Misc_ParseFctForm($Str) {
 	return $info;
 }
 
+/**
+ * Check if a string condition is true.
+ * @param  string  $Str The condition to check.
+ * @return boolean True if the condition if checked.
+ */
 static function f_Misc_CheckCondition($Str) {
 // Check if an expression like "exrp1=expr2" is true or false.
 
-	$StrZ = $Str; // same string but without protected data
+    // Bluid $StrZ, wich is the same as $Str but with 'z' for each charactares that is proetected with "'".
+    // This will help to search for operators outside protected strings.
+	$StrZ = $Str;
 	$Max = strlen($Str)-1;
 	$p = strpos($Str,'\'');
 	if ($Esc=($p!==false)) {
@@ -3969,6 +3976,12 @@ static function f_Misc_CheckCondition($Str) {
 
 }
 
+/**
+ * Delete the string delimiters that surrounds the string, if any. But not inside (no need).
+ * @param  string $Txt    The string variable that ba be modified.
+ * @param  string $Delim  The string variable that ba be modified.
+ * @return boolean True if the given string was not protected.
+ */
 static function f_Misc_DelDelimiter(&$Txt,$Delim) {
 // Delete the string delimiters
 	$len = strlen($Txt);
