@@ -192,7 +192,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2019-02-07</td>
+        <td>2020-04-03</td>
       </tr>
     </table>
   </div>
@@ -1669,7 +1669,7 @@ which is the same as:
           <span class="decal">Example: <a href="#html_field_prm_frm" class="opt-name">frm</a>=<span class="opt-value">0.00</span></span><br>
           If the value contains spaces, semicolons or quotes, then you can use single quotes as delimiters.<br>
           <span class="decal">Example:<a href="#html_field_prm_frm" class="opt-name"> frm</a>=<span class="opt-value">'0 000.00'</span></span><br>
-          To specify a literal single quote, escape it with a  second single quotes. <br>
+          Literal single quotes in the string must be escaped using two adjacent  single quotes ('').<br>
           <span class="decal">Example: <a href="#html_field_prm_ifempty" class="opt-name">ifempty</a>=<span class="opt-value">'hello that''s me'</span></span><br>
           <br>
           A parameter can contain embedded TBS fields, but only under special circumstances:<br>
@@ -1988,7 +1988,7 @@ Parameter <span class="opt-name">storename</span> changes the name of the store.
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_if" id="html_field_prm_if"></a>if</span> <span class="opt-value">expr1</span><span class="opt-name">=</span><span class="opt-value">expr2</span></td>
         <td align="left" valign="top" class="border-sep"><p>Display the data item only if the condition is verified, otherwise display nothing unless parameter <span class="opt-name">then</span> or <span class="opt-name">else</span> are used.</p>
-          <p> Supported operators are:          </p>
+          <p>Supported operators are: (same as parameter <a href="#html_block_prm_when"><span class="opt-name">when</span></a> for blocks)</p>
           <div class="decal">
             <table  border="0" cellpadding="0" cellspacing="0">
               <tr>
@@ -2022,11 +2022,23 @@ Parameter <span class="opt-name">storename</span> changes the name of the store.
             </table>
           </div>
           <p>Both <span class="opt-value">expr1</span> and <span class="opt-value">expr2</span> must be string or numerical expressions.<br>
-            You can use the keyword <span class="opt-value">[val]</span> inside the expression to insert the current data item.<br>
-            You can use <span class="opt-value">[var]</span> fields inside the expression.<br>
-            The expressions may contain other TBS fields, but you have to make sure that they are merged before the containing field.<br>
-          <span class="versioning">Since TBS version 3.0,</span> it is also possible to define several couples of <span class="opt-name">if</span>/<span class="opt-name">then</span> in the same field.</p>
-          <p> See parameters <span class="opt-name">then</span> and <span class="opt-name">else</span> for some examples.</p></td>
+            <em>Equal</em> and <em>not equal</em> operators are always string <span lang="en"><span title="">comparison</span></span>s and are <strong>case insensitive</strong>.<br>
+As with other parameters, string expressions can be delimited with single quotes ('), and literal single quotes in the string must be escaped using two adjacent  single quotes ('').</p>
+          <p>The expressions of parameter <span class="opt-name">if</span> may contain then <span class="opt-name">[val]</span> keyword in order to insert the current data item.<br>
+            </p>
+          <p>Example:</p>
+          <div class="decal">[<span class="opt-name">onshow</span>.x;<span class="opt-name">if</span> [val]+-<span class="opt-value">0</span>;<span class="opt-name">then</span> <span class="opt-value">'OK'</span>;<span class="opt-name">else</span> <span class="opt-value">'FAIL'</span>]<br>
+          <span class="txt-small">The  field will displayed OK only if « $x &gt; 0 ». </span></div>
+          <p>If the emmebed fields may contains single quotes, you need to use delimitors and to escape strings in the field's value and both expressions: </p>
+          <div class="decal">[<span class="opt-name">onshow</span>.x;<span class="opt-name">strconv</span>=<span class="opt-value">esc</span>;<span class="opt-name">if</span> '[val]'=<span class="opt-value">'abc'</span>;<span class="opt-name">then</span> <span class="opt-value">'OK'</span>;<span class="opt-name">else</span> <span class="opt-value">'FAIL'</span>]<br>
+          <span class="txt-small">The  field will displayed OK only if « $x == 'abc' ». </span></div>
+          <p><em></em>The expressions may contain <span class="opt-value">[var]</span> fields and other TBS fields, but you have to make sure that they are merged before the containing field is merged. Otherwise the condition will always be considered as false.</p>
+          <p> It is also possible to define several couples of <span class="opt-name">if</span>/<span class="opt-name">then</span> in the same field. <span class="versioning">Supported since TBS version 3.0</span><br>
+          Example:</p>
+          <div class="decal">[<span class="opt-name">onshow</span>.x;<span class="opt-name">if</span> [val]=0;<span class="opt-name">then</span> <span class="opt-value">'ZERO'</span>;<span class="opt-name">if</span> [val]=<span class="opt-value">10</span>;<span class="opt-name">then</span> <span class="opt-value">'TEN'</span>;<span class="opt-name">if</span> [val]=2<span class="opt-value">0</span>;<span class="opt-name">then</span> <span class="opt-value">'TWENTY'</span>;<span class="opt-name">else</span> [val]]<br>
+        </div>
+          <p></p>
+<p> See parameters <span class="opt-name">then</span> and <span class="opt-name">else</span> for other examples.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_then" id="html_field_prm_then"></a>then</span><span class="opt-value"> val1</span></td>
@@ -2816,8 +2828,11 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_when" id="html_block_prm_when"></a>when</span> <span class="opt-value">expr1</span><span class="opt-name">=</span><span class="opt-value">expr2</span></td>
-        <td align="left" valign="top" class="border-sep">Make the section conditional and define its condition. A conditional section is displayed only if its condition is verified.<br>
-          Supported operators are:<br>
+        <td align="left" valign="top" class="border-sep">
+          Make the section conditional and define its condition. A conditional section is displayed only if its condition is verified.
+          <p>
+            Supported operators are: (same as parameter <a href="#html_field_prm_if"><span class="opt-name">if/then/else</span></a> for fieds)<br>
+          </p>
           <div class="decal">
             <table  border="0" cellpadding="0" cellspacing="2">
               <tr>
@@ -2858,10 +2873,16 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
               </tr>
             </table>
           </div>
-          Both <span class="opt-value">expr1</span> and <span class="opt-value">expr2</span> must be string or numerical expressions. The expressions may contain <a href="#html_field_auto">[var] fields</a>.<br>
-          Example:
-          <div class="decal"><span class="opt-html">&lt;div&gt;</span>[<span class="opt-name">onload</span>;<span class="opt-name">block</span>=<span class="opt-value">div</span>;<span class="opt-name">when</span> [<span class="opt-name">var</span>.<span class="opt-name">x</span>]~=<span class="opt-value">'*to*'</span>] ... <span class="opt-html">&lt;/div&gt;</span><br>
-            <span class="txt-small">The  &lt;div&gt; block will be displayed only if $x&gt;0. </span></div>
+          <p>Both <span class="opt-value">expr1</span> and <span class="opt-value">expr2</span> must be string or numerical expressions.<br>
+          <em>Equal</em> and <em>not equal</em> operators are always string <span lang="en"><span title="">comparison</span></span>s and are <strong>case insensitive</strong>.<br>
+          As with other parameters, string expressions can be delimited with single quotes ('), and literal single quotes in the string must be escaped using two adjacent  single quotes ('').</p>
+          <p>The expressions of parameter <span class="opt-name">when</span> may contain <a href="#html_field_auto">[var] fields</a>.</p>
+          <p>Example:          </p>
+          <div class="decal"><span class="opt-html">&lt;div&gt; ... </span>[<span class="opt-name">onload</span>;<span class="opt-name">block</span>=<span class="opt-value">div</span>;<span class="opt-name">when</span> [<span class="opt-name">var</span>.<span class="opt-name">x</span>]+-<span class="opt-value">0</span>] ... <span class="opt-html">&lt;/div&gt;</span><br>
+            <span class="txt-small">The  &lt;div&gt; block will be displayed only if « $x &gt; 0 ». </span></div>
+          <p>If the emmebed fields may contains single quotes, you need to use delimitor and to escape strings in both expressions: </p>
+          <div class="decal"><span class="opt-html">&lt;div&gt; ... </span>[<span class="opt-name">onload</span>;<span class="opt-name">block</span>=<span class="opt-value">div</span>;<span class="opt-name">when</span> '[<span class="opt-name">var</span>.<span class="opt-name">x</span>;<span class="opt-name">strconv</span>=<span class="opt-value">esc</span>]'=<span class="opt-value">'abc'</span>] ... <span class="opt-html">&lt;/div&gt;</span><br>
+            <span class="txt-small">The  &lt;div&gt; block will be displayed only if « $x == 'abc' ». </span>          </div>
           <p><em>Note:</em> do not confuse parameter <span class="opt-name">when</span> (which works only for TBS blocs or sections) and parameter <span class="opt-name">if</span> (which works only for TBS fields). Thus, parameter <span class="opt-name">when</span> is taken into account only if parameter <span class="opt-name">block</span> exists in the same TBS tag.<br>
             See <a href="#html_conditional">conditional blocks</a> for more details.</p></td>
       </tr>
