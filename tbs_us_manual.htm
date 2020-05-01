@@ -192,7 +192,7 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2020-04-03</td>
+        <td>2020-05-01</td>
       </tr>
     </table>
   </div>
@@ -1119,6 +1119,7 @@ Some of the TBS options are a new way of setting <a href="#php_options_compatibi
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="php_setoption_noerr" id="php_setoption4"></a>noerr</span></td>
         <td align="left" valign="top" class="border-sep"><p>Enables you to avoid all TinyButStrong error messages for next operations. Default value is <span class="opt-value">false</span>. The errors that were not displayed can however be returned with the special automatic field <a href="#html_field_special" class="opt-name">[onshow..error_msg]</a>. Furthermore you can check the presence of error using property <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;<span class="opt-value">ErrCount</span></span> which counts  TBS errors regardless of option <span class="opt-name"> noerr</span>. When the <span class="opt-name">noerr</span> option is set to <span class="opt-value">false</span>, error messages are concatened in property <span class="txt-code"><span class="opt-name">$TBS</span>-&gt;<span class="opt-value">ErrMsg</span></span>.</p>
+          <p>You can also avoir error messages on a single TBS field using parameter <a href="#html_field_prm_noerr" class="opt-name">noerr</a>.</p>
           <p> Option <span class="opt-name">noerr</span> is useful in two cases:</p>
           <ul>
             <li> For professional  sites put into production for whom no error message can be displayed. Take care because you will have no more indication about the good running of the merge. It is often more judicious to use parameter <a href="#html_field_prm_noerr" class="opt-name">noerr</a> which enables you to avoid messages concerning one particular TBS tag. </li>
@@ -1878,7 +1879,9 @@ which is the same as:
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_field_prm_noerr"></a><span class="opt-name">noerr</span></td>
-        <td align="left" valign="top" class="border-sep"><p>Avoid some of the TBS Error messages. When a message can be cancelled, it is mentioned in the message.</p></td>
+        <td align="left" valign="top" class="border-sep"><p>Avoid some of the TBS Error messages for this TBS field. When such a message can be cancelled, it is mentioned in the message.</p>
+          <p>After the error is cancelled, the value of the field becomes an empty string ('').</p>
+        <p>You can also avoid all TBS error messages using the TBS option <a href="#php_setoption_noerr" class="opt-name">noerr</a>.</p></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_field_prm_file"></a>file</span>=<span class="opt-value">filename</span></td>
