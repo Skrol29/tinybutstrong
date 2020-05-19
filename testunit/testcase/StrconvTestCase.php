@@ -3,7 +3,7 @@
 class StrconvTestCase extends TBSUnitTestCase {
 
 	function __construct() {
-		$this->UnitTestCase('Strconv Unit Tests');
+        parent::__construct('Strconv Unit Tests');
 	}
 
 	function setUp() {

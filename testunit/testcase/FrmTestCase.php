@@ -3,7 +3,7 @@
 class FrmTestCase extends TBSUnitTestCase {
 
 	function __construct() {
-		$this->UnitTestCase('Frm Unit Tests');
+        parent::__construct('Frm Unit Tests');
 	}
 
 	function setUp() {
@@ -172,7 +172,11 @@ class FrmTestCase extends TBSUnitTestCase {
 		// strange or bug ?
 		//$this->assertEqualMergeFieldStrings("{[a;frm=+0 000,00|-0 000,00|zero|(nothing)]}", array('a'=>$z),  "{ze12o}", "zero part merged as standard"); // this is not a bug yet, only a poor functionality: the zero part format is used a standard format (i.e. date or numeric). In this example, it is merged a date format: r is replaced by the hour
 		$this->assertEqualMergeFieldStrings("{[a;frm=+0 000,00|-0 000,00|zero|(nothing)]}", array('a'=>$z),  "{" . date('\\z\\eg\\o', $z) . "}", "zero part merged as standard"); // this is not a bug yet, only a poor functionality: the zero part format is used a standard format (i.e. date or numeric). In this example, it is merged a date format: r is replaced by the hour
-		
+
+        // In this example, it is merged a date format: r is replaced by the hour
+        // date_default_timezone_set('Etc/GMT+0');
+		// $this->assertEqualMergeFieldStrings("{[a;frm=+0 000,00|-0 000,00|zero|(nothing)]}", array('a'=>0),  "{ze12o}", "%s: zero part merged as standard");
+
 		//$this->dumpLastSource();
 
 	}

@@ -3,7 +3,7 @@
 class SubTplTestCase extends TBSUnitTestCase {
 
 	function __construct() {
-		$this->UnitTestCase('Sub-Template Unit Tests');
+        parent::__construct('Sub-Template Unit Tests');
 	}
 
 	function setUp() {

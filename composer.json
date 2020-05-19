@@ -14,7 +14,16 @@
     "require": {
         "php": ">=5.0"
     },
+    "require-dev": {
+        "simpletest/simpletest": "^1.1"
+    },
     "autoload": {
         "classmap": ["tbs_class.php"]
+    },
+    "scripts": {
+        "test": "php testunit/index.php"
+    },
+    "scripts-descriptions": {
+        "test": "Run tests"
     }
 }

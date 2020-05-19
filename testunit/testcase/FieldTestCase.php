@@ -8,9 +8,10 @@ class FieldTestCase extends TBSUnitTestCase {
 
 	var $empty = '';
 	var $test = 'toto';
+	var $public_reporter;
 
 	function __construct() {
-		$this->UnitTestCase('Basic MergeField Unit Tests');
+		parent::__construct('Basic MergeField Unit Tests');
 	}
 
 	function FieldTestCaseUserMethod($param1) {
@@ -105,7 +106,14 @@ class FieldTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("<b>[a.ab.abb.abba]</b>", $data, "<b>3</b>", "merge field with chain call #4");
 		$this->assertEqualMergeFieldStrings("<b>[a.aa.aaa.aaaa.aaaaa]</b>", $data, "<b>1</b>", "merge field with chain call #5");
 		$this->assertEqualMergeFieldStrings("<b>[a.ad.test]</b>", $data, "<b>toto</b>", "merge field with chain call #6");
-		$this->assertEqualMergeFieldStrings("<b>[a.ad._reporter._character_set]</b>", $data, "<b>".$this->_reporter->_character_set."</b>", "merge field with chain call #7");
+
+		$this->public_reporter = &$this->{property_exists($this, '_reporter') ? '_reporter' : 'reporter'};
+        if (property_exists($this->public_reporter, '_character_set')) {
+		    $this->assertEqualMergeFieldStrings("<b>[a.ad.public_reporter._character_set]</b>", $data, "<b>".$this->public_reporter->_character_set."</b>", "merge field with chain call #7");
+        } else {
+            $this->assertEqualMergeFieldStrings("<b>[a.ad.public_reporter.character_set]</b>", $data, "<b>".$this->public_reporter->character_set."</b>", "merge field with chain call #7");
+        }
+
 	}
 
 	function testVarRef() {
