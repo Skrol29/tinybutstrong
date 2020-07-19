@@ -115,7 +115,8 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * @return boolean               True on pass
 	 */
 	function assertEqualMergeString($expected, $message='%s') {
-		return $this->assertEqual($this->getTBSRender(), $expected, $message);
+        $result = $this->getTBSRender();        
+		return $this->assertEqual($result, $expected, $message);
 	}
 
 	/**
