@@ -1255,10 +1255,20 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
 
 }
 
+/**
+ * Add a special section to the LocR.
+ *
+ * @param object $LocR 
+ * @param string $BlockName
+ * @param object $BDef 
+ * @param string $Type  Type of behavior: 'H' header, 'F' footer, 'S' splitter.
+ * @param string $Field Name of the field on which the group of values is defined.
+ * @param string $Prm   Parameter that induced the section.
+ */
 function meth_Locator_SectionAddGrp(&$LocR,$BlockName,&$BDef,$Type,$Field,$Prm) {
 
 	$BDef->PrevValue = false;
-	$BDef->Type = $Type;
+	$BDef->Type = $Type; // property not used in native, but designed for plugins
 
 	// Save sub items in a structure near to Locator.
 	$Field0 = $Field;
@@ -1267,6 +1277,7 @@ function meth_Locator_SectionAddGrp(&$LocR,$BlockName,&$BDef,$Type,$Field,$Prm) 
 	if ($BDef->FDef->LocNbr==0)	$this->meth_Misc_Alert('Parameter '.$Prm,'The value \''.$Field0.'\' is unvalide for this parameter.');
 
 	if ($Type==='H') {
+        // Header behavior
 		if ($LocR->HeaderFound===false) {
 			$LocR->HeaderFound = true;
 			$LocR->HeaderNbr = 0;
@@ -1275,6 +1286,7 @@ function meth_Locator_SectionAddGrp(&$LocR,$BlockName,&$BDef,$Type,$Field,$Prm) 
 		$i = ++$LocR->HeaderNbr;
 		$LocR->HeaderDef[$i] = &$BDef;
 	} else {
+        // Footer behavior
 		if ($LocR->FooterFound===false) {
 			$LocR->FooterFound = true;
 			$LocR->FooterNbr = 0;
@@ -2500,20 +2512,22 @@ function meth_Merge_BlockSections(&$Txt,&$LocR,&$Src,&$RecSpe) {
 		// Headers and Footers
 		if ($GrpFound) {
 			$brk_any = false;
-			$brk_src = '';
+			$brk_src = ''; // concatenated source to insert as of breaked groups (header and footer)
 			if ($LocR->FooterFound) {
 				$brk = false;
 				for ($i=$LocR->FooterNbr;$i>=1;$i--) {
 					$GrpDef = &$LocR->FooterDef[$i];
 					$x = $this->meth_Merge_SectionNormal($GrpDef->FDef,$Src);
 					if ($Src->RecNum===1) {
+                        // no footer break on first record
 						$GrpDef->PrevValue = $x;
 						$brk_i = false;
 					} else {
+                        // default state for breaked group
 						if ($GrpDef->AddLastGrp) {
-							$brk_i = &$brk;
+							$brk_i = &$brk; // cascading breakings
 						} else {
-							unset($brk_i); $brk_i = false;
+							unset($brk_i); $brk_i = false; // independent breaking
 						}
 						if (!$brk_i) $brk_i = !($GrpDef->PrevValue===$x);
 						if ($brk_i) {
@@ -2525,16 +2539,18 @@ function meth_Merge_BlockSections(&$Txt,&$LocR,&$Src,&$RecSpe) {
 						}
 					}
 				}
+                // Update the Previous Record info
 				$Src->PrevRec->CurrRec = $Src->CurrRec;
 				$Src->PrevRec->RecNum = $Src->RecNum;
 				$Src->PrevRec->RecKey = $Src->RecKey;
 			}
 			if ($LocR->HeaderFound) {
-				$brk = ($Src->RecNum===1);
+                // Check if the current record breaks any header group
+				$brk = ($Src->RecNum===1); // there is always a header break on first record
 				for ($i=1;$i<=$LocR->HeaderNbr;$i++) {
 					$GrpDef = &$LocR->HeaderDef[$i];
-					$x = $this->meth_Merge_SectionNormal($GrpDef->FDef,$Src);
-					if (!$brk) $brk = !($GrpDef->PrevValue===$x);
+					$x = $this->meth_Merge_SectionNormal($GrpDef->FDef,$Src); // value of the header expression for the current record
+					if (!$brk) $brk = !($GrpDef->PrevValue===$x); // cascading breakings
 					if ($brk) {
 						$ok = true;
 						if ($piOMG) {$ArgLst2[0]=&$Src; $ArgLst2[1]=&$GrpDef; $ok = $this->meth_PlugIn_RunAll($this->_piOnMergeGroup,$ArgLst2);}
@@ -2607,17 +2623,20 @@ function meth_Merge_BlockSections(&$Txt,&$LocR,&$Src,&$RecSpe) {
 			$BlockRes .= $SecSrc;
 		}
 
-		// Next row
+		// Next record
 		$Src->DataFetch();
 
 	} //--> while($CurrRec!==false) {
 
+    // At this point, all data has been fetched.
+
+    // Source to add after the last record
 	$SecSrc = '';
 
 	// Serial: merge the extra the sub-blocks
 	if ($IsSerial) $SecSrc .= $this->meth_Merge_SectionSerial($SecDef,$SrId,$LocR);
 
-	// Footer
+	// Add all footers after the last record
 	if ($LocR->FooterFound) {
 		if ($Src->RecNum>0) {
 			for ($i=1;$i<=$LocR->FooterNbr;$i++) {
