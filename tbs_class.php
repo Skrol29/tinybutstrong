@@ -2441,8 +2441,6 @@ function meth_Merge_BlockParallel(&$Txt,&$LocR,&$Src) {
 
 	// Main loop
 	$Src->DataFetch();
-
-	$FirstRec = true;
 	
 	// Prepare sources
 	$BlockRes = array();
