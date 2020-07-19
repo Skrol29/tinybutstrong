@@ -60,7 +60,7 @@ public $Query = '';
 public $RecSet = false;
 public $RecKey = '';
 public $RecNum = 0;
-public $RecNumInit = 0;
+public $RecNumInit = 0; // Used by ByPage plugin
 public $RecSaving = false;
 public $RecSaved = false;
 public $RecBuffer = false;
@@ -175,7 +175,7 @@ public function DataOpen(&$Query,$QryPrms=false) {
 	// Init values
 	unset($this->CurrRec); $this->CurrRec = true;
 	if ($this->RecSaved) {
-		$this->FirstRec = true;
+		$this->RSIsFirst = true;
 		unset($this->RecKey); $this->RecKey = '';
 		$this->RecNum = $this->RecNumInit;
 		if ($this->OnDataOk) $this->OnDataArgs[1] = &$this->CurrRec;
@@ -277,7 +277,7 @@ public function DataOpen(&$Query,$QryPrms=false) {
 		// First record
 		if ($this->RecSet!==false) {
 			$this->RecNbr = $this->RecNumInit + count($this->RecSet);
-			$this->FirstRec = true;
+			$this->RSIsFirst = true;
 			$this->RecSaved = true;
 			$this->RecSaving = false;
 		}
@@ -436,7 +436,7 @@ public function DataFetch() {
 
 	if ($this->RecSaved) {
 		if ($this->RecNum<$this->RecNbr) {
-			if ($this->FirstRec) {
+			if ($this->RSIsFirst) {
 				if ($this->SubType===2) { // From string
 					reset($this->RecSet);
 					$this->RecKey = key($this->RecSet);
@@ -445,7 +445,7 @@ public function DataFetch() {
 					$this->CurrRec = reset($this->RecSet);
 					$this->RecKey = key($this->RecSet);
 				}
-				$this->FirstRec = false;
+				$this->RSIsFirst = false;
 			} else {
 				if ($this->SubType===2) { // From string
 					next($this->RecSet);
