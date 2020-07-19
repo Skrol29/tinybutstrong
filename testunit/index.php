@@ -16,11 +16,7 @@ require_once($dir_testu.'/simpletest/reporter.php');
 @require_once($dir_testu.'/simpletest/mock_objects.php');
 
 // include tbs classes
-if (version_compare(PHP_VERSION,'5.0')<0) {
-	$tbsFileName = $dir_tbs.'/tbs_class_php4.php';
-} else {
-	$tbsFileName = $dir_tbs.'/tbs_class.php';
-}
+$tbsFileName = $dir_tbs.'/tbs_class.php';
 require_once($tbsFileName);
 
 // other files required for unit tests
@@ -42,16 +38,15 @@ include($dir_testu.'/testcase/SubnameTestCase.php');
 
 $tbs = new clsTinyButStrong();
 $test = new GroupTest('TinyButStrong v'.$tbs->Version.' (with PHP '.PHP_VERSION.')');
-$x1 = new FieldTestCase();   $test->addTestCase($x1);
-$x2 = new BlockTestCase();   $test->addTestCase($x2);
-$x3 = new AttTestCase();     $test->addTestCase($x3);
-$x4 = new QuoteTestCase();   $test->addTestCase($x4);
-$x5 = new FrmTestCase();     $test->addTestCase($x5);
-$x6 = new StrconvTestCase(); $test->addTestCase($x6);
-$x7 = new MiscTestCase();    $test->addTestCase($x7);
-$x8 = new SubTplTestCase();  $test->addTestCase($x8);
-$x9 = new SubnameTestCase(); $test->addTestCase($x9);
+$test->addTestCase(new FieldTestCase());
+$test->addTestCase(new BlockTestCase());
+$test->addTestCase(new AttTestCase());
+$test->addTestCase(new QuoteTestCase());
+$test->addTestCase(new FrmTestCase());
+$test->addTestCase(new StrconvTestCase());
+$test->addTestCase(new MiscTestCase());
+$test->addTestCase(new SubTplTestCase());
+$test->addTestCase(new SubnameTestCase());
 
-$xx = new HtmlCodeCoverageReporter(array($tbsFileName, $dir_tbs.'/plugins/'));
-$test->run($xx);
+$test->run(new HtmlCodeCoverageReporter(array($tbsFileName, $dir_tbs.'/plugins/')));
 

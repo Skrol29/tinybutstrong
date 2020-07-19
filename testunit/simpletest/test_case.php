@@ -518,7 +518,7 @@ class TestSuite {
     /**
      *    @deprecated
      */
-    function addTestCase(&$test_case) {
+    function addTestCase($test_case) {
         $this->_test_cases[] = &$test_case;
     }
 
@@ -587,7 +587,7 @@ class TestSuite {
      *    @param SimpleReporter $reporter    Current test reporter.
      *    @access public
      */
-    function run(&$reporter) {
+    function run($reporter) {
         $reporter->paintGroupStart($this->getLabel(), $this->getSize());
         for ($i = 0, $count = count($this->_test_cases); $i < $count; $i++) {
             if (is_string($this->_test_cases[$i])) {
