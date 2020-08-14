@@ -3,7 +3,7 @@
  *
  * TinyButStrong - Template Engine for Pro and Beginners
  *
- * @version 3.11.0 for PHP 5 and 7
+ * @version 3.12.0-beta for PHP 5 and 7
  * @date    2019-02-10
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
@@ -58,18 +58,26 @@ public $SubType = 0;
 public $SrcId = false;
 public $Query = '';
 public $RecSet = false;
-public $RecKey = '';
-public $RecNum = 0;
 public $RecNumInit = 0; // Used by ByPage plugin
 public $RecSaving = false;
 public $RecSaved = false;
 public $RecBuffer = false;
-public $CurrRec = false;
 public $TBS = false;
 public $OnDataOk = false;
 public $OnDataPrm = false;
 public $OnDataPrmDone = array();
 public $OnDataPi = false;
+
+// Info relative to the current record :
+public $CurrRec = false; // Used by ByPage plugin
+public $RecKey = '';     // Used by ByPage plugin
+public $RecNum = 0;      // Used by ByPage plugin
+
+public $PrevRec = null;
+public $NextRec = null;
+
+public $PrevSave = false;
+public $NextSave = false;
 
 public function DataAlert($Msg) {
 	if (is_array($this->TBS->_CurrBlock)) {
@@ -85,7 +93,7 @@ public function DataPrepare(&$SrcId,&$TBS) {
 	$this->TBS = &$TBS;
 	$FctInfo = false;
 	$FctObj = false;
-
+    
 	if (is_array($SrcId)) {
 		$this->Type = 0;
 	} elseif (is_resource($SrcId)) {
@@ -173,7 +181,9 @@ public function DataPrepare(&$SrcId,&$TBS) {
 public function DataOpen(&$Query,$QryPrms=false) {
 
 	// Init values
-	unset($this->CurrRec); $this->CurrRec = true;
+	unset($this->CurrRec);
+    $this->CurrRec = true;
+    
 	if ($this->RecSaved) {
 		$this->RSIsFirst = true;
 		unset($this->RecKey); $this->RecKey = '';
@@ -181,9 +191,15 @@ public function DataOpen(&$Query,$QryPrms=false) {
 		if ($this->OnDataOk) $this->OnDataArgs[1] = &$this->CurrRec;
 		return true;
 	}
-	unset($this->RecSet); $this->RecSet = false;
+    
+	unset($this->RecSet);
+    $this->RecSet = false;
 	$this->RecNumInit = 0;
 	$this->RecNum = 0;
+
+    // Previous and next records
+    $this->PrevRec = (object) null;
+    $this->NextRec = false;
 
 	if (isset($this->TBS->_piOnData)) {
 		$this->OnDataPi = true;
@@ -434,115 +450,27 @@ public function DataOpen(&$Query,$QryPrms=false) {
 
 public function DataFetch() {
 
-	if ($this->RecSaved) {
-		if ($this->RecNum<$this->RecNbr) {
-			if ($this->RSIsFirst) {
-				if ($this->SubType===2) { // From string
-					reset($this->RecSet);
-					$this->RecKey = key($this->RecSet);
-					$this->CurrRec = &$this->RecSet[$this->RecKey];
-				} else {
-					$this->CurrRec = reset($this->RecSet);
-					$this->RecKey = key($this->RecSet);
-				}
-				$this->RSIsFirst = false;
-			} else {
-				if ($this->SubType===2) { // From string
-					next($this->RecSet);
-					$this->RecKey = key($this->RecSet);
-					$this->CurrRec = &$this->RecSet[$this->RecKey];
-				} else {
-					$this->CurrRec = next($this->RecSet);
-					$this->RecKey = key($this->RecSet);
-				}
-			}
-			if ((!is_array($this->CurrRec)) && (!is_object($this->CurrRec))) $this->CurrRec = array('key'=>$this->RecKey, 'val'=>$this->CurrRec);
-			$this->RecNum++;
-			if ($this->OnDataOk) {
-				$this->OnDataArgs[1] = &$this->CurrRec; // Reference has changed if ($this->SubType===2)
-				if ($this->OnDataPrm) call_user_func_array($this->OnDataPrmRef,$this->OnDataArgs);
-				if ($this->OnDataPi) $this->TBS->meth_PlugIn_RunAll($this->OnDataPiRef,$this->OnDataArgs);
-				if ($this->SubType!==2) $this->RecSet[$this->RecKey] = $this->CurrRec; // save modifications because array reading is done without reference :(
-			}
-		} else {
-			unset($this->CurrRec); $this->CurrRec = false;
-		}
-		return;
-	}
-
-	switch ($this->Type) {
-	case 6: // MySQL
-		$this->CurrRec = mysql_fetch_assoc($this->RecSet);
-		break;
-	case 1: // Num
-		if (($this->NumVal>=$this->NumMin) && ($this->NumVal<=$this->NumMax)) {
-			$this->CurrRec = array('val'=>$this->NumVal);
-			$this->NumVal += $this->NumStep;
-		} else {
-			$this->CurrRec = false;
-		}
-		break;
-	case 2: // Text
-		if ($this->RecNum===0) {
-			if ($this->RecSet==='') {
-				$this->CurrRec = false;
-			} else {
-				$this->CurrRec = &$this->RecSet;
-			}
-		} else {
-			$this->CurrRec = false;
-		}
-		break;
-	case 3: // Custom function
-		$FctFetch = $this->FctFetch;
-		$this->CurrRec = $FctFetch($this->RecSet,$this->RecNum+1);
-		break;
-	case 4: // Custom method from ObjectRef
-		$this->FctPrm[0] = &$this->RecSet; $this->FctPrm[1] = $this->RecNum+1;
-		$this->CurrRec = call_user_func_array($this->FctFetch,$this->FctPrm);
-		break;
-	case 5: // Custom method of object
-		$this->CurrRec = $this->SrcId->tbsdb_fetch($this->RecSet,$this->RecNum+1);
-		break;
-	case 7: // PostgreSQL
-		$this->CurrRec = pg_fetch_assoc($this->RecSet); /* COMPAT#5 */
-		break;
-	case 8: // SQLite
-		$this->CurrRec = sqlite_fetch_array($this->RecSet,SQLITE_ASSOC);
-		break;
-	case 9: // Iterator
-		if ($this->RecSet->valid()) {
-			$this->CurrRec = $this->RecSet->current();
-			$this->RecKey = $this->RecSet->key();
-			$this->RecSet->next();
-		} else {
-			$this->CurrRec = false;
-		}
-		break;
-	case 10: // MySQLi
-		$this->CurrRec = $this->RecSet->fetch_assoc();
-		if (is_null($this->CurrRec)) $this->CurrRec = false;
-		break;
-	case 11: // PDO
-		$this->CurrRec = $this->RecSet->fetch(PDO::FETCH_ASSOC);
-		break;
-	case 12: // Zend_DB_Adapater
-		$this->CurrRec = $this->RecSet->fetch(Zend_Db::FETCH_ASSOC);
-		break;
-	case 13: // SQLite3
-		$this->CurrRec = $this->RecSet->fetchArray(SQLITE3_ASSOC);
-		break;
-	}
-
-	// Set the row count
-	if ($this->CurrRec!==false) {
-		$this->RecNum++;
-		if ($this->OnDataOk) {
-			if ($this->OnDataPrm) call_user_func_array($this->OnDataPrmRef,$this->OnDataArgs);
-			if ($this->OnDataPi) $this->TBS->meth_PlugIn_RunAll($this->OnDataPiRef,$this->OnDataArgs);
-		}
-		if ($this->RecSaving) $this->RecBuffer[$this->RecKey] = $this->CurrRec;
-	}
+    // Save previous record
+    if ($this->PrevSave) {
+        $this->_CopyRec($this, $this->PrevRec);
+    }
+    
+    if ($this->NextSave) {
+        // Fecth and save next record
+        if ($this->NextRecord === false) {
+            // First record
+            $this->NextRecord = (object) null;
+            $this->_DataFetchOn($this);
+        } else {
+            $this->_CopyRec($this->NextRecord, $this);
+        }
+        if ($this->CurrRec !== false) {
+            $this->_DataFetchOn($this->NextRecord);
+        }
+    } else {
+        // Classic fetch
+        $this->_DataFetchOn($this);
+    }
 
 }
 
@@ -573,6 +501,139 @@ public function DataClose() {
 	}
 }
 
+/**
+ * Copy the record information from an object to another.
+ */
+private function _CopyRec($from, $to) {
+    
+    $to->CurrRec = $from->CurrRec;
+    $to->RecNum  = $from->RecNum;
+    $to->RecKey  = $from->RecKey;
+    
+}
+
+/**
+ * Fetch the next record on the object $obj.
+ * This wil set the proiperties :
+ *   $obj->CurrRec
+ *   $obj->RecKey
+ *   $obj->RecNum
+ */
+private function _DataFetchOn($obj) {
+
+    // Check if the records are saved in an array
+	if ($this->RecSaved) {
+		if ($obj->RecNum < $this->RecNbr) {
+			if ($this->RSIsFirst) {
+				if ($this->SubType===2) { // From string
+					reset($this->RecSet);
+					$obj->RecKey = key($this->RecSet);
+					$obj->CurrRec = &$this->RecSet[$obj->RecKey];
+				} else {
+					$obj->CurrRec = reset($this->RecSet);
+					$obj->RecKey = key($this->RecSet);
+				}
+				$this->RSIsFirst = false;
+			} else {
+				if ($this->SubType===2) { // From string
+					next($this->RecSet);
+					$obj->RecKey = key($this->RecSet);
+					$obj->CurrRec = &$this->RecSet[$obj->RecKey];
+				} else {
+					$obj->CurrRec = next($this->RecSet);
+					$obj->RecKey = key($this->RecSet);
+				}
+			}
+			if ((!is_array($obj->CurrRec)) && (!is_object($obj->CurrRec))) $obj->CurrRec = array('key'=>$obj->RecKey, 'val'=>$obj->CurrRec);
+			$obj->RecNum++;
+			if ($this->OnDataOk) {
+				$this->OnDataArgs[1] = &$obj->CurrRec; // Reference has changed if ($this->SubType===2)
+				if ($this->OnDataPrm) call_user_func_array($this->OnDataPrmRef,$this->OnDataArgs);
+				if ($this->OnDataPi) $this->TBS->meth_PlugIn_RunAll($this->OnDataPiRef,$this->OnDataArgs);
+				if ($this->SubType!==2) $this->RecSet[$obj->RecKey] = $obj->CurrRec; // save modifications because array reading is done without reference :(
+			}
+		} else {
+			unset($obj->CurrRec); $obj->CurrRec = false;
+		}
+		return;
+	}
+
+	switch ($this->Type) {
+	case 6: // MySQL
+		$obj->CurrRec = mysql_fetch_assoc($this->RecSet);
+		break;
+	case 1: // Num
+		if (($this->NumVal>=$this->NumMin) && ($this->NumVal<=$this->NumMax)) {
+			$obj->CurrRec = array('val'=>$this->NumVal);
+			$this->NumVal += $this->NumStep;
+		} else {
+			$obj->CurrRec = false;
+		}
+		break;
+	case 2: // Text
+		if ($obj->RecNum===0) {
+			if ($this->RecSet==='') {
+				$obj->CurrRec = false;
+			} else {
+				$obj->CurrRec = &$this->RecSet;
+			}
+		} else {
+			$obj->CurrRec = false;
+		}
+		break;
+	case 3: // Custom function
+		$FctFetch = $this->FctFetch;
+		$obj->CurrRec = $FctFetch($this->RecSet,$obj->RecNum+1);
+		break;
+	case 4: // Custom method from ObjectRef
+		$this->FctPrm[0] = &$this->RecSet; $this->FctPrm[1] = $obj->RecNum+1;
+		$obj->CurrRec = call_user_func_array($this->FctFetch,$this->FctPrm);
+		break;
+	case 5: // Custom method of object
+		$obj->CurrRec = $this->SrcId->tbsdb_fetch($this->RecSet,$obj->RecNum+1);
+		break;
+	case 7: // PostgreSQL
+		$obj->CurrRec = pg_fetch_assoc($this->RecSet); /* COMPAT#5 */
+		break;
+	case 8: // SQLite
+		$obj->CurrRec = sqlite_fetch_array($this->RecSet,SQLITE_ASSOC);
+		break;
+	case 9: // Iterator
+		if ($this->RecSet->valid()) {
+			$obj->CurrRec = $this->RecSet->current();
+			$obj->RecKey = $this->RecSet->key();
+			$this->RecSet->next();
+		} else {
+			$obj->CurrRec = false;
+		}
+		break;
+	case 10: // MySQLi
+		$obj->CurrRec = $this->RecSet->fetch_assoc();
+		if (is_null($obj->CurrRec)) $obj->CurrRec = false;
+		break;
+	case 11: // PDO
+		$obj->CurrRec = $this->RecSet->fetch(PDO::FETCH_ASSOC);
+		break;
+	case 12: // Zend_DB_Adapater
+		$obj->CurrRec = $this->RecSet->fetch(Zend_Db::FETCH_ASSOC);
+		break;
+	case 13: // SQLite3
+		$obj->CurrRec = $this->RecSet->fetchArray(SQLITE3_ASSOC);
+		break;
+	}
+
+	// Set the row count
+	if ($obj->CurrRec!==false) {
+		$obj->RecNum++;
+		if ($this->OnDataOk) {
+			if ($this->OnDataPrm) call_user_func_array($this->OnDataPrmRef,$this->OnDataArgs);
+			if ($this->OnDataPi) $this->TBS->meth_PlugIn_RunAll($this->OnDataPiRef,$this->OnDataArgs);
+		}
+		if ($this->RecSaving) $this->RecBuffer[$obj->RecKey] = $obj->CurrRec;
+	}
+
+}
+
 }
 
 // *********************************************
@@ -589,7 +650,7 @@ public $Assigned = array();
 public $ExtendedMethods = array();
 public $ErrCount = 0;
 // Undocumented (can change at any version)
-public $Version = '3.11.0';
+public $Version = '3.12.0-beta';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -2483,7 +2544,9 @@ function meth_Merge_BlockSections(&$Txt,&$LocR,&$Src,&$RecSpe) {
 	if ($LocR->HeaderFound || $LocR->FooterFound) {
 		$GrpFound = true;
 		$piOMG = false;
-		if ($LocR->FooterFound) $Src->PrevRec = (object) null;
+		if ($LocR->FooterFound) {
+            $Src->PrevSave = true; // $Src->PrevRec will be saved then
+        }
 	}
 	// Plug-ins
 	$piOMS = false;
@@ -2537,10 +2600,6 @@ function meth_Merge_BlockSections(&$Txt,&$LocR,&$Src,&$RecSpe) {
 						}
 					}
 				}
-                // Update the Previous Record info
-				$Src->PrevRec->CurrRec = $Src->CurrRec;
-				$Src->PrevRec->RecNum = $Src->RecNum;
-				$Src->PrevRec->RecKey = $Src->RecKey;
 			}
 			if ($LocR->HeaderFound) {
                 // Check if the current record breaks any header group
