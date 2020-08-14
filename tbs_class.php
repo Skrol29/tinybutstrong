@@ -456,15 +456,17 @@ public function DataFetch() {
     }
     
     if ($this->NextSave) {
-        // Fecth and save next record
+        // set current record
         if ($this->NextRecord === false) {
-            // First record
-            $this->NextRecord = (object) null;
+            $this->NextRecord = (object) null; // prepare for getting properties
             $this->_DataFetchOn($this);
         } else {
             $this->_CopyRec($this->NextRecord, $this);
         }
-        if ($this->CurrRec !== false) {
+        // set next record
+        if ($this->CurrRec === false) {
+            $this->NextRecord = (object) null; // clear properties
+        } else {
             $this->_DataFetchOn($this->NextRecord);
         }
     } else {
@@ -1347,7 +1349,7 @@ function meth_Locator_SectionAddGrp(&$LocR,$BlockName,&$BDef,$Type,$Field,$Prm) 
 		$i = ++$LocR->HeaderNbr;
 		$LocR->HeaderDef[$i] = &$BDef;
 	} else {
-        // Footer behavior
+        // Footer behavior (footer or splitter)
 		if ($LocR->FooterFound===false) {
 			$LocR->FooterFound = true;
 			$LocR->FooterNbr = 0;
@@ -2578,7 +2580,7 @@ function meth_Merge_BlockSections(&$Txt,&$LocR,&$Src,&$RecSpe) {
 				$brk = false;
 				for ($i=$LocR->FooterNbr;$i>=1;$i--) {
 					$GrpDef = &$LocR->FooterDef[$i];
-					$x = $this->meth_Merge_SectionNormal($GrpDef->FDef,$Src);
+					$x = $this->meth_Merge_SectionNormal($GrpDef->FDef,$Src); // value of the group expression for the current record
 					if ($Src->RecNum===1) {
                         // no footer break on first record
 						$GrpDef->PrevValue = $x;
@@ -2606,7 +2608,7 @@ function meth_Merge_BlockSections(&$Txt,&$LocR,&$Src,&$RecSpe) {
 				$brk = ($Src->RecNum===1); // there is always a header break on first record
 				for ($i=1;$i<=$LocR->HeaderNbr;$i++) {
 					$GrpDef = &$LocR->HeaderDef[$i];
-					$x = $this->meth_Merge_SectionNormal($GrpDef->FDef,$Src); // value of the header expression for the current record
+					$x = $this->meth_Merge_SectionNormal($GrpDef->FDef,$Src); // value of the group expression for the current record
 					if (!$brk) $brk = !($GrpDef->PrevValue===$x); // cascading breakings
 					if ($brk) {
 						$ok = true;
@@ -2661,7 +2663,7 @@ function meth_Merge_BlockSections(&$Txt,&$LocR,&$Src,&$RecSpe) {
 				$i = 1;
 				do {
 					$WhenBDef = &$LocR->WhenLst[$i];
-					$cond = $this->meth_Merge_SectionNormal($WhenBDef->WhenCond,$Src);
+					$cond = $this->meth_Merge_SectionNormal($WhenBDef->WhenCond,$Src); // conditional expression for the current record 
 					if ($this->f_Misc_CheckCondition($cond)) {
 						$x_when = $this->meth_Merge_SectionNormal($WhenBDef,$Src);
 						if ($WhenBDef->WhenBeforeNS) {$SecSrc = $x_when.$SecSrc;} else {$SecSrc = $SecSrc.$x_when;}
