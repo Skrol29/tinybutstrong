@@ -1215,6 +1215,9 @@ function meth_Locator_FindTbs(&$Txt,$Name,$Pos,$ChrSub) {
 
 }
 
+/**
+ * Note: keep the « & » if the function is called with it.
+ */
 function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
 
 	$Chk = true;
@@ -1324,20 +1327,44 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
  * @param object $LocR 
  * @param string $BlockName
  * @param object $BDef 
- * @param string $Type  Type of behavior: 'H' header, 'F' footer, 'S' splitter.
- * @param string $Field Name of the field on which the group of values is defined.
- * @param string $Prm   Parameter that induced the section.
+ * @param string $Field   Name of the field on which the group of values is defined.
+ * @param string $FromPrm Parameter that induced the section.
  */
-function meth_Locator_SectionAddGrp(&$LocR,$BlockName,&$BDef,$Type,$Field,$Prm) {
+function &meth_Locator_MakeBDefFromField(&$LocR,$BlockName,$Field,$FromPrm) {
+
+	if (strpos($Field,$this->_ChrOpen)===false) {
+        // The field is a simple colmun name
+        $src = $this->_ChrOpen.$BlockName.'.'.$Field.';tbstype='.$FromPrm.$this->_ChrClose; // tbstype is an internal parameter for catching errors
+    } else {
+        // The fields is a TBS field's expression
+        $src = $Field;
+    }
+    
+	$BDef = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,$src,array(),true);
+    
+	if ($BDef->LocNbr==0) $this->meth_Misc_Alert('Parameter '.$FromPrm,'The value \''.$Field.'\' is unvalide for this parameter.');
+
+    return $BDef;
+
+}
+
+/**
+ * Add a special section to the LocR.
+ *
+ * @param object $LocR 
+ * @param string $BlockName
+ * @param object $BDef 
+ * @param string $Type    Type of behavior: 'H' header, 'F' footer, 'S' splitter.
+ * @param string $Field   Name of the field on which the group of values is defined.
+ * @param string $FromPrm Parameter that induced the section.
+ */
+function meth_Locator_SectionAddGrp(&$LocR,$BlockName,&$BDef,$Type,$Field,$FromPrm) {
 
 	$BDef->PrevValue = false;
 	$BDef->Type = $Type; // property not used in native, but designed for plugins
 
 	// Save sub items in a structure near to Locator.
-	$Field0 = $Field;
-	if (strpos($Field,$this->_ChrOpen)===false) $Field = $this->_ChrOpen.$BlockName.'.'.$Field.';tbstype='.$Prm.$this->_ChrClose; // tbstype is an internal parameter for catching errors
-	$BDef->FDef = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,$Field,array(),true);
-	if ($BDef->FDef->LocNbr==0)	$this->meth_Misc_Alert('Parameter '.$Prm,'The value \''.$Field0.'\' is unvalide for this parameter.');
+	$BDef->FDef = &$this->meth_Locator_MakeBDefFromField($LocR,$BlockName,$Field,$FromPrm);
 
 	if ($Type==='H') {
         // Header behavior
