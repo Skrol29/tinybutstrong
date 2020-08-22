@@ -459,7 +459,7 @@ public function DataFetch() {
 		// set current record
 		if ($this->NextRec === false) {
 			// first record
-			$this->NextRec = (object) array('RecNum' => 1, 'RecKey' => null); // prepare for getting properties, RecNum needed for the first fetch
+			$this->NextRec = (object) array('RecNum' => 1); // prepare for getting properties, RecNum needed for the first fetch
 			$this->_DataFetchOn($this);
 		} else {
 			// other records
@@ -2732,10 +2732,12 @@ function meth_Merge_BlockSections(&$Txt,&$LocR,&$Src,&$RecSpe) {
 				if ($Src->RecNum===$RecSpe) {
 					$SecDef = &$LocR->Special;
 				} elseif ($LocR->BoundFound) {
+					$first = true;
 					for ($i = 0 ; $i < $LocR->BoundNb ; $i++) {
+						// all bounds must be tested in order to update next and prev values, but only the first found msut be kept
 						if ($this->meth_Merge_CheckBounds($LocR->BoundLst[$i],$Src)) {
-							$SecDef = &$LocR->BoundLst[$i];
-							$i = $LocR->BoundNb; // ends the lopp
+							if ($first) $SecDef = &$LocR->BoundLst[$i];
+							$first = false;
 						}
 					}
 				}
