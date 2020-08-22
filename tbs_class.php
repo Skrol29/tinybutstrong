@@ -457,17 +457,20 @@ public function DataFetch() {
 	
 	if ($this->NextSave) {
 		// set current record
-		if ($this->NextRecord === false) {
-			$this->NextRecord = (object) null; // prepare for getting properties
+		if ($this->NextRec === false) {
+			// first record
+			$this->NextRec = (object) array('RecNum' => 1, 'RecKey' => null); // prepare for getting properties, RecNum needed for the first fetch
 			$this->_DataFetchOn($this);
 		} else {
-			$this->_CopyRec($this->NextRecord, $this);
+			// other records
+			$this->_CopyRec($this->NextRec, $this);
 		}
 		// set next record
 		if ($this->CurrRec === false) {
-			$this->NextRecord = (object) null; // clear properties
+			// no more record
+			$this->NextRec = (object) null; // clear properties
 		} else {
-			$this->_DataFetchOn($this->NextRecord);
+			$this->_DataFetchOn($this->NextRec);
 		}
 	} else {
 		// Classic fetch
@@ -1389,42 +1392,6 @@ function meth_Locator_SectionAddGrp(&$LocR,$BlockName,&$BDef,$Type,$Field,$FromP
 
 }
 
-/**
- * Check the values of previous and next record for expression.
- *
- * @return boolean
- */
-function meth_Merge_CheckGrp($BDefExpr,$Src) {
-	
-	// Retrieve values considreing that a new record is fetched
-	// The order is important
-	if ($BDefExpr->CheckPrev) {
-	   $BDefExpr->ValPrev = $BDefExpr->ValCurr;
-	}
-	if ($BDefExpr->CheckNext) {
-		$BDefExpr->ValCurr = $BDefExpr->ValNext;
-		$BDefExpr->ValNext = $this->meth_Merge_SectionNormal($BDefExpr,$Src->NextRec);
-		$ok_next = ($BDefExpr->ValPrev === $BDefExpr->ValNext);
-	} else {
-		$BDefExpr->ValCurr = $this->meth_Merge_SectionNormal($BDefExpr,$Src);
-	}
-
-	// Check values
-	if ($BDefExpr->CheckPrev) {
-		$ok_prev = ($BDefExpr->ValPrev === $BDefExpr->ValPrev);
-	   if ($BDefExpr->CheckNext) {
-		   return $ok_prev && $ok_next;
-	   } else {
-		   return $ok_prev;
-	   }
-	} elseif ($BDefExpr->CheckNext) {
-		return $ok_next;
-	} else {
-		return false; // this state must never happen
-	}
-	
-}
-
 function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 // This function enables to merge a locator with a text and returns the position just after the replaced block
 // This position can be useful because we don't know in advance how $Value will be replaced.
@@ -2206,6 +2173,8 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 				}
 			} elseif ($BoundPrm !== false) {
 				$BDef->BoundExpr = &$this->meth_Locator_MakeBDefFromField($LocR,$BlockName,$Loc->PrmLst[$BoundPrm],$BoundPrm);
+				$BDef->ValCurr = null;
+				$BDef->ValNext = null;
 				$BDef->CheckPrev = ($BoundChk & 1); // bitwise check
 				if ($BDef->CheckPrev) {
 					$LocR->CheckPrev = true;
@@ -2655,6 +2624,8 @@ function meth_Merge_BlockSections(&$Txt,&$LocR,&$Src,&$RecSpe) {
 			$Src->PrevSave = true; // $Src->PrevRec will be saved then
 		}
 	}
+	if ($LocR->CheckPrev) $Src->PrevSave = true;
+	if ($LocR->CheckNext) $Src->NextSave = true;
 	// Plug-ins
 	$piOMS = false;
 	if ($this->_PlugIns_Ok) {
@@ -2762,7 +2733,7 @@ function meth_Merge_BlockSections(&$Txt,&$LocR,&$Src,&$RecSpe) {
 					$SecDef = &$LocR->Special;
 				} elseif ($LocR->BoundFound) {
 					for ($i = 0 ; $i < $LocR->BoundNb ; $i++) {
-						if ($this->meth_Merge_CheckGrp($LocR->BoundLst[$i]->BoundExpr,$Src)) {
+						if ($this->meth_Merge_CheckBounds($LocR->BoundLst[$i],$Src)) {
 							$SecDef = &$LocR->BoundLst[$i];
 							$i = $LocR->BoundNb; // ends the lopp
 						}
@@ -3009,6 +2980,46 @@ function meth_Merge_FieldOutside(&$Txt, &$CurrRec, $RecNum, $PosMax) {
 			$Pos = $NewEnd;
 		}
 	} while ($Loc!==false);
+}
+
+/**
+ * Check the values of previous and next record for expression.
+ *
+ * @return boolean
+ */
+function meth_Merge_CheckBounds($BDef,$Src) {
+	
+	// Retrieve values considreing that a new record is fetched
+	// The order is important
+	if ($BDef->CheckPrev) {
+	   $BDef->ValPrev = $BDef->ValCurr;
+	}
+	if ($BDef->CheckNext) {
+		$BDef->ValCurr = $BDef->ValNext;
+		if ($Src->NextRec->CurrRec === false) {
+			$diff_next = true;
+		} else {
+			$BDef->ValNext = $this->meth_Merge_SectionNormal($BDef->BoundExpr,$Src->NextRec); // merge with next record
+			$diff_next = ($BDef->ValCurr !== $BDef->ValNext);
+		}
+	} else {
+		$BDef->ValCurr = $this->meth_Merge_SectionNormal($BDef->BoundExpr,$Src); // merge with current record
+	}
+
+	// Check values
+	if ($BDef->CheckPrev) {
+		$diff_prev = ($BDef->ValCurr !== $BDef->ValPrev);
+	   if ($BDef->CheckNext) {
+		   return $diff_prev && $diff_next;
+	   } else {
+		   return $diff_prev;
+	   }
+	} elseif ($BDef->CheckNext) {
+		return $diff_next;
+	} else {
+		return false; // this state must never happen
+	}
+	
 }
 
 function meth_Merge_SectionNormal(&$BDef,&$Src) {
@@ -4520,8 +4531,8 @@ static function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagStr,$RetInnerSrc) {
 			$TagStr = substr($TagStr,$p+1);
 		}
 		// Check parentheses, relative position and single tag
- 		do {
- 			$t = trim($t);
+		do {
+			$t = trim($t);
 	 		$e = strlen($t) - 1; // pos of last char
 	 		if (($e>1) && ($t[0]==='(') && ($t[$e]===')')) {
 	 			if ($Ref===0) $Ref = $i;
@@ -4531,7 +4542,7 @@ static function f_Loc_EnlargeToTag(&$Txt,&$Loc,$TagStr,$RetInnerSrc) {
 	 			if (($e>=0) && ($t[$e]==='/')) $t = substr($t,0,$e); // for compatibilty
 	 			$e = false;
 	 		}
- 		} while ($e!==false);
+		} while ($e!==false);
 		// Check for multiples
 		$p = strpos($t, '*');
 		if ($p!==false) {
