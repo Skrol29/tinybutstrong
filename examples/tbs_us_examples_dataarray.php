@@ -21,4 +21,3 @@ $TBS->MergeBlock('blk2',$array_type2);
 $TBS->MergeBlock('blk3','array','all_array[type2]');
 $TBS->Show();
 
-?>

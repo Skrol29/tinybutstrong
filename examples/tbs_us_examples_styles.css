@@ -67,7 +67,9 @@ h1 {
 	padding-top: 0 !important;
 }
 
-
+.text-discrete {
+	color: grey;
+}
 .text-mini {
 	font-size: 10px;
 }

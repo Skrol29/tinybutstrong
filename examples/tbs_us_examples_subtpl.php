@@ -23,4 +23,3 @@ $TBS = new clsTinyButStrong;
 $TBS->LoadTemplate('tbs_us_examples_subtpl.htm');
 $TBS->Show();
 
-?>

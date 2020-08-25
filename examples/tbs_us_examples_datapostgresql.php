@@ -16,4 +16,3 @@ $TBS->MergeBlock('blk1',$cnx_id,'SELECT * FROM t_tbs_exemples');
 
 $TBS->Show();
 
-?>

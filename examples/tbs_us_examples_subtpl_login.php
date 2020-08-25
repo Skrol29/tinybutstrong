@@ -21,4 +21,3 @@ if (isset($_POST['btn_ok'])) {
 $TBS->LoadTemplate('tbs_us_examples_subtpl_login.htm');
 $TBS->Show() ;  // When calling this method in Subtemplate Mode, the main script won't end, and this merged subtemplated will be inserted into the main template.
 
-?>

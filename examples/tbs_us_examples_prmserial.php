@@ -19,4 +19,3 @@ $TBS->MergeBlock('bx',$recset);
 $TBS->MergeBlock('bz',$recset);
 $TBS->Show();
 
-?>

@@ -178,4 +178,3 @@ function tbs_Cache_DeleteAll($Dir,$Mask) {
 
 }
 
-?>

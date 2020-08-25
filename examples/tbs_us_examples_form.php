@@ -33,4 +33,3 @@ if (!isset($_POST['x_type'])) {
 
 $TBS->Show();
 
-?>

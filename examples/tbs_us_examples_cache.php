@@ -13,4 +13,3 @@ if ($TBS->PlugIn(TBS_CACHE,'testcache',10)) {
 	$TBS->Show();
 }
 	
-?>

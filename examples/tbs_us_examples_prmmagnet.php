@@ -26,4 +26,3 @@ $TBS = new clsTinyButStrong;
 $TBS->LoadTemplate('tbs_us_examples_prmmagnet.htm');
 $TBS->Show();
 
-?>

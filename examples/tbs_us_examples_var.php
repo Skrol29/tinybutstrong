@@ -14,4 +14,3 @@ $TBS = new clsTinyButStrong;
 $TBS->LoadTemplate('tbs_us_examples_var.htm');
 $TBS->Show();
 
-?>

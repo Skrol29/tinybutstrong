@@ -53,4 +53,3 @@ $TBS->PlugIn(TBS_NAVBAR,'nv','',$PageNum,$RecCnt,$PageSize);
 
 $TBS->Show();
 
-?>

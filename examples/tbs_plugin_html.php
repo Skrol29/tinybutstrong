@@ -226,4 +226,3 @@ function f_Html_IsHtml(&$Txt) {
 
 }
 
-?>

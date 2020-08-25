@@ -23,4 +23,3 @@ $TBS->MergeBlock('expl_2', 'assigned');
 
 $TBS->Show();
 
-?>

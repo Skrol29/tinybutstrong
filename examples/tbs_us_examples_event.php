@@ -26,4 +26,3 @@ function m_event_b1($BlockName,&$CurrRec,$RecNum){
   if ($CurrRec['res_score']>=300) $CurrRec['level'] = '<font color="#CCCC00"><strong>excellent</strong></font>';
 }
 
-?>

@@ -33,4 +33,3 @@ $TBS->MergeBlock('c',$columns);
 $TBS->MergeBlock('r',$data);
 $TBS->Show();
 
-?>

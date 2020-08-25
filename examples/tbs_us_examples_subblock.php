@@ -27,4 +27,3 @@ $TBS->MergeBlock('sb','array','TeamList[%p1%][matches]');
 
 $TBS->Show();
 
-?>

@@ -28,4 +28,3 @@ $TBS->MergeBlock('lst3' ,$item_lst);
 // The selection of the items is done here
 $TBS->Show();
 
-?>

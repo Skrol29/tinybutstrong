@@ -10,4 +10,3 @@ $TBS = new clsTinyButStrong;
 $TBS->LoadTemplate('tbs_us_examples_prmfrm.htm');
 $TBS->Show();
 
-?>

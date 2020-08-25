@@ -56,4 +56,3 @@ foreach ($data as $recipiant) {
 	break;
 }
 
-?>
