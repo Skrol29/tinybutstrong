@@ -5,7 +5,7 @@ $viewer = $_SERVER['SCRIPT_NAME'];
 
 // parameters of this application
 if (!isset($app_folder)) $app_folder = ''; // folder where to find the Example scripts
-if (!isset($app_html)) $app_html = false; // true if the contents must not been dipslay directly, but saved into $app_html for a parent script
+if (!isset($app_html)) $app_html = false; // true if the contents must not been displayed directly, but saved into $app_html for a parent script
 $app_echo = ($app_html===false);
 
 // sub-template
@@ -14,14 +14,30 @@ $s = (isset($_GET['s'])) ? $_GET['s'] : '';
 // example do be displayed
 $e = (isset($_GET['e'])) ? $_GET['e'] : '';
 $e_script   = $app_folder.'tbs_us_examples_'.$e.'.php';
+
+// Try for the HTML template
 $e_template = $app_folder.'tbs_us_examples_'.$e.(($s=='') ? '' : '_'.$s).'.htm';
 
-if (!file_exists($e_template)) $e_template = $app_folder.'tbs_us_examples_'.$e.(($s=='') ? '' : '_'.$s).'.txt'; // case of text template
+// If the HTML template is not found => we try the TXT template
+if (!file_exists($e_template)) {
+	$e_template = $app_folder.'tbs_us_examples_'.$e.(($s=='') ? '' : '_'.$s).'.txt';
+}
 
+// If no template is found => we display the Welcome part
 if ( ($e==='') || (!file_exists($e_script)) ) {
 	$e = '-welcome';
 	$e_script   = $app_folder.'tbs_us_examples__welcome.php';
 	$e_template = $app_folder.'tbs_us_examples__welcome.htm';
+}
+
+// Links for the front side
+if ($app_html && ($app_folder != '') ) {
+	// The parent script will change relative links to $app_folder
+	$href_script   = './' . basename($e_script);
+	$href_template = './' . basename($e_template);
+} else {
+	$href_script   = $e_script;
+	$href_template = $e_template;
 }
 
 // prepare data for retreiving the result of the merge
@@ -109,8 +125,8 @@ function f_source_create_html($contents) {
 </style>
 </head>
 <body>
-<h1>' . $title . '</h1>
 <div id="main-body"> 
+  <h1>' . $title . '</h1>
   <div id="example">
   ' . $contents['main'] . '
   </div>
