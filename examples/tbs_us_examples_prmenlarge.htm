@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TinyButStrong - Example of parameter enlarge</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="main-body">
+  <h1>Example of parameter <span class="text-prm">enlarge</span></h1>
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+  
+    <p>
+        The <span class="text-prm">enlarge</span> parameter gives a supplementary comfort for designing a Template using a visual HTML Editor.
+        It enables you to enlarge the bounds of a locator to the bounds of any tag.
+    </p>
+    
+    <h2>Example #1</h2>
+
+    <p>The TBS fields will be enlarged to the &lt;span&gt; tag.</p>
+
+    <p>
+    Time is now:
+    <span>
+        [onshow..now;frm='hh:nn:ss';enlarge=span]
+        So this text will be deleted during the merging.
+    </span>
+    .</p>
+
+    <h2>Example #2 - with an HTML comment</h2>
+
+    <p>The TBS fields will be enlarged to the HTML comment.</p>
+    
+    <p>Time is now:
+    <!--
+        [onshow..now;frm='hh:nn:ss';enlarge]
+        So this text will be deleted during the merging.
+    -->.
+    </p>
+    
+    
+  </div>
+</div>
+</body>
+</html>
