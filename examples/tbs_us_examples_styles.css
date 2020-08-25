@@ -77,7 +77,25 @@ h1 {
 .title-table {
 	background:#BBCCED;
 	font-weight: bold;
+	padding-left: 5px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
+.title-table:first-child {
+	margin-top: 0 !important;
+}
+
+.item-category {
+	font-weight: bold;
+	padding-left: 5px;
+	padding-top: 4px;
+	padding-bottom: 0px;
+}
+.item-category:first-child {
+	padding-top: 0 !important;
+}
+
+
 .text-mini {
 	font-size: 10px;
 }
