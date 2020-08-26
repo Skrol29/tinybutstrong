@@ -46,7 +46,7 @@ function f_Select() {
       </tr>
     </table>
     <form action="[onshow..script_name]" method="post" id="frm_condition">
-      <div style="text-align:center;">Select a block to display:
+      <p style="text-align:center;">Select a block to display:
         <select name="lst_block" class="normal" id="lst_block" onchange="javascript:f_Select()">
           <option value="0">&lt;select a block&gt;</option>
           <option value="1">Block 1</option>
@@ -54,7 +54,7 @@ function f_Select() {
           <option value="3">Block 3</option>
           <option value="x">[onshow.blk_id;ope=html;select]</option>
         </select>
-      </div>
+      </p>
     </form>
   </div>
 </div>
