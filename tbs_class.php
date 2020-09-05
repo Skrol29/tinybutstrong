@@ -1220,8 +1220,10 @@ function meth_Locator_FindTbs(&$Txt,$Name,$Pos,$ChrSub) {
 
 /**
  * Note: keep the « & » if the function is called with it.
+ *
+ * @return object
  */
-function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
+function meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
 
 	$Chk = true;
 	$LocLst = array();
@@ -1332,8 +1334,10 @@ function &meth_Locator_SectionNewBDef(&$LocR,$BlockName,$Txt,$PrmLst,$Cache) {
  * @param object $BDef 
  * @param string $Field   Name of the field on which the group of values is defined.
  * @param string $FromPrm Parameter that induced the section.
+ * 
+ * @return object
  */
-function &meth_Locator_MakeBDefFromField(&$LocR,$BlockName,$Field,$FromPrm) {
+function meth_Locator_MakeBDefFromField(&$LocR,$BlockName,$Field,$FromPrm) {
 
 	if (strpos($Field,$this->_ChrOpen)===false) {
 		// The field is a simple colmun name
@@ -1343,7 +1347,7 @@ function &meth_Locator_MakeBDefFromField(&$LocR,$BlockName,$Field,$FromPrm) {
 		$src = $Field;
 	}
 	
-	$BDef = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,$src,array(),true);
+	$BDef = $this->meth_Locator_SectionNewBDef($LocR,$BlockName,$src,array(),true);
 	
 	if ($BDef->LocNbr==0) $this->meth_Misc_Alert('Parameter '.$FromPrm,'The value \''.$Field.'\' is unvalide for this parameter.');
 
@@ -1367,7 +1371,7 @@ function meth_Locator_SectionAddGrp(&$LocR,$BlockName,&$BDef,$Type,$Field,$FromP
 	$BDef->Type = $Type; // property not used in native, but designed for plugins
 
 	// Save sub items in a structure near to Locator.
-	$BDef->FDef = &$this->meth_Locator_MakeBDefFromField($LocR,$BlockName,$Field,$FromPrm);
+	$BDef->FDef = $this->meth_Locator_MakeBDefFromField($LocR,$BlockName,$Field,$FromPrm);
 
 	if ($Type==='H') {
 		// Header behavior
@@ -1377,7 +1381,7 @@ function meth_Locator_SectionAddGrp(&$LocR,$BlockName,&$BDef,$Type,$Field,$FromP
 			$LocR->HeaderDef = array(); // 1 to HeaderNbr
 		}
 		$i = ++$LocR->HeaderNbr;
-		$LocR->HeaderDef[$i] = &$BDef;
+		$LocR->HeaderDef[$i] = $BDef;
 	} else {
 		// Footer behavior (footer or splitter)
 		if ($LocR->FooterFound===false) {
@@ -1387,7 +1391,7 @@ function meth_Locator_SectionAddGrp(&$LocR,$BlockName,&$BDef,$Type,$Field,$FromP
 		}
 		$BDef->AddLastGrp = ($Type==='F');
 		$i = ++$LocR->FooterNbr;
-		$LocR->FooterDef[$i] = &$BDef;
+		$LocR->FooterDef[$i] = $BDef;
 	}
 
 }
@@ -1950,7 +1954,7 @@ function meth_Locator_PartAndRename(&$CurrVal, &$PrmLst) {
 }
 
 /**
- * Retrieve the lis of all sections and their finition for a given block name.
+ * Retrieve the list of all sections and their finition for a given block name.
  *
  * @param string  $Txt
  * @param string  $BlockName
@@ -2007,7 +2011,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 					// Redefine the Header block
 					$Parent->Src = substr($Src,0,$LocR->PosBeg);
 					// Add a Footer block
-					$BDef = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,substr($Src,$LocR->PosEnd+1),$Parent->Prm,true);
+					$BDef = $this->meth_Locator_SectionNewBDef($LocR,$BlockName,substr($Src,$LocR->PosEnd+1),$Parent->Prm,true);
 					$this->meth_Locator_SectionAddGrp($LocR,$BlockName,$BDef,'F',$Parent->Fld,'parentgrp');
 				}
 				// Now go down to previous level
@@ -2056,7 +2060,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 			}
 			// Save the block and cache its tags
 			$IsParentGrp = isset($Loc->PrmLst['parentgrp']);
-			$BDef = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,$Loc->BlockSrc,$Loc->PrmLst,!$IsParentGrp);
+			$BDef = $this->meth_Locator_SectionNewBDef($LocR,$BlockName,$Loc->BlockSrc,$Loc->PrmLst,!$IsParentGrp);
 
 			// Bounds
 			$BoundPrm = false;
@@ -2070,9 +2074,9 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 
 			// Add the text in the list of blocks
 			if (isset($Loc->PrmLst['nodata'])) { // Nodata section
-				$LocR->NoData = &$BDef;
+				$LocR->NoData = $BDef;
 			} elseif (($SpePrm!==false) && isset($Loc->PrmLst[$SpePrm])) { // Special section (used for navigation bar)
-				$LocR->Special = &$BDef;
+				$LocR->Special = $BDef;
 			} elseif (isset($Loc->PrmLst['when'])) {
 				if ($LocR->WhenFound===false) {
 					$LocR->WhenFound = true;
@@ -2081,13 +2085,13 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 					$LocR->WhenLst = array();
 				}
 				$this->meth_Merge_AutoVar($Loc->PrmLst['when'],false);
-				$BDef->WhenCond = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,$Loc->PrmLst['when'],array(),true);
+				$BDef->WhenCond = $this->meth_Locator_SectionNewBDef($LocR,$BlockName,$Loc->PrmLst['when'],array(),true);
 				$BDef->WhenBeforeNS = ($LocR->SectionNbr===0); // position of the When section relativley to the Normal Section
 				$i = ++$LocR->WhenNbr;
-				$LocR->WhenLst[$i] = &$BDef;
+				$LocR->WhenLst[$i] = $BDef;
 				if (isset($Loc->PrmLst['several'])) $LocR->WhenSeveral = true;
 			} elseif (isset($Loc->PrmLst['default'])) {
-				$LocR->WhenDefault = &$BDef;
+				$LocR->WhenDefault = $BDef;
 				$LocR->WhenDefaultBeforeNS = ($LocR->SectionNbr===0);
 			} elseif (isset($Loc->PrmLst['headergrp'])) {
 				$this->meth_Locator_SectionAddGrp($LocR,$BlockName,$BDef,'H',$Loc->PrmLst['headergrp'],'headergrp');
@@ -2103,7 +2107,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 				$BDef->Beg = $LocR->PosBeg;
 				$BDef->End = $LocR->PosEnd;
 				$Pid++;
-				$ParentLst[$Pid] = &$BDef;
+				$ParentLst[$Pid] = $BDef;
 				$Txt = &$BDef->Src;
 				$Pos = $Loc->PosDefBeg + 1;
 				$LocR->BlockFound = false;
@@ -2129,17 +2133,17 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 					$SrId = 1;
 					do {
 						// Save previous subsection
-						$SrBDef = &$this->meth_Locator_SectionNewBDef($LocR,$SrName,$SrLoc->BlockSrc,$SrLoc->PrmLst,true);
+						$SrBDef = $this->meth_Locator_SectionNewBDef($LocR,$SrName,$SrLoc->BlockSrc,$SrLoc->PrmLst,true);
 						$SrBDef->SrBeg = $SrLoc->PosBeg;
 						$SrBDef->SrLen = $SrLoc->PosEnd - $SrLoc->PosBeg + 1;
 						$SrBDef->SrTxt = false;
-						$BDef->SrBDefLst[$SrId] = &$SrBDef;
+						$BDef->SrBDefLst[$SrId] = $SrBDef;
 						// Put in order
-						$BDef->SrBDefOrdered[$SrId] = &$SrBDef;
+						$BDef->SrBDefOrdered[$SrId] = $SrBDef;
 						$i = $SrId;
 						while (($i>1) && ($SrBDef->SrBeg<$BDef->SrBDefOrdered[$SrId-1]->SrBeg)) {
-							$BDef->SrBDefOrdered[$i] = &$BDef->SrBDefOrdered[$i-1];
-							$BDef->SrBDefOrdered[$i-1] = &$SrBDef;
+							$BDef->SrBDefOrdered[$i] = $BDef->SrBDefOrdered[$i-1];
+							$BDef->SrBDefOrdered[$i-1] = $SrBDef;
 							$i--;
 						}
 						// Search next subsection
@@ -2151,7 +2155,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 					$BDef->SrBDefNbr = $SrId-1;
 					$BDef->IsSerial = true;
 					$i = ++$LocR->SectionNbr;
-					$LocR->SectionLst[$i] = &$BDef;
+					$LocR->SectionLst[$i] = $BDef;
 				}
 			} elseif (isset($Loc->PrmLst['parallel'])) {
 				$BlockLst = $this->meth_Locator_FindParallel($Txt, $Loc->PosBeg, $Loc->PosEnd, $Loc->PrmLst['parallel']);
@@ -2159,9 +2163,9 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 					// Store BDefs
 					foreach ($BlockLst as $i => $Blk) {
 						if ($Blk['IsRef']) {
-							$PrBDef = &$BDef;
+							$PrBDef = $BDef;
 						} else {
-							$PrBDef = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,$Blk['Src'],array(),true);
+							$PrBDef = $this->meth_Locator_SectionNewBDef($LocR,$BlockName,$Blk['Src'],array(),true);
 						}
 						$PrBDef->PosBeg = $Blk['PosBeg'];
 						$PrBDef->PosEnd = $Blk['PosEnd'];
@@ -2172,7 +2176,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 					$LocR->PosEnd = $BlockLst[$LocR->SectionNbr-1]['PosEnd'];
 				}
 			} elseif ($BoundPrm !== false) {
-				$BDef->BoundExpr = &$this->meth_Locator_MakeBDefFromField($LocR,$BlockName,$Loc->PrmLst[$BoundPrm],$BoundPrm);
+				$BDef->BoundExpr = $this->meth_Locator_MakeBDefFromField($LocR,$BlockName,$Loc->PrmLst[$BoundPrm],$BoundPrm);
 				$BDef->ValCurr = null;
 				$BDef->ValNext = null;
 				$BDef->CheckPrev = ($BoundChk & 1); // bitwise check
@@ -2194,7 +2198,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 			} else {
 				// Normal section
 				$i = ++$LocR->SectionNbr;
-				$LocR->SectionLst[$i] = &$BDef;
+				$LocR->SectionLst[$i] = $BDef;
 			}
 
 		}
@@ -2203,7 +2207,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 
 	if ($LocR->WhenFound && ($LocR->SectionNbr===0)) {
 		// Add a blank section if When is used without a normal section
-		$BDef = &$this->meth_Locator_SectionNewBDef($LocR,$BlockName,'',array(),false);
+		$BDef = $this->meth_Locator_SectionNewBDef($LocR,$BlockName,'',array(),false);
 		$LocR->SectionNbr = 1;
 		$LocR->SectionLst[1] = &$BDef;
 	}
