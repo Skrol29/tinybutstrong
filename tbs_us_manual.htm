@@ -2787,6 +2787,14 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
         <td align="left" valign="top" class="border-sep">Indicates a parent section that is displayed each time the value of column <span class="opt-value">colname</span> changes. Unlike other sections, a <span class="opt-name">parentgrp</span> section allows normal sections inside itself. It's a way to define both a header and a footer in one section. </td>
       </tr>
       <tr>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_firstgrp" id="html_block_prm_parentgrp2"></a>firstgrp</span>=<span class="opt-value">colname</span></td>
+        <td align="left" valign="top" class="border-sep">Indicates a section which replaces the normal section each time the value of column <span class="opt-value">colname</span> is different from the previous one. See <a href="#html_block_prm_headergrp" class="opt-name">headergrp</a>. <span class="versioning">Parameter <span class="opt-name">firstgrp</span> is upported since TBS 3.12.</span></td>
+      </tr>
+      <tr>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_lastgrp" id="html_block_prm_parentgrp3"></a>lastgrp</span>=<span class="opt-value">colname</span></td>
+        <td align="left" valign="top" class="border-sep">Indicates a section which replaces the normal section each time the value of column <span class="opt-value">colname</span> is different from the next one. See <a href="#html_block_prm_headergrp" class="opt-name">headergrp</a>. <span class="versioning">Parameter <span class="opt-name">lastgrp</span> is upported since TBS 3.12.</span></td>
+      </tr>
+      <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_block_prm_serial" id="html_block_prm_serial"></a><span class="opt-name">serial</span></td>
         <td align="left" valign="top" class="border-sep">Indicates that the block is a main block which contains serial secondary blocks.<br>
           For more information, see the chapter '<a href="#html_block_serial">serial display (in columns)</a>'.</td>
@@ -4059,6 +4067,14 @@ class MyCustomClass {
       <tr id="v202_parentgrp_sum">
         <td align="left" valign="top"><a href="#html_block_prm_parentgrp" class="opt-name">parentgrp</a></td>
         <td align="left" valign="top">Indicates a parent section that is displayed when the value of a column changes.</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top"><a href="#html_block_prm_splittergrp" class="opt-name">firstgrp</a></td>
+        <td align="left" valign="top">Indicates a section that replaces the normal section when the value of a column changes.</td>
+      </tr>
+      <tr id="v202_parentgrp_sum2">
+        <td align="left" valign="top"><a href="#html_block_prm_parentgrp" class="opt-name">lastgrp</a></td>
+        <td align="left" valign="top">Indicates a section that replaces the normal section when the value of a column changes.</td>
       </tr>
       <tr>
         <td align="left" valign="top" class="opt-name"><a href="#html_block_prm_parallel" class="opt-name">parallel</a></td>
