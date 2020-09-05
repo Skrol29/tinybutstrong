@@ -1661,7 +1661,8 @@ which is the same as:
       <tr>
         <td align="left" valign="top" class="opt-name">FieldName</td>
         <td align="left" valign="top">The name of the Field.<br>
-          Warning: names that begin with <span class="opt-name">onload</span>, <span class="opt-name">onshow</span> and <span class="opt-name">var </span>are reserved for <a href="#html_field_auto">automatic fields</a>.</td>
+          The dot (.) is a special character reserved for sub-names in TBS fields. It enables you to indicate a column name (see <a href="#html_block">Blocks</a>) or  sub-values (see <a href="#php_mergefield">MergeField()</a>).<br>
+        Warning: names that begin with <span class="opt-name">onload</span>, <span class="opt-name">onshow</span> and <span class="opt-name">var </span>are reserved for <a href="#html_field_auto">automatic fields</a>.</td>
       </tr>
       <tr>
         <td align="left" valign="top" class="opt-name">param1</td>
@@ -2585,10 +2586,14 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
     <p> Merging a block with  data is done using the <a href="#php_mergeblock">MergeBlock()</a> method. When a  TBS block is merged with data,  it is repeated as many times as there are records; and the associated TBS fields are replaced by the value of the columns stored in the current record.<br>
       A TBS field associated to a block is identified by its name which should be made of the name of the block followed by the  name of the column to display and separated by a dot.</p>
     <p> Examples: </p>
-    <div class="decal"> - [<span class="opt-name">Block1</span>.<span class="opt-name">ColA</span>]   This field will display the value of column <span class="opt-name">ColA</span> when block <span class="opt-name">Block1</span> is merged. <br>
-      - [<span class="opt-name">Blokc1</span>.<span class="opt-name">ColB</span>;<span class="opt-name">frm</span>=<span class="opt-value">'dd-mm-yyyy'</span>] Another field but with a TBS parameter. </div>
+    <div class="decal">
+      - [<span class="opt-name">Block1</span>.<span class="opt-name">ColumnA</span>]   This field will display the value of column <span class="opt-name">ColumnA</span> when block <span class="opt-name">Block1</span> is merged. <br>
+      - [<span class="opt-name">Blokc1</span>.<span class="opt-name">ColumnB</span>;<span class="opt-name">frm</span>=<span class="opt-value">'dd-mm-yyyy'</span>] Another field but with a TBS parameter.
+    </div>
     <p>
-      <p class="versioning">Since TBS version 3.5.0 column names with spaces are accepted.</p>
+      The dot (.) is a special character reserved for sub-names in TBS field. It cannot be used in a column's name.</p>
+    <p class="versioning">
+      The space character ( ) is supported in column names since TBS version 3.5.0.
     </p>
     <p><em>Remark:</em> when two separated blocks have the same name, then they will be considered has two sections of the same block. All content placed between those two sections of a block  will be <strong>ignored and deleted</strong> during the merging. See <a href="#html_block_section">sections of blocks</a> to know more about sections.</p>
     <h4>Block syntaxes:</h4>
