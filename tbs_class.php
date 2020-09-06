@@ -2064,7 +2064,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 
 			// Bounds
 			$BoundPrm = false;
-			$lst = array('firstgrp'=>1, 'lastgrp'=>2, 'firstlastgrp'=>3); // 1=prev, 2=next, 3=1+2=prev+next
+			$lst = array('firstgrp'=>1, 'lastgrp'=>2, 'singlegrp'=>3); // 1=prev, 2=next, 3=1+2=prev+next
 			foreach ($lst as $prm => $chk) {
 				if (isset($Loc->PrmLst[$prm])) {
 					$BoundPrm = $prm;

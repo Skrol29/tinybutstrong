@@ -2,7 +2,7 @@
 
 == New features ==
 
-* New parameters 'firstgrp', 'lastgrp', 'firstlastgrp' : define sections of a block displayed for first or last record of a group.
+* New parameters 'firstgrp', 'lastgrp', 'singlegrp' : define sections of a block displayed for first or last record of a group.
 
 = Release 3.11.0 =
 
