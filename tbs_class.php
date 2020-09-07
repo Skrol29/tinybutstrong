@@ -2179,12 +2179,12 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 				$BDef->BoundExpr = $this->meth_Locator_MakeBDefFromField($LocR,$BlockName,$Loc->PrmLst[$BoundPrm],$BoundPrm);
 				$BDef->ValCurr = null;
 				$BDef->ValNext = null;
-				$BDef->CheckPrev = ($BoundChk & 1); // bitwise check
+				$BDef->CheckPrev = (($BoundChk & 1) != 0); // bitwise check
 				if ($BDef->CheckPrev) {
 					$LocR->CheckPrev = true;
 					$LocR->ValPrev = null;
 				}
-				$BDef->CheckNext = ($BoundChk & 2); // bitwise check
+				$BDef->CheckNext = (($BoundChk & 2) != 0); // bitwise check
 				if ($BDef->CheckNext) {
 					$LocR->CheckNext = true;
 					$LocR->ValNext = null;
@@ -2738,7 +2738,7 @@ function meth_Merge_BlockSections(&$Txt,&$LocR,&$Src,&$RecSpe) {
 				} elseif ($LocR->BoundFound) {
 					$first = true;
 					for ($i = 0 ; $i < $LocR->BoundNb ; $i++) {
-						// all bounds must be tested in order to update next and prev values, but only the first found msut be kept
+						// all bounds must be tested in order to update next and prev values, but only the first found must be kept
 						if ($this->meth_Merge_CheckBounds($LocR->BoundLst[$i],$Src)) {
 							if ($first) $SecDef = &$LocR->BoundLst[$i];
 							$first = false;
@@ -2994,15 +2994,21 @@ function meth_Merge_FieldOutside(&$Txt, &$CurrRec, $RecNum, $PosMax) {
  * @return boolean
  */
 function meth_Merge_CheckBounds($BDef,$Src) {
-	
-	// Retrieve values considreing that a new record is fetched
+		
+	// Retrieve values considering that a new record is fetched
 	// The order is important
 	if ($BDef->CheckPrev) {
 	   $BDef->ValPrev = $BDef->ValCurr;
 	}
 	if ($BDef->CheckNext) {
-		$BDef->ValCurr = $BDef->ValNext;
+		if (is_null($BDef->ValNext)) {
+			// ValNext is not set at this point for the very first record
+			$BDef->ValCurr = $this->meth_Merge_SectionNormal($BDef->BoundExpr,$Src);
+		} else {
+			$BDef->ValCurr = $BDef->ValNext;
+		}
 		if ($Src->NextRec->CurrRec === false) {
+			// No next record
 			$diff_next = true;
 		} else {
 			$BDef->ValNext = $this->meth_Merge_SectionNormal($BDef->BoundExpr,$Src->NextRec); // merge with next record
@@ -3013,18 +3019,19 @@ function meth_Merge_CheckBounds($BDef,$Src) {
 	}
 
 	// Check values
+	$result = false; // this state must never happen
 	if ($BDef->CheckPrev) {
 		$diff_prev = ($BDef->ValCurr !== $BDef->ValPrev);
 	   if ($BDef->CheckNext) {
-		   return $diff_prev && $diff_next;
+		   $result = $diff_prev && $diff_next;
 	   } else {
-		   return $diff_prev;
+		   $result = $diff_prev;
 	   }
 	} elseif ($BDef->CheckNext) {
-		return $diff_next;
-	} else {
-		return false; // this state must never happen
+		$result = $diff_next;
 	}
+	
+	return $result;
 	
 }
 
