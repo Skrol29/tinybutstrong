@@ -192,13 +192,13 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2020-05-01</td>
+        <td>2020-09-10</td>
       </tr>
     </table>
   </div>
   <div style="margin:auto; width:500px; text-align:center;">
     <h1>TinyButStrong Documentation</h1>
-    <div class="txt-tiny">version 3.11</div>
+    <div class="txt-tiny">version 3.12</div>
     <div style="margin-top:10px;">Template Engine for Pro and Beginners<br>
       for PHP 5 and 7</div>
   </div>
@@ -2787,16 +2787,20 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
         <td align="left" valign="top" class="border-sep">Indicates a parent section that is displayed each time the value of column <span class="opt-value">colname</span> changes. Unlike other sections, a <span class="opt-name">parentgrp</span> section allows normal sections inside itself. It's a way to define both a header and a footer in one section. </td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_firstgrp" id="html_block_prm_parentgrp2"></a>firstgrp</span>=<span class="opt-value">colname</span></td>
-        <td align="left" valign="top" class="border-sep">Indicates a section which replaces the normal section each time the value of column <span class="opt-value">colname</span> is different from the previous one. The syntax is the same as <a href="#html_block_prm_headergrp" class="opt-name">headergrp</a>. <span class="versioning">Parameter <span class="opt-name">firstgrp</span> is supported since TBS 3.12.</span></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_firstingrp" id="html_block_prm_parentgrp2"></a>firstingrp</span>=<span class="opt-value">colname</span></td>
+        <td align="left" valign="top" class="border-sep">Indicates a section which replaces the normal section each time the value of column <span class="opt-value">colname</span> is the first in its group. That is when the value is different from the previous one.<br>
+          You can define several<a href="#html_block_prm_firstingrp" class="opt-name"> firstingrp</a>, <a href="#html_block_prm_lastingrp" class="opt-name">lastingrp</a>, <a href="#html_block_prm_singleingrp" class="opt-name">singleingrp</a> sections but only the first relevant one will be displayed for the same record if they are several relevant.<br>
+        The syntax is the same as <a href="#html_block_prm_headergrp" class="opt-name">headergrp</a>.<br><span class="versioning">Parameter <span class="opt-name">firstingrp</span> is supported since TBS 3.12.</span></td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_lastgrp" id="html_block_prm_parentgrp3"></a>lastgrp</span>=<span class="opt-value">colname</span></td>
-        <td align="left" valign="top" class="border-sep">Indicates a section which replaces the normal section each time the value of column <span class="opt-value">colname</span> is different from the next one. The syntax is the same as <a href="#html_block_prm_headergrp" class="opt-name">headergrp</a>. <span class="versioning">Parameter <span class="opt-name">lastgrp</span> is supported since TBS 3.12.</span></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_lastingrp" id="html_block_prm_parentgrp3"></a>lastingrp</span>=<span class="opt-value">colname</span></td>
+        <td align="left" valign="top" class="border-sep">Indicates a section which replaces the normal section each time the value of column <span class="opt-value">colname</span> is the last in its group. That is when the value is different from the next one.<br>
+        The syntax is the same as <a href="#html_block_prm_headergrp" class="opt-name">headergrp</a>.<br>        <span class="versioning">Parameter <span class="opt-name">lastingrp</span> is supported since TBS 3.12.</span></td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_singlegrp" id="html_block_prm_parentgrp4"></a>singlegrp</span>=<span class="opt-value">colname</span></td>
-        <td align="left" valign="top" class="border-sep">Indicates a section which replaces the normal section each time the value of column <span class="opt-value">colname</span> is different from the previous and next one. This parameter is useful when you use both <span class="opt-name">firstgrp</span> and <span class="opt-name">lastgrp</span> and you also need to specify when happen when both cases are met. The syntax is the same as <a href="#html_block_prm_headergrp" class="opt-name">headergrp</a>. <span class="versioning">Parameter <span class="opt-name">singlegrp</span> is supported since TBS 3.12.</span></td>
+        <td align="left" valign="top" class="border-sep"><span class="opt-name"><a name="html_block_prm_singleingrp" id="html_block_prm_parentgrp4"></a>singleingrp</span>=<span class="opt-value">colname</span></td>
+        <td align="left" valign="top" class="border-sep">Indicates a section which replaces the normal section each time the value of column <span class="opt-value">colname</span> single in its group. That is when the value is different from the previous and the next one. This parameter is useful when you use both <span class="opt-name">firstingrp</span> and <span class="opt-name">lastingrp</span> and you also need to specify when happen when both cases are met.<br>
+        The syntax is the same as <a href="#html_block_prm_headergrp" class="opt-name">headergrp</a>.<br><span class="versioning">Parameter <span class="opt-name">singleingrp</span> is supported since TBS 3.12.</span></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a name="html_block_prm_serial" id="html_block_prm_serial"></a><span class="opt-name">serial</span></td>
@@ -4073,11 +4077,15 @@ class MyCustomClass {
         <td align="left" valign="top">Indicates a parent section that is displayed when the value of a column changes.</td>
       </tr>
       <tr>
-        <td align="left" valign="top"><a href="#html_block_prm_splittergrp" class="opt-name">firstgrp</a></td>
+        <td align="left" valign="top"><a href="#html_block_prm_splittergrp" class="opt-name">firstingrp</a></td>
         <td align="left" valign="top">Indicates a section that replaces the normal section when the value of a column changes.</td>
       </tr>
       <tr id="v202_parentgrp_sum2">
-        <td align="left" valign="top"><a href="#html_block_prm_parentgrp" class="opt-name">lastgrp</a></td>
+        <td align="left" valign="top"><a href="#html_block_prm_parentgrp" class="opt-name">lastingrp</a></td>
+        <td align="left" valign="top">Indicates a section that replaces the normal section when the value of a column changes.</td>
+      </tr>
+      <tr id="v202_parentgrp_sum3">
+        <td align="left" valign="top"><a href="#html_block_prm_singleingrp" class="opt-name">singleingrp</a></td>
         <td align="left" valign="top">Indicates a section that replaces the normal section when the value of a column changes.</td>
       </tr>
       <tr>

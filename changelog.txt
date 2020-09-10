@@ -2,7 +2,7 @@
 
 == New features ==
 
-* New parameters 'firstgrp', 'lastgrp', 'singlegrp' : define sections of a block displayed for first or last record of a group.
+* New parameters 'firstingrp', 'lastingrp', 'singleingrp' : define sections of a block displayed for the first, the last or the single record in a group.
 
 = Release 3.11.0 =
 

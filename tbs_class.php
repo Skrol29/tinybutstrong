@@ -2064,7 +2064,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 
 			// Bounds
 			$BoundPrm = false;
-			$lst = array('firstgrp'=>1, 'lastgrp'=>2, 'singlegrp'=>3); // 1=prev, 2=next, 3=1+2=prev+next
+			$lst = array('firstingrp'=>1, 'lastingrp'=>2, 'singleingrp'=>3); // 1=prev, 2=next, 3=1+2=prev+next
 			foreach ($lst as $prm => $chk) {
 				if (isset($Loc->PrmLst[$prm])) {
 					$BoundPrm = $prm;
@@ -2192,9 +2192,18 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 				if (!$LocR->BoundFound) {
 					$LocR->BoundFound = true;
 					$LocR->BoundLst = array();
+					$LocR->BoundNb = 0;
+					$LocR->BoundSingleNb = 0;
 				}
-				$LocR->BoundLst[] = $BDef;
-				$LocR->BoundNb = count($LocR->BoundLst);
+				if ($BoundChk == 3) {
+					// Insert the singleingrp before all other types
+					array_splice($LocR->BoundLst, $LocR->BoundSingleNb, 0, array($BDef));
+					$LocR->BoundSingleNb++;
+				} else {
+					// Insert other types at the end
+					$LocR->BoundLst[] = $BDef;
+				}
+				$LocR->BoundNb++;
 			} else {
 				// Normal section
 				$i = ++$LocR->SectionNbr;
