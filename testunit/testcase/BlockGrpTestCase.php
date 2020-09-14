@@ -170,6 +170,38 @@ class BlockGrpTestCase extends TBSUnitTestCase {
         //$this->dumpLastSource();        
         
     }
+
+	function testRelatedGrp() {
+	
+        $data = array(
+			array('cat1'=>'A', 'name'=>'n01'),
+			array('cat1'=>'A', 'name'=>'n02'),
+			array('cat1'=>'A', 'name'=>'n03'),
+			array('cat1'=>'B', 'name'=>'n04'),
+			array('cat1'=>'C', 'name'=>'n05'),
+			array('cat1'=>'C', 'name'=>'n06'),
+			array('cat1'=>'C', 'name'=>'n07'),
+		);
+		
+		$this->assertEqualMergeBlockStrings(
+              '{<p>[a.name;block=p]</p><b>[a.name;block=b;firstingrp=cat1]</b><u>[a.name;block=u;lastingrp=cat1]</u><i>[a.name;block=i;singleingrp=cat1]</i>}'
+            , array('a'=>$data)
+            , '{<b>n01</b><p>n02</p><u>n03</u><i>n04</i><b>n05</b><p>n06</p><u>n07</u>}'
+            , "related grp - order 1");
+
+		$this->assertEqualMergeBlockStrings(
+              '{<i>[a.name;block=i;singleingrp=cat1]</i><b>[a.name;block=b;firstingrp=cat1]</b><u>[a.name;block=u;lastingrp=cat1]</u><p>[a.name;block=p]</p>}'
+            , array('a'=>$data)
+            , '{<b>n01</b><p>n02</p><u>n03</u><i>n04</i><b>n05</b><p>n06</p><u>n07</u>}' // same result as previous one
+            , "related grp - order 2");
+
+		$this->assertEqualMergeBlockStrings(
+              '{<p>[a.name;block=p]</p><i>[a.name;block=i;singleingrp=cat1]</i><u>[a.name;block=u;lastingrp=cat1]</u><b>[a.name;block=b;firstingrp=cat1]</b>}'
+            , array('a'=>$data)
+            , '{<b>n01</b><p>n02</p><u>n03</u><i>n04</i><b>n05</b><p>n06</p><u>n07</u>}' // same result as previous one
+            , "related grp - order 3");
+        
+    }
 	
 }
 
