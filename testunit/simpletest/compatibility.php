@@ -19,7 +19,7 @@ class SimpleTestCompatibility {
      *    @access public
      *    @static
      */
-    function copy($object) {
+    static function copy($object) {
         if (version_compare(phpversion(), '5') >= 0) {
             eval('$copy = clone $object;');
             return $copy;
@@ -37,9 +37,9 @@ class SimpleTestCompatibility {
      *    @access public
      *    @static
      */
-    function isIdentical($first, $second) {
+    public static function isIdentical($first, $second) {
         if (version_compare(phpversion(), '5') >= 0) {
-            return SimpleTestCompatibility::_isIdenticalType($first, $second);
+            return self::_isIdenticalType($first, $second);
         }
         if ($first != $second) {
             return false;
@@ -55,7 +55,7 @@ class SimpleTestCompatibility {
      *    @access private
      *    @static
      */
-    function _isIdenticalType($first, $second) {
+    private static function _isIdenticalType($first, $second) {
         if (gettype($first) != gettype($second)) {
             return false;
         }
@@ -63,12 +63,12 @@ class SimpleTestCompatibility {
             if (get_class($first) != get_class($second)) {
                 return false;
             }
-            return SimpleTestCompatibility::_isArrayOfIdenticalTypes(
+            return self::_isArrayOfIdenticalTypes(
                     get_object_vars($first),
                     get_object_vars($second));
         }
         if (is_array($first) && is_array($second)) {
-            return SimpleTestCompatibility::_isArrayOfIdenticalTypes($first, $second);
+            return self::_isArrayOfIdenticalTypes($first, $second);
         }
         if ($first !== $second) {
             return false;
@@ -84,12 +84,12 @@ class SimpleTestCompatibility {
      *    @access private
      *    @static
      */
-    function _isArrayOfIdenticalTypes($first, $second) {
+    private static function _isArrayOfIdenticalTypes($first, $second) {
         if (array_keys($first) != array_keys($second)) {
             return false;
         }
         foreach (array_keys($first) as $key) {
-            $is_identical = SimpleTestCompatibility::_isIdenticalType(
+            $is_identical = self::_isIdenticalType(
                     $first[$key],
                     $second[$key]);
             if (! $is_identical) {
@@ -107,7 +107,7 @@ class SimpleTestCompatibility {
      *    @access public
      *    @static
      */
-    function isReference(&$first, &$second) {
+    public static function isReference(&$first, &$second) {
         if (version_compare(phpversion(), '5', '>=') && is_object($first)) {
             return ($first === $second);
         }
@@ -160,7 +160,7 @@ class SimpleTestCompatibility {
      *    @access public
      *    @static
      */
-    function setTimeout($handle, $timeout) {
+    public static function setTimeout($handle, $timeout) {
         if (function_exists('stream_set_timeout')) {
             stream_set_timeout($handle, $timeout, 0);
         } elseif (function_exists('socket_set_timeout')) {
@@ -170,4 +170,3 @@ class SimpleTestCompatibility {
         }
     }
 }
-?>

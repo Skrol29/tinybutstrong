@@ -156,7 +156,23 @@ class BlockTestCase extends TBSUnitTestCase {
 		
 	}	
 
+	function testMergeBlockResult() {
+	
+		$blocks = array(
+			'a' => array(
+				array('title' => "AAA", 'id'=>21),
+				array('title' => "BBB", 'id'=>22),
+				array('title' => "CCC", 'id'=>23),
+			),
+		);
 
+		$this->assertEqualMergeBlockResult("<p>[a.id;block=p]</p>", $blocks, 3, "test bloc standard.");
+
+		$this->assertEqualMergeBlockResult("<p>[a.id]</p>", $blocks, 1, "test champ simple.");
+		
+		//$this->assertEqualMergeBlockResult("<p>[xxx.id]</p>", $blocks, 2, "test bloc absent.");
+		
+	}
 	
 }
 
