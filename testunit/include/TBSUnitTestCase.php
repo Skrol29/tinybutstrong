@@ -91,6 +91,24 @@ class TBSUnitTestCase extends UnitTestCase {
 	}
 
 	/**
+	 * Returns directory of HTML files to compare.
+	 */
+	function getTemplateDir() {
+		return dirname(dirname(__FILE__)).'/template/';
+	}
+	
+	/**
+	 * Test TBS merge result with expected result.
+	 * @param string $expected       expected merge result
+	 * @param string $message        message to display (optional)
+	 * @return boolean               True on pass
+	 */
+	function assertEqualMergeString($expected, $message='%s') {
+        $result = $this->getTBSRender();        
+		return $this->assertEqual($result, $expected, $message);
+	}
+
+	/**
 	 * Test TBS class with one function.
 	 * @param string $source         source of template
 	 * @param array $vars            associative array of name/value to pass to MergeField
@@ -106,17 +124,6 @@ class TBSUnitTestCase extends UnitTestCase {
 			}
 		}
 		return $this->assertEqualMergeString($result, $message);
-	}
-
-	/**
-	 * Test TBS merge result with expected result.
-	 * @param string $expected       expected merge result
-	 * @param string $message        message to display (optional)
-	 * @return boolean               True on pass
-	 */
-	function assertEqualMergeString($expected, $message='%s') {
-        $result = $this->getTBSRender();        
-		return $this->assertEqual($result, $expected, $message);
 	}
 
 	/**
@@ -146,7 +153,7 @@ class TBSUnitTestCase extends UnitTestCase {
 	 * @param string $message        message to display (optional)
 	 * @return boolean               True on pass
 	 */
-	function assertEqualMergeBlockStrings($source, $vars, $result, $message='%s') {
+	function assertEqualMergeBlockString($source, $vars, $result, $message='%s') {
 		$this->createTBSInstance($source);
 		if (is_array($vars)) {
 			foreach ($vars as $name => $value) {
@@ -213,13 +220,6 @@ class TBSUnitTestCase extends UnitTestCase {
 		}
 		$this->getTBSRender();
 		return $this->assertTrue($this->tbs->ErrCount > 0, $message);
-	}
-	
-	/**
-	 * Returns directory of HTML files to compare.
-	 */
-	function getTemplateDir() {
-		return dirname(dirname(__FILE__)).'/template/';
 	}
 
 	/**
