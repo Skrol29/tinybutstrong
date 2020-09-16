@@ -588,8 +588,9 @@ include_once(<span class="opt-value">'tbs_class.php'</span>);
   </div>
   <h3><a name="php_mergeblock" id="php_mergeblock"></a>method MergeBlock():</h3>
   <div class="norm">
-    <p>Merges one or several <a href="#html_block">TBS blocks</a> with records coming from a data source.
-      By default, this method returns the number of merged records (more exactly, it is the number of the last record), but it can also return the full merged record set (see argument <span class="opt-name">BlockName</span>). </p>
+    <p>Merges one or several <a href="#html_block">TBS blocks</a> with records coming from a data source.</p>
+    <p>By default, this method returns the number of merged records (more exactly, it is the number of the last record), but it can also return the full merged record set (see argument <span class="opt-name">BlockName</span>).</p>
+    <p><span class="versioning">Versioning: since TBS version 3.12.0, MergeBlock() return false if no block and no field have been merged. Before that it returned 0.</span></p>
     <p>TinyButStrong supports several data source types in native:</p>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
@@ -602,7 +603,7 @@ include_once(<span class="opt-value">'tbs_class.php'</span>);
       </tr>
     </table>
     <p> You can also add a new one: '<a href="#plugins_db">database plug-ins</a>'.</p>
-    <p> Syntax: <span class="txt-code"><span class="opt-type">int</span><span class="opt-name"></span> <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-type">string</span><span class="opt-name"> BlockName</span>, <span class="opt-type">mixed</span> <span class="opt-name">Source<span style="color:#333333"> [</span></span>, <span class="opt-type">string</span><span class="opt-name"> Query <span class="opt-value">= ''</span> <span style="color:#333333">[, <span class="opt-type">mixed</span> QryPrms = false]]</span></span>)</span> </p>
+    <p> Syntax: <span class="txt-code"><span class="opt-type">mixed</span><span class="opt-name"></span> <span class="opt-name">$TBS</span>-&gt;MergeBlock(<span class="opt-type">string</span><span class="opt-name"> BlockName</span>, <span class="opt-type">mixed</span> <span class="opt-name">Source<span style="color:#333333"> [</span></span>, <span class="opt-type">string</span><span class="opt-name"> Query <span class="opt-value">= ''</span> <span style="color:#333333">[, <span class="opt-type">mixed</span> QryPrms = false]]</span></span>)</span> </p>
     <table border="0" cellpadding="5" cellspacing="0">
       <tr>
         <th>Argument</th>
@@ -611,8 +612,9 @@ include_once(<span class="opt-value">'tbs_class.php'</span>);
       <tr>
         <td align="left" valign="top" class="opt-name">BlockName</td>
         <td align="left" valign="top">Indicates the name of the TBS <a href="#html_block">block</a> to merge.<br>
-          You can merge several blocks with the same data by indicating their names separated by commas. If you add <span class="opt-value"> '*'</span> as a block name, then the method will return the full merged record set as a PHP array, instead of the number of records.
-          <div class="versioning">Versioning: the keyword  '*' is supported since TBS version 3.0.</div></td>
+You can merge several blocks with the same data by indicating their names separated by commas.<br>
+If you add <span class="opt-value"> '*'</span> as a block name, then the method will return the full merged record set as a PHP array, instead of the number of records.
+        <div class="versioning">Versioning: the keyword  '*' is supported since TBS version 3.0.</div></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="opt-name">Source</td>

@@ -4,6 +4,10 @@
 
 * New parameters 'firstingrp', 'lastingrp', 'singleingrp' : define sections of a block displayed for the first, the last or the single record in a group.
 
+== Enhancements ==
+
+* MergeBlock() return false instead of 0 when no block and no field have been merged.
+
 = Release 3.11.0 =
 
 == New features ==

@@ -2467,6 +2467,7 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$Qr
 	$NbrRecTot = 0;
 	$QueryZ = &$Query;
 	$ReturnData = false;
+	$Nothing = true;
 
 	while ($BlockId<$BlockNbr) {
 
@@ -2483,6 +2484,8 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$Qr
 		$LocR = $this->meth_Locator_FindBlockLst($Txt,$this->_CurrBlock,0,$SpePrm);
 
 		if ($LocR->BlockFound) {
+
+			$Nothing = false;
 
 			if ($LocR->Special!==false) $RecSpe = $SpeRecNum;
 			// OnData
@@ -2571,7 +2574,10 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$Qr
 			$NbrRecTot += $Src->RecNum;
 			$BlockId++;
 		}
-		if ($LocR->FieldOutside) $this->meth_Merge_FieldOutside($Txt,$Src->CurrRec,$Src->RecNum,$LocR->FOStop);
+		if ($LocR->FieldOutside) {
+			$Nothing = false;
+			$this->meth_Merge_FieldOutside($Txt,$Src->CurrRec,$Src->RecNum,$LocR->FOStop);
+		}
 
 	}
 
@@ -2582,7 +2588,7 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$Qr
 		return $Src->RecSet;
 	} else {
 		unset($Src);
-		return $NbrRecTot;
+		return ($Nothing) ? false : $NbrRecTot;
 	}
 
 }
