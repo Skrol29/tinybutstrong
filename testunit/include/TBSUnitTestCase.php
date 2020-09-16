@@ -1,6 +1,6 @@
 <?php
 
-// override unit test case class to simplify tinyButStrong test cases
+// override unit test case  class (unit_tester.php) to simplify tinyButStrong test cases
 class TBSUnitTestCase extends UnitTestCase {
 
 	/**
@@ -148,7 +148,7 @@ class TBSUnitTestCase extends UnitTestCase {
 	/**
 	 * Test TBS class with one function. Work only withe 'clear' and array data.
 	 * @param string $source         source of template
-	 * @param array $vars            associative array of name/value to pass to MergeBlock
+	 * @param array  $vars           associative array of name/value to pass to MergeBlock
 	 * @param string $result         merge result to compare
 	 * @param string $message        message to display (optional)
 	 * @return boolean               True on pass
@@ -166,7 +166,7 @@ class TBSUnitTestCase extends UnitTestCase {
 	/**
 	 * Test TBS class errors with one function.
 	 * @param string $source         source of template
-	 * @param array $vars            associative array of name/value to pass to MergeBlock
+	 * @param array  $vars           associative array of name/value to pass to MergeBlock
 	 * @param string $message        message to display (optional)
 	 * @return boolean               True on pass
 	 */
@@ -183,9 +183,27 @@ class TBSUnitTestCase extends UnitTestCase {
 	}
 
 	/**
+	 * Test TBS class with one function. Work only withe 'clear' and array data.
+	 * @param string $source         source of template
+	 * @param array  $vars           associative array of name/value to pass to MergeBlock
+	 * @param string $result         merge result to compare
+	 * @param string $message        message to display (optional)
+	 * @return boolean               True on pass
+	 */
+	function assertEqualMergeBlockResult($source, $vars, $result, $message='%s') {
+		$this->createTBSInstance($source);
+		if (is_array($vars)) {
+			foreach ($vars as $name => $value) {
+				$res = $this->tbs->MergeBlock($name, $value);
+			}
+		}
+		return $this->assertIdentical($result, $res , $message);
+	}
+	
+	/**
 	 * Test TBS class with one function. Use 'num' parameter as second MergeBlock parameter.
 	 * @param string $source         source of template
-	 * @param array $vars            associative array of name/value to pass to MergeBlock
+	 * @param array  $vars           associative array of name/value to pass to MergeBlock
 	 * @param string $result         merge result to compare
 	 * @param string $message        message to display (optional)
 	 * @return boolean               True on pass
@@ -243,7 +261,7 @@ class TBSUnitTestCase extends UnitTestCase {
 	/**
 	 * Test TBS class with one function.
 	 * @param string $sourceFilename fine name of template source
-	 * @param array $vars            associative array of name/value to pass to MergeBlock
+	 * @param array  $vars           associative array of name/value to pass to MergeBlock
 	 * @param string $resultFilename file name of merge result to compare
 	 * @param string $message        message to display (optional)
 	 * @return boolean               True on pass

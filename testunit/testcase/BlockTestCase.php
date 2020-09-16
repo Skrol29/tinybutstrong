@@ -116,7 +116,7 @@ class BlockTestCase extends TBSUnitTestCase {
 			),
 		);
 
-		if ( $this->atLeastTBSVersion('3.10.0-beta') ) {
+		if ( $this->atLeastTBSVersion('3.10.0') ) {
 			
 			// With NotBounds
 			$this->assertEqualMergeBlockString("<p><b>[a.title;block=!b]</b></p>", $blocks, "<p><b>AAABBBCCC</b></p>", "test block=!b");
@@ -149,7 +149,7 @@ class BlockTestCase extends TBSUnitTestCase {
 		);
 
 		if ( $this->atLeastTBSVersion('3.10.0') ) {
-			
+
 			$this->assertEqualMergeBlockString("<p><b>[a.title;block=2*b]</b><b>more</b></p>", $blocks, "<p><b>AAA</b><b>more</b><b>BBB</b><b>more</b><b>CCC</b><b>more</b></p>", "test block=2*b");
 			
 		}
@@ -170,8 +170,11 @@ class BlockTestCase extends TBSUnitTestCase {
 
 		$this->assertEqualMergeBlockResult("<p>[a.id]</p>", $blocks, 1, "test champ simple.");
 		
-		//$this->assertEqualMergeBlockResult("<p>[xxx.id]</p>", $blocks, 2, "test bloc absent.");
-		
+		if ( $this->atLeastTBSVersion('3.12.0-beta') ) { // valable aussi si version = '3.12.0'
+			$this->assertEqualMergeBlockResult("<p>[xxx.id]</p>", $blocks, false, "test bloc absent (à partir de TBS 3.12).");
+		} else {
+			$this->assertEqualMergeBlockResult("<p>[xxx.id]</p>", $blocks, 0, "test bloc absent.");
+		}
 	}
 	
 }
