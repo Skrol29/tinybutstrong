@@ -1459,20 +1459,22 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 			if (!$this->meth_Misc_UserFctCheck($Loc->OnFrmInfo,'f',$ErrMsg,$ErrMsg,true)) {
 				unset($Loc->PrmLst['onformat']);
 				if (!isset($Loc->PrmLst['noerr'])) $this->meth_Misc_Alert($Loc,'(parameter onformat) '.$ErrMsg);
-				$Loc->OnFrmInfo = 'pi'; // Execute the function pi() just to avoid extra error messages
+				$Loc->OnFrmInfo = false; 
 			}
 		} else {
 			$Loc->OnFrmArg[3] = &$this; // bugs.php.net/51174
 		}
-		$Loc->OnFrmArg[1] = &$CurrVal;
-		if (isset($Loc->PrmLst['subtpl'])) {
-			$this->meth_Misc_ChangeMode(true,$Loc,$CurrVal);
-			call_user_func_array($Loc->OnFrmInfo,$Loc->OnFrmArg);
-			$this->meth_Misc_ChangeMode(false,$Loc,$CurrVal);
-			$Loc->ConvProtect = false;
-			$Loc->ConvStr = false;
-		} else {
-			call_user_func_array($Loc->OnFrmInfo,$Loc->OnFrmArg);
+		if ($Loc->OnFrmInfo !== false) {
+			$Loc->OnFrmArg[1] = &$CurrVal;
+			if (isset($Loc->PrmLst['subtpl'])) {
+				$this->meth_Misc_ChangeMode(true,$Loc,$CurrVal);
+				call_user_func_array($Loc->OnFrmInfo,$Loc->OnFrmArg);
+				$this->meth_Misc_ChangeMode(false,$Loc,$CurrVal);
+				$Loc->ConvProtect = false;
+				$Loc->ConvStr = false;
+			} else {
+				call_user_func_array($Loc->OnFrmInfo,$Loc->OnFrmArg);
+			}
 		}
 	}
 
