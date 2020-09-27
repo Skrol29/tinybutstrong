@@ -3518,25 +3518,11 @@ $TBS-&gt;MergeBlock('<span class="opt-value">blk</span>', '<span class="opt-valu
       [onshow] tags will be merged on the Show() method because they became part of the main template.</p>
     <p> The subtemplate can contain any TBS fields, including [var] fields and blocks to be merged. If you intend to merge data with a block defined into a subtemplate, then it's suggested to use parameter <span class="opt-name">file</span> in  an [onload] field in order to ensure that the subtemplate is inserted before you call MergeBlock(). </p>
     <p> You can create a subtemplate in an independent XML/HTML/Text file, and ask TBS to include in the main template only the <span class="opt-html">&lt;body&gt;</span> part (or another part). This can be done by adding parameter <a href="#html_field_prm_getpart" class="opt-name">getpart</a> to parameter <span class="opt-name">file</span> in the TBS field of the main template. This technique enables you to work <span class="contextual" title="What You See Is What You Get">WYSIWYG</span> with your subtemplates.</p>
-    <h4>Insertion driven with Php code using parameter <span class="opt-name">subtpl</span>:</h4>
+    <h4>Insertion driven with Php code using parameter <span class="opt-name">subtpl</span>:    </h4>
     <p>Parameter <span class="opt-name">subtpl</span> is useful to manage subtemplate insertion with Php code. Parameter <span class="opt-name">subtpl</span> is active  only when used with a parameter<span class="opt-name"> script</span> or <span class="opt-name">onformat.</span> It turns the current TBS instance in  Subtemplate mode during the script or function execution and can act on a new template without deteriorating the main template. </p>
-    <p> The Subtemplate mode presents the following characteristics: </p>
-    <table width="100%" border="0" cellpadding="2" cellspacing="0" >
-      <tr>
-        <td valign="top">*</td>
-        <td>Php outputs are displayed at the field's place instead of being immediately sent to the client. 
-          For example, using the Php command echo()  will insert a text in the main template instead of be directly output it. Using the Show() method will also insert the result of the sub-merge into the main template. </td>
-      </tr>
-      <tr>
-        <td valign="top">&nbsp;</td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <td width="10" valign="top">*</td>
-        <td>A reference to the TBS instance is provided by  local variable <span class="opt-name">$this</span> or <span class="opt-name">$TBS</span>, whether you use parameter <span class="opt-name">script</span> or <span class="opt-name">onformat</span>. This variable be used for new submerges without deteriorating the main template. The Show() method won't stop any script execution during the Subtemplate mode like it does by default in normal mode.</td>
-      </tr>
-    </table>
-    <p>When the script or the function ends, the TBS instance returns in normal mode with the main TBS template.</p>
+<p> In the Subtemplate mode, a reference to the TBS instance is provided by  local variable <span class="opt-name">$this</span> or <span class="opt-name">$TBS</span>, whether you use parameter <span class="opt-name">script</span> or <span class="opt-name">onformat</span>. This variable be used for new submerges without deteriorating the main template. The Show() method won't stop any script execution during the Subtemplate mode like it does by default in normal mode.</p>
+<p>When the script or the function ends, the TBS instance returns in normal mode with the main TBS template.</p>
+    <p class="versioning">Versioning: since TBS version 3.8.3, the PHP direct outputs (such as those done with the command echo) are no longer diverted from the subtemplate to the main template. </p>
     <p> Example <span class="txt-small">with parameter <span class="opt-name">script</span>:</span></p>
     <div class="decal">
       <table width="100%" border="0" cellpadding="4" cellspacing="0" >
@@ -3545,13 +3531,16 @@ $TBS-&gt;MergeBlock('<span class="opt-value">blk</span>', '<span class="opt-valu
           <td><pre>[<span class="opt-name">onload</span>.file;<span class="opt-name">script</span>=<span class="opt-value">specialbox.php</span>;<span class="opt-name">subtpl</span>]</pre></td>
         </tr>
         <tr>
-          <th>PHP script:</th>
+          <th><p>PHP script:<br>
+          </p></th>
           <td><pre class="txt-code"><span class="opt-html">&lt;?php</span>
-  echo(<span class="opt-value">'* Here include a subtemplate *'</span>);
-  <span class="opt-name">$this</span>-&gt;LoadTemplate(<span class="opt-name">$CurrVal</span>);
-  <span class="opt-name">$this</span>-&gt;MergeBlock(<span class="opt-value">'blk1'</span>,<span class="opt-name">$GLOBALS</span>[<span class="opt-value">'conn_id'</span>],<span class="opt-value">'SELECT * FROM table1'</span>);
-  <span class="opt-name">$this</span>-&gt;Show(); 
-<span class="opt-html">?&gt;</span></pre></td>
+
+<span class="opt-html">// script specialbox.php</span>
+
+<span class="opt-name">$this</span>-&gt;LoadTemplate(<span class="opt-name">$CurrVal</span>);
+<span class="opt-name">$this</span>-&gt;MergeBlock(<span class="opt-value">'blk1'</span>,<span class="opt-name">$GLOBALS</span>[<span class="opt-value">'conn_id'</span>],<span class="opt-value">'SELECT * FROM table1'</span>);
+<span class="opt-name">$this</span>-&gt;Show(); 
+<span class="opt-html"></span></pre></td>
         </tr>
         <tr>
           <th>Remarks:</th>

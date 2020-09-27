@@ -669,7 +669,7 @@ public $OnLoad = true;
 public $OnShow = true;
 public $IncludePath = array();
 public $TplStore = array();
-public $OldSubTpl = false;
+public $OldSubTpl = false; // turn to true to have compatibility with the old way to perform subtemplates, that is get output buffuring
 // Private
 public $_ErrMsgName = '';
 public $_LastFile = '';
