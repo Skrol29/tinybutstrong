@@ -4,7 +4,7 @@
  * TinyButStrong - Template Engine for Pro and Beginners
  *
  * @version 3.12.0-beta for PHP 5 and 7
- * @date    2019-02-10
+ * @date    2020-09-27
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
  * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
@@ -669,7 +669,7 @@ public $OnLoad = true;
 public $OnShow = true;
 public $IncludePath = array();
 public $TplStore = array();
-public $OldSubTpl = false;
+public $OldSubTpl = false; // turn to true to have compatibility with the old way to perform subtemplates, that is get output buffuring
 // Private
 public $_ErrMsgName = '';
 public $_LastFile = '';
@@ -1396,9 +1396,19 @@ function meth_Locator_SectionAddGrp(&$LocR,$BlockName,&$BDef,$Type,$Field,$FromP
 
 }
 
+/**
+ * Merge a locator with a text.
+ *
+ * @param string $Txt   The source string to modify.
+ * @param object $Loc   The locator of the field to replace.
+ * @param mixed  $Value The value to merge with.
+ * @param integer|false $SubStart The offset of subname to considere.
+ *
+ * @return integer The position just after the replaced field. Or the position of the start if the replace is canceled.
+ *                 This position can be useful because we don't know in advance how $Value will be replaced.
+ *                 $Loc->PosNext is also set to the next search position when embedded fields are allowed.
+ */
 function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
-// This function enables to merge a locator with a text and returns the position just after the replaced block
-// This position can be useful because we don't know in advance how $Value will be replaced.
 
 	// Found the value if there is a subname
 	if (($SubStart!==false) && $Loc->SubOk) {
@@ -1561,7 +1571,10 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 				$Loc->PrmLst['ope'] = $Loc->OpePrm[$i]; // for compatibility
 				$OpeArg = &$Loc->OpeArg[$i];
 				$OpeArg[1] = &$CurrVal; $OpeArg[3] = &$Txt;
-				if (!$this->meth_PlugIn_RunAll($this->_piOnOperation,$OpeArg)) return $Loc->PosBeg;
+				if (!$this->meth_PlugIn_RunAll($this->_piOnOperation,$OpeArg)) {
+					$Loc->PosNext = $Loc->PosBeg + 1; // +1 in order to avoid infinit loop
+					return $Loc->PosNext;
+				}
 				break;
 			case  1:
 				if ($Loc->ConvMode===-1) {
@@ -1810,6 +1823,8 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 	}
 
 	$Txt = substr_replace($Txt,$CurrVal,$Loc->PosBeg,$Loc->PosEnd-$Loc->PosBeg+1);
+	
+	$Loc->PosNext = $NewEnd;
 	return $NewEnd; // Return the new end position of the field
 
 }
@@ -2170,7 +2185,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 						$PrBDef->PosBeg = $Blk['PosBeg'];
 						$PrBDef->PosEnd = $Blk['PosEnd'];
 						$i = ++$LocR->SectionNbr;
-						$LocR->SectionLst[$i] = &$PrBDef;
+						$LocR->SectionLst[$i] = $PrBDef;
 					}
 					$LocR->PosBeg = $BlockLst[0]['PosBeg'];
 					$LocR->PosEnd = $BlockLst[$LocR->SectionNbr-1]['PosEnd'];
@@ -2467,6 +2482,7 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$Qr
 	$NbrRecTot = 0;
 	$QueryZ = &$Query;
 	$ReturnData = false;
+	$Nothing = true;
 
 	while ($BlockId<$BlockNbr) {
 
@@ -2483,6 +2499,8 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$Qr
 		$LocR = $this->meth_Locator_FindBlockLst($Txt,$this->_CurrBlock,0,$SpePrm);
 
 		if ($LocR->BlockFound) {
+
+			$Nothing = false;
 
 			if ($LocR->Special!==false) $RecSpe = $SpeRecNum;
 			// OnData
@@ -2571,7 +2589,10 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$Qr
 			$NbrRecTot += $Src->RecNum;
 			$BlockId++;
 		}
-		if ($LocR->FieldOutside) $this->meth_Merge_FieldOutside($Txt,$Src->CurrRec,$Src->RecNum,$LocR->FOStop);
+		if ($LocR->FieldOutside) {
+			$Nothing = false;
+			$this->meth_Merge_FieldOutside($Txt,$Src->CurrRec,$Src->RecNum,$LocR->FOStop);
+		}
 
 	}
 
@@ -2582,7 +2603,7 @@ function meth_Merge_Block(&$Txt,$BlockLst,&$SrcId,&$Query,$SpePrm,$SpeRecNum,$Qr
 		return $Src->RecSet;
 	} else {
 		unset($Src);
-		return $NbrRecTot;
+		return ($Nothing) ? false : $NbrRecTot;
 	}
 
 }
@@ -3177,8 +3198,10 @@ function meth_Merge_SectionSerial(&$BDef,&$SrId,&$LocR) {
 
 }
 
+/**
+ * Merge [onload] or [onshow] fields and blocks
+ */
 function meth_Merge_AutoOn(&$Txt,$Name,$TplVar,$MergeVar) {
-// Merge [onload] or [onshow] fields and blocks
 
 	$GrpDisplayed = array();
 	$GrpExclusive = array();
@@ -3253,15 +3276,16 @@ function meth_Merge_AutoOn(&$Txt,$Name,$TplVar,$MergeVar) {
 					} else {
 						$Txt = substr_replace($Txt,'',$LocA->PosBeg,$LocA->PosEnd-$LocA->PosBeg+1);
 					}
+					$Pos = $LocA->PosBeg;
 				} else {
 					// Merge the block as if it was a field
 					$x = '';
 					$this->meth_Locator_Replace($Txt,$LocA,$x,false);
+					$Pos = $LocA->PosNext;
 				}
-				$Pos = $LocA->PosBeg;
 			}
 
-		} else { // Field (has no subname at this point)
+		} else { // Field (the Loc has no subname at this point)
 
 			// Check for Template Var
 			if ($TplVar) {
@@ -3282,8 +3306,8 @@ function meth_Merge_AutoOn(&$Txt,$Name,$TplVar,$MergeVar) {
 			}
 
 			$x = '';
-			$Pos = $this->meth_Locator_Replace($Txt,$LocA,$x,false);
-			$Pos = $LocA->PosBeg;
+			$this->meth_Locator_Replace($Txt,$LocA,$x,false);
+			$Pos = $LocA->PosNext; // continue at the start so embedded fields can be merged
 
 		}
 

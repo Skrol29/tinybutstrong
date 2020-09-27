@@ -2185,7 +2185,7 @@ function meth_Locator_FindBlockLst(&$Txt,$BlockName,$Pos,$SpePrm) {
 						$PrBDef->PosBeg = $Blk['PosBeg'];
 						$PrBDef->PosEnd = $Blk['PosEnd'];
 						$i = ++$LocR->SectionNbr;
-						$LocR->SectionLst[$i] = &$PrBDef;
+						$LocR->SectionLst[$i] = $PrBDef;
 					}
 					$LocR->PosBeg = $BlockLst[0]['PosBeg'];
 					$LocR->PosEnd = $BlockLst[$LocR->SectionNbr-1]['PosEnd'];
