@@ -29,7 +29,7 @@
          *    @param $label        Test name to display.
          *    @public
          */
-        function PHPUnit_TestCase($label = false) {
+        function __construct($label = false) {
             $this->SimpleTestCase($label);
             $this->_loosely_typed = false;
         }

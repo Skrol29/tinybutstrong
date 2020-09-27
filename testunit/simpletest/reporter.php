@@ -20,7 +20,11 @@ require_once(dirname(__FILE__) . '/scorer.php');
  */
 class HtmlReporter extends SimpleReporter {
     var $_character_set;
-
+	
+    function __construct($character_set = 'ISO-8859-1') {
+        $this->HtmlReporter($character_set);
+    }
+	
     /**
      *    Does nothing yet. The first output will
      *    be sent on the first test start. For use
@@ -199,7 +203,7 @@ class TextReporter extends SimpleReporter {
      *    be sent on the first test start.
      *    @access public
      */
-    function TextReporter() {
+    function __construct() {
         $this->SimpleReporter();
     }
 
@@ -323,7 +327,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      *    @param string $just_this_case    Only this case or group will run.
      *    @param string $just_this_test    Only this test method will run.
      */
-    function SelectiveReporter(&$reporter, $just_this_case = false, $just_this_test = false) {
+    function __construct(&$reporter, $just_this_case = false, $just_this_test = false) {
         if (isset($just_this_case) && $just_this_case) {
             $this->_just_this_case = strtolower($just_this_case);
             $this->_off();

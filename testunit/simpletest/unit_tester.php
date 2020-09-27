@@ -22,6 +22,10 @@ require_once(dirname(__FILE__) . '/dumper.php');
  */
 class UnitTestCase extends SimpleTestCase {
 
+    function __construct($label = false) {
+		$this->UnitTestCase($label);
+    }
+
     /**
      *    Creates an empty test case. Should be subclassed
      *    with test methods for a functional test case.

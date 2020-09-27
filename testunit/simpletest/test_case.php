@@ -45,6 +45,10 @@ class SimpleTestCase {
     var $_observers;
     var $_should_skip = false;
 
+    function __construct($label = false) {
+		$this->SimpleTestCase($label);
+	}
+
     /**
      *    Sets up the test with no display.
      *    @param string $label    If no test name is given then
@@ -55,7 +59,7 @@ class SimpleTestCase {
         if ($label) {
             $this->_label = $label;
         }
-    }
+    }	
 
     /**
      *    Accessor for the test name for subclasses.
@@ -495,7 +499,7 @@ class TestSuite {
      *                            of the test.
      *    @access public
      */
-    function TestSuite($label = false) {
+    function __construct($label = false) {
         $this->_label = $label;
         $this->_test_cases = array();
     }
@@ -663,7 +667,7 @@ class BadTestSuite {
      *                            of the test.
      *    @access public
      */
-    function BadTestSuite($label, $error) {
+    function __construct($label, $error) {
         $this->_label = $label;
         $this->_error = $error;
     }

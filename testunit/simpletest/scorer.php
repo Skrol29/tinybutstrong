@@ -24,6 +24,10 @@ class SimpleScorer {
     var $_exceptions;
     var $_is_dry_run;
 
+    function __construct() {
+        $this->SimpleScorer();
+    }
+
     /**
      *    Starts the test run with no results.
      *    @access public
@@ -243,6 +247,10 @@ class SimpleReporter extends SimpleScorer {
     var $_size;
     var $_progress;
 
+    function __construct() {
+        $this->SimpleReporter();
+    }
+	
     /**
      *    Starts the display with no results in.
      *    @access public
@@ -422,7 +430,7 @@ class SimpleReporterDecorator {
      *    Mediates between the reporter and the test case.
      *    @param SimpleScorer $reporter       Reporter to receive events.
      */
-    function SimpleReporterDecorator(&$reporter) {
+    function __construct(&$reporter) {
         $this->_reporter = &$reporter;
     }
 
