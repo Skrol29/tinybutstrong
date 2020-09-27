@@ -8,6 +8,10 @@
 
 * MergeBlock() return false instead of 0 when no block and no field have been merged.
 
+== Bug fixes ==
+
+* Infinite loop when a plugin event OnOperation returns false during a mergin of an automatic field such as [onload.my_var].
+
 = Release 3.11.0 =
 
 == New features ==
