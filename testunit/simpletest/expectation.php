@@ -24,6 +24,10 @@ class SimpleExpectation {
     var $_dumper = false;
     var $_message;
 
+    function __construct($message = '%s') {
+        $this->SimpleExpectation($message);
+    }
+
     /**
      *    Creates a dumper for displaying values and sets
      *    the test message.
@@ -224,6 +228,10 @@ class FalseExpectation extends SimpleExpectation {
 class EqualExpectation extends SimpleExpectation {
     var $_value;
 
+    function __construct($value, $message = '%s') {
+        $this->EqualExpectation($value, $message);
+    }
+	
     /**
      *    Sets the value to compare against.
      *    @param mixed $value        Test value to match.
@@ -279,7 +287,11 @@ class EqualExpectation extends SimpleExpectation {
  */
 class NotEqualExpectation extends EqualExpectation {
 
-    /**
+    function __construct($value, $message = '%s') {
+        $this->NotEqualExpectation($value, $message);
+    }
+    
+	/**
      *    Sets the value to compare against.
      *    @param mixed $value       Test value to match.
      *    @param string $message    Customised message on failure.
@@ -329,6 +341,10 @@ class WithinMarginExpectation extends SimpleExpectation {
     var $_upper;
     var $_lower;
 
+    function __construct($value, $margin, $message = '%s') {
+        $this->WithinMarginExpectation($value, $margin, $message);
+    }
+	
     /**
      *    Sets the value to compare against and the fuzziness of
      *    the match. Used for comparing floating point values.
@@ -402,6 +418,10 @@ class WithinMarginExpectation extends SimpleExpectation {
  */
 class OutsideMarginExpectation extends WithinMarginExpectation {
 
+    function __construct($value, $margin, $message = '%s') {
+        $this->OutsideMarginExpectation($value, $margin, $message);
+    }
+
     /**
      *    Sets the value to compare against and the fuzziness of
      *    the match. Used for comparing floating point values.
@@ -449,6 +469,10 @@ class OutsideMarginExpectation extends WithinMarginExpectation {
 class ReferenceExpectation extends SimpleExpectation {
     var $_value;
 
+    function __construct(&$value, $message = '%s') {
+        $this->ReferenceExpectation($value, $message);
+    }
+	
     /**
      *    Sets the reference value to compare against.
      *    @param mixed $value       Test reference to match.
@@ -499,6 +523,10 @@ class ReferenceExpectation extends SimpleExpectation {
  */
 class IdenticalExpectation extends EqualExpectation {
 
+    function __construct($value, $message = '%s') {
+        $this->IdenticalExpectation($value, $message);
+    }
+	
     /**
      *    Sets the value to compare against.
      *    @param mixed $value       Test value to match.
@@ -547,6 +575,10 @@ class IdenticalExpectation extends EqualExpectation {
  */
 class NotIdenticalExpectation extends IdenticalExpectation {
 
+    function __construct($value, $message = '%s') {
+        $this->NotIdenticalExpectation($value, $message);
+    }
+	
     /**
      *    Sets the value to compare against.
      *    @param mixed $value        Test value to match.
@@ -594,6 +626,10 @@ class NotIdenticalExpectation extends IdenticalExpectation {
 class PatternExpectation extends SimpleExpectation {
     var $_pattern;
 
+    function __construct($pattern, $message = '%s') {
+        $this->PatternExpectation($pattern, $message);
+    }
+	
     /**
      *    Sets the value to compare against.
      *    @param string $pattern    Pattern to search for.
@@ -677,6 +713,10 @@ class WantedPatternExpectation extends PatternExpectation {
  */
 class NoPatternExpectation extends PatternExpectation {
 
+    function __construct($pattern, $message = '%s') {
+        $this->NoPatternExpectation($pattern, $message);
+    }
+	
     /**
      *    Sets the reject pattern
      *    @param string $pattern    Pattern to search for.
@@ -733,6 +773,10 @@ class UnwantedPatternExpectation extends NoPatternExpectation {
 class IsAExpectation extends SimpleExpectation {
     var $_type;
 
+    function __construct($type, $message = '%s') {
+        $this->IsAExpectation($type, $message);
+    }
+	
     /**
      *    Sets the type to compare with.
      *    @param string $type       Type or class name.
@@ -810,6 +854,10 @@ class IsAExpectation extends SimpleExpectation {
 class NotAExpectation extends IsAExpectation {
     var $_type;
 
+    function __construct($type, $message = '%s') {
+        $this->NotAExpectation($type, $message);
+    }
+	
     /**
      *    Sets the type to compare with.
      *    @param string $type       Type or class name.
@@ -853,6 +901,10 @@ class NotAExpectation extends IsAExpectation {
 class MethodExistsExpectation extends SimpleExpectation {
     var $_method;
 
+    function __construct($method, $message = '%s') {
+        $this->MethodExistsExpectation($method, $message);
+    }
+	
     /**
      *    Sets the value to compare against.
      *    @param string $method     Method to check.
