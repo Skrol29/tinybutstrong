@@ -8,12 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ### Added
 
+- Compatibility with PHP 8
 - New parameters for blocks : 'firstingrp', 'lastingrp', 'singleingrp'. They define sections of a block displayed for the first, the last or the single record in a group.
 
 ### Changed
 
 - MergeBlock() return false instead of 0 when no block and no field have been merged.
-- Compatibility with PHP 8
 
 ### Fixed
 
@@ -26,9 +26,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - New method GetAttValue($Name[,$delete]) : enables you to read an attribute of an HTML or XML element in the template.
 - New method ReplaceFields(array($name=>$prms) [, $BlocName]) : replace simple TBS fields with new definitions of fields.
 - New parameter 'combo' : apply a set of parameters defined at the PHP side using SetOption('prm_combo').
-
-### Changed
-
 - Subnames for fields, array queries and ObjectRef path can support methods overloaded with magic function _call().
 
 ### Fixed
@@ -42,11 +39,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - Coding OnCacheField event in a plug-in: in some circumstances, moved locators may be ignored by TBS.
   Could happen with OpenTBS when using parameter "ope=tbs:num" or a similar operator. 
-
-### Changed
-
 - Coding OnCacheField event in a plug-in: stronger way to manage embedding fields + support property DelMe.  
-  
+ 
 ## [3.10.0] - 2015-11-08
 
 ### Added
@@ -60,8 +54,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - New arguments $LocLst and $Pos for the event OnCacheField. It enables a plug-in to move, add or delete TBS fields.
 
 - Native support for SQLite3.
-
-### Changed
 
 - Parameter "parallel=tbs:table" now supports <tbody>, <tfoot>, <colgroup> and <col>. The <col> tags must be closed even if HTML actually allows unclosed tags.
 
@@ -90,11 +82,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - New way for merging sub-template: PHP error messages are not absorbed any more.
   This new way may not be compatible with subscripts that uses the echo command (very rare).
   In this case you should add set option $TBS->SetOptions('old_subtemplate') for compatibility.
+- Now can merge DateTime objects and also objects with the magic method __toString().
 
 ### Changed
 
 - Error messages are in plain text instead of HTML when PHP is used in command line (CLI).
-- Now can merge DateTime objects and also objects with the magic method __toString().
 - Some code enhancements.
   - replace or  with ||
   - replace and with &&
