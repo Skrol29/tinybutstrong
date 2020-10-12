@@ -1,13 +1,13 @@
-= Beta 3.12.0 =
+= Release 3.12.0 =
 
 == New features ==
 
-* New parameters 'firstingrp', 'lastingrp', 'singleingrp' : define sections of a block displayed for the first, the last or the single record in a group.
+* New parameters for blocks : 'firstingrp', 'lastingrp', 'singleingrp'. They define sections of a block displayed for the first, the last or the single record in a group.
 
 == Enhancements ==
 
-* Compatibility with PHP 8
 * MergeBlock() return false instead of 0 when no block and no field have been merged.
+* Compatibility with PHP 8
 
 == Bug fixes ==
 
