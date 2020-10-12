@@ -8,7 +8,6 @@ Main script for running TBS examples.
 $viewer = $_SERVER['SCRIPT_NAME'];
 
 // parameters of this application
-if (!isset($app_folder)) $app_folder = ''; // folder where to find the Example scripts
 if (!isset($app_html)) $app_html = false; // true if the contents must not been displayed directly, but saved into $app_html for a parent script
 $app_echo = ($app_html===false);
 
@@ -17,35 +16,29 @@ $s = (isset($_GET['s'])) ? $_GET['s'] : '';
 
 // example do be displayed
 $e = (isset($_GET['e'])) ? $_GET['e'] : '';
-$e_script   = $app_folder.'tbs_us_examples_'.$e.'.php';
+$e_script   = 'tbs_us_examples_'.$e.'.php';
 
 // Try for the HTML template
-$e_template = $app_folder.'tbs_us_examples_'.$e.(($s=='') ? '' : '_'.$s).'.htm';
+$e_template = 'tbs_us_examples_'.$e.(($s=='') ? '' : '_'.$s).'.htm';
 
 // If the HTML template is not found => we try the TXT template
 if (!file_exists($e_template)) {
-	$e_template = $app_folder.'tbs_us_examples_'.$e.(($s=='') ? '' : '_'.$s).'.txt';
+	$e_template = 'tbs_us_examples_'.$e.(($s=='') ? '' : '_'.$s).'.txt';
 }
 
 // If no template is found => we display the Welcome part
 if ( ($e==='') || (!file_exists($e_script)) ) {
 	$e = '-welcome';
-	$e_script   = $app_folder.'tbs_us_examples__welcome.php';
-	$e_template = $app_folder.'tbs_us_examples__welcome.htm';
+	$e_script   = 'tbs_us_examples__welcome.php';
+	$e_template = 'tbs_us_examples__welcome.htm';
 }
 
-// Links for the front side
-if ($app_html && ($app_folder != '') ) {
-	// The parent script will change relative links to $app_folder
-	$href_script   = './' . basename($e_script);
-	$href_template = './' . basename($e_template);
-} else {
-	$href_script   = $e_script;
-	$href_template = $e_template;
-}
+// Global variables for the template: links for standalone mode
+$href_script   = $e_script;
+$href_template = $e_template;
 
 // prepare data for retreiving the result of the merge
-$sidebar = $app_folder.'tbs_us_examples__sidebar.htm'; // used by function f_sidebar_getmerged() and plug-in clsMyPluginRenderNothing
+$sidebar = 'tbs_us_examples__sidebar.htm'; // used by function f_sidebar_getmerged() and plug-in clsMyPluginRenderNothing
 $sidebar_landmark = '<div id="main-body">';
 
 // mode
