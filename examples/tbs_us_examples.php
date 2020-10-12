@@ -107,10 +107,13 @@ if ($app_echo) {
 	// Nothing to do. Another script is supposed to get the result in the variable $html. Used in the TinyButStrong web site for example.
 }
 
+// -----------------------------
 // fonction for this application
+// -----------------------------
 
-/* Merges the Side-bar template and return the contents
-*/
+/**
+ * Merges the Side-bar template and return the contents
+ */
 function f_sidebar_getmerged() {
 	global $e, $m, $s, $e_script, $e_template, $sidebar;
 	include_once('tbs_class.php');
@@ -121,8 +124,13 @@ function f_sidebar_getmerged() {
 	return $TBS->Source;
 }
 
-/* Create an HTML body for viewing the PHP or HTML colored source
-*/
+/**
+ * Create an HTML body for viewing the PHP or HTML colored source
+ *
+ * @param array $contents An array with items 'file', 'main', 'css', given by f_color_file()
+ *
+ * @return string
+ */
 function f_source_create_html($contents) {
 	$title = 'Source code of '.$contents['file'];
 	return '<!DOCTYPE HTML>
@@ -147,8 +155,9 @@ function f_source_create_html($contents) {
 
 }
 
-/* Color the contents of a file. Can be HTML or PHP.
-   Returns an array with 'main', 'css' and 'file'
+/**
+ * Color the contents of a file. Can be HTML or PHP.
+ *  Returns an array with 'main', 'css' and 'file'
  */
 function f_color_file($file, $ishtml, $lines) {
 
@@ -189,7 +198,8 @@ code {font-family: "Courier New", Courier, monospace; font-size: 12px; white-spa
 	return array('main'=>$x, 'css'=>$style, 'file'=>basename($file));
 }
 
-/* Color a list of tags or all remaing tags with using a CSS class.
+/**
+ * Color a list of tags or all remaing tags with using a CSS class.
  * $txt must be a source code wich is a result of highlight_file().
  */
 function f_color_tag(&$txt, $class, $tag='') {
@@ -239,7 +249,8 @@ function f_color_tag(&$txt, $class, $tag='') {
 	
 }
 
-/* Auto-loaded Plug-in for inserting the side-bar in running examples.
+/**
+ * Auto-loaded Plug-in for inserting the side-bar in running examples.
  */
 class clsMyPluginRenderNothing {
 	function OnInstall() {
