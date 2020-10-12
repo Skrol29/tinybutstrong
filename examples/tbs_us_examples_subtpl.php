@@ -18,7 +18,7 @@ $tmpl_article = 'tbs_us_examples_subtpl_article'.$art.'.htm';
 $tmpl_menu = 'tbs_us_examples_subtpl_menu.htm';
 
 // Merging main template
-include_once('tbs_class.php');
+include_once('../tbs_class.php');
 $TBS = new clsTinyButStrong;
 $TBS->LoadTemplate('tbs_us_examples_subtpl.htm');
 $TBS->Show();

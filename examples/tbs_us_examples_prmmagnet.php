@@ -1,6 +1,6 @@
 <?php
 
-include_once('tbs_class.php');
+include_once('../tbs_class.php');
 
 //Default value
 if (!isset($_GET)) $_GET=&$HTTP_GET_VARS;

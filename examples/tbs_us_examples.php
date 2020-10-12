@@ -4,13 +4,6 @@
 Main script for running TBS examples.
 */
 
-// The TBS class can be searched in the current directory or the parent directory
-set_include_path(implode(PATH_SEPARATOR, array(
-    '.',               // PHP ususal
-	__DIR__,           // for examples when called from a parent-script 
-	dirname(__DIR__),  // for the TBS class which may be in the parent directory
-)));
-
 // usefull for examples that contains links to this Example Viewer
 $viewer = $_SERVER['SCRIPT_NAME'];
 
@@ -116,7 +109,7 @@ if ($app_echo) {
  */
 function f_sidebar_getmerged() {
 	global $e, $m, $s, $e_script, $e_template, $sidebar;
-	include_once('tbs_class.php');
+	include_once('../tbs_class.php');
 	$TBS = new clsTinyButStrong;
 	$TBS->Source = '[sidebar;file;getbody=body]';
 	$TBS->MergeField('sidebar', $sidebar);

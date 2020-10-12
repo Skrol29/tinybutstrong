@@ -1,6 +1,6 @@
 <?php
 
-include_once('tbs_class.php');
+include_once('../tbs_class.php');
 
 $x_color = '#8FC2ED';
 $x_style = 'style2';

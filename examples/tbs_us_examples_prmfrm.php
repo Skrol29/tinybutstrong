@@ -1,6 +1,6 @@
 <?php
 
-include_once('tbs_class.php');
+include_once('../tbs_class.php');
 
 $amount = 1023.2568;
 $amount2 = -255.4893;

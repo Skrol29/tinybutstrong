@@ -1,6 +1,6 @@
 <?php
 
-include_once('tbs_class.php');
+include_once('../tbs_class.php');
 
 $amount = 3.55;
 $task['monday'] = '<cooking>';

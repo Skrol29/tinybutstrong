@@ -1,6 +1,6 @@
 <?php
 
-include_once('tbs_class.php');
+include_once('../tbs_class.php');
 include_once('tbs_plugin_bypage.php'); // Plug-in By-Page
 include_once('tbs_plugin_navbar.php'); // Plug-in Navigation Bar
 

@@ -1,6 +1,6 @@
 <?php
 
-include_once('tbs_class.php');
+include_once('../tbs_class.php');
 include_once('class.phpmailer.php'); // the mailer class
 
 // prepare the data

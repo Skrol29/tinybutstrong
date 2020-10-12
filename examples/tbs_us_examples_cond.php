@@ -1,6 +1,6 @@
 <?php
 
-include_once('tbs_class.php');
+include_once('../tbs_class.php');
 include_once('tbs_plugin_html.php'); // Plug-in for selecting HTML items.
 
 if (!isset($_GET)) $_GET=&$HTTP_GET_VARS;

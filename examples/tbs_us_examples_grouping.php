@@ -1,6 +1,6 @@
 <?php
 
-include_once('tbs_class.php');
+include_once('../tbs_class.php');
 
 $result[0]  = array('country'=>'United States', 'city'=>'Washington', 'winner'=>'Bob',        'score'=>100);
 $result[1]  = array('country'=>'United States', 'city'=>'Washington', 'winner'=>'Julia',      'score'=>99);

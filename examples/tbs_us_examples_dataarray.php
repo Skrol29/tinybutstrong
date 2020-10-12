@@ -1,6 +1,6 @@
 <?php
 
-include_once('tbs_class.php');
+include_once('../tbs_class.php');
 
 $array_type1 = array('France'=>33, 'England'=>44, 'Spain'=>34, 'Italy'=>39, 'Deutchland'=>49);
 

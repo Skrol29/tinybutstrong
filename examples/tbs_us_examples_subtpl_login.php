@@ -5,7 +5,7 @@ if (isset($this)) {
 	$TBS = &$this;
 } else {
   // This sub-script can also be run under the normal mode => its corresponding template will be displayed like a main template.
-	include_once('tbs_class.php');
+	include_once('../tbs_class.php');
 	$TBS = new clsTinyButStrong;
 }
 

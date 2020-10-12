@@ -1,6 +1,6 @@
 <?php
 
-include_once('tbs_class.php');
+include_once('../tbs_class.php');
 include_once('tbs_plugin_html.php'); // Plug-in to select HTML items.
 
 // Example with values stored in an array.

@@ -1,6 +1,6 @@
 <?php
 
-include_once('tbs_class.php');
+include_once('../tbs_class.php');
 
 $data = array();
 $data[] = array('cmt'=>'Assigned data');
