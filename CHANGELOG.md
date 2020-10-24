@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## [3.12.1] - 2020-10-24
+
+### Fixed
+
+- Parameter 'frm' displays '1970-01-01' for a date over '2038-01-19 03:14:07' on a PHP 32-bits plateform.
+
 ## [3.12.0] - 2020-10-12
 
 ### Added

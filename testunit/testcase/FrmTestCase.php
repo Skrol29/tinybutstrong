@@ -86,7 +86,8 @@ class FrmTestCase extends TBSUnitTestCase {
 
 	function testDateFormats() {
 
-		$d = mktime(21, 46, 33, 11, 30, 2001);
+		// Values that are a timestamp
+		$d  = mktime(21, 46, 33, 11, 30, 2001);
 		$ds = mktime(9, 8, 7, 2, 3, 2001); // sort, i.e. with (day<10) and (month<10) and (hour<10) and (minutes<10)
 		$d1 = mktime(21, 46, 33, 11, 1, 2001); // first  day of month
 		$d2 = mktime(21, 46, 33, 11, 2, 2001); // second day of month
@@ -142,6 +143,22 @@ class FrmTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>true),  "{1}", "test unexpected values: true"); // TBS performs an implicite conversion from true to string
 		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>''),  "{}", "test unexpected values: empty string");
 		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>0),  "{".date('Y-m-d H:i:s', 0)."}", "test unexpected values: 0"); // 0 is a timsetamp for the start of unix dates
+		
+		// Date over '2038-01-19 03:14:07' on a PHP 32-bits plateform
+		if (PHP_INT_SIZE === 4) { // 32-bit
+			if ($this->atLeastTBSVersion('3.12.1')) {
+				$caption = "format date over 2038 on PHP 32-bits, >= TBS < 3.12.1";
+				$result  = "{2039/10/22}"; // fixed
+			} else {
+				$caption = "format date 2038 on PHP 32-bits, TBS < 3.12.1";
+				$result  = "{1970/01/01}"; // bugged
+			}
+		} else {
+			$caption = "format date 2038 on PHP 64-bits";
+			$result  = "{2039/10/22}"; // normal
+		}
+		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy/mm/dd]}", array('a'=>'2039-10-22'),  $result, $caption);
+		
 	}
 
 	function testConditionalFormats() {

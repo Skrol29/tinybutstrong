@@ -3,8 +3,8 @@
  *
  * TinyButStrong - Template Engine for Pro and Beginners
  *
- * @version 3.12.0 for PHP 5, 7, 8
- * @date    2020-10-12
+ * @version 3.12.1 for PHP 5, 7, 8
+ * @date    2020-10-21
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
  * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
@@ -655,7 +655,7 @@ public $Assigned = array();
 public $ExtendedMethods = array();
 public $ErrCount = 0;
 // Undocumented (can change at any version)
-public $Version = '3.12.0';
+public $Version = '3.12.1';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -3731,6 +3731,9 @@ function meth_PlugIn_SetEvent($PlugInId, $Event, $NewRef='') {
 
 }
 
+/**
+ * Convert any value to a string without specific formating.
+ */
 static function meth_Misc_ToStr($Value) {
 	if (is_string($Value)) {
 		return $Value;
@@ -3738,14 +3741,17 @@ static function meth_Misc_ToStr($Value) {
 		if (method_exists($Value,'__toString')) {
 			return $Value->__toString();
 		} elseif (is_a($Value, 'DateTime')) {
+			// ISO date-time format
 			return $Value->format('c');
 		}
 	}
 	return @(string)$Value; // (string) is faster than strval() and settype()
 }
 
+/**
+ * Return the formated representation of a Date/Time or numeric variable using a 'VB like' format syntax instead of the PHP syntax.
+ */
 function meth_Misc_Format(&$Value,&$PrmLst) {
-// This function return the formated representation of a Date/Time or numeric variable using a 'VB like' format syntax instead of the PHP syntax.
 
 	$FrmStr = $PrmLst['frm'];
 	$CheckNumeric = true;
@@ -3757,30 +3763,39 @@ function meth_Misc_Format(&$Value,&$PrmLst) {
 	// Manage Multi format strings
 	if ($Frm['type']=='multi') {
 
-		// Select the format
+		// Found the format according to the value (positive|negative|zero|null)
+		
 		if (is_numeric($Value)) {
+			// Numeric:
 			if (is_string($Value)) $Value = 0.0 + $Value;
 			if ($Value>0) {
 				$FrmStr = &$Frm[0];
 			} elseif ($Value<0) {
 				$FrmStr = &$Frm[1];
 				if ($Frm['abs']) $Value = abs($Value);
-			} else { // zero
+			} else {
+				// zero
 				$FrmStr = &$Frm[2];
 				$Minus = '';
 			}
 			$CheckNumeric = false;
 		} else {
+			// date|
 			$Value = $this->meth_Misc_ToStr($Value);
 			if ($Value==='') {
-				return $Frm[3]; // Null value
+				// Null value
+				return $Frm[3];
 			} else {
+				// Date conversion
 				$t = strtotime($Value); // We look if it's a date
-				if (($t===-1) || ($t===false)) { // Date not recognized
+				if (($t===-1) || ($t===false)) {
+					// Date not recognized
 					return $Frm[1];
-				} elseif ($t===943916400) { // Date to zero
+				} elseif ($t===943916400) {
+					// Date to zero in some softwares
 					return $Frm[2];
-				} else { // It's a date
+				} else {
+					// It's a date
 					$Value = $t;
 					$FrmStr = &$Frm[0];
 				}
@@ -3794,7 +3809,7 @@ function meth_Misc_Format(&$Value,&$PrmLst) {
 	}
 
 	switch ($Frm['type']) {
-	case 'num' :
+	case 'num':
 		// NUMERIC
 		if ($CheckNumeric) {
 			if (is_numeric($Value)) {
@@ -3810,35 +3825,71 @@ function meth_Misc_Format(&$Value,&$PrmLst) {
 		$Value = substr_replace($Frm['Str'],$Value,$Frm['Pos'],$Frm['Len']);
 		return $Value;
 		break;
-	case 'date' :
+	case 'date':
 		// DATE
-		if (is_object($Value)) {
-			$Value = $this->meth_Misc_ToStr($Value);
-		}
-		if (is_string($Value)) {
-			if ($Value==='') return '';
-			$x = strtotime($Value);
-			if (($x===-1) || ($x===false)) {
-				if (!is_numeric($Value)) $Value = 0;
-			} else {
-				$Value = &$x;
-			}
-		} else {
-			if (!is_numeric($Value)) return $this->meth_Misc_ToStr($Value);
-		}
-		if ($Frm['loc'] || isset($PrmLst['locale'])) {
-			$x = strftime($Frm['str_loc'],$Value);
-			$this->meth_Conv_Str($x,false); // may have accent
-			return $x;
-		} else {
-			return date($Frm['str_us'],$Value);
-		}
+		return $this->meth_Misc_DateFormat($Value, $Frm);
 		break;
 	default:
 		return $Frm['string'];
 		break;
 	}
 
+}
+
+function meth_Misc_DateFormat(&$Value, $Frm) {
+	
+	if (is_object($Value)) {
+		$Value = $this->meth_Misc_ToStr($Value);
+	}
+
+	if ($Value==='') return '';
+	
+	// Note : DateTime object is supported since PHP 5.2
+	// So we could simplify this function using only DateTime instead of timestamp.
+	
+	// Now we try to get the timestamp
+	if (is_string($Value)) {
+		// Any string value is assumed to be a formated date.
+		// If you whant a string value to be a considered to a a time stamp, then use prefixe '@' accordding to the 
+		$x = strtotime($Value);
+		// In case of error return false (return -1 for PHP < 5.1.0)
+		if (($x===false) || ($x===-1)) {
+			if (!is_numeric($Value)) {
+				// At this point the value is not recognized as a date
+				// Special fix for PHP 32-bit and date > '2038-01-19 03:14:07' => strtotime() failes
+				if (PHP_INT_SIZE === 4) { // 32-bit
+					try {
+						$date = new DateTime($Value);
+						return $date->format($Frm['str_us']);
+						// 'locale' cannot be supported in this case because strftime() has to equilavent with DateTime
+					} catch (Exception $e) {
+						// We take an arbitrary value in order to avoid formating error
+						$Value = 0; // '1970-01-01'
+						// echo $e->getMessage();
+					}                
+				} else {
+					// We take an arbirtary value in order to avoid formating error
+					$Value = 0; // '1970-01-01'
+				}
+			}
+		} else {
+			$Value = &$x;
+		}
+	} else {
+		if (!is_numeric($Value)) {
+			// It’s not a timestamp, thus we return the non formated value 
+			return $this->meth_Misc_ToStr($Value);
+		}
+	}
+	
+	if ($Frm['loc'] || isset($PrmLst['locale'])) {
+		$x = strftime($Frm['str_loc'],$Value);
+		$this->meth_Conv_Str($x,false); // may have accent
+		return $x;
+	} else {
+		return date($Frm['str_us'],$Value);
+	}
+	
 }
 
 /**

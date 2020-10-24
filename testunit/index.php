@@ -38,7 +38,11 @@ include($dir_testu.'/testcase/SubnameTestCase.php');
 // launch tests
 
 $tbs = new clsTinyButStrong();
-$test = new GroupTest('TinyButStrong v'.$tbs->Version.' (with PHP '.PHP_VERSION.')');
+
+$bit = (PHP_INT_SIZE <= 4) ? '32' : '64' ;
+$title = "TinyButStrong v" . $tbs->Version . " (with PHP version " . PHP_VERSION . " , " . $bit . "-bits)";
+$test = new GroupTest($title);
+
 $test->addTestCase(new FieldTestCase());
 $test->addTestCase(new BlockTestCase());
 $test->addTestCase(new BlockGrpTestCase());
