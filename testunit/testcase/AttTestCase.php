@@ -79,6 +79,7 @@ class AttTestCase extends TBSUnitTestCase {
 	}
 
 	function testMergeBlocks() {
+		
 		$blk = array();
 		$blk[] = array('id'=>'AttCache x12', 'val'=>'effect1');
 		$blk[] = array('id'=>'AttCache x13', 'val'=>'effect2');
@@ -93,6 +94,7 @@ class AttTestCase extends TBSUnitTestCase {
 
 		// test normal with parent tag specification
 		$this->assertEqualMergeBlockFiles('att_test3.html', array('blk'=>$blk), 'att_test3_result.html', "test blocks #3");
+				
 	}
 
 	function testMergeBlocksWithCachedFields() {
@@ -150,6 +152,21 @@ class AttTestCase extends TBSUnitTestCase {
 			$this->assertErrorMergeBlockString('<div>[b.val;att=+span#width][b.id;block=div]/[b.id]/[b.id]<span></span></div>',           array('b'=>$data), "test blocks CacheField - forward + attribute not yet exists + jump 3 fields");
 			$this->assertErrorMergeBlockString('<div>[b.val;att=+span#width][b.id;block=div]/[b.id]/[b.id]<span width="0"></span></div>', array('b'=>$data), "test blocks CacheField - forward + attribute already exists + jump 3 fields");
 		}
+
+		// magnet = #
+
+		$data = array();
+		$data[] = array('ref' => 'r1');
+		$data[] = array('ref' => '');
+		$data[] = array('ref' => '');
+		$data[] = array('ref' => '');
+		$data[] = array('ref' => 'r5');
+
+		// A fixed bug since 3.12.2
+		if ( $this->atLeastTBSVersion('3.12.2') ) {
+			$this->assertEqualMergeBlockString('<a href="[b.ref;block=a;magnet=#]"></a>', array('b'=>$data), '<a href="r1"></a><a></a><a></a><a></a><a href="r5"></a>', "test blocks CacheField + magnet = #");
+		}
+		
 		
 	}
 

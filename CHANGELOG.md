@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## [3.12.2] - 2020-11-03
+
+### Fixed
+
+- Parameter 'magnet=#' used with MergeBlock() makes erroneous merging when magnet is activated, except for the first occurence.
+
 ## [3.12.1] - 2020-10-24
 
 ### Fixed

@@ -3,8 +3,8 @@
  *
  * TinyButStrong - Template Engine for Pro and Beginners
  *
- * @version 3.12.1 for PHP 5, 7, 8
- * @date    2020-10-21
+ * @version 3.12.2 for PHP 5, 7, 8
+ * @date    2020-11-03
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
  * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
@@ -655,7 +655,7 @@ public $Assigned = array();
 public $ExtendedMethods = array();
 public $ErrCount = 0;
 // Undocumented (can change at any version)
-public $Version = '3.12.1';
+public $Version = '3.12.2';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -1761,7 +1761,8 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 				if ($Loc->PrmLst['magnet']==='#') {
 					if (!isset($Loc->AttBeg)) {
 						$Loc->PrmLst['att'] = '.';
-						$this->f_Xml_AttFind($Txt,$Loc,true,$this->AttDelim);
+						// no moving because att info would be modified and thus become wrong regarding to the eventually cached source
+						$this->f_Xml_AttFind($Txt,$Loc,false,$this->AttDelim);
 					}
 					if (isset($Loc->AttBeg)) {
 						$Loc->MagnetId = -3;
@@ -1789,7 +1790,12 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 		case 0: break;
 		case -1: $CurrVal = '&nbsp;'; break; // Enables to avoid null cells in HTML tables
 		case -2: $CurrVal = $Loc->PrmLst['ifempty']; break;
-		case -3: $Loc->Enlarged = true; $Loc->PosBeg = $Loc->AttBegM; $Loc->PosEnd = $Loc->AttEnd; break;
+		case -3:
+			// magnet=#
+			$Loc->Enlarged = true;
+			$Loc->PosBeg = ($Txt[$Loc->AttBeg-1]===' ') ? $Loc->AttBeg-1 : $Loc->AttBeg;
+			$Loc->PosEnd = $Loc->AttEnd;
+			break;
 		case 1:
 			$Loc->Enlarged = true;
 			$this->f_Loc_EnlargeToTag($Txt,$Loc,$Loc->PrmLst['magnet'],false);
@@ -4845,8 +4851,9 @@ static function f_Loc_Sort(&$LocLst, $DelEmbd, $iFirst = 0) {
 
 /**
  * Prepare all informations to move a locator according to parameter "att".
- * @param mixed $MoveLocLst true to simple move the loc, or an array of loc to rearrange the list after the move.
- *              Note: rearrange doest not work with PHP4.
+ *
+ * @param false|true|array $MoveLocLst true to simple move the loc, or an array of loc to rearrange the list after the move.
+ *                          Note: rearrange doest not work with PHP4.
  */
 static function f_Xml_AttFind(&$Txt,&$Loc,$MoveLocLst=false,$AttDelim=false,$LocLst=false) {
 // att=div#class ; att=((div))#class ; att=+((div))#class
@@ -4933,6 +4940,12 @@ static function f_Xml_AttFind(&$Txt,&$Loc,$MoveLocLst=false,$AttDelim=false,$Loc
 
 }
 
+/**
+ * Move a locator in the source from its original location to the attribute location.
+ * The new locator string is only '[]', no need to copy the full source since all parameters are saved in $Loc.*
+ *
+ * @param false|true|array $MoveLocLst If the function is called from the caching process, then this value is an array.
+ */
 static function f_Xml_AttMove(&$Txt, &$Loc, $AttDelim, &$MoveLocLst) {
 
 	if ($AttDelim===false) $AttDelim = $Loc->AttDelimChr;
@@ -4990,11 +5003,8 @@ static function f_Xml_AttMove(&$Txt, &$Loc, $AttDelim, &$MoveLocLst) {
 		$Loc->AttTagEnd += $InsLen;
 	}
 
-	$Loc->PrevPosBeg = $Loc->PosBeg;
-	$Loc->PrevPosEnd = $Loc->PosEnd;
 	$Loc->PosBeg = $PosBeg;
 	$Loc->PosEnd = $PosEnd;
-	$Loc->AttBegM = ($Txt[$Loc->AttBeg-1]===' ') ? $Loc->AttBeg-1 : $Loc->AttBeg; // for magnet=#
 
 	// for CacheField
 	if (is_array($MoveLocLst)) {
