@@ -68,7 +68,7 @@ if ($m!=='result') {
 	$p = strpos($app_html, $sidebar_landmark);
 	if ($p===false) {
 		// can happen with sub-templates
-		// inserte the main title if missing
+		// insert the main title if missing
 		if (strpos($app_html, '<h1')===false) {
 			if ($s==='') {
 				$title = "Example '".e."'";
