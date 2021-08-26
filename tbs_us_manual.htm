@@ -1891,11 +1891,10 @@ which is the same as:
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a id="html_field_prm_file"></a>file</span>=<span class="opt-value">filename</span></td>
         <td align="left" valign="top" class="border-sep"><p>Replace the field with the contents of the file.</p>
-          <p> <span class="opt-name"><span class="opt-value">Filename</span></span> can be a string or an expression.<br>
-            You can use the keyword <span class="opt-value">[val]</span> inside the expression to insert the current data item.<br>
-            You can use <span class="opt-value">[var]</span> fields inside the expression.<br>
-            If parameter <span class="opt-name">script</span> is used by omitting the <span class="opt-value">filename</span> value (example: [onshow.file;<span class="opt-name">script</span>;<span class="opt-name">subtpl</span>]), then the field's value is used for the file name.<br>
-          If the file is not found, then it will be searched in the folder of the last loaded template (<span class="versioning">since TBS version 3.2.0</span>).</p>
+          <p> <span class="opt-name"><span class="opt-value">Filename</span></span> can be a string or an expression.</p>
+          <p>Parameter <span class="opt-name">file</span> supports <a href="#html_field_auto_embedded">automatic embded fields</a> <span class="opt-name">[val]</span> and <span class="opt-name">[var]</span>.</p>
+          <p>If parameter <span class="opt-name">script</span> is used by omitting the <span class="opt-value">filename</span> value (example: [onshow.file;<span class="opt-name">script</span>;<span class="opt-name">subtpl</span>]), then the field's value is used for the file name.<br>
+            If the file is not found, then it will be searched in the folder of the last loaded template (<span class="versioning">since TBS version 3.2.0</span>).</p>
           <p> Examples:</p>
           <div class="decal">[<span class="opt-name">onload</span>;<span class="opt-name">file</span>=<span class="opt-value">header.html</span>]<br>
             [<span class="opt-name">onload</span>;<span class="opt-name">file</span>=[<span class="opt-name">var</span>.<span class="opt-name">filename</span>]] </div>
@@ -1964,10 +1963,10 @@ Parameter <span class="opt-name">storename</span> changes the name of the store.
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a id="html_field_prm_script"></a>script</span>=<span class="opt-value">filename</span></td>
         <td align="left" valign="top" class="border-sep"><p>Execute the Php script just before replacing the TBS field.</p>
-          <p><span class="opt-name"><span class="opt-value">Filename</span></span> can be a string or an expression.<br>
-            You can use the keyword <span class="opt-value">[val]</span> inside the expression to insert the current data item.<br>
-            You can use <span class="opt-value">[var]</span> fields inside the expression.<br>
-            If parameter <span class="opt-name">script</span> is used by omitting the <span class="opt-value">filename</span> value (example: [onshow.file;<span class="opt-name">script</span>;<span class="opt-name">subtpl</span>]), then the field's value is used for the file name.<br>
+          <p><span class="opt-name"><span class="opt-value">Filename</span></span> can be a string or an expression.</p>
+          <p>Parameter <span class="opt-name">script</span> supports <a href="#html_field_auto_embedded">automatic embded fields</a> <span class="opt-name">[val]</span> and <span class="opt-name">[var]</span>.<br>
+            </p>
+          <p>If parameter <span class="opt-name">script</span> is used by omitting the <span class="opt-value">filename</span> value (example: [onshow.file;<span class="opt-name">script</span>;<span class="opt-name">subtpl</span>]), then the field's value is used for the file name.<br>
             If the file is not found, then it will be searched in the folder of the last loaded template (<span class="versioning">since TBS version 3.2.0</span>).          </p>
           <table width="100%" border="0" cellpadding="2" cellspacing="0" >
             <tr>
@@ -2032,9 +2031,9 @@ Parameter <span class="opt-name">storename</span> changes the name of the store.
           <p>Both <span class="opt-value">expr1</span> and <span class="opt-value">expr2</span> must be string or numerical expressions.<br>
             <em>Equal</em> and <em>not equal</em> operators are always string <span lang="en"><span title="">comparison</span></span>s and are <strong>case insensitive</strong>.<br>
 As with other parameters, string expressions can be delimited with single quotes ('), and literal single quotes in the string must be escaped using two adjacent  single quotes ('').</p>
-          <p>The expressions of parameter <span class="opt-name">if</span> may contain then <span class="opt-name">[val]</span> keyword in order to insert the current data item.<br>
-            </p>
-          <p>Example:</p>
+          <p>Parameter <span class="opt-name">if</span> supports <a href="#html_field_auto_embedded">automatic embded fields</a> <span class="opt-name">[val]</span> and <span class="opt-name">[var]</span>.<br>
+          </p>
+<p>Example:</p>
           <div class="decal">[<span class="opt-name">onshow</span>.x;<span class="opt-name">if</span> [val]+-<span class="opt-value">0</span>;<span class="opt-name">then</span> <span class="opt-value">'OK'</span>;<span class="opt-name">else</span> <span class="opt-value">'FAIL'</span>]<br>
           <span class="txt-small">The  field will displayed OK only if « $x &gt; 0 ». </span></div>
           <p>If the emmebed fields may contains single quotes, you need to use delimitors and to escape strings in the field's value and both expressions: </p>
@@ -2051,20 +2050,18 @@ As with other parameters, string expressions can be delimited with single quotes
       <tr>
         <td align="left" valign="top" class="border-sep"><span class="opt-name"><a id="html_field_prm_then"></a>then</span><span class="opt-value"> val1</span></td>
         <td align="left" valign="top" class="border-sep"><p>If the parameter <span class="opt-name">if</span> is defined and its condition is verified, then the data item is replaced with <span class="opt-value">val1</span>.</p>
+          <p>Parameter <span class="opt-name">then</span> supports <a href="#html_field_auto_embedded">automatic embded fields</a> <span class="opt-name">[val]</span> and <span class="opt-name">[var]</span>.</p>
           <p><span class="versioning">Since TBS version 3.0,</span> it is also possible to define several couples of <span class="opt-name">if</span>/<span class="opt-name">then</span> in the same field.</p>
-          <p> Examples:          </p>
+          <p> Examples:</p>
           <div class="decal"> [<span class="opt-name">onshow.image</span>;<span class="opt-name">if</span> <span class="opt-value">[val]</span>=<span class="opt-value">''</span>;<span class="opt-name">then</span> <span class="opt-value">'image0.gif'</span>]<br>
-            [<span class="opt-name">onshow</span>.<span class="opt-name">x</span>;<span class="opt-name">if</span> <span class="opt-value">[val]=1</span>;<span class="opt-name">then</span> <span class="opt-value">'one'</span>;<span class="opt-name">if</span> <span class="opt-value">[val]=2</span>;<span class="opt-name">then</span> <span class="opt-value">'two'</span>;<span class="opt-name">else</span> <span class="opt-value">'more'</span>] </div>
-          <p>You can use the keyword <span class="opt-value">[val]</span> inside the expression to insert the current data item.<br>
-          You can use <span class="opt-value">[var]</span> fields inside the expression.</p></td>
+            [<span class="opt-name">onshow</span>.<span class="opt-name">x</span>;<span class="opt-name">if</span> <span class="opt-value">[val]=1</span>;<span class="opt-name">then</span> <span class="opt-value">'one'</span>;<span class="opt-name">if</span> <span class="opt-value">[val]=2</span>;<span class="opt-name">then</span> <span class="opt-value">'two'</span>;<span class="opt-name">else</span> <span class="opt-value">'more'</span>] </div></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a id="html_field_prm_else"></a><span class="opt-name">else</span> <span class="opt-value">val2</span></td>
-        <td align="left" valign="top" class="border-sep">If the parameter <span class="opt-name">if</span> is defined and its condition is not verified, then the data item is replaced with <span class="opt-value">val2</span>.<br>
-          Example:
-          <div class="decal"> [<span class="opt-name">onshow.error_id</span>;<span class="opt-name">if</span> <span class="opt-value">[val]</span>=<span class="opt-value">0</span>;<span class="opt-name">then</span> <span class="opt-value">'no error'</span>;<span class="opt-name">else</span> <span class="opt-value">'error found'</span>] </div>
-          You can use the keyword <span class="opt-value">[val]</span> inside the expression to insert the current data item.<br>
-          You can use <span class="opt-value">[var]</span> fields inside the expression.</td>
+        <td align="left" valign="top" class="border-sep"><p>If the parameter <span class="opt-name">if</span> is defined and its condition is not verified, then the data item is replaced with <span class="opt-value">val2</span>.</p>
+          <p>Parameter <span class="opt-name">then</span> supports <a href="#html_field_auto_embedded">automatic embded fields</a> <span class="opt-name">[val]</span> and <span class="opt-name">[var]</span>.</p>
+          <p>            Example:          </p>
+<div class="decal"> [<span class="opt-name">onshow.error_id</span>;<span class="opt-name">if</span> <span class="opt-value">[val]</span>=<span class="opt-value">0</span>;<span class="opt-name">then</span> <span class="opt-value">'no error'</span>;<span class="opt-name">else</span> <span class="opt-value">'error found'</span>]</div></td>
       </tr>
       <tr>
         <td align="left" valign="top" class="border-sep"><a id="html_field_prm_onformat"></a><span class="opt-name">onformat</span>=<span class="opt-value">fct_name</span></td>
@@ -2424,7 +2421,7 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
       <li> Insert the value in the template. </li>
     </ol>
   </div>
-  <h3><a id="html_field_auto"></a>Automatic fields</h3>
+  <h3><a name="html_field_auto" id="html_field_auto"></a>Automatic fields</h3>
   <div class="norm">
     <p>Automatic fields enable you to automatically merge data when some events occur. </p>
     <p> Automatic fields support <a href="#php_mergeblock_subnames">subnames</a>. They merges items stored in <span class="txt-code">$TBS-&gt;VarRef</span>. By default <span class="txt-code">$TBS-&gt;VarRef</span> is a reference on <span class="opt-name">$GLOBAL</span>. See property <a href="#php_varref">VarRef</a> for more details.</p>
@@ -2458,15 +2455,18 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
     </table>
     <p>Automatic fields <u>cannot</u> merge a variable which is local to a function. You can add your local variable to <span class="txt-code">$TBS-&gt;VarRef</span>, or you can merge it using <a href="#php_mergefield">MergeField()</a>.</p>
     <p>Note: You can force the merge of  automatic fields using <a href="#php_mergefield">MergeField()</a>.</p>
-<h4>Embedded automatic fields</h4>
-    <p> An embedded TBS field is never merged, unless :</p>
-    <ul>
-      <li> it is merged before the parent field,</li>
-      <li> il is a <span class="opt-name">[var]</span> field placed into a paremeter <a href="#html_field_prm_file" class="opt-name">file</a>, <a href="#html_field_prm_script" class="opt-name">script</a>, <a href="#html_field_prm_if" class="opt-name">if</a>, <span class="opt-name">then</span>, <span class="opt-name">else</span> or <a href="#html_block_prm_when" class="opt-name">when</a>. </li>
-    </ul>
-    <p> Examples:    </p>
+<h4><a name="html_field_auto_embedded" id="html_field_auto_embedded"/>Embedded automatic fields</h4>
+    <p>Some parameters can manage embedded TBS fields. That is those embedded fields will be automatically merged at the time the parameter is evaluated.</p>
+    <p>Inside parameters <a href="#html_field_prm_file" class="opt-name">file</a>, <a href="#html_field_prm_script" class="opt-name">script</a>, <a href="#html_field_prm_if" class="opt-name">if</a>, <span class="opt-name">then</span>, <span class="opt-name">else</span>, embedded automatic fields are : <span class="opt-name">[var]</span> and <span class="opt-name">[val]</span>.</p>
+<p>Inside parameters <a href="#html_field_prm_file" class="opt-name">when</a>, embedded automatic fields are : <span class="opt-name">[var]</span> and the fields of the same block.</p>
+    <p>Note that the special fields <span class="opt-name">[val]</span> and <span class="opt-name">[var]</span> won't be merged when placed inside other parameters.</p>
+    <p>Note that other ordinary embedded fields <span class="opt-name"></span> won't be merged when placed inside any other parameters. You have to ensure that such fields are merged before, otherwise the merged result could be unexpected. Most of the time such embedded fields are simply not merged.</p>
+    <p> Bad templating examples:</p>
 <p class="decal"><span class="opt-html">[onload;if [onload.x]=1;then 'yes';else 'no']</span><br>
-      This example will always display <span class="opt-html">'no'</span>, because the embedded <span class="opt-html">[onload.x]</span> fild will never be evaluated. It is better to use <span class="opt-html">[onload;if [var.x]=1;then 'yes';else 'no']</span> instead, or better : <span class="opt-html">[onload.x;if [val]=1;then 'yes';else 'no']</span></p>
+      This example will always display <span class="opt-html">'no'</span>, because the embedded field <span class="opt-html">[onload.x]</span>  will never be merged (only [val] and [var] could be merged here).<br>
+      Corrects expressions are :<br>
+    <span class="opt-html">&nbsp;&nbsp;[onload;if [var.x]=1;then 'yes';else 'no']</span><br>
+    <span class="opt-html">&nbsp;&nbsp;[onload.x;if [val]=1;then 'yes';else 'no']</span></p>
     <p class="decal"><span class="opt-html">[b1.nom;block=tr;headergrp=[var.x]]</span><br>
       In this example,  [var.x] will not be merged yet when you call <span class="txt-code"><span class="opt-value">$TBS-&gt;MergeBlock('b1',...)</span></span><br>
       The header will then be defined badly. <br>
@@ -2904,7 +2904,7 @@ It is the same feature as option <a href="#php_setoption_tpl_frms" class="opt-na
           <p>Both <span class="opt-value">expr1</span> and <span class="opt-value">expr2</span> must be string or numerical expressions.<br>
           <em>Equal</em> and <em>not equal</em> operators are always string <span lang="en"><span title="">comparison</span></span>s and are <strong>case insensitive</strong>.<br>
           As with other parameters, string expressions can be delimited with single quotes ('), and literal single quotes in the string must be escaped using two adjacent  single quotes ('').</p>
-          <p>The expressions of parameter <span class="opt-name">when</span> may contain <a href="#html_field_auto">[var] fields</a>.</p>
+          <p>Parameter <span class="opt-name">if</span> supports <a href="#html_field_auto_embedded">automatic embded fields</a> <span class="opt-name">[var]</span>.</p>
           <p>Example:          </p>
           <div class="decal"><span class="opt-html">&lt;div&gt; ... </span>[<span class="opt-name">onload</span>;<span class="opt-name">block</span>=<span class="opt-value">div</span>;<span class="opt-name">when</span> [<span class="opt-name">var</span>.<span class="opt-name">x</span>]+-<span class="opt-value">0</span>] ... <span class="opt-html">&lt;/div&gt;</span><br>
             <span class="txt-small">The  &lt;div&gt; block will be displayed only if « $x &gt; 0 ». </span></div>
