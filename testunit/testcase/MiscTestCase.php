@@ -52,6 +52,28 @@ class MiscTestCase extends TBSUnitTestCase {
 	}
 
 
-}
+	/**
+	 * Important since the changes concerning $GLOBALS since PHP 8.1
+	 */
+	function testGlobalVariables() {
+		
+		// Using the $GLOBALS variable
+		$GLOBALS['xxx'] = 'XXX';
+		$this->assertEqualMergeFieldStrings("<div>[onshow.xxx]</div>", array(), "<div>XXX</div>", "test Global #1");
+		
+		// Using the « global » instruction
+		global $yyy;
+		$yyy = 'YYY';
+		$this->assertEqualMergeFieldStrings("<div>[onshow.yyy]</div>", array(), "<div>YYY</div>", "test Global #2");
+		
+		// Using a separated VarRef
+		$this->newInstance = false;
+		$this->tbs = new clsTinyButStrong;
+		$this->tbs->ResetVarRef(false); // VarRef is now a new empty array
+		$this->tbs->VarRef['zzz'] = 'ZZZ';
+		$this->assertEqualMergeFieldStrings("<div>[onshow.zzz]</div>", array(), "<div>ZZZ</div>", "test Global #3");
+		
+	}
 
-?>
+
+}

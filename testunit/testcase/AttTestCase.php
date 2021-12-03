@@ -189,8 +189,10 @@ class AttTestCase extends TBSUnitTestCase {
 	}
 	
 	function testOnShowMagnet() {
+		
 		// tests with 'onshow/magnet' directive with an empty value
 		$GLOBALS['x'] = '';
+		
 		$this->assertEqualMergeFieldStrings("<div>[onshow.x;att=id;magnet=#]</div>", array(), "<div></div>", "test fields #40");
 		$this->assertEqualMergeFieldStrings("<div >[onshow.x;att=id;magnet=#]</div>", array(), "<div ></div>", "test fields #41");
 		$this->assertEqualMergeFieldStrings("<div class=test>hello[onshow.x;att=id;magnet=#]</div>", array(), "<div class=test>hello</div>", "test fields #42");
@@ -209,6 +211,7 @@ class AttTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("<div id=\"22\">hello[onshow.x;att=id;magnet=#]</div>", array(), "<div>hello</div>", "test fields #55");
 		$this->assertEqualMergeFieldStrings("<div id=22 >hello[onshow.x;att=id;magnet=#]</div>", array(), "<div >hello</div>", "test fields #56");
 		$this->assertEqualMergeFieldStrings("<div id=\"22\" >hello[onshow.x;att=id;magnet=#]</div>", array(), "<div >hello</div>", "test fields #57");
+		
 	}
 
 	function testBugs() {
