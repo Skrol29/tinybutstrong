@@ -169,11 +169,14 @@ a.opt-name:hover {
 	border: 1px dotted #6699CC;
 }
 .note {
-	background-color: #D9FFD9;
+	background-color: #D9FFD9; /* green */
 	border: thin solid #00EC9F;
 	padding: 2px;
 	margin-top: 3px;
 	margin-left: 20px;
+}
+.warning {
+	background-color: #f4dfdf; /* light red */
 }
 -->
 </style>
@@ -188,13 +191,13 @@ a.opt-name:hover {
       </tr>
       <tr>
         <td>Date:</td>
-        <td>2021-08-27</td>
+        <td>2022-02-07</td>
       </tr>
     </table>
 </div>
   <div style="margin:auto; width:500px; text-align:center;">
     <h1>TinyButStrong Documentation</h1>
-    <div class="txt-tiny">version 3.12</div>
+    <div class="txt-tiny">version 3.13</div>
     <div style="margin-top:10px;">Template Engine for Pro and Beginners<br>
 PHP 8<br>
 PHP 7<br>
@@ -270,7 +273,19 @@ PHP 5
       </tr>
       <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_getoption"><span class="txt-small">method</span> GetOption()</a></td>
-        <td>get  TBS options</td>
+        <td>get TBS options</td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_resetvarref"><span class="txt-small">method</span> ResetVarRef()</a></td>
+        <td>reset the VarRef property</td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_getvarrefitem"><span class="txt-small">method</span> GetVarRefItem()</a></td>
+        <td>get an item in the VarRef property</td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_setvarrefitem"><span class="txt-small">method</span> SetVarRefItem()</a></td>
+        <td>set an item in the VarRef property</td>
       </tr>
       <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#php_replacefields"><span class="txt-small">method</span> ReplaceFields()</a></td>
@@ -1322,6 +1337,45 @@ The old features are still suported for compatibility, but they become deprecate
     <p class="versioning">Versioning:  methods GetOption() is supported since TBS version 3.8.0. </p>
   </div>
 
+  <h3><a id="php_resetvarref"></a>Method ResetVarRef():</h3>
+  <div class="norm">
+    <p>Reset the <a href="#php_varref" class="opt-name">VarRef</a> property.</p>
+    <p>By default, VarRef refers  to the <a href="https://www.php.net/manual/en/reserved.variables.globals.php">PHP global variable $GLOBALS</a>.</p>
+    <p> Syntax: <span class="txt-code"><span class="opt-type">mixed</span> <span class="opt-name">$TBS</span>-&gt;ResetVarRef(<span class="opt-type"><span class="opt-value">boolean</span></span> <span class="opt-name">$to_globals</span>)</span></p>
+    <table border="0" cellpadding="5" cellspacing="0">
+      <tr>
+        <th>Argument</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td align="left" valign="top" class="opt-name"><span class="txt-code">$to_globals</span></td>
+        <td align="left" valign="top">Indicates if the property VarRef refers to $GLOBALS or is a new empty array.
+		<br>- if <span class="opt-name">$to_globals</span> is <span class="txt-code"><span class="opt-type">true</span></span> then VarRef refers to $GLOBALS.
+		<br>- if <span class="opt-name">$to_globals</span> is <span class="txt-code"><span class="opt-type">false</span></span> then VarRef is a new empty array.</td>
+      </tr>
+    </table>
+  </div>
+
+  <h3><a id="php_getvarrefitem"></a>Method GetVarRefItem():</h3>
+  <div class="norm">
+    <p>Get an item value in the <a href="#php_varref" class="opt-name">VarRef</a> property.</p>
+    <p>This function uniformizes the way to get a <a href="#php_varref" class="opt-name">VarRef</a> item, whether VarRef refers to <a href="https://www.php.net/manual/en/reserved.variables.globals.php">$GLOBALS</a> or not.</p>
+    <p> Syntax: <span class="txt-code"><span class="opt-type">mixed</span> <span class="opt-name">$TBS</span>-&gt;GetVarRefItem(<span class="opt-type"><span class="opt-value">string</span></span> <span class="opt-name">$key</span>, <span class="opt-type"><span class="opt-value">mixed</span></span> <span class="opt-name">$default</span> = <span class="opt-value">null</span>)</span></p>
+    <p>If VarRef if a dedicated array, then this function is the same as doing <span class="txt-code">$TBS->VarRef[$key] ?? $default;</span></p>
+    <p class="versioning">Versioning:  methods GetVarRefItem() is supported since TBS version 3.13.0.</p>
+  </div>
+
+  <h3><a id="php_setvarrefitem"></a>Method SetVarRefItem():</h3>
+  <div class="norm">
+    <p>Set an item value in the <a href="#php_varref" class="opt-name">VarRef</a> property.</p>
+    <p>This function uniformizes the way to set a <a href="#php_varref" class="opt-name">VarRef</a> item, whether VarRef refers to <a href="https://www.php.net/manual/en/reserved.variables.globals.php">$GLOBALS</a> or not.</p>
+    <p> Syntax: <span class="txt-code"><span class="opt-type">mixed</span> <span class="opt-name">$TBS</span>-&gt;SetVarRefItem(<span class="opt-type"><span class="opt-value">string</span></span> <span class="opt-name">$key</span>, <span class="opt-type"><span class="opt-value">mixed</span></span> <span class="opt-name">$value</span>)</span></p>
+    <p>If VarRef if a dedicated array, then this function is the same as doing <span class="txt-code">$TBS->VarRef[$key] = $value;</span></p>
+    <p class="versioning">Versioning:  methods SetVarRefItem() is supported since TBS version 3.13.0.</p>
+  </div>
+
+
+  
   <h3><a id="php_replacefields"></a>Method ReplaceFields():</h3>
   <div class="norm">
     <p>Replace a set of simple TBS fields in the template with new definitions prepared at the PHP side. Note than this function does not merges any field ; it only replaces the definition of fields.</p>
@@ -1388,7 +1442,7 @@ $TBS</span>-&gt;ReplaceFields( array(
       <li><span class="txt-code opt-value">null</span> if the TBS field is not found or if it has no parameter <a href="#html_field_prm_all" class="opt-name">att</a>,</li>
       <li><span class="txt-code opt-value">false</span> if the target XML/HTML element is not found or if the asked attribute is not found.</li>
     </ul>
-<p class="versioning">Versioning:  methods GetAttValue() is supported since TBS version 3.11.0. </p>
+	<p class="versioning">Versioning:  methods GetAttValue() is supported since TBS version 3.11.0. </p>
   </div>
   
   <h3><a id="php_plugin"></a>Method PlugIn():</h3>
@@ -1416,29 +1470,56 @@ $TBS</span>-&gt;ReplaceFields( array(
     </ul>
     <p class="versioning">Versioning: the method PlugIn()  is supported since TBS version 3.0. </p>
   </div>
+  
   <h3><a name="php_varref"></a>Property VarRef:</h3>
   <div class="norm">
-    <p>This property enables you to set the scope of variables availables for <a href="#html_field_auto">automatic fields</a> ([onload], [onshow] and [var]).</p>
-    <p>By default, VarRef is a <a href="http://www.php.net/manual/en/language.references.whatare.php">reference</a> to the <span class="opt-name">$GLOBALS</span> PHP variable, which means all global PHP variables are available for automatic field.</p>
+    <p>Property VarRef is the array of the items that will be merged with <a href="#html_field_auto">automatic fields</a> ([onload], [onshow] and [var]).</p>
     <p> Syntax: <span class="txt-code"><span class="opt-type">array</span> <span class="opt-name">$TBS</span>-&gt;VarRef</span></p>
+	<p>
+		By default <span class="txt-code">$TBS->VarRef</span> refers
+		to the special <a class="opt-name" href="https://www.php.net/manual/en/reserved.variables.globals.php">$GLOBALS</a> variable of PHP.
+		This is for compatibility reasons, but it is recommended to use another array instead (see below).
+	</p>
+	<p>You can set <span class="txt-code">$TBS->VarRef</span> to be a new empty array using the method <span class="txt-code">$TBS->ResetVarRef(false);</span></p>
+	<p>You can also set <span class="txt-code">$TBS->VarRef</span> to be a reference to your own array : <span class="txt-code">$TBS->VarRef =& $my_array;</span></p>
+	
+	<div class="decal warning">
+		<strong>Warning</strong>
+		<br>As of TBS version 3.13.0, is not possible to access directly to the VarRef items when the property refers to $GLOBALS. This is because of the PHP restriction on $GLOBALS that occurs with PHP 8.1.
+		<br>In order to ensure the compatibility to any situation, you can manage the items of VarRef using the methods <a href="#php_setvarrefitem" class="txt-code">$TBS->SetVarRefItem()</a> and <a href="#php_setvarrefitem" class="txt-code">$TBS->GetVarRefItem()</a>.
+	</div>
+	
     <p>Notes:</p>
     <ul>
-      <li> Method<span class="txt-code"> ResetVarRef(<span class="opt-name">$ToGlobal</span>)</span> is a shorthand for reseting property VarRef to <span class="opt-name">$GLOBALS</span> or to an empty array.</li>
+      <li> Method <a href="#php_resetvarref" class="txt-code">ResetVarRef(<span class="opt-name">$ToGlobal</span>)</a> is a shorthand for resetting property VarRef to <a class="opt-name" href="https://www.php.net/manual/en/reserved.variables.globals.php">$GLOBALS</a> or to an empty array.</li>
       <li> If property VarRef is changed by a sub-template, the change is available only for the sub-template.</li>
     </ul>
-<p>Example for setting VarRef to global variables :</p>
-<pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;VarRef = &amp;<span class="opt-name">$GLOBALS</span>;
+	
+	<p>Example when VarRef is a custom array (recommended): </p>
+	<pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;ResetVarRef(false); <span class="opt-html">// VarRef is now a new empty array</span>
+<span class="opt-name">$TBS</span>-&gt;VarRef['my_item'] = "my value";
+<span class="opt-name">$TBS</span>-&gt;SetVarRefItem('my_item', "my value"); <span class="opt-html">// same as above but ensure the compatibility with any situation</span></pre>
 
-which is the same as:
+	<p>Example when VarRef is attached to $GLOBALS (by default): </p>
+	<pre class="decal txt-code"><s><span class="opt-name">$TBS</span>-&gt;VarRef['my_item'] = "my value";</s> <span class="opt-html">// this will raise an error as of TBS version 3.13.0</span>
+<span class="opt-name">$GLOBALS</span>['my_item'] = "my value";
+<span class="opt-name">$TBS</span>-&gt;SetVarRefItem('my_item', "my value"); <span class="opt-html">// same as above but ensure the compatibility with any situation</span></pre>
 
-<span class="opt-name">$TBS</span>-&gt;ResetVarRef(true)<span class="opt-name"></span>;
-</pre>
-<p>Example for setting VarRef to a custome scope of variables: </p>
-<pre class="decal txt-code"><span class="opt-name">$TBS</span>-&gt;ResetVarRef(false); <span class="opt-html">// VarRef is now a new empty array</span>
-<span class="opt-name">$TBS</span>-&gt;VarRef['x'] = 'This is value X';</pre>
-    <p class="versioning">Versioning: property  VarRef is supported since TBS version 3.8. Before this version, the scope of automatic fields was PHP global variables.</p>
-</div>
-<h3><a id="php_assigned"></a>Property Assigned:</h3>
+	<div class="versioning">
+		<p>Versioning:</p>
+		<ul class="list-mini">
+			<li>Property VarRef is supported since TBS version 3.8. Before this version, the scope of automatic fields was PHP global variables.</li>
+			<li>
+			  Since TBS version 3.13.0, you cannot directly use the property <span class="txt-code">$TBS->VarRef</span> when it refers to $GLOBAL. This is because of a PHP 8.1 restriction. Use SetVarRefItem() and GetVarRefItem() instead.
+			  <br>Before TBS version 3.13.0, property <span class="txt-code">$TBS->VarRef</span> used to be by default a PHP reference the $GLOBAL variable.
+			</li>
+	</div>
+	
+	</div>
+	
+	
+	<h3><a id="php_assigned"></a>Property Assigned:</h3>
+
   <div class="norm">
     <p>Enables you to define information for a subsequent  merging which can be automatic or manual. </p>
     <p> Syntax: <span class="txt-code"><span class="opt-type">array</span> <span class="opt-name">$TBS</span>-&gt;Assigned</span></p>
