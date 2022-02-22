@@ -655,7 +655,7 @@ public $Assigned = array();
 public $ExtendedMethods = array();
 public $ErrCount = 0;
 // Undocumented (can change at any version)
-public $Version = '3.13.0';
+public $Version = '3.13.1';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
