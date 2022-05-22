@@ -179,9 +179,8 @@ a.opt-name:hover {
 	background-color: #f4dfdf; /* light red */
 }
 -->
-</style>
-  </head>
-  <body bgcolor="#FFFFFF">
+</style> </head>
+  <body style="background-color: white;">
     <div id="main-body">
       <div class="txt-tiny" style="display:inline-block; float:left;">
         <table class="txt-tiny" cellspacing="0" cellpadding="0" border="0">
@@ -753,8 +752,13 @@ class="opt-value">false</span>); <span class="opt-html">// turn the charset to n
                 <td>an array, a string, a number</td>
               </tr>
               <tr>
-                <th width="80">Databases:</th>
-                <td>MySQL ; PostgreSQL ; SQLite</td>
+                <th>PHP Databases Drivers:</th>
+                <td>MySQL, PostgreSQL, SQLite, PDO<br>
+                </td>
+              </tr>
+              <tr>
+                <td>PHP Library Connectors:</td>
+                <td>Doctrine DBAL, Zend_Db</td>
               </tr>
             </tbody>
           </table>
@@ -3270,10 +3274,9 @@ class="opt-value">body</span>;<span class="opt-name">store</span>=<span class="o
                 <td class="border-sep" align="left" valign="top"><a name="html_field_prm_storename"></a><span
                     class="opt-name">storename</span>=<span class="opt-value">name</span></td>
                 <td class="border-sep" align="left" valign="top">To be used with
-                  parameter <span class="opt-name">store</span>.
-                  Parameter <span class="opt-name">storename</span> changes the
-                  name of the store. See parameter <a href="#html_field_prm_store"
-                    class="opt-name">store</a>.
+                  parameter <span class="opt-name">store</span>. Parameter <span
+                    class="opt-name">storename</span> changes the name of the
+                  store. See parameter <a href="#html_field_prm_store" class="opt-name">store</a>.
                   <p class="versioning">Versioning: Parameter <span class="opt-name">store</span>
                     is supported since TBS version 3.8.0.</p>
                 </td>
@@ -4090,8 +4093,7 @@ class="opt-value">body</span>;<span class="opt-name">store</span>=<span class="o
                       class="opt-name">onshow.x</span>;<span class="opt-name">combo</span>=<span
                       class="opt-value">add_date</span>] </div>
                   <p class="versioning"> Versioning: parameter combo is
-                    supported since TBS version 3.11.0.
-                  </p>
+                    supported since TBS version 3.11.0. </p>
                 </td>
               </tr>
               <tr>
@@ -6330,8 +6332,7 @@ class="opt-value">'SELECT * FROM table1'</span>);
           <p class="versioning">Versioning: Extended methods are supported since
             TBS version 3.8. The feature needs PHP 5.0 or higher.</p>
           <p> Examples:</p>
-          <p>
-            If you define:<br>
+          <p> If you define:<br>
             <span class="txt-code decal"><span class="opt-name">$TBS</span>-&gt;ExtendedMethods[<span
                 class="opt-value">'newMethod1'</span>] = array(&amp;<span class="opt-name">$myObject</span>,
               <span class="opt-value">'myMethod'</span>);</span><br>
@@ -6340,10 +6341,8 @@ class="opt-value">'SELECT * FROM table1'</span>);
                 class="opt-name">$x</span>);</span><br>
             it whill run :<br>
             <span class="txt-code decal"><span class="opt-name">$myObject</span>-&gt;myMethod(<span
-                class="opt-name">$x</span>);</span>
-          </p>
-          <p>
-            If you define: <br>
+                class="opt-name">$x</span>);</span> </p>
+          <p> If you define: <br>
             <span class="txt-code decal"><span class="opt-name">$TBS</span>-&gt;ExtendedMethods[<span
                 class="opt-value">'newMethod2'</span>] = <span class="opt-value">'myFunction'</span>;</span><br>
             then if you call:<br>

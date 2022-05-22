@@ -3,8 +3,8 @@
  *
  * TinyButStrong - Template Engine for Pro and Beginners
  *
- * @version 3.13.2 for PHP 5, 7, 8
- * @date    2022-02-23
+ * @version 3.13.3-beta for PHP 5, 7, 8
+ * @date    2022-05-22
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
  * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
@@ -145,6 +145,8 @@ public function DataPrepare(&$SrcId,&$TBS) {
 		$this->Type = 13; $this->SubType = 2;
 	} elseif ($SrcId instanceof SQLite3Result) {
 		$this->Type = 13; $this->SubType = 3;
+	} elseif (is_a($SrcId, 'Doctrine\DBAL\Connection')) {
+		$this->Type = 14;
 	} elseif (is_object($SrcId)) {
 		$FctInfo = get_class($SrcId);
 		$FctCat = 'o';
@@ -433,6 +435,14 @@ public function DataOpen(&$Query,$QryPrms=false) {
 			$this->DataAlert('SQLite3 error message when opening the query: '.$e->getMessage());
 		}
 		break;
+	case 14: // Doctrine DBAL
+		try {
+			if (!is_array($QryPrms)) $QryPrms = array();
+			$this->RecSet = $this->SrcId->executeQuery($Query, $QryPrms);
+		} catch (Exception $e) {
+			$this->DataAlert('Doctrine DBAL error message when opening the query: '.$e->getMessage());
+		}
+		break;
 	}
 
 	if (($this->Type===0) || ($this->Type===9)) {
@@ -625,6 +635,9 @@ private function _DataFetchOn($obj) {
 	case 13: // SQLite3
 		$obj->CurrRec = $this->RecSet->fetchArray(SQLITE3_ASSOC);
 		break;
+	case 14: // Doctrine DBAL
+		$obj->CurrRec = $this->RecSet->fetchAssociative();
+		break;
 	}
 
 	// Set the row count
@@ -655,7 +668,7 @@ public $Assigned = array();
 public $ExtendedMethods = array();
 public $ErrCount = 0;
 // Undocumented (can change at any version)
-public $Version = '3.13.2';
+public $Version = '3.13.3-beta';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
