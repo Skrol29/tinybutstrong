@@ -180,7 +180,7 @@ a.opt-name:hover {
 }
 -->
 </style> </head>
-  <body style="background-color: white;">
+  <body style="     background-color: white;">
     <div id="main-body">
       <div class="txt-tiny" style="display:inline-block; float:left;">
         <table class="txt-tiny" cellspacing="0" cellpadding="0" border="0">
@@ -749,7 +749,7 @@ class="opt-value">false</span>); <span class="opt-html">// turn the charset to n
             <tbody>
               <tr>
                 <th>Php data:</th>
-                <td>an array, a string, a number</td>
+                <td>an array, a string, a number, an IteratorAggregate</td>
               </tr>
               <tr>
                 <th>PHP Databases Drivers:</th>
@@ -2791,8 +2791,10 @@ class="opt-value">TBS_NOTHING</span>); <span class="opt-html">// terminate the m
                         </tr>
                         <tr>
                           <td valign="top"><span class="opt-value">utf8</span></td>
-                          <td>Convert the data item into UTF-8. <span class="versioning">(supported
-                              since TBS version 3.6.0)</span></td>
+                          <td>Convert the data item from ISO-8859-1 (Latin 1) to
+                            UTF-8. <span class="versioning">(supported since
+                              TBS version 3.6.0) <br>
+                            </span></td>
                         </tr>
                         <tr>
                           <td valign="top"><span class="opt-value">look</span></td>
@@ -2803,10 +2805,19 @@ class="opt-value">TBS_NOTHING</span>); <span class="opt-html">// terminate the m
                       </tbody>
                     </table>
                   </div>
-                  <p class="versioning">Versioning: Parameter <span class="opt-name">strconv</span>
-                    is supported since TBS version 3.8.0. It is an alias of
-                    parameter <span class="opt-name">htmlconv</span> which was
-                    misnamed and becomes deprecated.</p>
+                  <div class="versioning">
+                    <p>Versioning:</p>
+                    <ul class="list-mini">
+                      <li>Parameter <span class="opt-name">strconv</span> is
+                        supported since TBS version 3.8.0. It is an alias of
+                        parameter <span class="opt-name">htmlconv</span> which
+                        was misnamed and becomes deprecated.</li>
+                      <li>Keyword <span class="opt-value">utf8 </span>needs
+                        the <a href="https://www.php.net/manual/en/book.mbstring.php"
+                          target="_blank">mbstring</a> PHP extension since TBS
+                        version 3.14.0.</li>
+                    </ul>
+                  </div>
                 </td>
               </tr>
               <tr>
