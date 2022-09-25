@@ -4,7 +4,7 @@
  * TinyButStrong - Template Engine for Pro and Beginners
  *
  * @version 3.14.0 for PHP 5, 7, 8
- * @date    2022-07-25
+ * @date    2022-09-25
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
  * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
@@ -678,6 +678,7 @@ public $Protect = true;
 public $ErrMsg = '';
 public $AttDelim = false;
 public $MethodsAllowed = false;
+public $ScriptsAllowed = false;
 public $OnLoad = true;
 public $OnShow = true;
 public $IncludePath = array();
@@ -791,6 +792,7 @@ function SetOption($o, $v=false, $d=false) {
 	if (array_key_exists('include_path',$o))  self::f_Misc_UpdateArray($this->IncludePath, true, $o['include_path'], $d);
 	if (isset($o['render'])) $this->Render = $o['render'];
 	if (isset($o['methods_allowed'])) $this->MethodsAllowed = $o['methods_allowed'];
+	if (isset($o['scripts_allowed'])) $this->ScriptsAllowed = $o['scripts_allowed'];
 }
 
 function GetOption($o) {
@@ -821,6 +823,7 @@ function GetOption($o) {
 	if ($o==='include_path') return $this->IncludePath;
 	if ($o==='render') return $this->Render;
 	if ($o==='methods_allowed') return $this->MethodsAllowed;
+	if ($o==='scripts_allowed') return $this->ScriptsAllowed;
 	if ($o==='parallel_conf') return $GLOBALS['_TBS_ParallelLst'];
 	if ($o==='block_alias') return $GLOBALS['_TBS_BlockAlias'];
 	if ($o==='prm_combo') return $GLOBALS['_TBS_PrmCombo'];
@@ -1803,9 +1806,18 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 
 	if (isset($Loc->PrmLst['script'])) {// Include external PHP script
 		$x = $Loc->PrmLst['script'];
-		if ($x===true) $x = $CurrVal;
-		$this->meth_Merge_AutoVar($x,false);
-		$x = trim(str_replace($this->_ChrVal,$CurrVal,$x));
+		if ($this->ScriptsAllowed) {
+			if ($x===true) $x = $CurrVal;
+			$this->meth_Merge_AutoVar($x,false);
+			$x = trim(str_replace($this->_ChrVal,$CurrVal,$x));
+			if (basename($x) == basename($this->_LastFile)) {
+				if (!isset($Loc->PrmLst['noerr'])) $this->meth_Misc_Alert($Loc,'the file \''.$x.'\' given by parameter script cannot be called because it has the same name as the current template and this is suspicious.',true);
+				$x= '';
+			}
+		} else {
+			if (!isset($Loc->PrmLst['noerr'])) $this->meth_Misc_Alert($Loc,'parameter script with value \''.$x.'\' cannot be called because the current TBS settings do not allow to call scripts.',true);
+			$x = '';	
+		}
 		if ($x!=='') {
 			$this->_Subscript = $x;
 			$this->CurrPrm = &$Loc->PrmLst;

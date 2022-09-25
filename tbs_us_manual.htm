@@ -180,7 +180,7 @@ a.opt-name:hover {
 }
 -->
 </style> </head>
-  <body style="     background-color: white;">
+  <body style="            background-color: white;">
     <div id="main-body">
       <div class="txt-tiny" style="display:inline-block; float:left;">
         <table class="txt-tiny" cellspacing="0" cellpadding="0" border="0">
@@ -1934,17 +1934,31 @@ class="opt-name">'else'</span>=&gt;'More');</pre>
                       id="php_setoption_methods_allowed"></a>methods_allowed</span></td>
                 <td class="border-sep" align="left" valign="top">
                   <p>Allow methods in <a href="#html_field_auto">automatic
-                      fields</a>. The default value is <span class="opt-value">false</span>.
-                    If you set this option to <span class="opt-value">true</span>,
-                    then and automatic fields can call methods of its sub items.
-                    It is a security point to not allow methods by default on
-                    automatic fields because all global variables can be called
-                    by automatic fields until <a href="#php_varref">VarRef</a>
-                    is redefined.</p>
+                      fields</a>. The default value is <span class="opt-value"><span
+                        class="txt-code">false</span></span>. If you set this
+                    option to <span class="opt-value">true</span>, then
+                    automatic fields can call methods of its sub items. It is a
+                    security point to not allow methods by default on automatic
+                    fields because all global variables can be called by
+                    automatic fields until <a href="#php_varref">VarRef</a> is
+                    redefined.</p>
                   <p> Example of automatic field calling a method:
                     [onshow.my_objet.my_method]</p>
                   <p class="versioning">Versioning: option 'methods_allowed' is
                     supported since TBS version 3.8.2. </p>
+                </td>
+              </tr>
+              <tr>
+                <td class="border-sep" align="left" valign="top"><span class="opt-name"><a
+                      id="php_setoption_scripts_allowed"></a>scripts_allowed</span></td>
+                <td class="border-sep" align="left" valign="top">
+                  <p>Allow to use <a href="#html_field_prm_script">parameter
+                      script</a>. The default value is <span class="opt-value"><span
+                        class="txt-code">false</span></span><span class="opt-value"><span
+                        style="color: black;">. This is a security option.<br>
+                      </span></span></p>
+                  <p class="versioning">Versioning: option 'scripts_allowed' is
+                    supported since TBS version 3.14.0. </p>
                 </td>
               </tr>
               <tr>
@@ -3369,9 +3383,14 @@ class="opt-value">body</span>;<span class="opt-name">store</span>=<span class="o
                       </tr>
                     </tbody>
                   </table>
-                  <p><span>See chapter '<a href="#html_subtemplate">Subtemplates</a>'
-                      for more details about how to use this parameter in
-                      subtemplate mode.</span></p>
+                  <p>See chapter '<a href="#html_subtemplate">Subtemplates</a>'
+                    for more details about how to use this parameter in
+                    subtemplate mode.</p>
+                  <p class="versioning">Versioning: Since TBS version 3.14.0
+                    this feature is locked by default. You have to set the
+                    option <a href="#php_setoption_scripts_allowed" class="opt-name">scripts_allowed</a>
+                    to <span class="txt-code">true </span>in order to unlock
+                    it.</p>
                 </td>
               </tr>
               <tr id="v202_subtpl">
@@ -4112,10 +4131,9 @@ class="opt-value">body</span>;<span class="opt-name">store</span>=<span class="o
                     class="opt-name">locale</span></td>
                 <td class="border-sep" align="left" valign="top">
                   <p><span class="versioning">Deprecated since TBS version
-                      3.4.0.</span><br>
-                    It does the same as the keyword <span class="opt-value">(locale)</span>
-                    used in parameter <a href="#html_field_prm_frm" class="opt-name">frm</a>.
-                  </p>
+                      3.4.0, and may be badly supported.</span><br>
+                    Instead you should use parameter <a href="#html_field_prm_frm"
+                      class="opt-name">frm</a> with the keyword <span class="opt-value">(locale)</span>.</p>
                 </td>
               </tr>
               <tr>
