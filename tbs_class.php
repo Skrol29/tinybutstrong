@@ -3,8 +3,8 @@
  *
  * TinyButStrong - Template Engine for Pro and Beginners
  *
- * @version 3.14.0 for PHP 5, 7, 8
- * @date    2022-09-25
+ * @version 3.14.1 for PHP 5, 7, 8
+ * @date    2022-11-01
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
  * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
@@ -667,7 +667,7 @@ public $Assigned = array();
 public $ExtendedMethods = array();
 public $ErrCount = 0;
 // Undocumented (can change at any version)
-public $Version = '3.14.0';
+public $Version = '3.14.1';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -4296,7 +4296,7 @@ static function f_Misc_ParseFctForm($Str) {
 static function f_Misc_CheckCondition($Str) {
 // Check if an expression like "exrp1=expr2" is true or false.
 
-	// Bluid $StrZ, wich is the same as $Str but with 'z' for each charactares that is proetected with "'".
+	// Bluid $StrZ, wich is the same as $Str but with 'z' for each character that is protected with "'".
 	// This will help to search for operators outside protected strings.
 	$StrZ = $Str;
 	$Max = strlen($Str)-1;
@@ -4352,8 +4352,8 @@ static function f_Misc_CheckCondition($Str) {
 	$Val1  = trim(substr($Str,0,$p));
 	$Val2  = trim(substr($Str,$p+$Len));
 	if ($Esc) {
-		$Nude1 = self::f_Misc_DelDelimiter($Val1,'\'');
-		$Nude2 = self::f_Misc_DelDelimiter($Val2,'\'');
+		$NoDelim1 = self::f_Misc_DelDelimiter($Val1,'\'');
+		$NoDelim2 = self::f_Misc_DelDelimiter($Val2,'\'');
 	} else {
 		$Nude1 = $Nude2 = false;
 	}
@@ -4366,10 +4366,13 @@ static function f_Misc_CheckCondition($Str) {
 	} elseif ($Ope==='~=') {
 		return (preg_match($Val2,$Val1)>0);
 	} else {
-		if ($Nude1) $Val1='0'+$Val1;
-		if ($Nude2) $Val2='0'+$Val2;
+		// If a value has no string delimiter, we assume it is supposed to be a numerical comparison.
+		if ($NoDelim1 && ($Val1 === '') ) $Val1 = '0';
+		if ($NoDelim2 && ($Val2 === '') ) $Val2 ='0';
+		// PHP makes a numerical comparison when each item is independently either a numeric value or a numeric string. Otherwise it makes a string comparison.
+		// So we let PHP doing the comparison on its onw way.
 		if ($Ope==='+-') {
-			return ($Val1>$Val2);
+			return ($Val1 > $Val2);
 		} elseif ($Ope==='-+') {
 			return ($Val1 < $Val2);
 		} elseif ($Ope==='+=-') {
@@ -4385,9 +4388,9 @@ static function f_Misc_CheckCondition($Str) {
 
 /**
  * Delete the string delimiters that surrounds the string, if any. But not inside (no need).
- * @param  string $Txt    The string variable that ba be modified.
- * @param  string $Delim  The string variable that ba be modified.
- * @return boolean True if the given string was not protected.
+ * @param  string $Txt    The string to modifiy.
+ * @param  string $Delim  The character that can delimit the string.
+ * @return boolean True if the given string was not delimited with $Delim.
  */
 static function f_Misc_DelDelimiter(&$Txt,$Delim) {
 // Delete the string delimiters

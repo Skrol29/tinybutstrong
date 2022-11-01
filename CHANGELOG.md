@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## [3.14.1] - 2022-11-01
+
+### Fixed
+
+- PHP error "Unsupported operand types" when using a TBS comparison (if/when) and one expression has no string delimiter and is not numerical.
+
 ## [3.14.0] - 2022-07-25
 
 ### Added
