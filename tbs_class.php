@@ -3,8 +3,8 @@
  *
  * TinyButStrong - Template Engine for Pro and Beginners
  *
- * @version 3.14.1 for PHP 5, 7, 8
- * @date    2022-11-01
+ * @version 3.15.0-beta-1 for PHP 5, 7, 8
+ * @date    2022-11-30
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
  * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
@@ -29,6 +29,7 @@ define('TBS_ISINSTALLED', -3);
 // *********************************************
 
 class clsTbsLocator {
+
 	public $PosBeg = false;
 	public $PosEnd = false;
 	public $Enlarged = false;
@@ -46,6 +47,83 @@ class clsTbsLocator {
 	public $ConvStr = true;
 	public $ConvMode = 1; // Normal
 	public $ConvBr = true;
+	
+	// Compatibility with PHP 8.2
+
+	public $Ope;
+	public $PosNext;
+	public $PrmIf;
+	public $PrmThen;
+	public $PrmThenVar;
+	public $PrmIfVar;
+	public $PrmElseVar;
+
+	// autre
+	public $ConvEsc;
+	public $ConvWS;
+	public $ConvJS;
+	public $ConvUrl;
+	public $ConvUtf8;
+
+	public $OnFrmInfo;
+	public $OnFrmArg;
+
+	// Att
+	public $PrmPos;
+	public $AttForward;
+	public $AttTagBeg;
+	public $AttTagEnd;
+	public $AttDelimChr;
+	public $AttName;
+	public $AttBeg;
+	public $AttEnd;
+	public $AttDelimCnt;
+	public $AttValBeg;
+	public $PosBeg0;
+	public $PosEnd0;
+	public $InsPos;
+	public $InsLen;
+	public $DelPos;
+	public $DelLen;
+	public $PosBeg2;
+
+	// blocks
+	public $P1;
+	public $FieldOutside;
+	public $FOStop;
+	public $BDefLst;
+	public $NoData;
+	public $Special;
+	public $HeaderFound;
+	public $FooterFound;
+	public $SerialEmpty;
+	public $GrpBreak;
+	public $BoundFound;
+	public $CheckNext;
+	public $CheckPrev;
+	public $WhenFound;
+	public $WhenDefault;
+	public $SectionNbr;
+	public $SectionLst;
+	public $PosDefBeg;
+	public $RightLevel;
+	public $BlockSrc;
+	public $PosDefEnd;
+	public $IsRecInfo;
+	public $RecInfo;
+	public $WhenSeveral;
+	public $WhenNbr;
+	public $WhenLst;
+	public $FooterNbr;
+	public $FooterDef;
+	public $HeaderNbr;
+	public $HeaderDef;
+	public $ValPrev;
+	public $BoundLst;
+	public $BoundNb;
+	public $BoundSingleNb;
+	public $ValNext;
+
 }
 
 // *********************************************
@@ -77,6 +155,10 @@ public $NextRec = null;
 
 public $PrevSave = false;
 public $NextSave = false;
+
+// Compatibility with PHP 8.2
+public $RecNbr;
+public $RSIsFirst;
 
 public function DataAlert($Msg) {
 	if (is_array($this->TBS->_CurrBlock)) {
@@ -667,7 +749,7 @@ public $Assigned = array();
 public $ExtendedMethods = array();
 public $ErrCount = 0;
 // Undocumented (can change at any version)
-public $Version = '3.14.1';
+public $Version = '3.15.0-beta-1';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -696,6 +778,9 @@ public $_ChrProtect = '&#91;';
 public $_PlugIns = array();
 public $_PlugIns_Ok = false;
 public $_piOnFrm_Ok = false;
+
+// Compatibility with PHP 8.2
+private $_UserFctLst;
 
 function __construct($Options=null,$VarPrefix='',$FctPrefix='') {
 
@@ -1751,7 +1836,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 			$CurrVal = str_replace(array("\n","\r","\t"),array('\n','\r','\t'),$CurrVal);
 		}
 		if ($Loc->ConvUrl) $CurrVal = urlencode($CurrVal);
-		if ($Loc->ConvUtf8) $CurrVal = mb_convert_encoding($CurrVal, 'UTF-8', 'ISO-8859-1');
+		if ($Loc->ConvUtf8) $CurrVal = iconv('ISO-8859-1', 'UTF-8', $CurrVal);
 	}
 
 	// if/then/else process, there may be several if/then
