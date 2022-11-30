@@ -3,7 +3,7 @@
  *
  * TinyButStrong - Template Engine for Pro and Beginners
  *
- * @version 3.15.0-beta-1 for PHP 5, 7, 8
+ * @version 3.15.0-beta-2 for PHP 5, 7, 8
  * @date    2022-11-30
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
@@ -49,7 +49,8 @@ class clsTbsLocator {
 	public $ConvBr = true;
 	
 	// Compatibility with PHP 8.2
-
+	public $Prop = array(); // dynamic properties, used by OpenTBS
+	
 	public $Ope;
 	public $PosNext;
 	public $PrmIf;
@@ -67,6 +68,11 @@ class clsTbsLocator {
 
 	public $OnFrmInfo;
 	public $OnFrmArg;
+	
+	public $OpeUtf8;
+	public $OpeAct;
+	public $OpePrm;	
+	public $OpeArg;	
 
 	// Att
 	public $PrmPos;
@@ -159,6 +165,10 @@ public $NextSave = false;
 // Compatibility with PHP 8.2
 public $RecNbr;
 public $RSIsFirst;
+public $NumMin;
+public $NumMax;
+public $NumStep;
+public $NumVal;
 
 public function DataAlert($Msg) {
 	if (is_array($this->TBS->_CurrBlock)) {
@@ -749,7 +759,7 @@ public $Assigned = array();
 public $ExtendedMethods = array();
 public $ErrCount = 0;
 // Undocumented (can change at any version)
-public $Version = '3.15.0-beta-1';
+public $Version = '3.15.0-beta-2';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -781,6 +791,41 @@ public $_piOnFrm_Ok = false;
 
 // Compatibility with PHP 8.2
 private $_UserFctLst;
+
+private $_piOnData;
+private $_piBeforeLoadTemplate;
+private $_piAfterLoadTemplate;
+private $_piOnMergeField;
+private $_piBeforeShow;
+private $_piAfterShow;
+private $_piOnCommand;
+private $_piOnOperation;
+private $_piOnCacheField;
+private $_PlugIns_Ok_save;
+private $_piOnFrm_Ok_save;
+private $_piOnFormat;
+private $_piBeforeMergeBlock;
+private $_piOnMergeSection;
+private $_piOnMergeGroup;
+private $_piAfterMergeBlock;
+private $_piOnSpecialVar;
+
+// OpenTBS
+public $OtbsAutoLoad;
+public $OtbsConvBr;
+public $OtbsAutoUncompress;
+public $OtbsConvertApostrophes;
+public $OtbsSpacePreserve;
+public $OtbsClearWriter;
+public $OtbsClearMsWord;
+public $OtbsMsExcelConsistent;
+public $OtbsMsExcelExplicitRef;
+public $OtbsClearMsPowerpoint;
+public $OtbsGarbageCollector;
+public $OtbsMsExcelCompatibility;
+public $OtbsCurrFile;
+public $OtbsSubFileLst;
+public $TbsZip;
 
 function __construct($Options=null,$VarPrefix='',$FctPrefix='') {
 
