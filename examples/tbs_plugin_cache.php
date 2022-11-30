@@ -4,6 +4,7 @@
 ********************************************************
 TinyButStrong Plug-in: CacheSystem for TBS => 3.0.2
 Version 1.0.6, on 2008-02-29, by Skrol29
+Version 1.1.0, on 2022-11-30, by Skrol29, compatibility with PHP 8.2
 ********************************************************
 */
 
@@ -23,15 +24,16 @@ define('TBS_CACHEDELETEMASK', -9);
 
 class clsTbsCacheSytem {
 
+	public $TBS;
+	public $Version = '1.1.0';
+	public $ShowFromCache = false;
+	public $CacheFile = array();
+	public $CacheMask = 'cache_tbs_*.php';
+	public $CacheDir  = '';
+
 	function OnInstall($CacheDir=false,$CacheMask=false) {
-		$this->Version = '1.0.6';
-		$this->ShowFromCache = false;
-		$this->CacheFile = array();
-		$TBS =& $this->TBS;
-		if (!isset($TBS->CacheMask))  $TBS->CacheMask = 'cache_tbs_*.php'; // for compatibility
-		if (!isset($TBS->CacheDir))   $TBS->CacheDir = '';
-		if ($CacheMask!==false) $TBS->CacheMask = $CacheMask;
-		if ($CacheDir!==false ) $TBS->CacheDir  = $CacheDir;
+		if ($CacheMask!==false) $this->CacheMask = $CacheMask;
+		if ($CacheDir!==false ) $this->CacheDir  = $CacheDir;
 		return array('OnCommand','BeforeShow','AfterShow');
 	}
 
@@ -41,17 +43,17 @@ class clsTbsCacheSytem {
 
 		$CacheId = trim($CacheId);
 		$Res = false;
-		if ($Dir===false) $Dir = $TBS->CacheDir;
+		if ($Dir===false) $Dir = $this->CacheDir;
 		if (!isset($this->CacheFile[$TBS->_Mode])) $this->CacheFile[$TBS->_Mode] = false;
 		
 		if ($Action===TBS_CACHECANCEL) { // Cancel cache save if any
 			$this->CacheFile[$TBS->_Mode] = false;
 		} elseif (($CacheId === '*') and ($Action===TBS_CACHEDELETE)) {
-			$Res = tbs_Cache_DeleteAll($Dir,$TBS->CacheMask);
+			$Res = tbs_Cache_DeleteAll($Dir,$this->CacheMask);
 		} elseif ($Action===TBS_CACHEDELETEMASK) {
 			$Res = tbs_Cache_DeleteAll($Dir,$CacheId);
 		} else {
-			$CacheFile = tbs_Cache_File($Dir,$CacheId,$TBS->CacheMask);
+			$CacheFile = tbs_Cache_File($Dir,$CacheId,$this->CacheMask);
 			if ($Action===TBS_CACHENOW) {
 				$this->meth_Cache_Save($CacheFile,$TBS->Source);
 			} elseif ($Action===TBS_CACHEGETAGE) {

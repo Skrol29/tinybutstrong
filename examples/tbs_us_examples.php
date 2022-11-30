@@ -239,9 +239,14 @@ function f_color_tag(&$txt, $class, $tag='') {
  * Auto-loaded Plug-in for inserting the side-bar in running examples.
  */
 class clsMyPluginRenderNothing {
+	
+	public $TBS;
+	public $_Mode;
+	
 	function OnInstall() {
 		return array('BeforeShow');
 	}
+	
 	function BeforeShow(&$Render) {
 		$TBS = &$this->TBS;
 		if ($TBS->_Mode==0) { // the engine is not in subtemplate-mode
@@ -252,4 +257,5 @@ class clsMyPluginRenderNothing {
 			$Render = TBS_NOTHING;
 		}
 	}
+	
 }

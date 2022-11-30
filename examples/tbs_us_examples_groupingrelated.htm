@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<title>TinyButStrong - Example of sections related to grouping</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="./tbs_us_examples_styles.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="main-body">
+  <h1>Example of sections related to grouping</h1>
+  <div class="w3cinfo"> this TBS template is W3C compliant <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" style="border:none;" /></a> </div>
+  <div id="example">
+  
+    <p>
+        Parameter <samp>firstingrp</samp>, <samp>lastingrp</samp> and <samp>singleingrp</samp> enable you replace the normal section when the record is the first, the last or single for its group.
+    </p>
+	
+	<div style="margin-bottom: 10px; padding: 4px; background-color: #CFE7CF;">
+		<table style="width:600px;">
+			<tr>
+			  <td style="background-color:#F0F0F0; width:100px;"><strong>Country</strong></td>
+			  <td style="background-color:#F0F0F0; width:100px;"><strong>Name</strong></td>
+			  <td style="background-color:#F0F0F0;"><strong>Score</strong></td>
+			  <td style="background-color:#F0F0F0;">&nbsp;</td>
+			  <td>&nbsp;</td>
+			</tr>
+			<tr>
+			  <td style="background-color:#F0F0F0;">[blk_res.country;block=tr]</td>
+			  <td style="background-color:#F0F0F0;">[blk_res.winner]</td>
+			  <td style="background-color:#F0F0F0;">[blk_res.score]</td>
+			  <td style="background-color:#F0F0F0;">&nbsp;</td>
+			  <td class="text-discrete" style="padding-left: 60px;">this is a normal section</td>
+			</tr>
+			<tr>
+			  <td style="background-color:#F0F0F0;">[blk_res.country;block=tr;firstingrp=country]</td>
+			  <td style="background-color:#F0F0F0;">[blk_res.winner]</td>
+			  <td style="background-color:#F0F0F0;">[blk_res.score]</td>
+			  <td style="background-color:#F0F0F0;">↓</td>
+			  <td class="text-discrete" style="padding-left: 60px;">this is a <em>firstingrp</em> section</td>
+			</tr>
+			<tr>
+			  <td style="background-color:#F0F0F0;">[blk_res.country;block=tr;lastingrp=country]</td>
+			  <td style="background-color:#F0F0F0;">[blk_res.winner]</td>
+			  <td style="background-color:#F0F0F0;">[blk_res.score]</td>
+			  <td style="background-color:#F0F0F0;">↑</td>
+			  <td class="text-discrete" style="padding-left: 60px;">this is a <em>lastingrp</em> section</td>
+			</tr>
+			<tr>
+			  <td style="background-color:#F0F0F0;">[blk_res.country;block=tr;singleingrp=country]</td>
+			  <td style="background-color:#F0F0F0;">[blk_res.winner]</td>
+			  <td style="background-color:#F0F0F0;">[blk_res.score]</td>
+			  <td style="background-color:#F0F0F0;">↕</td>
+			  <td class="text-discrete" style="padding-left: 60px;">this is a <em>singleingrp</em> section</td>
+			</tr>
+		</table>
+	</div>
+	
+  </div>
+</div>
+</body>
+</html>
+

@@ -4,6 +4,7 @@
 ********************************************************
 TinyButStrong Plug-in: Navigation Bar
 Version 1.0.5, on 2006-10-26, by Skrol29
+Version 1.1.0, on 2022-11-30, by Skrol29, compatibility with PHP 8.2
 ********************************************************
 */
 
@@ -11,8 +12,10 @@ define('TBS_NAVBAR','tbsNavBar');
 
 class tbsNavBar {
 
+	public $TBS;
+	public $Version = '1.0.5';
+	
 	function OnInstall() {
-		$this->Version = '1.0.5';
 		return array('OnCommand');
 	}
 

@@ -79,7 +79,7 @@ foreach ($data as $recipiant) {
 if ($display_last_as_example) {
 
 	$TBS = new clsTinyButStrong;
-	$TBS->LoadTemplate('tbs_us_examples_email.htm');
+	$TBS->LoadTemplate('tbs_us_examples_email.txt');
 
 	$TBS->MergeBlock('demo_result', $demo_result);
 

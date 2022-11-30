@@ -4,6 +4,7 @@
 ********************************************************
 TinyButStrong plug-in: ByPage (requires TBS >= 3.1.0)
 Version 1.0.5, on 2006-10-26, by Skrol29
+Version 1.1.0, on 2022-11-30, by Skrol29, compatibility with PHP 8.2
 ********************************************************
 */
 
@@ -11,9 +12,14 @@ define('TBS_BYPAGE','tbsByPage');
 
 class tbsByPage {
 
+	public $TBS;
+	public $Version = '1.0.5';
+	public $PageSize = 0;
+	public $PageNum;
+	public $RecKnown;
+	public $RecNbr;
+
 	function OnInstall() {
-		$this->Version = '1.0.5';
-		$this->PageSize = 0;
 		return array('OnCommand','BeforeMergeBlock','AfterMergeBlock');
 	}
 
@@ -28,7 +34,7 @@ class tbsByPage {
 	function BeforeMergeBlock(&$TplSource,&$BlockBeg,&$BlockEnd,$PrmLst,&$Src) {
 
 		if ($this->PageSize<=0) return;   // ByPage Mode not actived
-		if (isset($Src->ByPage)) return;  // ByPage Mode already processed for the current Data source
+		if (isset($Src->Prop['ByPage'])) return;  // ByPage Mode already processed for the current Data source
 		if ($Src->RecSet===false) return; // No data available
 
 		if ($Src->RecSaved) {
@@ -98,12 +104,12 @@ class tbsByPage {
 
 		// Deactivate ByPage Mode
 		$this->PageSize = 0;
-		$Src->ByPage = true;
+		$Src->Prop['ByPage'] = true;
 
 	}
 
 	function AfterMergeBlock(&$Buffer,&$Src) {
-		if (!isset($Src->ByPage)) return;
+		if (!isset($Src->Prop['ByPage'])) return;
 		if ($this->RecKnown==-1) $Src->RecNum = $this->RecNbr;
 	}	
 
