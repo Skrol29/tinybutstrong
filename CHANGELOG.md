@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
-## [3.15.0-beta-3] - 2022-11-30
+## [3.15.0-beta-4] - 2022-12-08
 
 ### Enhancements
 
@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Fixed
 
 - Error message « invalid query XXX because VarRef item YYY is not found » when item YYY is stored in $GLOBALS. 
+- Error message « Undefined variable $NoDelim1 »
 
 ## [3.14.1] - 2022-11-01
 
