@@ -13,6 +13,7 @@ class QuoteTestCase extends TBSUnitTestCase {
 	}
 
 	function testEmptyValue() {
+		
 		// with an emptystring
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when [a]!='';block=b]</b>", array('a'=>''),  "", "test empty #1 (empty string)");
 		$this->dumpLastSource(); // debug
@@ -37,9 +38,11 @@ class QuoteTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when [a]='';block=b]</b>", array('a'=>array()),  "", "test empty #14 (array value)");
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when '[a]'!='';block=b]</b>", array('a'=>array()),  "<b></b>", "test empty #15 (array value)");
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when '[a]'='';block=b]</b>", array('a'=>array()),  "", "test empty #16 (array value)");
+		
 	}
 
 	function testNotEmptyString() {
+		
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when [a]!='a';block=b]</b>", array('a'=>'a'),  "", "test quote #1");
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when [a]='a';block=b]</b>", array('a'=>'a'),  "<b></b>", "test quote #2");
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when '[a]'!='a';block=b]</b>", array('a'=>'a'),  "", "test quote #3");
@@ -54,9 +57,15 @@ class QuoteTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when [a]='';block=b]</b>", array('a'=>'a'),  "", "test quote #10");
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when '[a]'!='';block=b]</b>", array('a'=>'a'),  "<b></b>", "test quote #11");
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when '[a]'='';block=b]</b>", array('a'=>'a'),  "", "test quote #12");
+
+		// Quotes one the value, and +/- operators
+		$this->assertEqualMergeFieldStrings("<b>[onshow;when '[a]'+-'3.5';block=b]</b>", array('a'=>'3.6'),  "<b></b>", "test quotes (any side), and +/- operator");
+		$this->assertEqualMergeFieldStrings("<b>[onshow;when [a]+-3.5;block=b]</b>",   array('a'=>'3.6'),  "<b></b>", "test no quotes (any side), and +/- operator");
+		
 	}
 
 	function testBugs() {
+		
 		// vicious: with an ';' as value
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when [a]!=';';block=b]</b>", array('a'=>';'),  "", "test bug #1");
 		// $this->assertEqualMergeFieldStrings("<b>[onshow;when [a]=';';block=b]</b>", array('a'=>';'),  "<b></b>", "test bug #2"); // bug
@@ -72,6 +81,7 @@ class QuoteTestCase extends TBSUnitTestCase {
 		// vicious: with an ']' as value
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when '[a]'!=']';block=b]</b>", array('a'=>']'),  "", "test bug #11");
 		$this->assertEqualMergeFieldStrings("<b>[onshow;when '[a]'=']';block=b]</b>", array('a'=>']'),  "<b></b>", "test bug #12");
+		
 	}
 		
 }
