@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
-## [3.15.0-beta-4] - 2022-12-08
+## [3.15.0-beta-5] - 2022-12-20
 
 ### Enhancements
 
@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - Error message « invalid query XXX because VarRef item YYY is not found » when item YYY is stored in $GLOBALS. 
 - Error message « Undefined variable $NoDelim1 »
+- Error message « Error in field [onload...]: it doesn't have any subname. » when using subtemplates.
 
 ## [3.14.1] - 2022-11-01
 
