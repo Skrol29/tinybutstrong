@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - Error message « invalid query XXX because VarRef item YYY is not found » when item YYY is stored in $GLOBALS. 
 - Error message « Undefined variable $NoDelim1 »
-- Error message « Error in field [onload...]: it doesn't have any subname. » when using subtemplates with automatic fields.
+- Error message « Error in field [onload...]: it doesn't have any subname. » when using subtemplates containing automatic fields.
 
 ## [3.14.1] - 2022-11-01
 

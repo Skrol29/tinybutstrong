@@ -39,6 +39,7 @@ class clsTbsLocator {
 	public $SubLst = array();
 	public $SubNbr = 0;
 	public $PrmLst = array();
+	public $PrmPos; // positions of the parameters, if asked
 	public $PrmIfNbr = false;
 	public $MagnetId = false;
 	public $BlockFound = false;
@@ -82,7 +83,6 @@ class clsTbsLocator {
 	public $SaveRender;
 
 	// Att
-	public $PrmPos;
 	public $AttForward;
 	public $AttTagBeg;
 	public $AttTagEnd;
