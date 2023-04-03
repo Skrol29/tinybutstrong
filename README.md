@@ -12,6 +12,10 @@ It has many plugins, including OpenTBS for merging LibreOffice and Ms Office doc
 For documentation see 
 www.tinybutstrong.com/manual.php
 
+## Licence
+
+TinyButStrong is released under the LGPL (Lesser General Public Licence) version 3.0.
+
 ## Distribution repository
 
 TinyButStrong in on GitHub since version 3.5.3.
