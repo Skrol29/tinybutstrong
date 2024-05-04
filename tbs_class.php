@@ -3,8 +3,8 @@
  *
  * TinyButStrong - Template Engine for Pro and Beginners
  *
- * @version 3.15.1 for PHP 5, 7, 8
- * @date    2023-05-15
+ * @version 3.15.2 for PHP 5, 7, 8
+ * @date    2024-05-05
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
  * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
@@ -163,6 +163,7 @@ public $OnDataOk = false;
 public $OnDataPrm = false;
 public $OnDataPrmDone = array();
 public $OnDataPi = false;
+public $OnDataPiRef = false;
 
 // Info relative to the current record :
 public $CurrRec = false; // Used by ByPage plugin
@@ -813,7 +814,8 @@ private $_UserFctLst;
 private $_Subscript;
 public  $CurrPrm;
 
-private $_piOnData;
+// Plug-in events
+public  $_piOnData; // must be public because used by clsTbsDataSource, otherwise the plugi is never
 private $_piBeforeLoadTemplate;
 private $_piAfterLoadTemplate;
 private $_piOnMergeField;
