@@ -4,7 +4,7 @@
  * TinyButStrong - Template Engine for Pro and Beginners
  *
  * @version 3.15.2 for PHP 5, 7, 8
- * @date    2024-05-05
+ * @date    2024-05-08
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
  * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
@@ -1761,6 +1761,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 				} elseif ($ope==='lower') { $Loc->OpeAct[$i] = 16;
 				} elseif ($ope==='upper1') { $Loc->OpeAct[$i] = 17;
 				} elseif ($ope==='upperw') { $Loc->OpeAct[$i] = 18;
+				} elseif ($ope==='debug_val') { $Loc->OpeAct[$i] = 19;
 				} else {
 					$x = substr($ope,0,4);
 					if ($x==='max:') {
@@ -1877,6 +1878,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 			case 16: $CurrVal = ($Loc->OpeUtf8) ? mb_convert_case($CurrVal, MB_CASE_LOWER, 'UTF-8') : strtolower($CurrVal); break;
 			case 17: $CurrVal = ucfirst($CurrVal); break;
 			case 18: $CurrVal = ($Loc->OpeUtf8) ? mb_convert_case($CurrVal, MB_CASE_TITLE, 'UTF-8') : ucwords(strtolower($CurrVal)); break;
+			case 19: $CurrVal = '(' . gettype($CurrVal) . ') ' . var_export($CurrVal, true); break;
 			}
 		}
 	}

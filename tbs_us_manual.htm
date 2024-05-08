@@ -180,7 +180,7 @@ a.opt-name:hover {
 }
 -->
 </style> </head>
-  <body style="            background-color: white;">
+  <body style="              background-color: white;">
     <div id="main-body">
       <div class="txt-tiny" style="display:inline-block; float:left;">
         <table class="txt-tiny" cellspacing="0" cellpadding="0" border="0">
@@ -3827,6 +3827,13 @@ class="opt-value">body</span>;<span class="opt-name">store</span>=<span class="o
                             indicate that the value is UTF8 encoded. <span class="opt-value">upper1</span>
                             is not supported in UTF8. <span class="versioning">(supported
                               since TBS version 3.8.0)</span></td>
+                        </tr>
+                        <tr>
+                          <td class="opt-value" valign="top">debug_val</td>
+                          <td>Display a string export of the value (type + <a href="https://www.php.net/manual/en/function.var-export.php">var_export</a>).
+                            For example: 3.55 will display <span class="txt-small">(double)
+                              3.55</span>. <span class="versioning">(supported
+                              since TBS version 3.15.2)</span></td>
                         </tr>
                       </tbody>
                     </table>
