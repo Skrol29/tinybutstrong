@@ -28,12 +28,14 @@ include($dir_testu.'/testcase/AttTestCase.php');
 include($dir_testu.'/testcase/QuoteTestCase.php');
 include($dir_testu.'/testcase/FrmTestCase.php');
 include($dir_testu.'/testcase/StrconvTestCase.php');
+include($dir_testu.'/testcase/OpeTestCase.php');
 include($dir_testu.'/testcase/FieldTestCase.php');
 include($dir_testu.'/testcase/BlockTestCase.php');
 include($dir_testu.'/testcase/BlockGrpTestCase.php');
 include($dir_testu.'/testcase/MiscTestCase.php');
 include($dir_testu.'/testcase/SubTplTestCase.php');
 include($dir_testu.'/testcase/SubnameTestCase.php');
+include($dir_testu.'/testcase/PluginsTestCase.php');
 
 // launch tests
 
@@ -49,10 +51,12 @@ $test->addTestCase(new BlockGrpTestCase());
 $test->addTestCase(new AttTestCase());
 $test->addTestCase(new QuoteTestCase());
 $test->addTestCase(new FrmTestCase());
+$test->addTestCase(new OpeTestCase());
 $test->addTestCase(new StrconvTestCase());
 $test->addTestCase(new MiscTestCase());
 $test->addTestCase(new SubTplTestCase());
 $test->addTestCase(new SubnameTestCase());
+$test->addTestCase(new PluginsTestCase());
 
 $test->run(new HtmlCodeCoverageReporter(array($tbsFileName, $dir_tbs.'/plugins/')));
 
