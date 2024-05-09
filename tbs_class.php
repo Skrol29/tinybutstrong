@@ -4008,6 +4008,8 @@ static function meth_Misc_ToStr($Value) {
 		} elseif (is_a($Value, 'DateTime')) {
 			// ISO date-time format
 			return $Value->format('c');
+		} elseif(is_callable($Value)) { 
+			return $Value = (string)$Value();
 		}
 	}
 	return @(string)$Value; // (string) is faster than strval() and settype()
