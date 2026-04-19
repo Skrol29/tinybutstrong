@@ -170,11 +170,11 @@ class TrueExpectation extends SimpleExpectation {
     /**
      *    Tests the expectation.
      *    @param mixed $compare  Should be true.
-     *    @return boolean        True on match.
+     *    @return bool        True on match.
      *    @access public
      */
     function test($compare) {
-        return (boolean)$compare;
+        return (bool)$compare;
     }
 
     /**
@@ -200,11 +200,11 @@ class FalseExpectation extends SimpleExpectation {
     /**
      *    Tests the expectation.
      *    @param mixed $compare  Should be false.
-     *    @return boolean        True on match.
+     *    @return bool        True on match.
      *    @access public
      */
     function test($compare) {
-        return ! (boolean)$compare;
+        return ! (bool)$compare;
     }
 
     /**
@@ -654,11 +654,11 @@ class PatternExpectation extends SimpleExpectation {
      *    Tests the expectation. True if the Perl regex
      *    matches the comparison value.
      *    @param string $compare        Comparison value.
-     *    @return boolean               True if correct.
+     *    @return bool               True if correct.
      *    @access public
      */
     function test($compare) {
-        return (boolean)preg_match($this->_getPattern(), $compare);
+        return (bool)preg_match($this->_getPattern(), $compare);
     }
 
     /**
@@ -924,7 +924,7 @@ class MethodExistsExpectation extends SimpleExpectation {
      *    @access public
      */
     function test($compare) {
-        return (boolean)(is_object($compare) && method_exists($compare, $this->_method));
+        return (bool)(is_object($compare) && method_exists($compare, $this->_method));
     }
 
     /**

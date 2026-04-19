@@ -712,7 +712,7 @@ class SimplePage {
      */
     function _linkIsAbsolute($url) {
         $parsed = new SimpleUrl($url);
-        return (boolean)($parsed->getScheme() && $parsed->getHost());
+        return (bool)($parsed->getScheme() && $parsed->getHost());
     }
 
     /**
@@ -748,7 +748,7 @@ class SimplePage {
      *    @access public
      */
     function hasFrames() {
-        return (boolean)$this->_frameset;
+        return (bool)$this->_frameset;
     }
 
     /**

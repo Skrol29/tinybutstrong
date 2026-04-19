@@ -202,7 +202,7 @@ class TestOfHttpRedirects extends UnitTestCase {
     
     function &createRedirect($content, $redirect) {
         $headers = new MockSimpleHttpHeaders();
-        $headers->setReturnValue('isRedirect', (boolean)$redirect);
+        $headers->setReturnValue('isRedirect', (bool) $redirect);
         $headers->setReturnValue('getLocation', $redirect);
         
         $response = new MockSimpleHttpResponse();

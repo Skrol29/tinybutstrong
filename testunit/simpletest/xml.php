@@ -459,7 +459,7 @@ class NestingGroupTag extends NestingXmlTag {
     function getSize() {
         $attributes = $this->_getAttributes();
         if (isset($attributes['SIZE'])) {
-            return (integer)$attributes['SIZE'];
+            return (int) $attributes['SIZE'];
         }
         return 0;
     }

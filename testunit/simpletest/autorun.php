@@ -42,7 +42,7 @@ function simpletest_autorun() {
  */
 function tests_have_run() {
     if ($context = SimpleTest::getContext()) {
-        return (boolean)$context->getTest();
+        return (bool)$context->getTest();
     }
     return false;
 }

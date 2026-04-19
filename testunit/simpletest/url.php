@@ -50,7 +50,7 @@ class SimpleUrl {
         $this->_port = false;
         if (preg_match('/(.*?):(.*)/', $this->_host, $host_parts)) {
             $this->_host = $host_parts[1];
-            $this->_port = (integer)$host_parts[2];
+            $this->_port = (int) $host_parts[2];
         }
         $this->_path = $this->_chompPath($url);
         $this->_request = $this->_parseRequest($this->_chompRequest($url));
@@ -68,7 +68,7 @@ class SimpleUrl {
     function _chompCoordinates(&$url) {
         if (preg_match('/(.*)\?(\d+),(\d+)$/', $url, $matches)) {
             $url = $matches[1];
-            return array((integer)$matches[2], (integer)$matches[3]);
+            return array((int) $matches[2], (int)$matches[3]);
         }
         return array(false, false);
     }
@@ -309,8 +309,8 @@ class SimpleUrl {
             $this->_x = $this->_y = false;
             return;
         }
-        $this->_x = (integer)$x;
-        $this->_y = (integer)$y;
+        $this->_x = (int) $x;
+        $this->_y = (int) $y;
     }
     
     /**
