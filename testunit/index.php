@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(E_ALL & ~E_USER_NOTICE & ~E_STRICT);
+error_reporting(E_ALL);
 ini_set("display_errors", "On");
 set_time_limit(0);
 //ini_set('memory_limit', '256M');
