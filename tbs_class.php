@@ -3,8 +3,8 @@
  *
  * TinyButStrong - Template Engine for Pro and Beginners
  *
- * @version 3.15.2 for PHP 5, 7, 8
- * @date    2024-05-08
+ * @version 3.15.3-beta for PHP 5, 7, 8
+ * @date    2026-04-20
  * @link    http://www.tinybutstrong.com Web site
  * @author  http://www.tinybutstrong.com/onlyyou.html
  * @license http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
@@ -779,7 +779,7 @@ public $Assigned = array();
 public $ExtendedMethods = array();
 public $ErrCount = 0;
 // Undocumented (can change at any version)
-public $Version = '3.15.0';
+public $Version = '3.15.3-beta';
 public $Charset = '';
 public $TurboBlock = true;
 public $VarPrefix = '';
@@ -1854,7 +1854,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 			case  6: $CurrVal = ('0'+$CurrVal) + $Loc->OpePrm[$i]; break;
 			case  7: $CurrVal = ('0'+$CurrVal) * $Loc->OpePrm[$i]; break;
 			case  8: $CurrVal = ('0'+$CurrVal) / $Loc->OpePrm[$i]; break;
-			case  9; case 10:
+			case  9: case 10:
 				if ($ope===9) {
 				 $CurrVal = (in_array($this->meth_Misc_ToStr($CurrVal),$Loc->OpeMOK)) ? ' ' : '';
 				} else {
