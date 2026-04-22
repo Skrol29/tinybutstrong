@@ -151,12 +151,15 @@ class clsTbsDataSource {
 
 public $Type = false;
 public $SubType = 0;
+/** @var mixed */
 public $SrcId = false;
 public $Query = '';
+/** @var mixed */
 public $RecSet = false;
 public $RecNumInit = 0; // Used by ByPage plugin
 public $RecSaving = false;
 public $RecSaved = false;
+/** @var mixed */
 public $RecBuffer = false;
 /** @var object|false */
 public $TBS = false;
@@ -177,7 +180,12 @@ public $NextRec = null;
 public $PrevSave = false;
 public $NextSave = false;
 
-// Compatibility with PHP 8.2
+public $FctOpen;
+public $FctFetch; 
+public $FctClose; 
+public $FctPrm = array();
+
+// Compatibility with PHP 8.2 : Creation of dynamic property is deprecated
 public $Prop = array(); // Used by ByPage plugin
 public $RecNbr;
 public $RSIsFirst;
