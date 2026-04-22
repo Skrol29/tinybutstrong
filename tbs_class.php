@@ -3801,11 +3801,11 @@ function meth_Misc_UserFctCheck(&$FctInfo,$FctCat,&$FctObj,&$ErrMsg,$FctCheck=fa
 		if ($IsObj && method_exists($FctObj,'tbsdb_open') && (!method_exists($FctObj,'+'))) { // '+' avoid a bug in PHP 5
 
 			if (!method_exists($FctObj,'tbsdb_fetch')) {
-				$ErrMsg = 'the expected method \'tbsdb_fetch\' is not found for the class '.$Cls.'.';
+				$ErrMsg = 'the expected method \'tbsdb_fetch\' is not found for the class '.get_class($FctObj).'.';
 				return false;
 			}
 			if (!method_exists($FctObj,'tbsdb_close')) {
-				$ErrMsg = 'the expected method \'tbsdb_close\' is not found for the class '.$Cls.'.';
+				$ErrMsg = 'the expected method \'tbsdb_close\' is not found for the class '.get_class($FctObj).'.';
 				return false;
 			}
 			$FctInfo = array('type'=>5);
