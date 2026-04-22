@@ -3791,7 +3791,6 @@ function meth_Misc_UserFctCheck(&$FctInfo,$FctCat,&$FctObj,&$ErrMsg,$FctCheck=fa
 				}
 			}
 			$FctInfo['type'] = 4;
-			if (isset($this->RecheckObj) && $this->RecheckObj) $Save = false;
 		} else {
 			$FctInfo = array(&$ObjRef,$x);
 		}
