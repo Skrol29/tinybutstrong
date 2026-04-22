@@ -4199,7 +4199,7 @@ static function meth_Misc_ApplyPrmCombo(&$PrmLst, $Loc) {
 				}
 				$PrmLst = array_merge($ap, $PrmLst);
 			} else {
-				$this->meth_Misc_Alert("with parameter 'combo'", "Combo '". $a. "' is not yet set.");
+				$this->meth_Misc_Alert("with parameter 'combo'", "Combo '". $name. "' is not yet set.");
 			}
 		}
 		
