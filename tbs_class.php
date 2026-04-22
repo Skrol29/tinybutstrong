@@ -158,6 +158,7 @@ public $RecNumInit = 0; // Used by ByPage plugin
 public $RecSaving = false;
 public $RecSaved = false;
 public $RecBuffer = false;
+/** @var object|false */
 public $TBS = false;
 public $OnDataOk = false;
 public $OnDataPrm = false;
@@ -245,7 +246,7 @@ public function DataPrepare(&$SrcId,&$TBS) {
 		$this->Type = 10;
 	} elseif ($SrcId instanceof PDO) {
 		$this->Type = 11;
-	} elseif ($SrcId instanceof Zend_Db_Adapter_Abstract) {
+	} elseif (is_a($SrcId, 'Zend_Db_Adapter_Abstract')) {
 		$this->Type = 12;
 	} elseif ($SrcId instanceof SQLite3) {
 		$this->Type = 13; $this->SubType = 1;
