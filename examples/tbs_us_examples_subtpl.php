@@ -20,6 +20,7 @@ $tmpl_menu = 'tbs_us_examples_subtpl_menu.htm';
 // Merging main template
 include_once('../tbs_class.php');
 $TBS = new clsTinyButStrong;
+$TBS->SetOption('scripts_allowed', true);
 $TBS->LoadTemplate('tbs_us_examples_subtpl.htm');
 $TBS->Show();
 
