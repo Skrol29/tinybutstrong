@@ -180,11 +180,6 @@ public $NextRec = null;
 public $PrevSave = false;
 public $NextSave = false;
 
-public $FctOpen;
-public $FctFetch; 
-public $FctClose; 
-public $FctPrm = array();
-
 // Compatibility with PHP 8.2 : Creation of dynamic property is deprecated
 public $Prop = array(); // Used by ByPage plugin
 public $RecNbr;
@@ -195,6 +190,10 @@ public $NumStep;
 public $NumVal;
 public $OnDataPrmRef;
 public $OnDataArgs;
+public $FctOpen;
+public $FctFetch; 
+public $FctClose; 
+public $FctPrm = array();
 
 public function DataAlert($Msg) {
 	if (is_array($this->TBS->_CurrBlock)) {
