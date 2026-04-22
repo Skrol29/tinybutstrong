@@ -1640,11 +1640,11 @@ function meth_Locator_SectionAddGrp(&$LocR,$BlockName,&$BDef,$Type,$Field,$FromP
  * @param string $Txt   The source string to modify.
  * @param object $Loc   The locator of the field to replace.
  * @param mixed  $Value The value to merge with.
- * @param integer|false $SubStart The offset of subname to considere.
+ * @param int|false $SubStart The offset of subname to considere.
  *
- * @return integer The position just after the replaced field. Or the position of the start if the replace is canceled.
- *                 This position can be useful because we don't know in advance how $Value will be replaced.
- *                 $Loc->PosNext is also set to the next search position when embedded fields are allowed.
+ * @return int The position just after the replaced field. Or the position of the start if the replace is canceled.
+ *             This position can be useful because we don't know in advance how $Value will be replaced.
+ *             $Loc->PosNext is also set to the next search position when embedded fields are allowed.
  */
 function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 
@@ -2093,7 +2093,7 @@ function meth_Locator_Replace(&$Txt,&$Loc,&$Value,$SubStart) {
 /**
  * Return the first block locator just after the PosBeg position
  *
- * @param integer $Mode 
+ * @param int     $Mode 
  *                1 : Merge_Auto => doesn't save $Loc->BlockSrc, save the bounds of TBS Def tags instead, return also fields
  *                2 : FindBlockLst or GetBlockSource => save $Loc->BlockSrc without TBS Def tags
  *                3 : GetBlockSource => save $Loc->BlockSrc with TBS Def tags
@@ -2238,7 +2238,7 @@ function meth_Locator_PartAndRename(&$CurrVal, &$PrmLst) {
  *
  * @param string  $Txt
  * @param string  $BlockName
- * @param integer $Pos        
+ * @param int     $Pos        
  * @param string|false $SpePrm The parameter's name for Special section (used for navigation bar), or false if none.
  *
  * @return object
@@ -3288,7 +3288,7 @@ function meth_Merge_FieldOutside(&$Txt, &$CurrRec, $RecNum, $PosMax) {
 /**
  * Check the values of previous and next record for expression.
  *
- * @return boolean
+ * @return bool
  */
 function meth_Merge_CheckBounds($BDef,$Src) {
 		
@@ -4453,8 +4453,10 @@ static function f_Misc_ParseFctForm($Str) {
 
 /**
  * Check if a string condition is true.
+ * 
  * @param  string  $Str The condition to check.
- * @return boolean True if the condition if checked.
+ * 
+ * @return bool True if the condition if checked.
  */
 static function f_Misc_CheckCondition($Str) {
 // Check if an expression like "exrp1=expr2" is true or false.
@@ -4551,9 +4553,11 @@ static function f_Misc_CheckCondition($Str) {
 
 /**
  * Delete the string delimiters that surrounds the string, if any. But not inside (no need).
+ * 
  * @param  string $Txt    The string to modifiy.
  * @param  string $Delim  The character that can delimit the string.
- * @return boolean True if the given string was not delimited with $Delim.
+ * 
+ * @return bool True if the given string was not delimited with $Delim.
  */
 static function f_Misc_DelDelimiter(&$Txt,$Delim) {
 // Delete the string delimiters
@@ -4813,9 +4817,9 @@ static function f_Loc_PrmCompute(&$Txt,&$Loc,&$SubName,$Status,$XmlTag,$DelimChr
  * Add a new parameter 'if or 'then' to the locator.
  * 
  * @param object  $Loc     The locator.
- * @param boolean $IsIf    Concerned parameter. True means 'if', false means 'then'.
+ * @param bool    $IsIf    Concerned parameter. True means 'if', false means 'then'.
  * @param string  $Val     The value of the parameter.
- * @param boolean $Ordered True means the parameter comes from the template and order must be checked. False means it comes from PHP and order is free.
+ * @param bool    $Ordered True means the parameter comes from the template and order must be checked. False means it comes from PHP and order is free.
  *
  */
 static function f_Loc_PrmIfThen(&$Loc, $IsIf, $Val, $Ordered) {
@@ -5069,10 +5073,12 @@ static function f_Loc_Moving(&$LocM, &$LocLst) {
 /**
  * Sort the locators in the list. Apply the bubble algorithm.
  * Deleted locators maked with DelMe.
- * @param array   $LocLst An array of locators.
- * @param boolean $DelEmbd True to deleted locators that embded other ones.
- * @param boolean $iFirst Index of the first item.
- * @return integer Return the number of met embedding locators.
+ * 
+ * @param array    $LocLst An array of locators.
+ * @param bool     $DelEmbd True to deleted locators that embded other ones.
+ * @param bool     $iFirst Index of the first item.
+ * 
+ * @return int Return the number of met embedding locators.
  */
 static function f_Loc_Sort(&$LocLst, $DelEmbd, $iFirst = 0) {
 
