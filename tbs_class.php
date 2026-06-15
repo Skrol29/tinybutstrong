@@ -1434,7 +1434,7 @@ function meth_Locator_FindTbs(&$Txt,$Name,$Pos,$ChrSub) {
 					$this->meth_Misc_Alert('','can\'t found the end of the tag \''.substr($Txt,$Pos,$PosX-$Pos+10).'...\'.');
 					$Pos++;
 				} else {
-					self::meth_Misc_ApplyPrmCombo($Loc->PrmLst, $Loc);
+					self::meth_Misc_ApplyPrmCombo($Loc->PrmLst, $Loc, $this);
 				}
 			}
 
@@ -4170,7 +4170,7 @@ function meth_Misc_DateFormat(&$Value, $Frm) {
  * @param array        $PrmLst The existing list of combo
  * @param object|false $Loc    The current locator, of false if called from an combo definition
  */
-static function meth_Misc_ApplyPrmCombo(&$PrmLst, $Loc) {
+static function meth_Misc_ApplyPrmCombo(&$PrmLst, $Loc, $TBS = null) {
 	
 	if (isset($PrmLst['combo'])) {
 		
@@ -4200,7 +4200,7 @@ static function meth_Misc_ApplyPrmCombo(&$PrmLst, $Loc) {
 				}
 				$PrmLst = array_merge($ap, $PrmLst);
 			} else {
-				$this->meth_Misc_Alert("with parameter 'combo'", "Combo '". $name. "' is not yet set.");
+				if ($TBS !== null) $TBS->meth_Misc_Alert("with parameter 'combo'", "Combo '". $name. "' is not yet set.");
 			}
 		}
 		
