@@ -4155,14 +4155,61 @@ function meth_Misc_DateFormat(&$Value, $Frm) {
 		}
 	}
 	
-	if ($Frm['loc'] || isset($PrmLst['locale'])) {
-		$x = strftime($Frm['str_loc'],$Value);
+	if ($Frm['loc']) {
+		$x = self::f_Misc_DateFormatLoc($Value,$Frm['str_us']);
 		$this->meth_Conv_Str($x,false); // may have accent
 		return $x;
 	} else {
 		return date($Frm['str_us'],$Value);
 	}
-	
+
+}
+
+/**
+ * Format a timestamp using the locale set with setlocale() for category LC_TIME, that is format '(locale)'.
+ * Extension Intl is used instead of strftime() which is deprecated since PHP 8.1 and deleted since PHP 9.0.
+ * @param  int    $Value  The timestamp.
+ * @param  string $FrmPHP The format in PHP date() syntax.
+ * @return string The formated date.
+ */
+static function f_Misc_DateFormatLoc($Value, $FrmPHP) {
+	if (!class_exists('IntlDateFormatter')) return date($FrmPHP,$Value); // no localization available
+	$loc = (string) setlocale(LC_TIME,'0'); // '0' reads the current locale without changing it
+	$loc = substr($loc,0,strcspn($loc,'.@')); // 'de_DE.UTF-8@euro' => 'de_DE'
+	if (($loc==='C') || ($loc==='POSIX')) $loc = 'en_US_POSIX'; // default locale of PHP, it gives English names
+	$f = new IntlDateFormatter($loc, 0, 0, date_default_timezone_get(), IntlDateFormatter::GREGORIAN, self::f_Misc_DateToIcu($FrmPHP));
+	return $f->format((int) $Value);
+}
+
+/**
+ * Convert a date format from the PHP date() syntax to the ICU syntax used by extension Intl.
+ * @param  string $FrmPHP The format in PHP date() syntax. Example: 'l j \d\e F Y'
+ * @return string The format in ICU syntax.              Example: "EEEE d 'de' MMMM yyyy"
+ */
+static function f_Misc_DateToIcu($FrmPHP) {
+	$map = array('H'=>'HH', 'G'=>'H', 'h'=>'hh', 'g'=>'h', 'a'=>'a', 'A'=>'a', 'i'=>'mm', 's'=>'ss', 'S'=>'',
+		'Y'=>'yyyy', 'y'=>'yy', 'F'=>'MMMM', 'M'=>'MMM', 'm'=>'MM', 'n'=>'M',
+		'l'=>'EEEE', 'D'=>'EEE', 'w'=>'e', 'd'=>'dd', 'j'=>'d');
+	$icu = '';
+	$txt = ''; // literal chars waiting to be quoted
+	$max = strlen($FrmPHP);
+	for ($i=0; $i<$max; $i++) {
+		$c = $FrmPHP[$i];
+		if ($c==='\\') {
+			$i++;
+			$txt .= substr($FrmPHP,$i,1); // protected char
+		} elseif (isset($map[$c])) {
+			if ($txt!=='') { // literal chars must be quoted because letters are reserved by ICU
+				$icu .= "'".str_replace("'","''",$txt)."'";
+				$txt = '';
+			}
+			$icu .= $map[$c];
+		} else {
+			$txt .= $c;
+		}
+	}
+	if ($txt!=='') $icu .= "'".str_replace("'","''",$txt)."'";
+	return $icu;
 }
 
 /**

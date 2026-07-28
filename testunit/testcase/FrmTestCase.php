@@ -119,13 +119,23 @@ class FrmTestCase extends TBSUnitTestCase {
 		$this->assertEqualMergeFieldStrings("{[a;frm=r]}", array('a'=>$d),  "{9}", "test hour (one digit)");
 		$this->assertEqualMergeFieldStrings("{[a;frm=hm]}", array('a'=>$d),  "{09}", "test hour (deprecated)"); // hm is like rr, it's deprecated since TBS 3.2.0
 
-		// locale
-		/* no configuration file on my computer :(
-		$currLocale = setlocale(LC_TIME, null); // save current Locale
-		setlocale(LC_TIME, 'fr_FR'); // change current Locale
-		$this->assertEqualMergeFieldStrings("{[a;frm=m mm mmm mmmm(locale)]}", array('a'=>$d),   "{11 11 Nov Novembre}", "test month formats (month>=10)");
+		// locale : conversion of the format into the ICU syntax used by extension Intl
+		if (method_exists('clsTinyButStrong', 'f_Misc_DateToIcu')) {
+			$this->assertEqual(clsTinyButStrong::f_Misc_DateToIcu('Y-m-d H:i:s'), "yyyy'-'MM'-'dd' 'HH':'mm':'ss", "test ICU conversion of numeric items");
+			$this->assertEqual(clsTinyButStrong::f_Misc_DateToIcu('l j \\d\\e F Y'), "EEEE' 'd' de 'MMMM' 'yyyy", "test ICU conversion with a protected text part");
+			$this->assertEqual(clsTinyButStrong::f_Misc_DateToIcu("\\l'\\a\\n\\s Y"), "'l''ans 'yyyy", "test ICU conversion with an apostrophe in the text part");
+		}
+
+		// locale : localized date. The test is skipped if the locale is not installed on the system.
+		$currLocale = setlocale(LC_TIME, '0'); // save current Locale
+		if (setlocale(LC_TIME, 'fr_FR.UTF-8', 'fr_FR', 'fr') !== false) {
+			if (class_exists('IntlDateFormatter')) {
+				$this->assertEqualMergeFieldStrings("{[a;frm=m mm mmmm(locale)]}", array('a'=>$d), "{11 11 novembre}", "test month formats with locale");
+				$this->assertEqualMergeFieldStrings("{[a;frm=dddd(locale)]}", array('a'=>$d), "{vendredi}", "test day name with locale");
+			}
+			$this->assertEqualMergeFieldStrings("{[a;frm=(locale)yyyy-mm-dd hh:nn:ss]}", array('a'=>$d), "{2001-11-30 21:46:33}", "test date with locale but no localized item");
+		}
 		setlocale(LC_TIME, $currLocale); // restore current Locale
-		*/
 
 		// string values. TBS try to convert strings into timestamps using the PHP function strtotime()
 		$this->assertEqualMergeFieldStrings("{[a;frm=yyyy-mm-dd hh:nn:ss]}", array('a'=>'2001-12-05'),  "{2001-12-05 00:00:00}", "test string values (ISO without hour)");
